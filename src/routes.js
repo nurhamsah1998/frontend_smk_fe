@@ -5,10 +5,12 @@ import SimpleLayout from './layouts/simple';
 //
 import BlogPage from './pages/BlogPage';
 import UserPage from './pages/UserPage';
-import LoginPage from './pages/LoginPage';
+import LoginStudentPage from './pages/AuthPage/Login/LoginStudentPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
+import LoginStaff from './pages/AuthPage/LoginStaff';
+import RegisterStudentPage from './pages/AuthPage/Register/RegisterStudentPage';
 
 // ----------------------------------------------------------------------
 
@@ -26,8 +28,16 @@ export default function Router() {
       ],
     },
     {
-      path: 'login',
-      element: <LoginPage />,
+      path: 'siswa-login',
+      element: <LoginStudentPage />,
+    },
+    {
+      path: 'siswa-register',
+      element: <RegisterStudentPage />,
+    },
+    {
+      path: 'staff-login',
+      element: <LoginStaff />,
     },
     {
       element: <SimpleLayout />,
