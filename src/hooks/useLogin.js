@@ -4,16 +4,22 @@ import { useSnackbar } from 'notistack';
 
 function useLogin({ module }) {
   const { enqueueSnackbar } = useSnackbar();
-  const login = useMutation([module], (values) =>
-    axios
-      .post(`http://localhost:5000/${module}`, { ...values })
-      .then((res) => {
-        enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+  const login = useMutation(
+    module,
+    (values) =>
+      axios({
+        method: 'post',
+        url: `http://localhost:5000/${module}`,
+        data: { ...values },
       })
-      .catch((error) => {
-        console.log(error, 'ini');
-        enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
-      })
+        .then((res) => {
+          enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+        })
+        .catch((error) => {
+          console.log(error, 'ini');
+          enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+        }),
+    {}
   );
   return { login, ...login };
 }

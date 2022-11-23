@@ -14,10 +14,10 @@ import useLogin from '../../../hooks/useLogin';
 export default function FormLogin() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { login, isLoading } = useLogin({
+  const { login, isLoading, isPaused, isIdle } = useLogin({
     module: 'login-siswa',
   });
-
+  console.log(isIdle);
   return (
     <>
       <Formik
@@ -25,7 +25,7 @@ export default function FormLogin() {
           nisn: '',
           password: '',
         }}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           login.mutate(values);
         }}
       >
@@ -57,9 +57,12 @@ export default function FormLogin() {
               </Link>
             </Stack>
 
-            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+            {/* <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
               Login
-            </LoadingButton>
+            </LoadingButton> */}
+            <button type="submit" disabled={isLoading}>
+              loging
+            </button>
           </Form>
         )}
       </Formik>
