@@ -1,12 +1,14 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, onlineManager } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 
 function useLogin({ module }) {
+  const isOnline = onlineManager.isOnline();
   const { enqueueSnackbar } = useSnackbar();
+  console.log(isOnline, 'ini');
   const login = useMutation(
-    module,
-    (values) =>
+    [module],
+    (values) => {
       axios({
         method: 'post',
         url: `http://localhost:5000/${module}`,
@@ -18,8 +20,9 @@ function useLogin({ module }) {
         .catch((error) => {
           console.log(error, 'ini');
           enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
-        }),
-    {}
+        });
+    },
+    { networkMode: 'always' }
   );
   return { login, ...login };
 }
