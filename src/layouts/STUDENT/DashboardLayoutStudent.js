@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 //
 import Header from './header';
 import Nav from './nav';
+import useFetch from '../../hooks/useFetch';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,17 @@ const Main = styled('div')(({ theme }) => ({
 
 export default function DashboardLayoutStudent() {
   const [open, setOpen] = useState(false);
-
+  const navigate = useNavigate();
+  const { items } = useFetch({
+    module: 'profile',
+  });
+  console.log(items, 'ini');
+  useEffect(() => {
+    const token = window.localStorage.getItem('accessToken');
+    if (!token) {
+      navigate('/siswa-login');
+    }
+  }, []);
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(true)} />
