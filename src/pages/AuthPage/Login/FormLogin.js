@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
@@ -17,6 +17,13 @@ export default function FormLogin() {
   const { login, isLoading } = useLogin({
     module: 'login-siswa',
   });
+  useEffect(() => {
+    const token = window.localStorage.getItem('accessToken');
+    if (token) {
+      navigate('/siswa/app');
+    }
+  }, []);
+
   return (
     <>
       <Formik

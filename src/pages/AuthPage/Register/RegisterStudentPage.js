@@ -69,16 +69,16 @@ export default function RegisterStudentPage() {
             </Typography>
             <FormRegister />
             <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography variant="subtitle2">Belum punya akun ?</Typography>
+              <Typography variant="subtitle2">Sudah punya akun ?</Typography>
               <Typography
-                onClick={() => navigate('/siswa-register')}
+                onClick={() => navigate('/siswa-login')}
                 component="span"
                 sx={{ cursor: 'pointer' }}
                 fontWeight={700}
                 color="#2065D1"
                 variant="subtitle2"
               >
-                Daftar
+                Login
               </Typography>
             </Box>
           </StyledContent>

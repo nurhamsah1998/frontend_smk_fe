@@ -11,6 +11,8 @@ import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import LoginStaff from './pages/AuthPage/LoginStaff';
 import RegisterStudentPage from './pages/AuthPage/Register/RegisterStudentPage';
+import AppSiswa from './pages/SISWA/AppSiswa';
+import DashboardLayoutStudent from './layouts/STUDENT/DashboardLayoutStudent';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +27,14 @@ export default function Router() {
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
+      ],
+    },
+    {
+      path: '/siswa',
+      element: <DashboardLayoutStudent />,
+      children: [
+        { element: <Navigate to="/siswa/app" />, index: true },
+        { path: 'app', element: <AppSiswa /> },
       ],
     },
     {

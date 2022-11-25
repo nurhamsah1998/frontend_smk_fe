@@ -16,6 +16,8 @@ function useLogin({ module }) {
       })
         .then((res) => {
           enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+          window.localStorage.setItem('accessToken', res.data?.accessToken);
+          window.location.reload();
         })
         .catch((error) => {
           console.log(error, 'ini');

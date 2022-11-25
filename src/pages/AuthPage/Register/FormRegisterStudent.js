@@ -25,6 +25,7 @@ export default function FormRegisterStudent() {
           nama: '',
           nisn: '',
           password: '',
+          noHP: '',
           jurusanId: '',
         }}
         onSubmit={(values) => {
@@ -36,6 +37,7 @@ export default function FormRegisterStudent() {
             <Stack spacing={3}>
               <TextField name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
               <TextField name="nisn" {...getFieldProps('nisn')} label="Nomor NISN" />
+              <TextField name="noHP" {...getFieldProps('noHP')} type="number" label="Nomor Telpon/Wa" />
               <AutoCompleteAsync
                 module="jurusan"
                 label="Pilih jurusan"
