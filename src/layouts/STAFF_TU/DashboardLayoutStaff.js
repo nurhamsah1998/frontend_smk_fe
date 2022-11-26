@@ -5,6 +5,8 @@ import { styled } from '@mui/material/styles';
 //
 import Header from './header';
 import Nav from './nav';
+import { PROFILE } from '../../hooks/useHelperContext';
+import useFetch from '../../hooks/useFetch';
 
 // ----------------------------------------------------------------------
 
@@ -34,9 +36,10 @@ const Main = styled('div')(({ theme }) => ({
 
 export default function DashboardLayoutStaff() {
   const [open, setOpen] = useState(false);
-
+  const { items, isLoading } = useFetch({
+    module: 'staff-profile',
+  });
   const navigate = useNavigate();
-
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
     if (!token) {
@@ -44,14 +47,18 @@ export default function DashboardLayoutStaff() {
     }
   }, []);
   return (
-    <StyledRoot>
-      <Header onOpenNav={() => setOpen(true)} />
+    <>
+      <PROFILE.Provider value={{ items, isLoading }}>
+        <StyledRoot>
+          <Header onOpenNav={() => setOpen(true)} />
 
-      <Nav openNav={open} onCloseNav={() => setOpen(false)} />
+          <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
-      <Main>
-        <Outlet />
-      </Main>
-    </StyledRoot>
+          <Main>
+            <Outlet />
+          </Main>
+        </StyledRoot>
+      </PROFILE.Provider>
+    </>
   );
 }

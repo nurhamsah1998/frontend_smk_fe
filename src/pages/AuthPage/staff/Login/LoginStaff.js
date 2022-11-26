@@ -59,12 +59,12 @@ export default function LoginStaff() {
           </StyledSection>
         )}
         <Box sx={{ position: 'fixed', top: 10, right: 10 }}>
-          <Button onClick={() => navigate('/siswa-login')}> login sebagai Siswa</Button>
+          <Button onClick={() => navigate('/siswa-login')}>login sebagai Siswa</Button>
         </Box>
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              Login Sebagai Staf
+              Staff Login
             </Typography>
             <LoginForm />
             <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>

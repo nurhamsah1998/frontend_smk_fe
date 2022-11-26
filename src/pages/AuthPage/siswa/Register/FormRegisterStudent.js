@@ -17,7 +17,9 @@ export default function FormRegisterStudent() {
   const [showPassword, setShowPassword] = useState(false);
   const { register, isLoading } = useRegister({
     module: 'register-siswa',
+    next: () => navigate('/siswa-login'),
   });
+  console.log(isLoading);
   return (
     <>
       <Formik
@@ -29,7 +31,7 @@ export default function FormRegisterStudent() {
           jurusanId: '',
         }}
         onSubmit={(values) => {
-          register.mutate({ ...values, jurusanId: values?.values?.id });
+          register.mutate({ ...values, jurusanId: values?.jurusanId?.id });
         }}
       >
         {({ getFieldProps, setFieldValue, values }) => (

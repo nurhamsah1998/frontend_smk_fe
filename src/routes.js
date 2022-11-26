@@ -14,19 +14,19 @@ import RegisterStudentPage from './pages/AuthPage/siswa/Register/RegisterStudent
 import AppSiswa from './pages/SISWA/AppSiswa';
 import DashboardLayoutStudent from './layouts/STUDENT/DashboardLayoutStudent';
 import RegisterStaffPage from './pages/AuthPage/staff/Register/RegisterStaffPage';
-import DashboardLayoutStaff from './layouts/STAFF/dashboard/DashboardLayoutStaff';
-import AppStaff from './pages/STAFF/AppStaff';
+import DashboardLayoutStaff from './layouts/STAFF_TU/DashboardLayoutStaff';
+import AppStaffTU from './pages/STAFF_TU/AppStaffTU';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/staff',
+      path: '/staff-tu',
       element: <DashboardLayoutStaff />,
       children: [
-        { element: <Navigate to="/staff/app" />, index: true },
-        { path: 'app', element: <AppStaff /> },
+        { element: <Navigate to="/staff-tu/tagihan" />, index: true },
+        { path: 'tagihan', element: <AppStaffTU /> },
         // { path: 'user', element: <UserPage /> },
         // { path: 'products', element: <ProductsPage /> },
         // { path: 'blog', element: <BlogPage /> },

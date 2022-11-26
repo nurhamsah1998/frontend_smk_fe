@@ -55,14 +55,14 @@ export default function RegisterStaffPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Selamat Datang, Website Resmi SMK PGRI KRAS
+              Staf Sekolah
             </Typography>
           </StyledSection>
         )}
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              Register
+              Staff Register
             </Typography>
             <FormRegister />
             <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>

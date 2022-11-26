@@ -16,17 +16,17 @@ export default function FormRegisterStaff() {
 
   const [showPassword, setShowPassword] = useState(false);
   const { register, isLoading } = useRegister({
-    module: 'register-siswa',
+    module: 'staff-register',
+    next: () => navigate('/staff-login'),
   });
   return (
     <>
       <Formik
         initialValues={{
           nama: '',
-          nisn: '',
+          username: '',
           password: '',
           noHP: '',
-          jurusanId: '',
         }}
         onSubmit={(values) => {
           register.mutate({ ...values, jurusanId: values?.values?.id });
@@ -36,15 +36,8 @@ export default function FormRegisterStaff() {
           <Form>
             <Stack spacing={3}>
               <TextField name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
-              <TextField name="nisn" {...getFieldProps('nisn')} label="Nomor NISN" />
+              <TextField name="username" {...getFieldProps('username')} label="Username / email" />
               <TextField name="noHP" {...getFieldProps('noHP')} type="number" label="Nomor Telpon/Wa" />
-              <AutoCompleteAsync
-                module="jurusan"
-                label="Pilih jurusan"
-                onChange={(x, y) => {
-                  setFieldValue('jurusanId', y);
-                }}
-              />
               <TextField
                 name="password"
                 label="Password"
@@ -61,13 +54,13 @@ export default function FormRegisterStaff() {
                 }}
               />
             </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+            {/* <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
               <Checkbox name="remember" label="Remember me" />
               <Link variant="subtitle2" underline="hover">
                 Forgot password?
               </Link>
-            </Stack>
-            <LoadingButton fullWidth size="large" type="submit" loading={isLoading} variant="contained">
+            </Stack> */}
+            <LoadingButton sx={{ mt: 2 }} fullWidth size="large" type="submit" loading={isLoading} variant="contained">
               Register
             </LoadingButton>
           </Form>

@@ -2,7 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 
-function useRegister({ module }) {
+function useRegister({
+  module,
+  next = () => {
+    return false;
+  },
+}) {
   const { enqueueSnackbar } = useSnackbar();
   const register = useMutation(
     [module],
@@ -11,6 +16,7 @@ function useRegister({ module }) {
         .post(`http://localhost:5000/${module}`, { ...values })
         .then((res) => {
           enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+          next();
         })
         .catch((error) => {
           console.log(error, 'ini');

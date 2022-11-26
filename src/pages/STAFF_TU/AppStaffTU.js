@@ -1,7 +1,7 @@
 import React from 'react';
 
-function AppStaff() {
+function AppStaffTU() {
   return <div>Hello Staf</div>;
 }
 
-export default AppStaff;
+export default AppStaffTU;
