@@ -2,15 +2,17 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+
 import { Link, Container, Typography, Divider, Stack, Button, Box } from '@mui/material';
 // hooks
-import useResponsive from '../../../hooks/useResponsive';
+import useResponsive from '../../../../hooks/useResponsive';
 // components
-import Logo from '../../../components/logo';
-import Iconify from '../../../components/iconify';
+import Logo from '../../../../components/logo';
+import Iconify from '../../../../components/iconify';
+import useFetch from '../../../../hooks/useFetch';
 // sections
-import { LoginForm } from '../../../sections/auth/login';
-import FormRegister from './FormRegisterStudent';
+import { LoginForm } from '../../../../sections/auth/login';
+import FormLogin from './FormLogin';
 
 // ----------------------------------------------------------------------
 
@@ -42,9 +44,13 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function RegisterStudentPage() {
+export default function LoginStudentPage() {
   const mdUp = useResponsive('up', 'md');
   const navigate = useNavigate();
+  // const { items } = useFetch({
+  //   module: 'siswa',
+  // });
+  // console.log(items);
   return (
     <>
       <Helmet>
@@ -65,20 +71,20 @@ export default function RegisterStudentPage() {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              Register
+              Login
             </Typography>
-            <FormRegister />
+            <FormLogin />
             <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography variant="subtitle2">Sudah punya akun ?</Typography>
+              <Typography variant="subtitle2">Belum punya akun ?</Typography>
               <Typography
-                onClick={() => navigate('/siswa-login')}
+                onClick={() => navigate('/siswa-register')}
                 component="span"
                 sx={{ cursor: 'pointer' }}
                 fontWeight={700}
                 color="#2065D1"
                 variant="subtitle2"
               >
-                Login
+                Daftar
               </Typography>
             </Box>
           </StyledContent>

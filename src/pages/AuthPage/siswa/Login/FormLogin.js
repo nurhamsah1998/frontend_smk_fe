@@ -5,9 +5,9 @@ import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@m
 import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
 // components
-import Iconify from '../../../components/iconify';
+import Iconify from '../../../../components/iconify';
 
-import useLogin from '../../../hooks/useLogin';
+import useLogin from '../../../../hooks/useLogin';
 
 // ----------------------------------------------------------------------
 

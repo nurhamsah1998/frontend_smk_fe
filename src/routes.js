@@ -5,28 +5,31 @@ import SimpleLayout from './layouts/simple';
 //
 import BlogPage from './pages/BlogPage';
 import UserPage from './pages/UserPage';
-import LoginStudentPage from './pages/AuthPage/Login/LoginStudentPage';
+import LoginStudentPage from './pages/AuthPage/siswa/Login/LoginStudentPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
-import LoginStaff from './pages/AuthPage/LoginStaff';
-import RegisterStudentPage from './pages/AuthPage/Register/RegisterStudentPage';
+import LoginStaff from './pages/AuthPage/staff/Login/LoginStaff';
+import RegisterStudentPage from './pages/AuthPage/siswa/Register/RegisterStudentPage';
 import AppSiswa from './pages/SISWA/AppSiswa';
 import DashboardLayoutStudent from './layouts/STUDENT/DashboardLayoutStudent';
+import RegisterStaffPage from './pages/AuthPage/staff/Register/RegisterStaffPage';
+import DashboardLayoutStaff from './layouts/STAFF/dashboard/DashboardLayoutStaff';
+import AppStaff from './pages/STAFF/AppStaff';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/dashboard',
-      element: <DashboardLayout />,
+      path: '/staff',
+      element: <DashboardLayoutStaff />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
+        { element: <Navigate to="/staff/app" />, index: true },
+        { path: 'app', element: <AppStaff /> },
+        // { path: 'user', element: <UserPage /> },
+        // { path: 'products', element: <ProductsPage /> },
+        // { path: 'blog', element: <BlogPage /> },
       ],
     },
     {
@@ -44,6 +47,10 @@ export default function Router() {
     {
       path: 'siswa-register',
       element: <RegisterStudentPage />,
+    },
+    {
+      path: 'staff-register',
+      element: <RegisterStaffPage />,
     },
     {
       path: 'staff-login',

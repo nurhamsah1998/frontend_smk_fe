@@ -4,12 +4,12 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Link, Container, Typography, Divider, Stack, Button, Box } from '@mui/material';
 // hooks
-import useResponsive from '../../hooks/useResponsive';
+import useResponsive from '../../../../hooks/useResponsive';
 // components
-import Logo from '../../components/logo';
-import Iconify from '../../components/iconify';
+import Logo from '../../../../components/logo';
+import Iconify from '../../../../components/iconify';
 // sections
-import { LoginForm } from '../../sections/auth/login';
+import { LoginForm } from '../../../../sections/auth/login';
 
 // ----------------------------------------------------------------------
 
@@ -67,6 +67,19 @@ export default function LoginStaff() {
               Login Sebagai Staf
             </Typography>
             <LoginForm />
+            <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <Typography variant="subtitle2">Belum punya akun ?</Typography>
+              <Typography
+                onClick={() => navigate('/staff-register')}
+                component="span"
+                sx={{ cursor: 'pointer' }}
+                fontWeight={700}
+                color="#2065D1"
+                variant="subtitle2"
+              >
+                Daftar
+              </Typography>
+            </Box>
           </StyledContent>
         </Container>
       </StyledRoot>
