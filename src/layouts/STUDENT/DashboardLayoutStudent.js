@@ -6,6 +6,10 @@ import { styled } from '@mui/material/styles';
 import Header from './header';
 import Nav from './nav';
 import useFetch from '../../hooks/useFetch';
+import ProgresPage from '../ProgresPage';
+import { PROFILE } from '../../hooks/useHelperContext';
+import LoadingPageReload from '../ProgresPage/LoadingPageReload';
+import BannedPage from '../ProgresPage/BannedPage';
 
 // ----------------------------------------------------------------------
 
@@ -36,25 +40,36 @@ const Main = styled('div')(({ theme }) => ({
 export default function DashboardLayoutStudent() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { items } = useFetch({
+  const { items, isLoading } = useFetch({
     module: 'profile',
   });
-  console.log(items, 'ini');
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
     if (!token) {
       navigate('/siswa-login');
     }
   }, []);
+
+  const jsxElement = (
+    <>
+      {items?.status?.includes('checking') && <ProgresPage />}
+      {items?.status?.includes('lock') && <BannedPage />}
+      {items?.status?.includes('accepted') && (
+        <StyledRoot>
+          <Header onOpenNav={() => setOpen(true)} />
+
+          <Nav openNav={open} onCloseNav={() => setOpen(false)} />
+
+          <Main>
+            <Outlet />
+          </Main>
+        </StyledRoot>
+      )}
+    </>
+  );
   return (
-    <StyledRoot>
-      <Header onOpenNav={() => setOpen(true)} />
-
-      <Nav openNav={open} onCloseNav={() => setOpen(false)} />
-
-      <Main>
-        <Outlet />
-      </Main>
-    </StyledRoot>
+    <PROFILE.Provider value={{ items, isLoading }}>
+      <>{isLoading ? <LoadingPageReload /> : jsxElement}</>
+    </PROFILE.Provider>
   );
 }
