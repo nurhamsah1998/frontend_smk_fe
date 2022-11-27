@@ -17,12 +17,12 @@ export default function LoginForm() {
   const { login, isLoading } = useLogin({
     module: 'staff-login',
   });
-  useEffect(() => {
-    const token = window.localStorage.getItem('accessToken');
-    if (token) {
-      navigate('/staff/app');
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = window.localStorage.getItem('accessToken');
+  //   if (token) {
+  //     navigate('/staff/app');
+  //   }
+  // }, []);
 
   return (
     <>

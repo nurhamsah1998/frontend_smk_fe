@@ -27,7 +27,7 @@ root.render(
       >
         <BrowserRouter>
           <App />
-          <ReactQueryDevtools initialIsOpen />
+          {/* <ReactQueryDevtools initialIsOpen /> */}
         </BrowserRouter>
       </SnackbarProvider>
     </QueryClientProvider>
