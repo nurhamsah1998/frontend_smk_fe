@@ -35,7 +35,7 @@ export default function FormLogin() {
           login.mutate(values);
         }}
       >
-        {({ getFieldProps, values }) => (
+        {({ getFieldProps, values, dirty }) => (
           <Form>
             <Stack spacing={3}>
               <TextField name="nisn" {...getFieldProps('nisn')} label="Nomor NISN" />
@@ -63,7 +63,14 @@ export default function FormLogin() {
               </Link>
             </Stack>
 
-            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+            <LoadingButton
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+              disabled={!dirty}
+              loading={isLoading}
+            >
               Login
             </LoadingButton>
           </Form>

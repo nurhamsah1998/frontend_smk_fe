@@ -16,6 +16,7 @@ import DashboardLayoutStudent from './layouts/STUDENT/DashboardLayoutStudent';
 import RegisterStaffPage from './pages/AuthPage/staff/Register/RegisterStaffPage';
 import DashboardLayoutStaff from './layouts/STAFF_TU/DashboardLayoutStaff';
 import AppStaffTU from './pages/STAFF_TU/AppStaffTU';
+import RouterPath from './RouterPath';
 
 // ----------------------------------------------------------------------
 
@@ -57,9 +58,13 @@ export default function Router() {
       element: <LoginStaff />,
     },
     {
+      path: 'loading',
+      element: <RouterPath />,
+    },
+    {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/siswa/app" />, index: true },
+        { element: <Navigate to="loading" />, index: true },
         { path: '404', element: <Page404 /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],

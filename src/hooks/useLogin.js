@@ -6,7 +6,6 @@ import { useSnackbar } from 'notistack';
 import jwt_decode from 'jwt-decode';
 
 function useLogin({ module }) {
-  const isOnline = onlineManager.isOnline();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const traficRole = [
