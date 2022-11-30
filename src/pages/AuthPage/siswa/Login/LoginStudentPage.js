@@ -48,6 +48,10 @@ export default function LoginStudentPage() {
   const mdUp = useResponsive('up', 'md');
   const navigate = useNavigate();
   // const { items } = useFetch({
+  //   module: 'tagihan',
+  // });
+  // console.log(items.map((i) => ({ ...i, periode: JSON.parse(i.periode) })));
+  // const { items } = useFetch({
   //   module: 'siswa',
   // });
   // console.log(items);

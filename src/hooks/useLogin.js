@@ -29,7 +29,7 @@ function useLogin({ module }) {
         .then((res) => {
           enqueueSnackbar(res?.data?.msg, { variant: 'success' });
           window.localStorage.setItem('accessToken', res.data?.accessToken);
-          // window.location.reload();
+
           const token = jwt_decode(window.localStorage.getItem('accessToken'));
           if (token) {
             const findRole = traficRole?.find((i) => i.role === token.roleStaff);

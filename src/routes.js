@@ -17,6 +17,7 @@ import RegisterStaffPage from './pages/AuthPage/staff/Register/RegisterStaffPage
 import DashboardLayoutStaff from './layouts/STAFF_TU/DashboardLayoutStaff';
 import AppStaffTU from './pages/STAFF_TU/AppStaffTU';
 import RouterPath from './RouterPath';
+import Tagihan from './pages/SISWA/Tagihan/Tagihan';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +40,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/siswa/app" />, index: true },
         { path: 'app', element: <AppSiswa /> },
+        { path: 'tagihan', element: <Tagihan /> },
       ],
     },
     {

@@ -13,7 +13,7 @@ const navConfig = [
   },
   {
     title: 'tagihan',
-    path: '/siswa-login',
+    path: '/siswa/tagihan',
     icon: icon('ic_analytics'),
   },
 ];

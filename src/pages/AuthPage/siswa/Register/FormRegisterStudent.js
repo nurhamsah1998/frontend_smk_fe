@@ -25,7 +25,7 @@ export default function FormRegisterStudent() {
       <Formik
         initialValues={{
           nama: '',
-          nisn: '',
+          username: '',
           password: '',
           noHP: '',
           jurusanId: '',
@@ -38,7 +38,7 @@ export default function FormRegisterStudent() {
           <Form>
             <Stack spacing={3}>
               <TextField name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
-              <TextField name="nisn" {...getFieldProps('nisn')} label="Nomor NISN" />
+              <TextField name="username" {...getFieldProps('username')} label="username" />
               <TextField name="noHP" {...getFieldProps('noHP')} type="number" label="Nomor Telpon/Wa" />
               <AutoCompleteAsync
                 module="jurusan"

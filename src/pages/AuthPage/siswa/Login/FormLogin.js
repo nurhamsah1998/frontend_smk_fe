@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import axios from 'axios';
 import { Formik, Form } from 'formik';
+import { useSnackbar } from 'notistack';
+
 // components
 import Iconify from '../../../../components/iconify';
 
@@ -12,11 +15,9 @@ import useLogin from '../../../../hooks/useLogin';
 // ----------------------------------------------------------------------
 
 export default function FormLogin() {
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { login, isLoading } = useLogin({
-    module: 'login-siswa',
-  });
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
     if (token) {
@@ -28,17 +29,30 @@ export default function FormLogin() {
     <>
       <Formik
         initialValues={{
-          nisn: '',
+          username: '',
           password: '',
         }}
         onSubmit={async (values) => {
-          login.mutate(values);
+          axios({
+            method: 'post',
+            url: `http://localhost:5000/login-siswa`,
+            data: { ...values },
+          })
+            .then((res) => {
+              enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+              window.localStorage.setItem('accessToken', res.data?.accessToken);
+              navigate('/siswa/app');
+            })
+            .catch((error) => {
+              console.log(error, 'ini');
+              enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+            });
         }}
       >
         {({ getFieldProps, values, dirty }) => (
           <Form>
             <Stack spacing={3}>
-              <TextField name="nisn" {...getFieldProps('nisn')} label="Nomor NISN" />
+              <TextField name="username" {...getFieldProps('username')} label="Username" />
               <TextField
                 name="password"
                 label="Password"
@@ -63,14 +77,7 @@ export default function FormLogin() {
               </Link>
             </Stack>
 
-            <LoadingButton
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-              disabled={!dirty}
-              loading={isLoading}
-            >
+            <LoadingButton fullWidth size="large" type="submit" variant="contained" disabled={!dirty}>
               Login
             </LoadingButton>
           </Form>
