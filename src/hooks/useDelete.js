@@ -2,8 +2,10 @@ import React from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import { Dialog } from './useContextHook';
 
-function useDelete({ module }) {
+function useDelete({ module, isCloseAfterConfirmDelete }) {
+  const { setDialog } = React.useContext(Dialog);
   const client = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const destroy = useMutation(
@@ -12,8 +14,18 @@ function useDelete({ module }) {
       axios
         .delete(`http://localhost:5000/${module}/${values}`)
         .then((res) => {
-          enqueueSnackbar(res?.data?.msg, { variant: 'success' });
-          client.invalidateQueries([module]);
+          if (isCloseAfterConfirmDelete) {
+            enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+            client.invalidateQueries([module]);
+            setDialog((i) => ({
+              do: null,
+              title: i.title,
+              content: i.content,
+            }));
+          } else {
+            enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+            client.invalidateQueries([module]);
+          }
         })
         .catch((error) => {
           enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });

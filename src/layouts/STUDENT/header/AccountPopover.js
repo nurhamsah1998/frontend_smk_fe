@@ -1,10 +1,12 @@
 import { useState, useContext } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
 // mocks_
 import account from '../../../_mock/account';
 import { PROFILE } from '../../../hooks/useHelperContext';
+import { Dialog } from '../../../hooks/useContextHook';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +29,8 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
+  const { setDialog } = useContext(Dialog);
+  const navigate = useNavigate();
   const { items, isLoading } = useContext(PROFILE);
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -36,8 +40,15 @@ export default function AccountPopover() {
     setOpen(null);
   };
   const handleLogOut = () => {
-    window.localStorage.clear();
-    window.location.reload();
+    setDialog({
+      title: 'Apakah anda yakin ingin keluar?',
+      labelClose: 'Batal',
+      labelSubmit: 'Keluar',
+      do: () => {
+        window.localStorage.removeItem('accessToken');
+        navigate('/');
+      },
+    });
   };
   return (
     <>
@@ -99,7 +110,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
         <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
-          Logout
+          Keluar
         </MenuItem>
       </Popover>
     </>
