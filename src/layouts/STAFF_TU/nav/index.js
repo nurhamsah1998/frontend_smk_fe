@@ -38,7 +38,7 @@ Nav.propTypes = {
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
 
-  const isDesktop = useResponsive('up', 'lg');
+  const isDesktop = useResponsive('up', 'md');
   const { items, isLoading } = useContext(PROFILE);
   useEffect(() => {
     if (openNav) {
@@ -83,8 +83,8 @@ export default function Nav({ openNav, onCloseNav }) {
     <Box
       component="nav"
       sx={{
-        flexShrink: { lg: 0 },
-        width: { lg: NAV_WIDTH },
+        flexShrink: { md: 0 },
+        width: { md: NAV_WIDTH },
       }}
     >
       {isDesktop ? (

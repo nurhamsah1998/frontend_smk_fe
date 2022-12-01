@@ -14,7 +14,7 @@ function RouterPath() {
       const traficRole = [
         {
           role: 'ADMINISTRASI',
-          path: '/staff-tu/tagihan',
+          path: '/staff-tu/dashboard',
         },
         {
           role: 'GURU',
@@ -22,7 +22,11 @@ function RouterPath() {
         },
       ];
       const findRole = traficRole.find((i) => i.role === token.roleStaff);
-      navigate(findRole.path);
+      if (findRole) {
+        navigate(findRole.path);
+      } else {
+        navigate('/siswa/app');
+      }
     }
     if (!localToken) {
       navigate('/siswa-login');

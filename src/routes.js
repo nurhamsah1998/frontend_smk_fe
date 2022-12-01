@@ -17,7 +17,8 @@ import RegisterStaffPage from './pages/AuthPage/staff/Register/RegisterStaffPage
 import DashboardLayoutStaff from './layouts/STAFF_TU/DashboardLayoutStaff';
 import AppStaffTU from './pages/STAFF_TU/AppStaffTU';
 import RouterPath from './RouterPath';
-import Tagihan from './pages/SISWA/Tagihan/Tagihan';
+import TagihanSiswa from './pages/SISWA/Tagihan/Tagihan';
+import TagihanStaff from './pages/STAFF_TU/Tagihan/TagihanStaff';
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +28,9 @@ export default function Router() {
       path: '/staff-tu',
       element: <DashboardLayoutStaff />,
       children: [
-        { element: <Navigate to="/staff-tu/tagihan" />, index: true },
-        { path: 'tagihan', element: <AppStaffTU /> },
+        { element: <Navigate to="/staff-tu/dashboard" />, index: true },
+        { path: 'dashboard', element: <AppStaffTU /> },
+        { path: 'tagihan', element: <TagihanStaff /> },
         // { path: 'user', element: <UserPage /> },
         // { path: 'products', element: <ProductsPage /> },
         // { path: 'blog', element: <BlogPage /> },
@@ -40,7 +42,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/siswa/app" />, index: true },
         { path: 'app', element: <AppSiswa /> },
-        { path: 'tagihan', element: <Tagihan /> },
+        { path: 'tagihan', element: <TagihanSiswa /> },
       ],
     },
     {

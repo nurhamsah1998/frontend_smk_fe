@@ -1,4 +1,5 @@
 // component
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import SvgColor from '../../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -7,9 +8,14 @@ const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ 
 
 const navConfig = [
   {
-    title: 'tagihan',
-    path: '/staff-tu/tagihan',
+    title: 'Dashboard',
+    path: '/staff-tu/dashboard',
     icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Tagihan',
+    path: '/staff-tu/tagihan',
+    icon: <RequestQuoteIcon />,
   },
 ];
 
