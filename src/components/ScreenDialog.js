@@ -7,6 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
+import { LoadingButton } from '@mui/lab';
 
 export default function ScreenDialog({
   children,
@@ -16,6 +17,7 @@ export default function ScreenDialog({
   labelClose,
   labelSubmit,
   handleSubmit,
+  isLoading,
   fullWidth = true,
 }) {
   const navigate = useNavigate();
@@ -43,12 +45,12 @@ export default function ScreenDialog({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="error" onClick={handleClose || handleCloseDefault}>
+          <LoadingButton variant="contained" color="error" onClick={handleClose || handleCloseDefault}>
             {labelClose}
-          </Button>
-          <Button variant="contained" onClick={handleSubmit}>
+          </LoadingButton>
+          <LoadingButton loading={isLoading} variant="contained" onClick={handleSubmit}>
             {labelSubmit}
-          </Button>
+          </LoadingButton>
         </DialogActions>
       </Dialog>
     </div>

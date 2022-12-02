@@ -22,7 +22,7 @@ export default function Button(theme) {
           },
         },
         containedPrimary: {
-          boxShadow: theme.customShadows.primary,
+          boxShadow: 'none',
         },
         containedSecondary: {
           boxShadow: theme.customShadows.secondary,

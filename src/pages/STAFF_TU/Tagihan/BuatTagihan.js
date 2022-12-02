@@ -4,28 +4,34 @@ import { Formik } from 'formik';
 import { Box } from '@mui/material';
 
 import ScreenDialog from '../../../components/ScreenDialog';
+import useMutationPost from '../../../hooks/useMutationPost';
 import FormTagihan from './FormTagihan';
 
 export const initialValues = {
-  name: '',
+  nama: '',
   jurusanId: '',
-  description: '',
+  categori: '',
+  deskripsi: '',
   total: '',
   kelas: '',
   angkatan: '',
   periode: [],
 };
-
 function BuatTagihan() {
   const location = useLocation();
   const navigate = useNavigate();
   const formRef = React.useRef();
+  const { mutationPost, isLoading } = useMutationPost({
+    module: 'tagihan',
+    next: () => navigate(-1),
+  });
 
   const handleSubmit = () => {
     formRef.current?.handleSubmit();
   };
   return (
     <ScreenDialog
+      isLoading={isLoading}
       open={location.search?.includes('?create-new-bill')}
       title="Buat tagihan baru"
       handleClose={() => navigate(-1)}
@@ -37,8 +43,11 @@ function BuatTagihan() {
         innerRef={formRef}
         initialValues={initialValues}
         onSubmit={(values) => {
-          console.log(values);
+          const ifNotSpp = values?.periode?.length <= 0 ? false : values?.periode;
+          const data = { ...values, periode: ifNotSpp, jurusanId: values?.jurusanId?.id || '' };
+          mutationPost.mutate(data);
         }}
+        enableReinitialize
       >
         {(props) => <FormTagihan {...props} />}
       </Formik>
