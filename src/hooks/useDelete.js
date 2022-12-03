@@ -12,7 +12,7 @@ function useDelete({ module, isCloseAfterConfirmDelete }) {
     [module],
     (values) => {
       axios
-        .delete(`http://localhost:5000/${module}/${values}`)
+        .delete(`http://127.0.0.1:5000/${module}/${values}`)
         .then((res) => {
           if (isCloseAfterConfirmDelete) {
             enqueueSnackbar(res?.data?.msg, { variant: 'success' });

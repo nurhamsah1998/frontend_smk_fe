@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import { apiUrl } from './api';
 
 function useMutationPost({
   module,
@@ -15,7 +16,7 @@ function useMutationPost({
     (values) => {
       axios
         .post(
-          `http://localhost:5000/${module}`,
+          `${apiUrl}${module}`,
           { ...values },
           {
             headers: {

@@ -19,6 +19,7 @@ import AppStaffTU from './pages/STAFF_TU/AppStaffTU';
 import RouterPath from './RouterPath';
 import TagihanSiswa from './pages/SISWA/Tagihan/Tagihan';
 import TagihanStaff from './pages/STAFF_TU/Tagihan/TagihanStaff';
+import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +32,7 @@ export default function Router() {
         { element: <Navigate to="/staff-tu/dashboard" />, index: true },
         { path: 'dashboard', element: <AppStaffTU /> },
         { path: 'tagihan', element: <TagihanStaff /> },
+        { path: 'pembayaran', element: <Pembayaran /> },
         // { path: 'user', element: <UserPage /> },
         // { path: 'products', element: <ProductsPage /> },
         // { path: 'blog', element: <BlogPage /> },

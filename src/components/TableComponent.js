@@ -17,7 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 
-import { grey, green } from '@mui/material/colors';
+import { grey, green, red, blue, orange, cyan, purple } from '@mui/material/colors';
 
 function TableComponen({
   tableHead,
@@ -27,6 +27,7 @@ function TableComponen({
   handleUpdate,
   handleDetail,
   hideOption = false,
+  colorHead = 'green',
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [item, setItem] = React.useState({});
@@ -37,6 +38,32 @@ function TableComponen({
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const variantColorTableHead = [
+    {
+      variant: 'green',
+      color: green[600],
+    },
+    {
+      variant: 'red',
+      color: red[600],
+    },
+    {
+      variant: 'blue',
+      color: blue[600],
+    },
+    {
+      variant: 'orange',
+      color: orange[600],
+    },
+    {
+      variant: 'cyan',
+      color: cyan[600],
+    },
+    {
+      variant: 'purple',
+      color: purple[600],
+    },
+  ].find((i) => i.variant === colorHead);
   return (
     <Box sx={{ bgcolor: '#fff' }}>
       <Table>
@@ -48,7 +75,14 @@ function TableComponen({
               tableHead?.map((head, index) => (
                 <TableCell
                   colSpan={index === tableHead?.length - 1 ? 6 : 'false'}
-                  sx={{ fontWeight: 600, border: 'none', bgcolor: green[600], color: '#fff', px: 2, py: 1 }}
+                  sx={{
+                    fontWeight: 600,
+                    border: 'none',
+                    bgcolor: variantColorTableHead?.color,
+                    color: '#fff',
+                    px: 2,
+                    py: 1,
+                  }}
                   key={index}
                 >
                   {head.label}
@@ -70,53 +104,45 @@ function TableComponen({
           ) : (
             tableBody?.map((body, index) => (
               <TableRow key={index}>
-                {tableHead?.map((head, index) => (
-                  <TableCell sx={{ px: 2, py: 1 }} key={index}>
-                    {head.isImage ? (
-                      <Box sx={{ display: 'flex', gap: 2 }}>
-                        {/* <Box>
-                          <img
-                            width="90px"
-                            style={{ borderRadius: "12px" }}
-                            src={body.image}
-                          />
-                        </Box> */}
-                        <Box>
-                          <Typography textTransform="capitalize" fontWeight={600}>
-                            {body[head.id]}
-                          </Typography>
-                          <Typography fontSize={14} color={grey[500]}>
-                            NIK : {body.nik}
-                          </Typography>
+                {tableHead?.map((head, index) => {
+                  const Status = (params) => {
+                    const isVariantStatusColor = head?.variantStatusColor?.find((i) => i?.value === params);
+                    const colorVariant = [
+                      {
+                        variant: 'success',
+                        color: green[700],
+                        bgcolor: green[100],
+                      },
+                      {
+                        variant: 'error',
+                        color: red[700],
+                        bgcolor: red[100],
+                      },
+                    ].find((i) => i?.variant === isVariantStatusColor?.variant);
+                    if (isVariantStatusColor) {
+                      return (
+                        <Box
+                          sx={{
+                            bgcolor: colorVariant?.bgcolor,
+                            color: colorVariant?.color,
+                            width: 'fit-content',
+                            px: 1.5,
+                            borderRadius: '9px',
+                          }}
+                        >
+                          <Typography>{isVariantStatusColor?.label}</Typography>
                         </Box>
-                      </Box>
-                    ) : head.isGrid ? (
-                      <Box>
-                        <Typography textTransform="capitalize" fontWeight={600}>
-                          {body[head.id]}
-                        </Typography>
-                        <Typography fontSize={14} color={grey[500]}>
-                          {body.status}
-                        </Typography>
-                      </Box>
-                    ) : head.isStatus ? (
-                      <Box
-                        sx={{
-                          bgcolor: body.color,
-                          width: 'fit-content',
-                          p: 1,
-                          borderRadius: '5px',
-                        }}
-                      >
-                        <Typography color="#fff" fomtSize={12}>
-                          {body[head.id]}
-                        </Typography>
-                      </Box>
-                    ) : (
-                      body[head.id]
-                    )}
-                  </TableCell>
-                ))}
+                      );
+                    }
+                    return false;
+                  };
+                  const isIndicator = head?.variantStatusColor ? Status(body[head.id]) : body[head.id];
+                  return (
+                    <TableCell sx={{ px: 2, py: 1 }} key={index}>
+                      {isIndicator}
+                    </TableCell>
+                  );
+                })}
                 <TableCell>
                   <Box>
                     <IconButton

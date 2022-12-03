@@ -9,6 +9,7 @@ import { useSnackbar } from 'notistack';
 
 // components
 import Iconify from '../../../../components/iconify';
+import { apiUrl } from '../../../../hooks/api';
 
 import useLogin from '../../../../hooks/useLogin';
 
@@ -35,7 +36,7 @@ export default function FormLogin() {
         onSubmit={async (values) => {
           axios({
             method: 'post',
-            url: `http://localhost:5000/login-siswa`,
+            url: `${apiUrl}login-siswa`,
             data: { ...values },
           })
             .then((res) => {

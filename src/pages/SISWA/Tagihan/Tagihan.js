@@ -8,7 +8,11 @@ function Tagihan() {
   const { items } = useFetch({
     module: 'tagihan-siswa',
   });
-  const itemRebuild = items?.map((i) => ({ ...i, periode: i?.periode ? JSON.parse(i?.periode) : i?.periode }));
+  const itemRebuild = items?.map((i) => ({
+    ...i,
+    periode: i?.periode ? JSON.parse(i?.periode) : i?.periode,
+    status: false,
+  }));
   console.log(itemRebuild);
   const tableHead = [
     {
@@ -22,6 +26,18 @@ function Tagihan() {
     {
       id: 'status',
       label: 'Status',
+      variantStatusColor: [
+        {
+          variant: 'success',
+          label: 'Lunas',
+          value: true,
+        },
+        {
+          variant: 'error',
+          label: 'Belum lunas',
+          value: false,
+        },
+      ],
     },
   ];
 
@@ -82,7 +98,12 @@ function Tagihan() {
                 <>
                   <Box>
                     <Box mt={2}>
-                      <TableComponen hideOption tableBody={item.periode} tableHead={tableHead} />
+                      <TableComponen
+                        colorHead="cyan"
+                        hideOption
+                        tableBody={[{ bulan: 'Januari', total: '20000', status: false }]}
+                        tableHead={tableHead}
+                      />
                     </Box>
                   </Box>
                 </>

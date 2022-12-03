@@ -1,5 +1,6 @@
 // component
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import SvgColor from '../../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -16,6 +17,11 @@ const navConfig = [
     title: 'Tagihan',
     path: '/staff-tu/tagihan',
     icon: <RequestQuoteIcon />,
+  },
+  {
+    title: 'Pembayaran',
+    path: '/staff-tu/pembayaran',
+    icon: <PointOfSaleIcon />,
   },
 ];
 

@@ -4,8 +4,10 @@ import axios from 'axios';
 import { useSnackbar } from 'notistack';
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode';
+import { apiUrl } from './api';
 
 function useLogin({ module }) {
+  console.log(apiUrl);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const traficRole = [
@@ -23,7 +25,7 @@ function useLogin({ module }) {
     (values) => {
       axios({
         method: 'post',
-        url: `http://localhost:5000/${module}`,
+        url: `${apiUrl}${module}`,
         data: { ...values },
       })
         .then((res) => {
