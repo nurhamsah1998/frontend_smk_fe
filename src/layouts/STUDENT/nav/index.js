@@ -1,9 +1,20 @@
 import PropTypes from 'prop-types';
 import { useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack, Toolbar, LinearProgress } from '@mui/material';
+import {
+  Box,
+  Link,
+  Button,
+  Drawer,
+  Typography,
+  Avatar,
+  Stack,
+  Toolbar,
+  LinearProgress,
+  ListItemText,
+} from '@mui/material';
 // mock
 import account from '../../../_mock/account';
 // hooks
@@ -13,6 +24,7 @@ import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import NavSection from '../../../components/nav-section';
+import ScreenDialog from '../../../components/ScreenDialog';
 //
 import navConfig from './config';
 
@@ -36,7 +48,8 @@ Nav.propTypes = {
 };
 
 export default function Nav({ openNav, onCloseNav }) {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
+  const navigate = useNavigate();
   const { items, isLoading } = useContext(PROFILE);
   const isDesktop = useResponsive('up', 'md');
 
@@ -46,7 +59,6 @@ export default function Nav({ openNav, onCloseNav }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
-
   const renderContent = (
     <Scrollbar
       sx={{
@@ -60,12 +72,17 @@ export default function Nav({ openNav, onCloseNav }) {
           <StyledAccount>
             <Avatar src={account.photoURL} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
+              <Typography variant="subtitle2" sx={{ color: 'text.primary', textTransform: 'capitalize' }}>
                 {isLoading ? <LinearProgress /> : items?.nama}
               </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {isLoading ? <LinearProgress /> : `NISN : ${items?.nisnSiswa}`}
-              </Typography>
+              {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {isLoading ? <LinearProgress /> : `${items?.username}`}
+              </Typography> */}
+              <Stack>
+                <Button onClick={() => navigate(`?profile-id=${items.id}`)} variant="contained" size="small">
+                  lihat profil
+                </Button>
+              </Stack>
             </Box>
           </StyledAccount>
         </Link>
@@ -113,6 +130,19 @@ export default function Nav({ openNav, onCloseNav }) {
           {renderContent}
         </Drawer>
       )}
+      <ScreenDialog
+        isLoading={isLoading}
+        open={search?.includes('?profile-id=')}
+        title="Buat tagihan baru"
+        handleClose={() => navigate(-1)}
+        labelClose="tutup"
+        labelSubmit="buat"
+      >
+        <ListItemText primary="Nama" secondary={items?.nama} />
+        <ListItemText primary="Jurusan" secondary={items?.jurusan?.nama} />
+        <ListItemText primary="Kelas" secondary={items?.kelas} />
+        <ListItemText primary="Angkatan" secondary={items?.angkatan} />
+      </ScreenDialog>
     </Box>
   );
 }

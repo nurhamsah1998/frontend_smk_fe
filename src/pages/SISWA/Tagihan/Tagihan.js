@@ -2,15 +2,78 @@ import React, { Fragment } from 'react';
 import { Box, Typography } from '@mui/material';
 import useFetch from '../../../hooks/useFetch';
 import AccordionList from '../../../components/AccordionList';
+import TableComponen from '../../../components/TableComponent';
 
 function Tagihan() {
   const { items } = useFetch({
     module: 'tagihan-siswa',
   });
-  console.log(items);
+  const itemRebuild = items?.map((i) => ({ ...i, periode: i?.periode ? JSON.parse(i?.periode) : i?.periode }));
+  console.log(itemRebuild);
+  const tableHead = [
+    {
+      id: 'bulan',
+      label: 'Bulan',
+    },
+    {
+      id: 'total',
+      label: 'Nominal',
+    },
+    {
+      id: 'status',
+      label: 'Status',
+    },
+  ];
+
+  /// LAB
+  // const x = [
+  //   {
+  //     name: 'A',
+  //     code: 'A1',
+  //   },
+  //   {
+  //     name: 'B',
+  //     code: 'B1',
+  //   },
+  //   {
+  //     name: 'C',
+  //     code: 'C1',
+  //   },
+  //   {
+  //     name: 'D',
+  //     code: 'D1',
+  //   },
+  //   {
+  //     name: 'E',
+  //     code: 'E1',
+  //   },
+  // ];
+  // const code = [
+  //   {
+  //     code: 'C1',
+  //     class: '009',
+  //   },
+  //   {
+  //     code: 'A1',
+  //     class: '606',
+  //   },
+  // ];
+  // const result = x.map((i) => {
+  //   const labX = code.find((o) => o.code === i.code);
+  //   if (labX) {
+  //     return { ...i, isMatch: true };
+  //   }
+  //   if (!labX) {
+  //     return { ...i, isMatch: false };
+  //   }
+  //   return labX;
+  // });
+
+  // console.log(result);
+
   return (
-    <Box>
-      {items?.map((item, index) => (
+    <Box sx={{ display: 'grid', gap: 2 }}>
+      {itemRebuild?.map((item, index) => (
         <Box key={index}>
           <AccordionList
             title={item.nama}
@@ -18,11 +81,9 @@ function Tagihan() {
               item?.periode ? (
                 <>
                   <Box>
-                    {JSON.parse(item?.periode)?.map((x, y) => (
-                      <Box key={y}>
-                        <Typography>{x.bulan}</Typography>
-                      </Box>
-                    ))}
+                    <Box mt={2}>
+                      <TableComponen hideOption tableBody={item.periode} tableHead={tableHead} />
+                    </Box>
                   </Box>
                 </>
               ) : (

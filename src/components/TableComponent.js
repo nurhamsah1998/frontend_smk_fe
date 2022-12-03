@@ -19,7 +19,15 @@ import InfoIcon from '@mui/icons-material/Info';
 
 import { grey, green } from '@mui/material/colors';
 
-function TableComponen({ tableHead, tableBody, emptyTag, handleDelete, handleUpdate, handleDetail }) {
+function TableComponen({
+  tableHead,
+  tableBody,
+  emptyTag,
+  handleDelete,
+  handleUpdate,
+  handleDetail,
+  hideOption = false,
+}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [item, setItem] = React.useState({});
   const open = Boolean(anchorEl);
@@ -121,7 +129,7 @@ function TableComponen({ tableHead, tableBody, emptyTag, handleDelete, handleUpd
                         setItem(body);
                       }}
                     >
-                      <MoreVertIcon />
+                      {hideOption ? null : <MoreVertIcon />}
                     </IconButton>
                     <Menu
                       id="basic-menu"

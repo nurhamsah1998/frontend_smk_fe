@@ -8,7 +8,7 @@ import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 function FormTagihan({ values, setFieldValue, getFieldProps }) {
   const handleClickAddBill = () => {
     const valuePeriode = [...values?.periode];
-    valuePeriode.push({ bulan: '', total: '' });
+    valuePeriode.push({ bulan: '', total: '', kode_bulan: '' });
     setFieldValue('periode', valuePeriode);
   };
   return (

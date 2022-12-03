@@ -43,8 +43,21 @@ function BuatTagihan() {
         innerRef={formRef}
         initialValues={initialValues}
         onSubmit={(values) => {
-          const ifNotSpp = values?.periode?.length <= 0 ? false : values?.periode;
-          const data = { ...values, periode: ifNotSpp, jurusanId: values?.jurusanId?.id || '' };
+          const spp = values?.periode?.map((i) => ({
+            ...i,
+            kode_bulan: `${i.bulan?.slice(0, 3)?.toUpperCase()}${values?.kelas}${values?.jurusanId?.nama}${
+              values?.angkatan
+            }`,
+          }));
+          const ifNotSpp = values?.periode?.length <= 0 ? false : spp;
+          const data = {
+            ...values,
+            periode: ifNotSpp,
+            jurusanId: values?.jurusanId?.id || '',
+            total: Boolean(values?.periode?.length <= 0)
+              ? values?.total
+              : values?.periode.map((i) => parseFloat(i.total)).reduce((a, b) => a + b),
+          };
           mutationPost.mutate(data);
         }}
         enableReinitialize
