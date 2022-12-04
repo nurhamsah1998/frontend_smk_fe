@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   IconButton,
+  Pagination,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -28,6 +29,9 @@ function TableComponen({
   handleDetail,
   hideOption = false,
   colorHead = 'green',
+  count,
+  page,
+  pageOnchange,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [item, setItem] = React.useState({});
@@ -196,6 +200,9 @@ function TableComponen({
           )}
         </TableBody>
       </Table>
+      <Box sx={{ py: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <Pagination onChange={pageOnchange} count={count} />
+      </Box>
     </Box>
   );
 }

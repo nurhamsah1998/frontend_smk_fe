@@ -1,9 +1,24 @@
 import React from 'react';
 import { Box, Button, TextField } from '@mui/material';
+import useFetch from '../../../hooks/useFetch';
+import TableComponen from '../../../components/TableComponent';
 
 function Pembayaran() {
+  const { items, page, totalPage, setPage } = useFetch({
+    module: 'siswa',
+  });
+  const tableHead = [
+    {
+      id: 'nama',
+      label: 'Nama tagihan',
+    },
+    {
+      id: 'username',
+      label: 'Username',
+    },
+  ];
   return (
-    <Box>
+    <Box sx={{ display: 'grid' }}>
       <Box sx={{ display: 'flex', gap: 2 }}>
         <Box sx={{ width: '50%' }}>
           <TextField size="small" label="Kode siswa" fullWidth />
@@ -14,6 +29,17 @@ function Pembayaran() {
         <Box sx={{ width: '100%' }}>
           <Box>asd</Box>
         </Box>
+      </Box>
+      <Box>
+        <TableComponen
+          count={totalPage}
+          pageOnchange={(x, y) => {
+            setPage(y - 1);
+          }}
+          hideOption
+          tableBody={items}
+          tableHead={tableHead}
+        />
       </Box>
     </Box>
   );
