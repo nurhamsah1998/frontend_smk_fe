@@ -22,15 +22,15 @@ function useFetch({ module, enabled = true }) {
     }
   );
   const items = query.data?.data?.data || [];
+  const itemsNoPagination = query.data?.data || [];
   const totalPage = query.data?.data?.totalPage;
   const currentPage = query.data?.data?.page;
   const totalRows = query.data?.data?.totalRows;
-  console.log(page);
 
   React.useEffect(() => {
     query.refetch();
   }, [page]);
-  return { items, setPage, search, currentPage, totalRows, totalPage, setSearch, page, ...query };
+  return { items, setPage, search, currentPage, totalRows, totalPage, setSearch, itemsNoPagination, page, ...query };
 }
 
 export default useFetch;

@@ -1,6 +1,5 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
-import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 //
 import BlogPage from './pages/BlogPage';
@@ -14,12 +13,15 @@ import RegisterStudentPage from './pages/AuthPage/siswa/Register/RegisterStudent
 import AppSiswa from './pages/SISWA/AppSiswa';
 import DashboardLayoutStudent from './layouts/STUDENT/DashboardLayoutStudent';
 import RegisterStaffPage from './pages/AuthPage/staff/Register/RegisterStaffPage';
-import DashboardLayoutStaff from './layouts/STAFF_TU/DashboardLayoutStaff';
+import DashboardLayoutStaff from './layouts/STAFF_TU/DashboardLayoutStaffTU';
 import AppStaffTU from './pages/STAFF_TU/AppStaffTU';
 import RouterPath from './RouterPath';
 import TagihanSiswa from './pages/SISWA/Tagihan/Tagihan';
 import TagihanStaff from './pages/STAFF_TU/Tagihan/TagihanStaff';
 import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
+import AppStaffPPDB from './pages/STAFF_PPDB/AppStaffPPDB';
+import DashboardLayoutStaffPPDB from './layouts/STAFF_PPDB/DashboardLayoutStaffPPDB';
+import Pendaftar from './pages/STAFF_PPDB/Pendaftar/Pendaftar';
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +38,15 @@ export default function Router() {
         // { path: 'user', element: <UserPage /> },
         // { path: 'products', element: <ProductsPage /> },
         // { path: 'blog', element: <BlogPage /> },
+      ],
+    },
+    {
+      path: '/staff-ppdb',
+      element: <DashboardLayoutStaffPPDB />,
+      children: [
+        { element: <Navigate to="/staff-ppdb/dashboard" />, index: true },
+        { path: 'dashboard', element: <AppStaffPPDB /> },
+        { path: 'pendaftar', element: <Pendaftar /> },
       ],
     },
     {

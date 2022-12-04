@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
+import jwtDecode from 'jwt-decode';
 //
-import Header from './header';
-import Nav from './nav';
 import { PROFILE } from '../../hooks/useHelperContext';
 import useFetch from '../../hooks/useFetch';
+import Header from '../dashboard/header';
+import Nav from '../dashboard/nav';
+import { navConfigTU } from '../navConfig/navConfig';
 
 // ----------------------------------------------------------------------
 
@@ -41,24 +43,32 @@ const Main = styled('div')(({ theme }) => ({
 
 export default function DashboardLayoutStaff() {
   const [open, setOpen] = useState(false);
-  const { items, isLoading } = useFetch({
+  const { itemsNoPagination, isLoading, isFetched } = useFetch({
     module: 'staff-profile',
   });
   const navigate = useNavigate();
+  const token = window.localStorage.getItem('accessToken');
+  const localToken = jwtDecode(token || '');
+  console.log('tes loop from TU');
   useEffect(() => {
-    const token = window.localStorage.getItem('accessToken');
     if (!token) {
       navigate('/staff-login');
     }
   }, []);
+  useEffect(() => {
+    if (localToken?.roleStaff === 'ADMINISTRASI') {
+      console.log('i am administrasi');
+    } else {
+      navigate('/loading');
+    }
+  }, []);
+
   return (
     <>
-      <PROFILE.Provider value={{ items, isLoading }}>
+      <PROFILE.Provider value={{ itemsNoPagination, isLoading }}>
         <StyledRoot>
           <Header onOpenNav={() => setOpen(true)} />
-
-          <Nav openNav={open} onCloseNav={() => setOpen(false)} />
-
+          <Nav openNav={open} navConfig={navConfigTU} onCloseNav={() => setOpen(false)} />
           <Main>
             <Outlet />
           </Main>

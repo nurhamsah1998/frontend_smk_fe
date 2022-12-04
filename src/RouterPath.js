@@ -18,7 +18,11 @@ function RouterPath() {
         },
         {
           role: 'GURU',
-          path: '/staff-guru/app',
+          path: '/staff-guru/dashboard',
+        },
+        {
+          role: 'PPDB',
+          path: '/staff-ppdb/dashboard',
         },
       ];
       const findRole = traficRole.find((i) => i.role === token.roleStaff);

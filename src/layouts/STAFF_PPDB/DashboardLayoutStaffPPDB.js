@@ -3,13 +3,11 @@ import { Outlet, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 //
-import Header from './header';
-import Nav from './nav';
-import useFetch from '../../hooks/useFetch';
-import ProgresPage from '../ProgresPage';
+import Header from '../dashboard/header';
+import Nav from '../dashboard/nav';
+import { navConfigPPDB } from '../navConfig/navConfig';
 import { PROFILE } from '../../hooks/useHelperContext';
-import LoadingPageReload from '../ProgresPage/LoadingPageReload';
-import BannedPage from '../ProgresPage/BannedPage';
+import useFetch from '../../hooks/useFetch';
 
 // ----------------------------------------------------------------------
 
@@ -42,39 +40,29 @@ const Main = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayoutStudent() {
+export default function DashboardLayoutStaffPPDB() {
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
   const { itemsNoPagination, isLoading } = useFetch({
-    module: 'siswa-profile',
+    module: 'staff-profile',
   });
+  const navigate = useNavigate();
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
     if (!token) {
-      navigate('/siswa-login');
+      navigate('/staff-login');
     }
   }, []);
-
-  const jsxElement = (
+  return (
     <>
-      {itemsNoPagination?.status?.includes('checking') && <ProgresPage />}
-      {itemsNoPagination?.status?.includes('lock') && <BannedPage />}
-      {itemsNoPagination?.status?.includes('accepted') && (
+      <PROFILE.Provider value={{ itemsNoPagination, isLoading }}>
         <StyledRoot>
           <Header onOpenNav={() => setOpen(true)} />
-
-          <Nav openNav={open} onCloseNav={() => setOpen(false)} />
-
+          <Nav navConfig={navConfigPPDB} openNav={open} onCloseNav={() => setOpen(false)} />
           <Main>
             <Outlet />
           </Main>
         </StyledRoot>
-      )}
+      </PROFILE.Provider>
     </>
-  );
-  return (
-    <PROFILE.Provider value={{ itemsNoPagination, isLoading }}>
-      <>{isLoading ? <LoadingPageReload /> : jsxElement}</>
-    </PROFILE.Provider>
   );
 }

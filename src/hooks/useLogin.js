@@ -7,7 +7,6 @@ import jwt_decode from 'jwt-decode';
 import { apiUrl } from './api';
 
 function useLogin({ module }) {
-  console.log(apiUrl);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const traficRole = [
@@ -17,7 +16,11 @@ function useLogin({ module }) {
     },
     {
       role: 'GURU',
-      path: '/staff-guru/app',
+      path: '/staff-guru/dashboard',
+    },
+    {
+      role: 'PPDB',
+      path: '/staff-ppdb/dashboard',
     },
   ];
   const login = useMutation(

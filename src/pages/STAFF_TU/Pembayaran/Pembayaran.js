@@ -19,16 +19,8 @@ function Pembayaran() {
   ];
   return (
     <Box sx={{ display: 'grid' }}>
-      <Box sx={{ display: 'flex', gap: 2 }}>
-        <Box sx={{ width: '50%' }}>
-          <TextField size="small" label="Kode siswa" fullWidth />
-          <Button fullWidth sx={{ mt: 2 }} variant="contained">
-            Cari
-          </Button>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <Box>asd</Box>
-        </Box>
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <TextField size="small" label="Kode siswa" />
       </Box>
       <Box>
         <TableComponen

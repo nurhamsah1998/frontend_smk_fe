@@ -1,13 +1,13 @@
 // component
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
-import SvgColor from '../../../components/svg-color';
+import SvgColor from '../../components/svg-color';
 
 // ----------------------------------------------------------------------
 
 const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
 
-const navConfig = [
+export const navConfigTU = [
   {
     title: 'Dashboard',
     path: '/staff-tu/dashboard',
@@ -24,5 +24,15 @@ const navConfig = [
     icon: <PointOfSaleIcon />,
   },
 ];
-
-export default navConfig;
+export const navConfigPPDB = [
+  {
+    title: 'Dashboard',
+    path: '/staff-ppdb/dashboard',
+    icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Pendaftar',
+    path: '/staff-ppdb/pendaftar',
+    icon: <RequestQuoteIcon />,
+  },
+];

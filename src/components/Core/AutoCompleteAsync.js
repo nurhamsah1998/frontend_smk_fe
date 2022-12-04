@@ -3,7 +3,7 @@ import { Autocomplete, TextField, Box } from '@mui/material';
 import useFetch from '../../hooks/useFetch';
 
 function AutoCompleteAsync({ onChange, module, label }) {
-  const { items, refetch, isLoading } = useFetch({
+  const { itemsNoPagination, refetch, isLoading, data } = useFetch({
     module,
     enabled: false,
   });
@@ -13,8 +13,8 @@ function AutoCompleteAsync({ onChange, module, label }) {
         disablePortal
         loading={isLoading}
         onOpen={() => refetch()}
-        getOptionLabel={(items) => items?.nama || ''}
-        options={items || []}
+        getOptionLabel={(itemsNoPagination) => itemsNoPagination?.nama || ''}
+        options={itemsNoPagination || []}
         fullWidth
         onChange={onChange}
         renderInput={(params) => <TextField {...params} label={label} />}
