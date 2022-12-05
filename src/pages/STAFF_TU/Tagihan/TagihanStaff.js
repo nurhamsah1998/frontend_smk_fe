@@ -11,10 +11,9 @@ import { Dialog } from '../../../hooks/useContextHook';
 
 export default function TagihanStaff() {
   const { setDialog } = React.useContext(Dialog);
-  const { items } = useFetch({
+  const { items, data } = useFetch({
     module: 'tagihan',
   });
-
   const { destroy } = useDelete({
     module: 'tagihan',
     isCloseAfterConfirmDelete: true,

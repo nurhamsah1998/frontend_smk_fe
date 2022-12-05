@@ -5,10 +5,10 @@ import AccordionList from '../../../components/AccordionList';
 import TableComponen from '../../../components/TableComponent';
 
 function Tagihan() {
-  const { items } = useFetch({
+  const { itemsNoPagination } = useFetch({
     module: 'tagihan-siswa',
   });
-  const itemRebuild = items?.map((i) => ({
+  const itemRebuild = itemsNoPagination?.map((i) => ({
     ...i,
     periode: i?.periode ? JSON.parse(i?.periode) : i?.periode,
     status: false,

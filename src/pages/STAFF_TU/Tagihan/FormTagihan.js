@@ -11,6 +11,9 @@ function FormTagihan({ values, setFieldValue, getFieldProps }) {
     valuePeriode.push({ bulan: '', total: '', kode_bulan: '' });
     setFieldValue('periode', valuePeriode);
   };
+
+  /// Disabled button when form reach 12 form
+  const isDisabled = values?.periode?.length >= 12;
   return (
     <Form>
       <Box sx={{ display: 'grid', gap: 2 }}>
@@ -203,7 +206,7 @@ function FormTagihan({ values, setFieldValue, getFieldProps }) {
                     </Box>
                   ))}
                 </Box>
-                <Button onClick={handleClickAddBill} sx={{ mt: 2 }} variant="contained" fullWidth>
+                <Button disabled={isDisabled} onClick={handleClickAddBill} sx={{ mt: 2 }} variant="contained" fullWidth>
                   Tambah periode pembayaran
                 </Button>
               </Box>

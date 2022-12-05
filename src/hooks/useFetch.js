@@ -7,7 +7,7 @@ function useFetch({ module, enabled = true }) {
   const token = window.localStorage.getItem('accessToken');
   const [page, setPage] = React.useState(0);
   const [search, setSearch] = React.useState('');
-  const [limit, setLimit] = React.useState(10);
+  const [limit, setLimit] = React.useState(5);
   const query = useQuery(
     [module, enabled],
     () =>
@@ -29,7 +29,7 @@ function useFetch({ module, enabled = true }) {
 
   React.useEffect(() => {
     query.refetch();
-  }, [page]);
+  }, [page, search]);
   return { items, setPage, search, currentPage, totalRows, totalPage, setSearch, itemsNoPagination, page, ...query };
 }
 

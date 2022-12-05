@@ -50,7 +50,7 @@ Nav.propTypes = {
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
-  const { items, isLoading } = useContext(PROFILE);
+  const { itemsNoPagination, isLoading } = useContext(PROFILE);
   const isDesktop = useResponsive('up', 'md');
 
   useEffect(() => {
@@ -73,13 +73,17 @@ export default function Nav({ openNav, onCloseNav }) {
             <Avatar src={account.photoURL} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary', textTransform: 'capitalize' }}>
-                {isLoading ? <LinearProgress /> : items?.nama}
+                {isLoading ? <LinearProgress /> : itemsNoPagination?.nama}
               </Typography>
               {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {isLoading ? <LinearProgress /> : `${items?.username}`}
+                {isLoading ? <LinearProgress /> : `${itemsNoPagination?.username}`}
               </Typography> */}
               <Stack>
-                <Button onClick={() => navigate(`?profile-id=${items.id}`)} variant="contained" size="small">
+                <Button
+                  onClick={() => navigate(`?profile-id=${itemsNoPagination.id}`)}
+                  variant="contained"
+                  size="small"
+                >
                   lihat profil
                 </Button>
               </Stack>
@@ -138,10 +142,10 @@ export default function Nav({ openNav, onCloseNav }) {
         labelClose="tutup"
         labelSubmit="buat"
       >
-        <ListItemText primary="Nama" secondary={items?.nama} />
-        <ListItemText primary="Jurusan" secondary={items?.jurusan?.nama} />
-        <ListItemText primary="Kelas" secondary={items?.kelas} />
-        <ListItemText primary="Angkatan" secondary={items?.angkatan} />
+        <ListItemText primary="Nama" secondary={itemsNoPagination?.nama} />
+        <ListItemText primary="Jurusan" secondary={itemsNoPagination?.jurusan?.nama} />
+        <ListItemText primary="Kelas" secondary={itemsNoPagination?.kelas} />
+        <ListItemText primary="Angkatan" secondary={itemsNoPagination?.angkatan} />
       </ScreenDialog>
     </Box>
   );

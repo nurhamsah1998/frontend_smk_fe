@@ -12,11 +12,14 @@ import {
   MenuItem,
   IconButton,
   Pagination,
+  Switch,
+  FormHelperText,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 
 import { grey, green, red, blue, orange, cyan, purple } from '@mui/material/colors';
 
@@ -32,6 +35,11 @@ function TableComponen({
   count,
   page,
   pageOnchange,
+  handleSwitch,
+  setChecked,
+  checked,
+  handleChangeSwitch,
+  handleSeeBill,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [item, setItem] = React.useState({});
@@ -73,26 +81,22 @@ function TableComponen({
       <Table>
         <TableHead>
           <TableRow sx={{ bgcolor: '#1BC5BD' }}>
-            {tableBody?.length <= 0 ? (
-              <TableCell>{null}</TableCell>
-            ) : (
-              tableHead?.map((head, index) => (
-                <TableCell
-                  colSpan={index === tableHead?.length - 1 ? 6 : 'false'}
-                  sx={{
-                    fontWeight: 600,
-                    border: 'none',
-                    bgcolor: variantColorTableHead?.color,
-                    color: '#fff',
-                    px: 2,
-                    py: 1,
-                  }}
-                  key={index}
-                >
-                  {head.label}
-                </TableCell>
-              ))
-            )}
+            {tableHead?.map((head, index) => (
+              <TableCell
+                colSpan={index === tableHead?.length - 1 ? 6 : 'false'}
+                sx={{
+                  fontWeight: 600,
+                  border: 'none',
+                  bgcolor: variantColorTableHead?.color,
+                  color: '#fff',
+                  px: 2,
+                  py: 1,
+                }}
+                key={index}
+              >
+                {head.label}
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -157,6 +161,9 @@ function TableComponen({
                       onClick={(event) => {
                         handleClick(event);
                         setItem(body);
+                        if (handleSwitch) {
+                          setChecked(body?.indicator);
+                        }
                       }}
                     >
                       {hideOption ? null : <MoreVertIcon />}
@@ -170,9 +177,29 @@ function TableComponen({
                         'aria-labelledby': 'basic-button',
                       }}
                     >
+                      {handleSeeBill ? (
+                        <MenuItem
+                          onClick={() => {
+                            handleSeeBill(item);
+                            setAnchorEl(null);
+                          }}
+                        >
+                          <RequestQuoteIcon color="primary" sx={{ mr: 1 }} /> Lihat tagihan
+                        </MenuItem>
+                      ) : null}
                       {handleDetail ? (
                         <MenuItem onClick={handleDetail}>
                           <InfoIcon color="primary" sx={{ mr: 1 }} /> Detail
+                        </MenuItem>
+                      ) : null}
+                      {handleSwitch ? (
+                        <MenuItem>
+                          <Switch
+                            checked={checked}
+                            onChange={(i) => handleChangeSwitch(i, item)}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                          <FormHelperText>Status</FormHelperText>
                         </MenuItem>
                       ) : null}
                       {handleUpdate ? (
