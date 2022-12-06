@@ -12,7 +12,12 @@ export default function AccordionList({ title, content }) {
     <div>
       <Accordion>
         <AccordionSummary
-          sx={{ bgcolor: blue[100] }}
+          sx={{
+            bgcolor: blue[100],
+            // '& .css-o4b71y-MuiAccordionSummary-content.Mui-expanded': {
+            //   margin: '4px 0px ',
+            // },
+          }}
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"

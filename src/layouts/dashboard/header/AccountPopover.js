@@ -40,7 +40,7 @@ export default function AccountPopover() {
     setOpen(null);
   };
   const handleLogOut = () => {
-    setDialog({
+    setDialog((i) => ({
       title: 'Apakah anda yakin ingin keluar?',
       labelClose: 'Batal',
       labelSubmit: 'Keluar',
@@ -48,7 +48,8 @@ export default function AccountPopover() {
         window.localStorage.removeItem('accessToken');
         navigate('/');
       },
-    });
+      isCloseAfterSubmit: true,
+    }));
   };
 
   return (

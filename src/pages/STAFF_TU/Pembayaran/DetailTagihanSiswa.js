@@ -26,11 +26,10 @@ function DetailTagihanSiswa() {
     <Box>
       <ScreenDialog
         // isLoading={isLoading}
-        open={location.search?.includes('?open-student-bill')}
+        open={location.search?.includes('?modal-open=true&force=')}
         title="Daftar tagihan siswa"
         handleClose={() => navigate(-1)}
         labelClose="tutup"
-        labelSubmit="buat"
       >
         <TabScreen tabList={tabList} />
       </ScreenDialog>

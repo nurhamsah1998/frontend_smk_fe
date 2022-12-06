@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
-import { AppBar } from '@mui/material';
+import { AppBar, ListItemText, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
+import queryString from 'query-string';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AccordionList from '../../../components/AccordionList';
 import TableComponen from '../../../components/TableComponent';
 import useFetchById from '../../../hooks/useFetchById';
+import { Dialog } from '../../../hooks/useContextHook';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -39,11 +42,48 @@ function a11yProps(index) {
 }
 
 export default function TabScreen({ tabList }) {
+  const navigate = useNavigate();
+  const { setDialog } = React.useContext(Dialog);
+  const location = useLocation();
+  const idCode = queryString.parse(location.search);
+  const [value, setValue] = React.useState(0);
   const { items } = useFetchById({
     module: 'tagihan',
-    queryParam: 'open-student-bill-id',
+    idCode: `${idCode?.force}${idCode?.major}0${value + 1}`,
   });
-  const [value, setValue] = React.useState(0);
+
+  const FormatCurrency = (params) => {
+    const resultAfterFormating = Number(params).toLocaleString('en-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    });
+    return resultAfterFormating;
+  };
+  const handleTransaction = (item) => {
+    console.log(item);
+    setDialog({
+      title: 'Masukkan uang siswa',
+      labelClose: 'Batal',
+      labelSubmit: 'Bayar',
+      isLoadingAfterSubmit: true,
+      content: (
+        <>
+          <Box>
+            <ListItemText primary="Total tagihan" secondary={FormatCurrency(item?.total)} />
+
+            <TextField sx={{ mt: 2 }} label="Uang diterima" fullWidth />
+          </Box>
+        </>
+      ),
+      do: () => {
+        console.log(item);
+      },
+    });
+  };
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   const tableHead = [
     {
       id: 'bulan',
@@ -70,10 +110,7 @@ export default function TabScreen({ tabList }) {
       ],
     },
   ];
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  console.log(`0${value + 1}`);
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -105,9 +142,9 @@ export default function TabScreen({ tabList }) {
                           <Box>
                             <Box mt={2}>
                               <TableComponen
+                                handleTransaction={handleTransaction}
                                 disablePagination
                                 colorHead="cyan"
-                                hideOption
                                 tableBody={item?.periode}
                                 tableHead={tableHead}
                               />

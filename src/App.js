@@ -19,7 +19,11 @@ export default function App() {
     content: null,
     labelClose: '',
     labelSubmit: '',
+    isCloseAfterSubmit: false,
+    isLoadingAfterSubmit: false,
+    isLoading: false,
   });
+
   return (
     <ThemeProvider>
       <Dialog.Provider value={{ setDialog }}>
@@ -27,14 +31,20 @@ export default function App() {
         <StyledChart />
         <Router />
         <ScreenDialog
-          fullWidth={false}
+          fullWidth
           title={dialog.title}
           labelClose={dialog.labelClose}
+          isLoading={dialog.isLoading}
           labelSubmit={dialog.labelSubmit}
           open={Boolean(dialog.do)}
           handleSubmit={() => {
             dialog.do();
-            setDialog((i) => ({ ...i, do: null }));
+            if (dialog.isCloseAfterSubmit) {
+              setDialog((i) => ({ ...i, do: null }));
+            }
+            if (dialog.isLoadingAfterSubmit) {
+              setDialog((i) => ({ ...i, isLoading: true }));
+            }
           }}
           handleClose={() => setDialog((i) => ({ ...i, do: null }))}
         >

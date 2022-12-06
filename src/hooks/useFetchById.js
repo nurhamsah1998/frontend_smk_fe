@@ -1,24 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import queryString from 'query-string';
-import React from 'react';
 import { apiUrl } from './api';
 
-function useFetchById({ module, enabled = true, queryParam }) {
+function useFetchById({ module, enabled = true, idCode = false }) {
   const location = useLocation();
-  const idCode = queryString.parse(location.search);
   const token = window.localStorage.getItem('accessToken');
   const query = useQuery(
-    [module, queryParam],
+    [module, idCode],
     () =>
-      axios.get(`${apiUrl}${module}/${idCode[queryParam]}`, {
+      axios.get(`${apiUrl}${module}/${idCode}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       }),
     {
-      enabled: Boolean(idCode[queryParam]),
+      enabled: Boolean(idCode),
       networkMode: 'always',
     }
   );

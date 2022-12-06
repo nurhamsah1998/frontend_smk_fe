@@ -14,7 +14,7 @@ function Pembayaran() {
 
   const itemsRebuild = items?.map((i) => ({ ...i, jurusan: i?.jurusan?.nama }));
   const handleSeeBill = (item) => {
-    navigate(`?open-student-bill-id=${item?.angkatan}${item?.jurusan}${item?.kelas}`);
+    navigate(`?modal-open=true&force=${item?.angkatan}&major=${item?.jurusan}`);
   };
 
   const tableHead = [

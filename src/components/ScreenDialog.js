@@ -48,9 +48,11 @@ export default function ScreenDialog({
           <LoadingButton variant="contained" color="error" onClick={handleClose || handleCloseDefault}>
             {labelClose}
           </LoadingButton>
-          <LoadingButton loading={isLoading} variant="contained" onClick={handleSubmit}>
-            {labelSubmit}
-          </LoadingButton>
+          {handleSubmit ? (
+            <LoadingButton loading={isLoading} variant="contained" onClick={handleSubmit}>
+              {labelSubmit}
+            </LoadingButton>
+          ) : null}
         </DialogActions>
       </Dialog>
     </div>

@@ -18,9 +18,9 @@ function useDelete({ module, isCloseAfterConfirmDelete }) {
             enqueueSnackbar(res?.data?.msg, { variant: 'success' });
             client.invalidateQueries([module]);
             setDialog((i) => ({
+              ...i,
               do: null,
-              title: i.title,
-              content: i.content,
+              isLoading: false,
             }));
           } else {
             enqueueSnackbar(res?.data?.msg, { variant: 'success' });

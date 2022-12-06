@@ -41,6 +41,7 @@ function TableComponen({
   handleChangeSwitch,
   handleSeeBill,
   disablePagination = false,
+  handleTransaction,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [item, setItem] = React.useState({});
@@ -173,11 +174,26 @@ function TableComponen({
                       id="basic-menu"
                       anchorEl={anchorEl}
                       open={open}
+                      sx={{
+                        '& .css-1h30a5t-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper': {
+                          boxShadow: '0px 5px 5px -3px rgb(145 158 171 / 20%)',
+                        },
+                      }}
                       onClose={handleClose}
                       MenuListProps={{
                         'aria-labelledby': 'basic-button',
                       }}
                     >
+                      {handleTransaction ? (
+                        <MenuItem
+                          onClick={() => {
+                            handleTransaction(item);
+                            setAnchorEl(null);
+                          }}
+                        >
+                          <RequestQuoteIcon color="primary" sx={{ mr: 1 }} /> Buat transaksi
+                        </MenuItem>
+                      ) : null}
                       {handleSeeBill ? (
                         <MenuItem
                           onClick={() => {
