@@ -12,7 +12,7 @@ export default function AccordionList({ title, content }) {
     <div>
       <Accordion>
         <AccordionSummary
-          sx={{ bgcolor: blue[100], borderRadius: '9px 9px 0px 0px' }}
+          sx={{ bgcolor: blue[100] }}
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"

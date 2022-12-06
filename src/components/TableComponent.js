@@ -40,6 +40,7 @@ function TableComponen({
   checked,
   handleChangeSwitch,
   handleSeeBill,
+  disablePagination = false,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [item, setItem] = React.useState({});
@@ -227,7 +228,7 @@ function TableComponen({
           )}
         </TableBody>
       </Table>
-      <Box sx={{ py: 2, display: 'flex', justifyContent: 'flex-end' }}>
+      <Box sx={{ py: 2, display: disablePagination ? 'none' : 'flex', justifyContent: 'flex-end' }}>
         <Pagination onChange={pageOnchange} count={count} />
       </Box>
     </Box>

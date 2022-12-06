@@ -13,7 +13,7 @@ function Tagihan() {
     periode: i?.periode ? JSON.parse(i?.periode) : i?.periode,
     status: false,
   }));
-  console.log(itemRebuild);
+
   const tableHead = [
     {
       id: 'bulan',

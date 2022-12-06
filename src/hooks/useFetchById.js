@@ -7,18 +7,18 @@ import { apiUrl } from './api';
 
 function useFetchById({ module, enabled = true, queryParam }) {
   const location = useLocation();
-  const idSiswa = queryString.parse(location.search);
+  const idCode = queryString.parse(location.search);
   const token = window.localStorage.getItem('accessToken');
   const query = useQuery(
     [module, queryParam],
     () =>
-      axios.get(`${apiUrl}${module}/${idSiswa[queryParam]}`, {
+      axios.get(`${apiUrl}${module}/${idCode[queryParam]}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       }),
     {
-      enabled: Boolean(idSiswa[queryParam]),
+      enabled: Boolean(idCode[queryParam]),
       networkMode: 'always',
     }
   );

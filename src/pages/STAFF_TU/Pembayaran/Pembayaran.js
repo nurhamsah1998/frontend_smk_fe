@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import DetailTagihanSiswa from './DetailTagihanSiswa';
-import useFetchById from '../../../hooks/useFetchById';
 
 function Pembayaran() {
   const navigate = useNavigate();
@@ -12,15 +11,10 @@ function Pembayaran() {
   const { items, totalPage, setPage, search, setSearch } = useFetch({
     module: 'siswa',
   });
-  const { items: data } = useFetchById({
-    module: 'siswa',
-    queryParam: 'open-student-bill-id',
-  });
-  console.log(data);
 
   const itemsRebuild = items?.map((i) => ({ ...i, jurusan: i?.jurusan?.nama }));
   const handleSeeBill = (item) => {
-    navigate(`?open-student-bill-id=${item.id}`);
+    navigate(`?open-student-bill-id=${item?.angkatan}${item?.jurusan}${item?.kelas}`);
   };
 
   const tableHead = [
