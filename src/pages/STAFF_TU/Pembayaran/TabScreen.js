@@ -6,11 +6,14 @@ import Typography from '@mui/material/Typography';
 import { AppBar, ListItemText, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import queryString from 'query-string';
+import { grey } from '@mui/material/colors';
+import jwtDecode from 'jwt-decode';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AccordionList from '../../../components/AccordionList';
 import TableComponen from '../../../components/TableComponent';
 import useFetchById from '../../../hooks/useFetchById';
-import { Dialog } from '../../../hooks/useContextHook';
+import useMutationPost from '../../../hooks/useMutationPost';
+import ScreenDialog from '../../../components/ScreenDialog';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -43,15 +46,27 @@ function a11yProps(index) {
 
 export default function TabScreen({ tabList }) {
   const navigate = useNavigate();
-  const { setDialog } = React.useContext(Dialog);
+
   const location = useLocation();
   const idCode = queryString.parse(location.search);
   const [value, setValue] = React.useState(0);
-  const { items } = useFetchById({
+  const [moneyAccepted, setMoneyAccepted] = React.useState(0);
+  const [note, setNote] = React.useState('');
+  const [openModalTransaction, setOpenModalTransaction] = React.useState({ data: {}, open: false });
+  const { items, refetch } = useFetchById({
     module: 'tagihan',
-    idCode: `${idCode?.force}${idCode?.major}0${value + 1}`,
+    idCode: `${idCode?.force}${idCode?.major}0${value + 1}?kode_tagihan=${idCode?.kode_siswa}`,
+  });
+  const { mutationPost } = useMutationPost({
+    module: 'invoice',
+    next: () => {
+      setOpenModalTransaction({ data: null, open: false });
+      refetch();
+    },
   });
 
+  const localToken = window.localStorage.getItem('accessToken');
+  const token = jwtDecode(localToken || '');
   const FormatCurrency = (params) => {
     const resultAfterFormating = Number(params).toLocaleString('en-ID', {
       style: 'currency',
@@ -60,26 +75,22 @@ export default function TabScreen({ tabList }) {
     return resultAfterFormating;
   };
   const handleTransaction = (item) => {
-    console.log(item);
-    setDialog({
-      title: 'Masukkan uang siswa',
-      labelClose: 'Batal',
-      labelSubmit: 'Bayar',
-      isLoadingAfterSubmit: true,
-      content: (
-        <>
-          <Box>
-            <ListItemText primary="Total tagihan" secondary={FormatCurrency(item?.total)} />
-
-            <TextField sx={{ mt: 2 }} label="Uang diterima" fullWidth />
-          </Box>
-        </>
-      ),
-      do: () => {
-        console.log(item);
-      },
-    });
+    setOpenModalTransaction({ data: item, open: true });
   };
+
+  const handleSubmit = () => {
+    const body = {
+      nama: idCode?.nama,
+      total: Number(openModalTransaction?.data?.total),
+      kode_tagihan: idCode?.kode_siswa,
+      kode_pembayaran: openModalTransaction?.data?.kode_bulan,
+      note,
+      uang_diterima: Number(moneyAccepted),
+      petugas: token?.namaStaff,
+    };
+    mutationPost.mutate(body);
+  };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -113,6 +124,27 @@ export default function TabScreen({ tabList }) {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <ScreenDialog
+        open={openModalTransaction.open}
+        title="Daftar tagihan siswa"
+        handleSubmit={handleSubmit}
+        handleClose={() => setOpenModalTransaction({ data: null, open: false })}
+        labelClose="cancel"
+        labelSubmit="bayar"
+      >
+        <Box>
+          <ListItemText primary="Total tagihan" secondary={FormatCurrency(openModalTransaction?.data?.total)} />
+          <TextField
+            onChange={(i) => setMoneyAccepted(i.target.value)}
+            value={moneyAccepted}
+            sx={{ mt: 2 }}
+            type="number"
+            label="Uang diterima"
+            fullWidth
+          />
+          <TextField onChange={(i) => setNote(i.target.value)} value={note} sx={{ mt: 2 }} label="Catatan" fullWidth />
+        </Box>
+      </ScreenDialog>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <AppBar position="static">
           <Tabs
@@ -128,38 +160,46 @@ export default function TabScreen({ tabList }) {
           </Tabs>
         </AppBar>
       </Box>
-      <Box>
+      <Box sx={{ border: `${grey[300]} 1px solid`, width: '100%' }}>
         {tabList?.map((item, index) => (
           <TabPanel key={index} value={value} index={index}>
             <Box sx={{ display: 'grid', gap: 2 }}>
-              {items?.map((item, index) => (
-                <Box key={index}>
-                  <AccordionList
-                    title={item.nama}
-                    content={
-                      item?.periode ? (
-                        <>
-                          <Box>
-                            <Box mt={2}>
-                              <TableComponen
-                                handleTransaction={handleTransaction}
-                                disablePagination
-                                colorHead="cyan"
-                                tableBody={item?.periode}
-                                tableHead={tableHead}
-                              />
-                            </Box>
-                          </Box>
-                        </>
-                      ) : (
-                        <Box>
-                          <Typography>{item.nama} Bukan periode</Typography>
-                        </Box>
-                      )
-                    }
-                  />
+              {items?.length <= 0 ? (
+                <Box>
+                  <Typography textAlign="center" variant="h4">
+                    Tagihan Belum Tersedia
+                  </Typography>
                 </Box>
-              ))}
+              ) : (
+                items?.map((item, index) => (
+                  <Box key={index}>
+                    <AccordionList
+                      title={item.nama}
+                      content={
+                        item?.periode ? (
+                          <>
+                            <Box>
+                              <Box mt={2}>
+                                <TableComponen
+                                  handleTransaction={handleTransaction}
+                                  disablePagination
+                                  colorHead="cyan"
+                                  tableBody={item?.periode}
+                                  tableHead={tableHead}
+                                />
+                              </Box>
+                            </Box>
+                          </>
+                        ) : (
+                          <Box>
+                            <Typography>{item.nama} Bukan periode</Typography>
+                          </Box>
+                        )
+                      }
+                    />
+                  </Box>
+                ))
+              )}
             </Box>
           </TabPanel>
         ))}

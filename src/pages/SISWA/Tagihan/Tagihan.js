@@ -1,18 +1,70 @@
 import React, { Fragment } from 'react';
-import { Box, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
+import { Box, Typography, Tabs, Tab, AppBar, ListItemText } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import useFetch from '../../../hooks/useFetch';
 import AccordionList from '../../../components/AccordionList';
 import TableComponen from '../../../components/TableComponent';
+import useFetchById from '../../../hooks/useFetchById';
+import { PROFILE } from '../../../hooks/useHelperContext';
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 function Tagihan() {
-  const { itemsNoPagination } = useFetch({
-    module: 'tagihan-siswa',
+  const [value, setValue] = React.useState(0);
+  const { itemsNoPagination, isLoading } = React.useContext(PROFILE);
+  const { items, refetch } = useFetchById({
+    module: 'tagihan',
+    idCode: `${itemsNoPagination?.angkatan}${itemsNoPagination?.jurusan?.nama}0${value + 1}?kode_tagihan=${
+      itemsNoPagination?.kode_siswa
+    }`,
   });
-  const itemRebuild = itemsNoPagination?.map((i) => ({
-    ...i,
-    periode: i?.periode ? JSON.parse(i?.periode) : i?.periode,
-    status: false,
-  }));
+  console.log(items, 'opop');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const tabList = [
+    {
+      label: 'Kelas I',
+      class: '01',
+    },
+    {
+      label: 'Kelas II',
+      class: '02',
+    },
+    {
+      label: 'Kelas III',
+      class: '03',
+    },
+  ];
 
   const tableHead = [
     {
@@ -24,7 +76,7 @@ function Tagihan() {
       label: 'Nominal',
     },
     {
-      id: 'status',
+      id: 'isPaid',
       label: 'Status',
       variantStatusColor: [
         {
@@ -40,82 +92,67 @@ function Tagihan() {
       ],
     },
   ];
-
-  /// LAB
-  // const x = [
-  //   {
-  //     name: 'A',
-  //     code: 'A1',
-  //   },
-  //   {
-  //     name: 'B',
-  //     code: 'B1',
-  //   },
-  //   {
-  //     name: 'C',
-  //     code: 'C1',
-  //   },
-  //   {
-  //     name: 'D',
-  //     code: 'D1',
-  //   },
-  //   {
-  //     name: 'E',
-  //     code: 'E1',
-  //   },
-  // ];
-  // const code = [
-  //   {
-  //     code: 'C1',
-  //     class: '009',
-  //   },
-  //   {
-  //     code: 'A1',
-  //     class: '606',
-  //   },
-  // ];
-  // const result = x.map((i) => {
-  //   const labX = code.find((o) => o.code === i.code);
-  //   if (labX) {
-  //     return { ...i, isMatch: true };
-  //   }
-  //   if (!labX) {
-  //     return { ...i, isMatch: false };
-  //   }
-  //   return labX;
-  // });
-
-  // console.log(result);
-
   return (
-    <Box sx={{ display: 'grid', gap: 2 }}>
-      {itemRebuild?.map((item, index) => (
-        <Box key={index}>
-          <AccordionList
-            title={item.nama}
-            content={
-              item?.periode ? (
-                <>
-                  <Box>
-                    <Box mt={2}>
-                      <TableComponen
-                        colorHead="cyan"
-                        hideOption
-                        tableBody={[{ bulan: 'Januari', total: '20000', status: false }]}
-                        tableHead={tableHead}
-                      />
-                    </Box>
-                  </Box>
-                </>
-              ) : (
+    <Box>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <AppBar position="static">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="inherit"
+            aria-label="full width tabs example"
+          >
+            {tabList?.map((item, index) => (
+              <Tab key={index} label={item?.label} {...a11yProps(index)} />
+            ))}
+          </Tabs>
+        </AppBar>
+      </Box>
+      <Box sx={{ border: `${grey[300]} 1px solid` }}>
+        {tabList?.map((item, index) => (
+          <TabPanel key={index} value={value} index={index}>
+            <Box sx={{ display: 'grid', gap: 2 }}>
+              {items?.length <= 0 ? (
                 <Box>
-                  <Typography>{item.nama} Bukan periode</Typography>
+                  <Typography textAlign="center" variant="h4">
+                    Tagihan Belum Tersedia
+                  </Typography>
                 </Box>
-              )
-            }
-          />
-        </Box>
-      ))}
+              ) : (
+                items?.map((item, index) => (
+                  <Box key={index}>
+                    <AccordionList
+                      title={item.nama}
+                      content={
+                        item?.periode ? (
+                          <>
+                            <Box>
+                              <Box mt={2}>
+                                <TableComponen
+                                  hideOption
+                                  disablePagination
+                                  colorHead="cyan"
+                                  tableBody={item?.periode}
+                                  tableHead={tableHead}
+                                />
+                              </Box>
+                            </Box>
+                          </>
+                        ) : (
+                          <Box>
+                            <ListItemText secondary={item?.deskripsi} />
+                          </Box>
+                        )
+                      }
+                    />
+                  </Box>
+                ))
+              )}
+            </Box>
+          </TabPanel>
+        ))}
+      </Box>
     </Box>
   );
 }

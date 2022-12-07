@@ -7,14 +7,15 @@ import DetailTagihanSiswa from './DetailTagihanSiswa';
 
 function Pembayaran() {
   const navigate = useNavigate();
-
   const { items, totalPage, setPage, search, setSearch } = useFetch({
     module: 'siswa',
   });
 
   const itemsRebuild = items?.map((i) => ({ ...i, jurusan: i?.jurusan?.nama }));
   const handleSeeBill = (item) => {
-    navigate(`?modal-open=true&force=${item?.angkatan}&major=${item?.jurusan}`);
+    navigate(
+      `?modal-open=true&force=${item?.angkatan}&major=${item?.jurusan}&nama=${item?.nama}&kode_siswa=${item?.kode_siswa}`
+    );
   };
 
   const tableHead = [

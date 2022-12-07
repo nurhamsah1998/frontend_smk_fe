@@ -30,23 +30,19 @@ function FormTagihan({ values, setFieldValue, getFieldProps }) {
             option: [
               {
                 value: 'spp',
-                label: 'Pembayaran SPP',
+                label: 'SPP',
               },
               {
-                value: 'uang_lks',
-                label: 'Pembayaran buku LKS',
-              },
-              {
-                value: 'uang_seragam',
-                label: 'Pembayaran Seragam',
+                value: 'non_spp',
+                label: 'NON SPP',
               },
             ],
           },
           {
             name: 'periode',
             label: 'Jangka waktu pembayaran',
-            disable: !Boolean(values.categori?.includes('spp')),
-            isMultipleForm: Boolean(values.categori?.includes('spp')),
+            disable: Boolean(values.categori?.includes('spp')),
+            isMultipleForm: !Boolean(values.categori?.includes('non_spp')),
             option: [
               {
                 value: 'januari',
@@ -106,7 +102,7 @@ function FormTagihan({ values, setFieldValue, getFieldProps }) {
           {
             name: 'total',
             label: 'Total tagihan',
-            disable: Boolean(values.categori?.includes('spp')),
+            disable: !Boolean(values.categori?.includes('non_spp')),
             type: 'number',
           },
           {

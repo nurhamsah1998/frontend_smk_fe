@@ -9,18 +9,13 @@ import { blue } from '@mui/material/colors';
 
 export default function AccordionList({ title, content }) {
   return (
-    <div>
+    <Box sx={{ width: '100%' }}>
       <Accordion>
         <AccordionSummary
           sx={{
             bgcolor: blue[100],
-            // '& .css-o4b71y-MuiAccordionSummary-content.Mui-expanded': {
-            //   margin: '4px 0px ',
-            // },
           }}
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
         >
           <Typography>{title}</Typography>
         </AccordionSummary>
@@ -28,6 +23,6 @@ export default function AccordionList({ title, content }) {
           <Box>{content}</Box>
         </AccordionDetails>
       </Accordion>
-    </div>
+    </Box>
   );
 }
