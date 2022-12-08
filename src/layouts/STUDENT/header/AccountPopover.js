@@ -31,7 +31,7 @@ export default function AccountPopover() {
   const [open, setOpen] = useState(null);
   const { setDialog } = useContext(Dialog);
   const navigate = useNavigate();
-  const { items, isLoading } = useContext(PROFILE);
+  const { itemsNoPagination, isLoading } = useContext(PROFILE);
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -48,6 +48,7 @@ export default function AccountPopover() {
         window.localStorage.removeItem('accessToken');
         navigate('/');
       },
+      isCloseAfterSubmit: true,
     });
   };
   return (
@@ -93,7 +94,7 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {isLoading ? <LinearProgress /> : items?.nama}
+            {isLoading ? <LinearProgress /> : itemsNoPagination?.nama}
           </Typography>
         </Box>
 

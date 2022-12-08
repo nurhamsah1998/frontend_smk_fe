@@ -126,19 +126,15 @@ function Tagihan() {
                       title={item.nama}
                       content={
                         item?.periode ? (
-                          <>
-                            <Box>
-                              <Box mt={2}>
-                                <TableComponen
-                                  hideOption
-                                  disablePagination
-                                  colorHead="cyan"
-                                  tableBody={item?.periode}
-                                  tableHead={tableHead}
-                                />
-                              </Box>
-                            </Box>
-                          </>
+                          <Box mt={2}>
+                            <TableComponen
+                              hideOption
+                              disablePagination
+                              colorHead="cyan"
+                              tableBody={item?.periode}
+                              tableHead={tableHead}
+                            />
+                          </Box>
                         ) : (
                           <Box>
                             <ListItemText secondary={item?.deskripsi} />

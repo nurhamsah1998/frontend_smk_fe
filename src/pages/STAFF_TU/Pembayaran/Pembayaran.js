@@ -44,8 +44,8 @@ function Pembayaran() {
     <Box sx={{ display: 'grid' }}>
       <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
         <Box sx={{ display: 'grid' }}>
-          <TextField value={search} onChange={(i) => setSearch(i.target.value)} size="small" label="Kode siswa" />
-          <FormHelperText>Masukan kode siswa</FormHelperText>
+          <FormHelperText>Masukan nama siswa / kode siswa</FormHelperText>
+          <TextField value={search} onChange={(i) => setSearch(i.target.value)} size="small" />
         </Box>
       </Box>
       <Box>

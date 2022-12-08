@@ -19,6 +19,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 
 import { grey, green, red, blue, orange, cyan, purple } from '@mui/material/colors';
@@ -42,6 +43,7 @@ function TableComponen({
   handleSeeBill,
   disablePagination = false,
   handleTransaction,
+  handleInvoice,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [item, setItem] = React.useState({});
@@ -79,7 +81,7 @@ function TableComponen({
     },
   ].find((i) => i.variant === colorHead);
   return (
-    <Box sx={{ bgcolor: '#fff' }}>
+    <Box sx={{ bgcolor: '#fff', width: '100%' }}>
       <Table>
         <TableHead>
           <TableRow sx={{ bgcolor: '#1BC5BD' }}>
@@ -184,6 +186,16 @@ function TableComponen({
                         'aria-labelledby': 'basic-button',
                       }}
                     >
+                      {item?.isPaid ? (
+                        <MenuItem
+                          onClick={() => {
+                            handleInvoice(item);
+                            setAnchorEl(null);
+                          }}
+                        >
+                          <LocalPrintshopIcon color="primary" sx={{ mr: 1 }} /> Cetak Invoice
+                        </MenuItem>
+                      ) : null}
                       {handleTransaction ? (
                         <MenuItem
                           onClick={() => {

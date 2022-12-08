@@ -46,7 +46,6 @@ function a11yProps(index) {
 
 export default function TabScreen({ tabList }) {
   const navigate = useNavigate();
-
   const location = useLocation();
   const idCode = queryString.parse(location.search);
   const [value, setValue] = React.useState(0);
@@ -93,6 +92,9 @@ export default function TabScreen({ tabList }) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  const handleInvoice = (event) => {
+    console.log(event);
   };
 
   const tableHead = [
@@ -182,6 +184,7 @@ export default function TabScreen({ tabList }) {
                               <Box mt={2}>
                                 <TableComponen
                                   handleTransaction={handleTransaction}
+                                  handleInvoice={handleInvoice}
                                   disablePagination
                                   colorHead="cyan"
                                   tableBody={item?.periode}

@@ -29,6 +29,9 @@ function useFetch({ module, enabled = true }) {
 
   React.useEffect(() => {
     query.refetch();
+    if (search) {
+      setPage(0);
+    }
   }, [page, search]);
   return { items, setPage, search, currentPage, totalRows, totalPage, setSearch, itemsNoPagination, page, ...query };
 }
