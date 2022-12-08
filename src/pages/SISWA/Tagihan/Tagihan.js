@@ -7,6 +7,8 @@ import AccordionList from '../../../components/AccordionList';
 import TableComponen from '../../../components/TableComponent';
 import useFetchById from '../../../hooks/useFetchById';
 import { PROFILE } from '../../../hooks/useHelperContext';
+import ListItemComponent from '../../../components/ListItemComponent';
+import { FormatCurrency } from '../../../components/FormatCurrency';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -126,14 +128,22 @@ function Tagihan() {
                       title={item.nama}
                       content={
                         item?.periode ? (
-                          <Box mt={2}>
-                            <TableComponen
+                          <Box>
+                            {/* <TableComponen
                               hideOption
                               disablePagination
                               colorHead="cyan"
                               tableBody={item?.periode}
                               tableHead={tableHead}
-                            />
+                            /> */}
+                            {item?.periode?.map((x, y) => (
+                              <ListItemComponent
+                                key={y}
+                                isVerified={x?.isPaid}
+                                primary={x?.bulan}
+                                secondary={FormatCurrency(x?.total)}
+                              />
+                            ))}
                           </Box>
                         ) : (
                           <Box>

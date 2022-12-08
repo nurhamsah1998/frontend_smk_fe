@@ -14,6 +14,7 @@ import TableComponen from '../../../components/TableComponent';
 import useFetchById from '../../../hooks/useFetchById';
 import useMutationPost from '../../../hooks/useMutationPost';
 import ScreenDialog from '../../../components/ScreenDialog';
+import { FormatCurrency } from '../../../components/FormatCurrency';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,13 +67,7 @@ export default function TabScreen({ tabList }) {
 
   const localToken = window.localStorage.getItem('accessToken');
   const token = jwtDecode(localToken || '');
-  const FormatCurrency = (params) => {
-    const resultAfterFormating = Number(params).toLocaleString('en-ID', {
-      style: 'currency',
-      currency: 'IDR',
-    });
-    return resultAfterFormating;
-  };
+
   const handleTransaction = (item) => {
     setOpenModalTransaction({ data: item, open: true });
   };
