@@ -48,7 +48,6 @@ function Tagihan() {
       itemsNoPagination?.kode_siswa
     }`,
   });
-  console.log(items, 'opop');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

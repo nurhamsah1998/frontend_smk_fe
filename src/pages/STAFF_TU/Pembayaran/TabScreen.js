@@ -45,7 +45,7 @@ function a11yProps(index) {
   };
 }
 
-export default function TabScreen({ tabList }) {
+export default function TabScreen({ tabList, studentProfile }) {
   const navigate = useNavigate();
   const location = useLocation();
   const idCode = queryString.parse(location.search);
@@ -55,7 +55,9 @@ export default function TabScreen({ tabList }) {
   const [openModalTransaction, setOpenModalTransaction] = React.useState({ data: {}, open: false });
   const { items, refetch } = useFetchById({
     module: 'tagihan',
-    idCode: `${idCode?.force}${idCode?.major}0${value + 1}?kode_tagihan=${idCode?.kode_siswa}`,
+    idCode: `${studentProfile?.angkatan}${studentProfile?.jurusan?.nama}0${value + 1}?kode_tagihan=${
+      studentProfile?.kode_siswa
+    }`,
   });
   const { mutationPost } = useMutationPost({
     module: 'invoice',
@@ -74,9 +76,9 @@ export default function TabScreen({ tabList }) {
 
   const handleSubmit = () => {
     const body = {
-      nama: idCode?.nama,
+      nama: studentProfile?.nama,
       total: Number(openModalTransaction?.data?.total),
-      kode_tagihan: idCode?.kode_siswa,
+      kode_tagihan: studentProfile?.kode_siswa,
       kode_pembayaran: openModalTransaction?.data?.kode_bulan,
       note,
       uang_diterima: Number(moneyAccepted),

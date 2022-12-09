@@ -1,7 +1,12 @@
 import React from 'react';
+import DashboardAppPage from '../DashboardAppPage';
 
 function AppStaffTU() {
-  return <div>Hello Staf</div>;
+  return (
+    <div>
+      <DashboardAppPage />
+    </div>
+  );
 }
 
 export default AppStaffTU;

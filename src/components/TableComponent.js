@@ -196,7 +196,7 @@ function TableComponen({
                           <LocalPrintshopIcon color="primary" sx={{ mr: 1 }} /> Cetak Invoice
                         </MenuItem>
                       ) : null}
-                      {handleTransaction ? (
+                      {!item?.isPaid ? (
                         <MenuItem
                           onClick={() => {
                             handleTransaction(item);

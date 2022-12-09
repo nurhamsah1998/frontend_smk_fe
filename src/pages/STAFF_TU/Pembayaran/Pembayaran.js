@@ -13,9 +13,10 @@ function Pembayaran() {
 
   const itemsRebuild = items?.map((i) => ({ ...i, jurusan: i?.jurusan?.nama }));
   const handleSeeBill = (item) => {
-    navigate(
-      `?modal-open=true&force=${item?.angkatan}&major=${item?.jurusan}&nama=${item?.nama}&kode_siswa=${item?.kode_siswa}`
-    );
+    // navigate(
+    //   `?modal-open=true&force=${item?.angkatan}&major=${item?.jurusan}&nama=${item?.nama}&kode_siswa=${item?.kode_siswa}&class=${item?.kelas}`
+    // );
+    navigate(`?modal-open=true&id=${item?.id}`);
   };
 
   const tableHead = [

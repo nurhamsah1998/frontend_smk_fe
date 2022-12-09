@@ -20,6 +20,7 @@ export default function App() {
     labelClose: '',
     labelSubmit: '',
     isCloseAfterSubmit: false,
+    fullWidth: true,
     isLoadingAfterSubmit: false,
     isLoading: false,
   });
@@ -31,7 +32,7 @@ export default function App() {
         <StyledChart />
         <Router />
         <ScreenDialog
-          fullWidth
+          fullWidth={dialog.fullWidth}
           title={dialog.title}
           labelClose={dialog.labelClose}
           isLoading={dialog.isLoading}

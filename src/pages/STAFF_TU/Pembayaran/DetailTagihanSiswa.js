@@ -1,12 +1,19 @@
-import { Box, Typography } from '@mui/material';
+import { Box, ListItemText, Typography } from '@mui/material';
+import queryString from 'query-string';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ScreenDialog from '../../../components/ScreenDialog';
 import TabScreen from './TabScreen';
+import useFetchById from '../../../hooks/useFetchById';
 
 function DetailTagihanSiswa() {
   const location = useLocation();
   const navigate = useNavigate();
+  const idCode = queryString.parse(location.search);
+  const { items: studentProfile } = useFetchById({
+    module: 'siswa',
+    idCode: `${idCode?.id}`,
+  });
 
   const tabList = [
     {
@@ -26,12 +33,32 @@ function DetailTagihanSiswa() {
     <Box>
       <ScreenDialog
         // isLoading={isLoading}
-        open={location.search?.includes('?modal-open=true&force=')}
+        open={location.search?.includes('?modal-open=true')}
         title="Daftar tagihan siswa"
         handleClose={() => navigate(-1)}
         labelClose="tutup"
       >
-        <TabScreen tabList={tabList} />
+        <Box sx={{ display: 'grid' }}>
+          <Box sx={{ display: 'flex' }}>
+            <Typography sx={{ width: '70px' }}>Nama</Typography>:
+            <Typography variant="subtitle2" ml={1}>
+              Nurhamsah
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', my: -0.5 }}>
+            <Typography sx={{ width: '70px' }}>Kelas</Typography>:
+            <Typography variant="subtitle2" ml={1}>
+              II
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex' }}>
+            <Typography sx={{ width: '70px' }}>Jurusan</Typography>:
+            <Typography variant="subtitle2" ml={1}>
+              TKJ
+            </Typography>
+          </Box>
+        </Box>
+        <TabScreen studentProfile={studentProfile} tabList={tabList} />
       </ScreenDialog>
     </Box>
   );
