@@ -196,15 +196,19 @@ function TableComponen({
                           <LocalPrintshopIcon color="primary" sx={{ mr: 1 }} /> Cetak Invoice
                         </MenuItem>
                       ) : null}
-                      {!item?.isPaid ? (
-                        <MenuItem
-                          onClick={() => {
-                            handleTransaction(item);
-                            setAnchorEl(null);
-                          }}
-                        >
-                          <RequestQuoteIcon color="primary" sx={{ mr: 1 }} /> Buat transaksi
-                        </MenuItem>
+                      {handleTransaction ? (
+                        <Box>
+                          {!item?.isPaid ? (
+                            <MenuItem
+                              onClick={() => {
+                                handleTransaction(item);
+                                setAnchorEl(null);
+                              }}
+                            >
+                              <RequestQuoteIcon color="primary" sx={{ mr: 1 }} /> Buat transaksi
+                            </MenuItem>
+                          ) : null}
+                        </Box>
                       ) : null}
                       {handleSeeBill ? (
                         <MenuItem
@@ -239,6 +243,7 @@ function TableComponen({
                       ) : null}
                       {handleDelete ? (
                         <MenuItem
+                          disabled
                           onClick={() => {
                             handleDelete(item);
                             setAnchorEl(null);

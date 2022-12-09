@@ -3,5 +3,6 @@ export const FormatCurrency = (params) => {
     style: 'currency',
     currency: 'IDR',
   });
-  return resultAfterFormating;
+  const toRp = resultAfterFormating.replace('IDR', 'Rp');
+  return toRp;
 };

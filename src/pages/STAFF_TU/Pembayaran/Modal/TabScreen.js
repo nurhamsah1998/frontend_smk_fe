@@ -9,12 +9,14 @@ import queryString from 'query-string';
 import { grey } from '@mui/material/colors';
 import jwtDecode from 'jwt-decode';
 import { useLocation, useNavigate } from 'react-router-dom';
-import AccordionList from '../../../components/AccordionList';
-import TableComponen from '../../../components/TableComponent';
-import useFetchById from '../../../hooks/useFetchById';
-import useMutationPost from '../../../hooks/useMutationPost';
-import ScreenDialog from '../../../components/ScreenDialog';
-import { FormatCurrency } from '../../../components/FormatCurrency';
+import AccordionList from '../../../../components/AccordionList';
+import TableComponen from '../../../../components/TableComponent';
+import useFetchById from '../../../../hooks/useFetchById';
+import useMutationPost from '../../../../hooks/useMutationPost';
+import ScreenDialog from '../../../../components/ScreenDialog';
+import { FormatCurrency } from '../../../../components/FormatCurrency';
+import TagihanSpp from './TagihanSpp';
+import TagihanNonSpp from './TagihanNonSpp';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -93,34 +95,7 @@ export default function TabScreen({ tabList, studentProfile }) {
   const handleInvoice = (event) => {
     console.log(event);
   };
-
-  const tableHead = [
-    {
-      id: 'bulan',
-      label: 'Bulan',
-    },
-    {
-      id: 'total',
-      label: 'Nominal',
-    },
-    {
-      id: 'isPaid',
-      label: 'Status',
-      variantStatusColor: [
-        {
-          variant: 'success',
-          label: 'Lunas',
-          value: true,
-        },
-        {
-          variant: 'error',
-          label: 'Belum lunas',
-          value: false,
-        },
-      ],
-    },
-  ];
-
+  console.log(items);
   return (
     <Box sx={{ width: '100%' }}>
       <ScreenDialog
@@ -177,22 +152,15 @@ export default function TabScreen({ tabList, studentProfile }) {
                       content={
                         item?.periode ? (
                           <>
-                            <Box>
-                              <Box mt={2}>
-                                <TableComponen
-                                  handleTransaction={handleTransaction}
-                                  handleInvoice={handleInvoice}
-                                  disablePagination
-                                  colorHead="cyan"
-                                  tableBody={item?.periode}
-                                  tableHead={tableHead}
-                                />
-                              </Box>
-                            </Box>
+                            <TagihanSpp
+                              handleTransaction={handleTransaction}
+                              handleInvoice={handleInvoice}
+                              item={item}
+                            />
                           </>
                         ) : (
                           <Box>
-                            <Typography>{item.nama} Bukan periode</Typography>
+                            <TagihanNonSpp item={item} />
                           </Box>
                         )
                       }

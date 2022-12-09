@@ -3,7 +3,7 @@ import { Box, FormHelperText, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
-import DetailTagihanSiswa from './DetailTagihanSiswa';
+import DetailTagihanSiswa from './Modal/DetailTagihanSiswa';
 
 function Pembayaran() {
   const navigate = useNavigate();

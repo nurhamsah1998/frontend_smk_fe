@@ -2,9 +2,9 @@ import { Box, ListItemText, Typography } from '@mui/material';
 import queryString from 'query-string';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ScreenDialog from '../../../components/ScreenDialog';
+import ScreenDialog from '../../../../components/ScreenDialog';
 import TabScreen from './TabScreen';
-import useFetchById from '../../../hooks/useFetchById';
+import useFetchById from '../../../../hooks/useFetchById';
 
 function DetailTagihanSiswa() {
   const location = useLocation();
@@ -42,19 +42,19 @@ function DetailTagihanSiswa() {
           <Box sx={{ display: 'flex' }}>
             <Typography sx={{ width: '70px' }}>Nama</Typography>:
             <Typography variant="subtitle2" ml={1}>
-              Nurhamsah
+              {studentProfile?.nama}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', my: -0.5 }}>
             <Typography sx={{ width: '70px' }}>Kelas</Typography>:
             <Typography variant="subtitle2" ml={1}>
-              II
+              {studentProfile?.kelas}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex' }}>
             <Typography sx={{ width: '70px' }}>Jurusan</Typography>:
             <Typography variant="subtitle2" ml={1}>
-              TKJ
+              {studentProfile?.jurusan?.nama}
             </Typography>
           </Box>
         </Box>
