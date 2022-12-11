@@ -44,6 +44,7 @@ export default function AccountPopover() {
       title: 'Apakah anda yakin ingin keluar?',
       labelClose: 'Batal',
       labelSubmit: 'Keluar',
+      fullWidth: false,
       do: () => {
         window.localStorage.removeItem('accessToken');
         navigate('/');

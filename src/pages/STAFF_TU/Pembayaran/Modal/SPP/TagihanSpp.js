@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import TableComponen from '../../../../components/TableComponent';
+import TableComponen from '../../../../../components/TableComponent';
 
 function TagihanSpp({ handleTransaction, handleInvoice, item }) {
   const tableHead = [
@@ -11,6 +11,7 @@ function TagihanSpp({ handleTransaction, handleInvoice, item }) {
     {
       id: 'total',
       label: 'Nominal',
+      isCurrency: true,
     },
     {
       id: 'isPaid',

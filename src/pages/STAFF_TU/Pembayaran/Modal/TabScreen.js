@@ -15,8 +15,8 @@ import useFetchById from '../../../../hooks/useFetchById';
 import useMutationPost from '../../../../hooks/useMutationPost';
 import ScreenDialog from '../../../../components/ScreenDialog';
 import { FormatCurrency } from '../../../../components/FormatCurrency';
-import TagihanSpp from './TagihanSpp';
-import TagihanNonSpp from './TagihanNonSpp';
+import TagihanSpp from './SPP/TagihanSpp';
+import TagihanNonSpp from './NonSPP/TagihanNonSpp';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,16 +48,16 @@ function a11yProps(index) {
 }
 
 export default function TabScreen({ tabList, studentProfile }) {
-  const navigate = useNavigate();
   const location = useLocation();
-  const idCode = queryString.parse(location.search);
   const [value, setValue] = React.useState(0);
   const [moneyAccepted, setMoneyAccepted] = React.useState(0);
   const [note, setNote] = React.useState('');
   const [openModalTransaction, setOpenModalTransaction] = React.useState({ data: {}, open: false });
   const { items, refetch } = useFetchById({
     module: 'tagihan',
+    /// get tagihan by kode_siswa
     idCode: `${studentProfile?.angkatan}${studentProfile?.jurusan?.nama}0${value + 1}?kode_tagihan=${
+      /// this for get invoice from backend to compare with tagihan
       studentProfile?.kode_siswa
     }`,
   });
@@ -160,7 +160,7 @@ export default function TabScreen({ tabList, studentProfile }) {
                           </>
                         ) : (
                           <Box>
-                            <TagihanNonSpp item={item} />
+                            <TagihanNonSpp item={item} studentProfile={studentProfile} />
                           </Box>
                         )
                       }

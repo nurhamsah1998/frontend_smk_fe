@@ -34,7 +34,7 @@ function DetailTagihanSiswa() {
       <ScreenDialog
         // isLoading={isLoading}
         open={location.search?.includes('?modal-open=true')}
-        title="Daftar tagihan siswa"
+        title="Rincian tagihan"
         handleClose={() => navigate(-1)}
         labelClose="tutup"
       >

@@ -21,8 +21,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
-
 import { grey, green, red, blue, orange, cyan, purple } from '@mui/material/colors';
+import { FormatCurrency } from './FormatCurrency';
 
 function TableComponen({
   tableHead,
@@ -149,9 +149,10 @@ function TableComponen({
                     return false;
                   };
                   const isIndicator = head?.variantStatusColor ? Status(body[head.id]) : body[head.id];
+                  const isCurrency = head?.isCurrency ? FormatCurrency(body[head.id]) : isIndicator;
                   return (
-                    <TableCell sx={{ px: 2, py: 1 }} key={index}>
-                      {isIndicator}
+                    <TableCell sx={{ px: 2, py: 1, textTransform: 'capitalize' }} key={index}>
+                      {isCurrency}
                     </TableCell>
                   );
                 })}

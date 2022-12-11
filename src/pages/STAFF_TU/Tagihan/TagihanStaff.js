@@ -54,7 +54,7 @@ export default function TagihanStaff() {
         </Button>
       </Box>
       <Box mt={2}>
-        <TableComponen tableBody={items} handleDelete={handleDelete} tableHead={tableHead} />
+        <TableComponen colorHead="blue" tableBody={items} handleDelete={handleDelete} tableHead={tableHead} />
       </Box>
       <BuatTagihan />
     </Box>

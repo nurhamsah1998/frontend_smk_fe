@@ -51,6 +51,7 @@ function Pembayaran() {
       </Box>
       <Box>
         <TableComponen
+          colorHead="blue"
           count={totalPage}
           pageOnchange={(x, y) => {
             setPage(y - 1);
