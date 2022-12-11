@@ -4,6 +4,8 @@ import { TextField, Box, Button, FormHelperText } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import SelectComponent from '../../../components/SelectComponent';
 import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
+import TextFieldNumberFormat from '../../../components/TextFieldNumberFormat';
+import formatNumberChange from '../../../components/formatNumberChange';
 
 function FormTagihan({ values, setFieldValue, getFieldProps }) {
   const handleClickAddBill = () => {
@@ -176,7 +178,14 @@ function FormTagihan({ values, setFieldValue, getFieldProps }) {
           }
           if (item.isMultipleForm) {
             return (
-              <Box key={index} sx={{ border: `solid 1px ${grey[400]}`, p: 2 }}>
+              <Box
+                key={index}
+                sx={{
+                  border: `solid 1px ${grey[400]}`,
+                  p: 2,
+                  display: values?.categori?.includes('spp') ? 'block' : 'none',
+                }}
+              >
                 <Box sx={{ display: 'grid', gap: 2 }}>
                   {values.periode?.map((month, x) => (
                     <Box key={x} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -190,10 +199,9 @@ function FormTagihan({ values, setFieldValue, getFieldProps }) {
                         placeholder="Bulan"
                         listSelect={item.option}
                       />
-                      <TextField
-                        type="number"
+                      <TextFieldNumberFormat
                         onChange={(i) => {
-                          setFieldValue(`periode[${x}].total`, i.target.value);
+                          setFieldValue(`periode[${x}].total`, formatNumberChange(i.target.value));
                         }}
                         size="small"
                         label="Total"

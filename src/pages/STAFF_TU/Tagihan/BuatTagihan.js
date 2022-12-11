@@ -49,7 +49,7 @@ function BuatTagihan() {
               values?.angkatan
             }`,
           }));
-          const ifNotSpp = values?.periode?.length <= 0 ? false : spp;
+          const ifNotSpp = !values?.categori?.includes('spp') ? false : spp;
           const data = {
             ...values,
             periode: ifNotSpp,

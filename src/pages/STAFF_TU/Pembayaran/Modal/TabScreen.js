@@ -10,7 +10,7 @@ import { grey } from '@mui/material/colors';
 import jwtDecode from 'jwt-decode';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AccordionList from '../../../../components/AccordionList';
-import TableComponen from '../../../../components/TableComponent';
+import TextFieldNumberFormat from '../../../../components/TextFieldNumberFormat';
 import useFetchById from '../../../../hooks/useFetchById';
 import useMutationPost from '../../../../hooks/useMutationPost';
 import ScreenDialog from '../../../../components/ScreenDialog';
@@ -50,7 +50,7 @@ function a11yProps(index) {
 export default function TabScreen({ tabList, studentProfile }) {
   const location = useLocation();
   const [value, setValue] = React.useState(0);
-  const [moneyAccepted, setMoneyAccepted] = React.useState(0);
+  const [moneyAccepted, setMoneyAccepted] = React.useState(null);
   const [note, setNote] = React.useState('');
   const [openModalTransaction, setOpenModalTransaction] = React.useState({ data: {}, open: false });
   const { items, refetch } = useFetchById({
@@ -95,12 +95,11 @@ export default function TabScreen({ tabList, studentProfile }) {
   const handleInvoice = (event) => {
     console.log(event);
   };
-  console.log(items);
   return (
     <Box sx={{ width: '100%' }}>
       <ScreenDialog
         open={openModalTransaction.open}
-        title="Daftar tagihan siswa"
+        title="Transaksi"
         handleSubmit={handleSubmit}
         handleClose={() => setOpenModalTransaction({ data: null, open: false })}
         labelClose="cancel"
@@ -108,11 +107,10 @@ export default function TabScreen({ tabList, studentProfile }) {
       >
         <Box>
           <ListItemText primary="Total tagihan" secondary={FormatCurrency(openModalTransaction?.data?.total)} />
-          <TextField
+          <TextFieldNumberFormat
             onChange={(i) => setMoneyAccepted(i.target.value)}
             value={moneyAccepted}
             sx={{ mt: 2 }}
-            type="number"
             label="Uang diterima"
             fullWidth
           />
@@ -160,7 +158,7 @@ export default function TabScreen({ tabList, studentProfile }) {
                           </>
                         ) : (
                           <Box>
-                            <TagihanNonSpp item={item} studentProfile={studentProfile} />
+                            <TagihanNonSpp item={item} studentProfile={studentProfile} refetch={refetch} />
                           </Box>
                         )
                       }

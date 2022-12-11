@@ -3,12 +3,13 @@ import { Box, Button, Divider, ListItemText, Typography } from '@mui/material';
 import { FormatCurrency } from '../../../../../components/FormatCurrency';
 import Create from './Create';
 
-function TagihanNonSpp({ item, studentProfile }) {
+function TagihanNonSpp({ item, studentProfile, refetch }) {
   const [openModalTransaction, setOpenModalTransaction] = React.useState(false);
 
   const TableBill = () => {
     const sumCicilan =
       item?.cicilan?.length <= 0 ? 0 : item?.cicilan?.map((i) => i?.uang_diterima)?.reduce((a, b) => a + b);
+    const lessLeft = item?.total - sumCicilan;
     return (
       <Box
         sx={{
@@ -27,7 +28,7 @@ function TagihanNonSpp({ item, studentProfile }) {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="body2">Kekurangan</Typography>
-            <Typography variant="subtitle2">Rp.0</Typography>
+            <Typography variant="subtitle2">{FormatCurrency(lessLeft)}</Typography>
           </Box>
         </Box>
       </Box>
@@ -48,6 +49,7 @@ function TagihanNonSpp({ item, studentProfile }) {
         openModalTransaction={openModalTransaction}
         setOpenModalTransaction={setOpenModalTransaction}
         TableBill={TableBill}
+        refetch={refetch}
       />
     </Box>
   );
