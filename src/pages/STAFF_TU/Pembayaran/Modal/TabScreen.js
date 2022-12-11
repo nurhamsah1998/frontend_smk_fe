@@ -137,10 +137,11 @@ export default function TabScreen({ tabList, studentProfile }) {
           <TabPanel key={index} value={value} index={index}>
             <Box sx={{ display: 'grid', gap: 2 }}>
               {items?.length <= 0 ? (
-                <Box>
-                  <Typography textAlign="center" variant="h4">
-                    Tagihan Belum Tersedia
+                <Box sx={{ display: 'grid' }}>
+                  <Typography textAlign="center" fontSize={20}>
+                    Tidak ada tagihan yang ditampilkan
                   </Typography>
+                  <Typography textAlign="center">(mungkin anda belum menambah tagihan)</Typography>
                 </Box>
               ) : (
                 items?.map((item, index) => (

@@ -9,6 +9,7 @@ import useFetchById from '../../../hooks/useFetchById';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import ListItemComponent from '../../../components/ListItemComponent';
 import { FormatCurrency } from '../../../components/FormatCurrency';
+import TagihanNonSpp from '../../STAFF_TU/Pembayaran/Modal/NonSPP/TagihanNonSpp';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -115,10 +116,11 @@ function Tagihan() {
           <TabPanel key={index} value={value} index={index}>
             <Box sx={{ display: 'grid', gap: 2 }}>
               {items?.length <= 0 ? (
-                <Box>
-                  <Typography textAlign="center" variant="h4">
-                    Tagihan Belum Tersedia
+                <Box sx={{ display: 'grid' }}>
+                  <Typography textAlign="center" fontSize={20}>
+                    Tidak ada tagihan yang ditampilkan
                   </Typography>
+                  <Typography textAlign="center">(mohon cek secara berkala untuk tagihan ini)</Typography>
                 </Box>
               ) : (
                 items?.map((item, index) => (
@@ -146,7 +148,7 @@ function Tagihan() {
                           </Box>
                         ) : (
                           <Box>
-                            <ListItemText secondary={item?.deskripsi} />
+                            <TagihanNonSpp isStaff={false} item={item} />
                           </Box>
                         )
                       }

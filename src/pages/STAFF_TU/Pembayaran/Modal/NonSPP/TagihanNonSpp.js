@@ -3,7 +3,7 @@ import { Box, Button, Divider, ListItemText, Typography } from '@mui/material';
 import { FormatCurrency } from '../../../../../components/FormatCurrency';
 import Create from './Create';
 
-function TagihanNonSpp({ item, studentProfile, refetch }) {
+function TagihanNonSpp({ item, studentProfile, refetch, isStaff = true }) {
   const [openModalTransaction, setOpenModalTransaction] = React.useState(false);
 
   const TableBill = () => {
@@ -38,11 +38,13 @@ function TagihanNonSpp({ item, studentProfile, refetch }) {
     <Box>
       <ListItemText secondary={item?.deskripsi} />
       <TableBill />
-      <Box sx={{ mt: 2 }}>
-        <Button onClick={() => setOpenModalTransaction(true)} variant="contained">
-          Buat transaksi
-        </Button>
-      </Box>
+      {isStaff ? (
+        <Box sx={{ mt: 2 }}>
+          <Button onClick={() => setOpenModalTransaction(true)} variant="contained">
+            Buat transaksi
+          </Button>
+        </Box>
+      ) : null}
       <Create
         studentProfile={studentProfile}
         item={item}
