@@ -22,6 +22,7 @@ import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
 import AppStaffPPDB from './pages/STAFF_PPDB/AppStaffPPDB';
 import DashboardLayoutStaffPPDB from './layouts/STAFF_PPDB/DashboardLayoutStaffPPDB';
 import Pendaftar from './pages/STAFF_PPDB/Pendaftar/Pendaftar';
+import DetailTagihan from './pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,16 @@ export default function Router() {
         { element: <Navigate to="/staff-tu/dashboard" />, index: true },
         { path: 'dashboard', element: <AppStaffTU /> },
         { path: 'tagihan', element: <TagihanStaff /> },
-        { path: 'pembayaran', element: <Pembayaran /> },
+        {
+          path: 'pembayaran',
+          element: <Pembayaran />,
+          children: [
+            {
+              path: 'detail-tagihan',
+              element: <DetailTagihan />,
+            },
+          ],
+        },
         // { path: 'user', element: <UserPage /> },
         // { path: 'products', element: <ProductsPage /> },
         // { path: 'blog', element: <BlogPage /> },
