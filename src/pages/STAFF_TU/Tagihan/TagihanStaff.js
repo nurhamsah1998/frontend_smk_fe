@@ -9,6 +9,7 @@ import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import BuatTagihan from './BuatTagihan';
 import { Dialog } from '../../../hooks/useContextHook';
+import TextFieldNumberFormat from '../../../components/TextFieldNumberFormat';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,11 +46,9 @@ export default function TagihanStaff() {
 
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
-  const clone = [...itemsNoPagination];
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  console.log(data, '===');
   const dataTextField = itemsNoPagination?.map((x) => {
     delete x?.id;
     delete x?.updatedAt;
@@ -57,7 +56,7 @@ export default function TagihanStaff() {
 
     return Object.entries(x);
   });
-
+  console.log(dataTextField);
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -69,16 +68,33 @@ export default function TagihanStaff() {
       </Box>
       <Box>
         {itemsNoPagination?.map((x, y) => (
-          <Box key={y}>
-            <TabPanel value={value} index={y}>
-              {dataTextField[y]?.map((item, index) => (
-                <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                  <Typography>s</Typography>
-                  <TextField size="small" label={item[0]} value={item[1]} />
-                </Box>
-              ))}
-            </TabPanel>
-          </Box>
+          // eslint-disable-next-line react/jsx-key
+          <TabPanel value={value} index={y} key={y}>
+            <Box key={y} sx={{ display: 'grid', gap: 2 }}>
+              {dataTextField[y]?.map((item, index) => {
+                if (item?.includes('tahun_angkatan')) {
+                  return;
+                }
+                // eslint-disable-next-line consistent-return
+                return (
+                  <Box
+                    key={index}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 3,
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Typography width="35%" textTransform="capitalize">
+                      {item[0].replace(/_/g, ' ')}
+                    </Typography>
+                    <TextFieldNumberFormat width="50%" size="small" label="Nominal" value={item[1]} fullWidth />
+                  </Box>
+                );
+              })}
+            </Box>
+          </TabPanel>
         ))}
       </Box>
     </Box>

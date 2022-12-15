@@ -158,7 +158,18 @@ function TableComponen({
                 })}
                 <TableCell>
                   <Box>
-                    <IconButton
+                    {handleSeeBill ? (
+                      <IconButton
+                        size="small"
+                        onClick={() => {
+                          handleSeeBill(body);
+                          setAnchorEl(null);
+                        }}
+                      >
+                        <RequestQuoteIcon color="primary" />
+                      </IconButton>
+                    ) : null}
+                    {/* <IconButton
                       id="basic-button"
                       aria-controls={open ? 'basic-menu' : undefined}
                       aria-haspopup="true"
@@ -172,8 +183,8 @@ function TableComponen({
                       }}
                     >
                       {hideOption ? null : <MoreVertIcon />}
-                    </IconButton>
-                    <Menu
+                    </IconButton> */}
+                    {/* <Menu
                       id="basic-menu"
                       anchorEl={anchorEl}
                       open={open}
@@ -254,7 +265,7 @@ function TableComponen({
                           Hapus
                         </MenuItem>
                       ) : null}
-                    </Menu>
+                    </Menu> */}
                   </Box>
                 </TableCell>
               </TableRow>

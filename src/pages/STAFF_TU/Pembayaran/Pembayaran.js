@@ -50,6 +50,7 @@ function Pembayaran() {
         </Box>
         <Box>
           <TableComponen
+            hideOption
             colorHead="blue"
             count={totalPage}
             pageOnchange={(x, y) => {

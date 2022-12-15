@@ -5,6 +5,7 @@ import queryString from 'query-string';
 
 import TableComponen from '../../../../components/TableComponent';
 import useFetchById from '../../../../hooks/useFetchById';
+import useFetch from '../../../../hooks/useFetch';
 
 function DetailTagihan() {
   const navigate = useNavigate();
@@ -14,24 +15,28 @@ function DetailTagihan() {
     module: 'siswa',
     idCode: `${idCode['student-id']}`,
   });
-  const { items, refetch } = useFetchById({
-    module: 'tagihan',
-    /// get tagihan by kode_siswa
-    idCode: `${studentProfile?.angkatan}${studentProfile?.jurusan?.nama}${studentProfile?.kelas}?kode_tagihan=${
-      /// this for get invoice from backend to compare with tagihan
-      studentProfile?.kode_siswa
-    }`,
+  const { itemsNoPagination, data } = useFetch({
+    module: `tagihan-permanent-siswa?tahun_angkatan=${studentProfile?.angkatan}`,
   });
-  console.log(studentProfile);
+  const dataTextField = itemsNoPagination?.map((x) => {
+    delete x?.id;
+    delete x?.updatedAt;
+    delete x?.createdAt;
+    delete x?.tahun_angkatan;
+
+    return Object.entries(x);
+  });
+  const itemsRebuild = dataTextField
+    ?.map((i) => i?.map((o) => ({ name: o[0], value: o[1] })))[0]
+    ?.filter((y) => y?.value !== 0);
   const tableHead = [
     {
-      id: 'nama',
+      id: 'name',
       label: 'Nama tagihan',
     },
     {
-      id: 'total',
+      id: 'value',
       label: 'Jumlah',
-      isCurrency: true,
     },
   ];
 
@@ -70,7 +75,7 @@ function DetailTagihan() {
       </Box>
       <Box>
         <Typography variant="h5">Tagihan Siswa</Typography>
-        <TableComponen hideOption tableHead={tableHead} disablePagination colorHead="blue" tableBody={items} />
+        <TableComponen hideOption tableHead={tableHead} disablePagination colorHead="blue" tableBody={itemsRebuild} />
       </Box>
     </Box>
   );
