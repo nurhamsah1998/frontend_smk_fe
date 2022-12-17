@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Typography, Tabs, Tab, AppBar, ListItemText } from '@mui/material';
+import { Box, Typography, Tabs, Tab, AppBar, ListItemText, Divider } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import useFetch from '../../../hooks/useFetch';
 import AccordionList from '../../../components/AccordionList';
@@ -86,7 +86,7 @@ function Tagihan() {
   ];
   return (
     <Box>
-      <Box>
+      <Box mb={2}>
         <Typography variant="h5">Ringkasan</Typography>
         {detailBill?.map((item, index) => (
           <Box key={index} sx={{ display: 'flex', gap: 2, width: '100%' }}>
@@ -95,11 +95,13 @@ function Tagihan() {
           </Box>
         ))}
       </Box>
-      <Box sx={{ mt: 5 }}>
+      <Divider />
+      <Box sx={{ my: 2 }}>
         <Typography variant="h5">Tagihan Siswa</Typography>
         <TableComponen
           isLoading={isLoading}
           isTotal
+          emptyTag="masih belum ada tagihan"
           hideOption
           totalBill={totalBillStudent}
           tableHead={tableHeadTagihanSiswa}
@@ -108,7 +110,8 @@ function Tagihan() {
           tableBody={itemsRebuild}
         />
       </Box>
-      <Box sx={{ mt: 5 }}>
+      <Divider />
+      <Box sx={{ my: 2 }}>
         <Typography variant="h5">Riwayat pembayaran</Typography>
         <TableComponen
           isLoading={isLoading}

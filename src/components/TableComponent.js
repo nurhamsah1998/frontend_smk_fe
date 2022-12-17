@@ -36,7 +36,6 @@ function TableComponen({
   handleSwitch,
   setChecked,
   checked,
-  handleChangeSwitch,
   handleSeeBill,
   disablePagination = false,
   isTotal = false,
@@ -181,6 +180,16 @@ function TableComponen({
                         >
                           <RequestQuoteIcon color="primary" />
                         </IconButton>
+                      ) : null}
+                      {handleSwitch ? (
+                        <MenuItem>
+                          <Switch
+                            checked={body?.indicator}
+                            onChange={(i) => handleSwitch(i, body)}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                          <FormHelperText>Status</FormHelperText>
+                        </MenuItem>
                       ) : null}
                       {/* <IconButton
                       id="basic-button"

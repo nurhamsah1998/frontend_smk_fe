@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
@@ -47,7 +47,7 @@ function DetailTagihan() {
     staff: itemsNoPagination,
   };
 
-  const detailSiswa = [
+  const detailSiswaLeft = [
     {
       value: studentProfile?.nama,
       label: 'Nama siswa',
@@ -63,6 +63,24 @@ function DetailTagihan() {
     {
       value: studentProfile?.noHP,
       label: 'Nomor Hp',
+    },
+  ];
+  const detailSiswaRight = [
+    {
+      value: studentProfile?.nama_ayah,
+      label: 'Nama ayah',
+    },
+    {
+      value: studentProfile?.nama_ibu,
+      label: 'Nama ibu',
+    },
+    {
+      value: studentProfile?.alamat,
+      label: 'Alamat',
+    },
+    {
+      value: studentProfile?.angkatan,
+      label: 'Angkatan',
     },
   ];
 
@@ -91,24 +109,43 @@ function DetailTagihan() {
   return (
     <Box sx={{ display: 'grid', gap: 4 }}>
       <Box>
-        <Typography variant="h5">Profile Siswa</Typography>
-        <Box>
-          {detailSiswa.map((x, y) => (
-            <Box key={y} sx={{ display: 'flex' }}>
-              <Typography sx={{ width: '120px' }}>{x?.label}</Typography>:
-              <Typography variant="subtitle2" ml={1}>
-                {x?.value}
-              </Typography>
-            </Box>
-          ))}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h5">Profile Siswa</Typography>
+          <Button variant="contained" disabled>
+            Edit profil siswa
+          </Button>
         </Box>
+        <Grid container>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            {detailSiswaLeft.map((x, y) => (
+              <Box key={y} sx={{ display: 'flex' }}>
+                <Typography sx={{ width: '120px' }}>{x?.label}</Typography>:
+                <Typography variant="subtitle2" ml={1} textTransform="capitalize">
+                  {x?.value}
+                </Typography>
+              </Box>
+            ))}
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            {detailSiswaRight.map((x, y) => (
+              <Box key={y} sx={{ display: 'flex' }}>
+                <Typography sx={{ width: '120px' }}>{x?.label}</Typography>:
+                <Typography variant="subtitle2" ml={1} textTransform="capitalize">
+                  {x?.value}
+                </Typography>
+              </Box>
+            ))}
+          </Grid>
+        </Grid>
       </Box>
+      <Divider />
       <Box>
         <Typography variant="h5" mb={2}>
           Tagihan Siswa
         </Typography>
         <TableComponen
           isLoading={isLoading}
+          emptyTag="masih belum ada tagihan"
           isTotal
           hideOption
           totalBill={totalBillStudent}
@@ -118,6 +155,7 @@ function DetailTagihan() {
           tableBody={itemsRebuild}
         />
       </Box>
+      <Divider />
       <Box>
         <Typography variant="h5" mb={2}>
           Riwayat pembayaran
@@ -134,6 +172,7 @@ function DetailTagihan() {
           tableBody={paymentHistory}
         />
       </Box>
+      <Divider />
       <Box>
         <Typography variant="h5">Pembayaran</Typography>
         <Box>

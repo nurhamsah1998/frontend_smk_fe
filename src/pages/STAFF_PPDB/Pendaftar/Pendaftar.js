@@ -20,6 +20,7 @@ function Pendaftar() {
     delete data?.indicator;
     mutationPatch.mutate({ ...data, status: valueSwitch ? 'accepted' : 'checking' });
   };
+  console.log(itemsRebuild);
   const tableHead = [
     {
       id: 'nama',
@@ -50,9 +51,8 @@ function Pendaftar() {
     <Box>
       <Box>
         <TableComponen
-          handleSwitch
           checked={checked}
-          handleChangeSwitch={handleChangeSwitch}
+          handleSwitch={handleChangeSwitch}
           setChecked={setChecked}
           count={totalPage}
           pageOnchange={(x, y) => {
