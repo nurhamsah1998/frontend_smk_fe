@@ -11,154 +11,116 @@ import ListItemComponent from '../../../components/ListItemComponent';
 import { FormatCurrency } from '../../../components/FormatCurrency';
 import TagihanNonSpp from '../../STAFF_TU/Pembayaran/Modal/NonSPP/TagihanNonSpp';
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
 function Tagihan() {
   const [value, setValue] = React.useState(0);
+  const { itemsNoPagination: studentProfile } = React.useContext(PROFILE);
   const { itemsNoPagination, isLoading } = React.useContext(PROFILE);
-  const { items, refetch } = useFetchById({
-    module: 'tagihan',
-    idCode: `${itemsNoPagination?.angkatan}${itemsNoPagination?.jurusan?.nama}0${value + 1}?kode_tagihan=${
-      itemsNoPagination?.kode_siswa
-    }`,
+  const { itemsNoPagination: tagihanPermanent } = useFetch({
+    module: `tagihan-permanent-siswa?tahun_angkatan=${studentProfile?.angkatan}`,
   });
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  const tabList = [
+  const { itemsNoPagination: paymentHistory } = useFetch({
+    isCustom: true,
+    module: `invoice?kode_tagihan=${studentProfile?.kode_siswa}`,
+  });
+  const dataRaw = tagihanPermanent?.map((x) => {
+    delete x?.id;
+    delete x?.updatedAt;
+    delete x?.createdAt;
+    delete x?.tahun_angkatan;
+    return Object.entries(x);
+  });
+  const itemsRebuild = dataRaw
+    ?.map((i) => i?.map((o) => ({ name: o[0].replace(/_/g, ' '), value: o[1] })))[0]
+    ?.filter((y) => y?.value !== 0);
+  const totalBillPaymentHistory =
+    paymentHistory?.length <= 0 ? 0 : paymentHistory?.map((i) => i?.uang_diterima)?.reduce((x, y) => x + y);
+  const totalBillStudent = itemsRebuild?.length <= 0 ? 0 : itemsRebuild?.map((i) => i?.value)?.reduce((x, y) => x + y);
+  const tableHeadTagihanSiswa = [
     {
-      label: 'Kelas I',
-      class: '01',
+      id: 'name',
+      label: 'Nama tagihan',
     },
     {
-      label: 'Kelas II',
-      class: '02',
-    },
-    {
-      label: 'Kelas III',
-      class: '03',
+      id: 'value',
+      label: 'Jumlah',
+      isCurrency: true,
     },
   ];
-
-  const tableHead = [
+  const tableHeadPembayaranSiswa = [
     {
-      id: 'bulan',
-      label: 'Bulan',
+      id: 'invoice',
+      label: 'No Invoice',
     },
     {
-      id: 'total',
-      label: 'Nominal',
+      id: 'createdAt',
+      label: 'Tanggal bayar',
+      isDate: true,
     },
     {
-      id: 'isPaid',
-      label: 'Status',
-      variantStatusColor: [
-        {
-          variant: 'success',
-          label: 'Lunas',
-          value: true,
-        },
-        {
-          variant: 'error',
-          label: 'Belum lunas',
-          value: false,
-        },
-      ],
+      id: 'kode_pembayaran',
+      label: 'Nama tagihan',
+    },
+    {
+      id: 'uang_diterima',
+      label: 'Jumlah',
+      isCurrency: true,
+    },
+  ];
+  const detailBill = [
+    {
+      label: 'Total tagihan',
+      value: totalBillStudent,
+    },
+    {
+      label: 'Terbayar',
+      value: totalBillPaymentHistory,
+    },
+    {
+      label: 'Uang lebih',
+      value: totalBillPaymentHistory - totalBillStudent <= 0 ? 0 : totalBillPaymentHistory - totalBillStudent,
+    },
+    {
+      label: 'Kekurangan',
+      value: totalBillStudent - totalBillPaymentHistory <= 0 ? 0 : totalBillStudent - totalBillPaymentHistory,
     },
   ];
   return (
     <Box>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <AppBar position="static">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            indicatorColor="primary"
-            textColor="inherit"
-            aria-label="full width tabs example"
-          >
-            {tabList?.map((item, index) => (
-              <Tab key={index} label={item?.label} {...a11yProps(index)} />
-            ))}
-          </Tabs>
-        </AppBar>
-      </Box>
-      <Box sx={{ border: `${grey[300]} 1px solid` }}>
-        {tabList?.map((item, index) => (
-          <TabPanel key={index} value={value} index={index}>
-            <Box sx={{ display: 'grid', gap: 2 }}>
-              {items?.length <= 0 ? (
-                <Box sx={{ display: 'grid' }}>
-                  <Typography textAlign="center" fontSize={20}>
-                    Tidak ada tagihan yang ditampilkan
-                  </Typography>
-                  <Typography textAlign="center">(mohon cek secara berkala untuk tagihan ini)</Typography>
-                </Box>
-              ) : (
-                items?.map((item, index) => (
-                  <Box key={index}>
-                    <AccordionList
-                      title={item.nama}
-                      content={
-                        item?.periode ? (
-                          <Box>
-                            {/* <TableComponen
-                              hideOption
-                              disablePagination
-                              colorHead="cyan"
-                              tableBody={item?.periode}
-                              tableHead={tableHead}
-                            /> */}
-                            {item?.periode?.map((x, y) => (
-                              <ListItemComponent
-                                key={y}
-                                isVerified={x?.isPaid}
-                                primary={x?.bulan}
-                                secondary={FormatCurrency(x?.total)}
-                              />
-                            ))}
-                          </Box>
-                        ) : (
-                          <Box>
-                            <TagihanNonSpp isStaff={false} item={item} />
-                          </Box>
-                        )
-                      }
-                    />
-                  </Box>
-                ))
-              )}
-            </Box>
-          </TabPanel>
+      <Box>
+        <Typography variant="h5">Ringkasan</Typography>
+        {detailBill?.map((item, index) => (
+          <Box key={index} sx={{ display: 'flex', gap: 2, width: '100%' }}>
+            <Typography sx={{ width: '30%' }}>{item?.label}</Typography>
+            <Typography>: {FormatCurrency(item?.value)}</Typography>
+          </Box>
         ))}
+      </Box>
+      <Box sx={{ mt: 5 }}>
+        <Typography variant="h5">Tagihan Siswa</Typography>
+        <TableComponen
+          isLoading={isLoading}
+          isTotal
+          hideOption
+          totalBill={totalBillStudent}
+          tableHead={tableHeadTagihanSiswa}
+          disablePagination
+          colorHead="blue"
+          tableBody={itemsRebuild}
+        />
+      </Box>
+      <Box sx={{ mt: 5 }}>
+        <Typography variant="h5">Riwayat pembayaran</Typography>
+        <TableComponen
+          isLoading={isLoading}
+          emptyTag="sepertinya belum ada transaksi"
+          hideOption
+          isTotal
+          totalBill={totalBillPaymentHistory}
+          tableHead={tableHeadPembayaranSiswa}
+          disablePagination
+          colorHead="blue"
+          tableBody={paymentHistory}
+        />
       </Box>
     </Box>
   );

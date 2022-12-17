@@ -2,7 +2,7 @@ import React from 'react';
 import { NumericFormat } from 'react-number-format';
 import { TextField } from '@mui/material';
 
-function TextFieldNumberFormat({ value, onChange, label, fullWidth, sx, size }) {
+function TextFieldNumberFormat({ value, onChange, label, fullWidth, sx, size, ...props }) {
   return (
     <NumericFormat
       prefix="Rp"
@@ -14,6 +14,7 @@ function TextFieldNumberFormat({ value, onChange, label, fullWidth, sx, size }) 
       sx={{ ...sx }}
       size={size}
       fullWidth={fullWidth}
+      {...props}
     />
   );
 }

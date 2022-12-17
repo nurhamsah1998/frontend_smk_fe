@@ -13,8 +13,8 @@ import BannedPage from '../ProgresPage/BannedPage';
 
 // ----------------------------------------------------------------------
 
-const APP_BAR_MOBILE = 64;
-const APP_BAR_DESKTOP = 92;
+const APP_BAR_MOBILE = 32;
+const APP_BAR_DESKTOP = 61;
 
 const StyledRoot = styled('div')({
   display: 'flex',
@@ -26,15 +26,15 @@ const Main = styled('div')(({ theme }) => ({
   flexGrow: 1,
   overflow: 'auto',
   minHeight: '100%',
-  paddingTop: APP_BAR_MOBILE + 24,
+  paddingTop: APP_BAR_MOBILE,
   paddingBottom: theme.spacing(10),
   [theme.breakpoints.up('md')]: {
-    paddingTop: APP_BAR_DESKTOP + 24,
+    paddingTop: APP_BAR_DESKTOP,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
   [theme.breakpoints.up('xs')]: {
-    paddingTop: APP_BAR_DESKTOP + 24,
+    paddingTop: APP_BAR_DESKTOP,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },

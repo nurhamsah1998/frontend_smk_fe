@@ -3,15 +3,15 @@ import axios from 'axios';
 import React from 'react';
 import { apiUrl } from './api';
 
-function useFetch({ module, enabled = true }) {
+function useFetch({ module, enabled = true, isCustom = false }) {
   const token = window.localStorage.getItem('accessToken');
   const [page, setPage] = React.useState(0);
   const [search, setSearch] = React.useState('');
   const [limit, setLimit] = React.useState(5);
   const query = useQuery(
-    [module, enabled],
+    [module, enabled, isCustom],
     () =>
-      axios.get(`${apiUrl}${module}?page=${page}&search=${search}&limit=${limit}`, {
+      axios.get(`${apiUrl}${module}${isCustom ? '' : `?page=${page}&search=${search}&limit=${limit}`}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },

@@ -15,11 +15,8 @@ import {
   Switch,
   FormHelperText,
 } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import InfoIcon from '@mui/icons-material/Info';
-import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import moment from 'moment/moment';
+import 'moment/locale/id';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import { grey, green, red, blue, orange, cyan, purple } from '@mui/material/colors';
 import { FormatCurrency } from './FormatCurrency';
@@ -42,9 +39,13 @@ function TableComponen({
   handleChangeSwitch,
   handleSeeBill,
   disablePagination = false,
+  isTotal = false,
   handleTransaction,
   handleInvoice,
+  totalBill = 0,
+  isLoading,
 }) {
+  moment.locale('id');
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [item, setItem] = React.useState({});
   const open = Boolean(anchorEl);
@@ -103,73 +104,85 @@ function TableComponen({
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {tableBody?.length <= 0 ? (
+        {isLoading ? (
+          <TableBody>
             <TableRow>
-              <TableCell colSpan={6} sx={{ border: 'none', textAlign: 'center' }}>
-                <Typography variant="h6" fontWeight={600} color={grey[600]}>
-                  " Kosong "
-                </Typography>
-                <Typography color={grey[600]}>{emptyTag}</Typography>
+              <TableCell colSpan={6} sx={{ textAlign: 'center' }}>
+                Memuat
               </TableCell>
             </TableRow>
-          ) : (
-            tableBody?.map((body, index) => (
-              <TableRow key={index}>
-                {tableHead?.map((head, index) => {
-                  const Status = (params) => {
-                    const isVariantStatusColor = head?.variantStatusColor?.find((i) => i?.value === params);
-                    const colorVariant = [
-                      {
-                        variant: 'success',
-                        color: green[700],
-                        bgcolor: green[100],
-                      },
-                      {
-                        variant: 'error',
-                        color: red[700],
-                        bgcolor: red[100],
-                      },
-                    ].find((i) => i?.variant === isVariantStatusColor?.variant);
-                    if (isVariantStatusColor) {
-                      return (
-                        <Box
-                          sx={{
-                            bgcolor: colorVariant?.bgcolor,
-                            color: colorVariant?.color,
-                            width: 'fit-content',
-                            px: 1.5,
-                            borderRadius: '9px',
+          </TableBody>
+        ) : (
+          <TableBody>
+            {tableBody?.length <= 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} sx={{ border: 'none', textAlign: 'center' }}>
+                  <Typography fontSize={24} color={grey[600]}>
+                    Kosong
+                  </Typography>
+                  <Typography color={grey[600]} variant="body">
+                    {emptyTag}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ) : (
+              tableBody?.map((body, index) => (
+                <TableRow key={index}>
+                  {tableHead?.map((head, index) => {
+                    const Status = (params) => {
+                      const isVariantStatusColor = head?.variantStatusColor?.find((i) => i?.value === params);
+                      const colorVariant = [
+                        {
+                          variant: 'success',
+                          color: green[700],
+                          bgcolor: green[100],
+                        },
+                        {
+                          variant: 'error',
+                          color: red[700],
+                          bgcolor: red[100],
+                        },
+                      ].find((i) => i?.variant === isVariantStatusColor?.variant);
+                      if (isVariantStatusColor) {
+                        return (
+                          <Box
+                            sx={{
+                              bgcolor: colorVariant?.bgcolor,
+                              color: colorVariant?.color,
+                              width: 'fit-content',
+                              px: 1.5,
+                              borderRadius: '9px',
+                            }}
+                          >
+                            <Typography>{isVariantStatusColor?.label}</Typography>
+                          </Box>
+                        );
+                      }
+                      return false;
+                    };
+                    const isIndicator = head?.variantStatusColor ? Status(body[head.id]) : body[head.id];
+                    const isCurrency = head?.isCurrency ? FormatCurrency(body[head.id]) : isIndicator;
+                    const isDate = head?.isDate ? moment(body[head.id]).format('LLLL') : isCurrency;
+                    return (
+                      <TableCell sx={{ px: 2, py: 1, textTransform: 'capitalize' }} key={index}>
+                        {isDate}
+                      </TableCell>
+                    );
+                  })}
+                  <TableCell>
+                    <Box>
+                      {handleSeeBill ? (
+                        <IconButton
+                          size="small"
+                          onClick={() => {
+                            handleSeeBill(body);
+                            setAnchorEl(null);
                           }}
                         >
-                          <Typography>{isVariantStatusColor?.label}</Typography>
-                        </Box>
-                      );
-                    }
-                    return false;
-                  };
-                  const isIndicator = head?.variantStatusColor ? Status(body[head.id]) : body[head.id];
-                  const isCurrency = head?.isCurrency ? FormatCurrency(body[head.id]) : isIndicator;
-                  return (
-                    <TableCell sx={{ px: 2, py: 1, textTransform: 'capitalize' }} key={index}>
-                      {isCurrency}
-                    </TableCell>
-                  );
-                })}
-                <TableCell>
-                  <Box>
-                    {handleSeeBill ? (
-                      <IconButton
-                        size="small"
-                        onClick={() => {
-                          handleSeeBill(body);
-                          setAnchorEl(null);
-                        }}
-                      >
-                        <RequestQuoteIcon color="primary" />
-                      </IconButton>
-                    ) : null}
-                    {/* <IconButton
+                          <RequestQuoteIcon color="primary" />
+                        </IconButton>
+                      ) : null}
+                      {/* <IconButton
                       id="basic-button"
                       aria-controls={open ? 'basic-menu' : undefined}
                       aria-haspopup="true"
@@ -184,7 +197,7 @@ function TableComponen({
                     >
                       {hideOption ? null : <MoreVertIcon />}
                     </IconButton> */}
-                    {/* <Menu
+                      {/* <Menu
                       id="basic-menu"
                       anchorEl={anchorEl}
                       open={open}
@@ -266,12 +279,45 @@ function TableComponen({
                         </MenuItem>
                       ) : null}
                     </Menu> */}
-                  </Box>
-                </TableCell>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+            {isTotal ? (
+              <TableRow>
+                {tableHead?.map((x, y) => (
+                  <TableCell
+                    colSpan={y === tableHead?.length - 1 ? 6 : 'false'}
+                    key={y}
+                    align={y === tableHead?.length - 2 ? 'right' : 'left'}
+                    sx={{
+                      color: y === tableHead?.length - 2 || y === tableHead?.length - 1 ? '#000' : grey[300],
+                      cursor: y === tableHead?.length - 2 || y === tableHead?.length - 1 ? '' : 'default',
+                      bgcolor: grey[300],
+                      fontWeight: 700,
+                      position: 'relative',
+                    }}
+                  >
+                    {y === tableHead?.length - 2 ? 'Total :' : FormatCurrency(totalBill)}
+                    {y === tableHead?.length - 2 || y === tableHead?.length - 1 ? null : (
+                      <Box
+                        sx={{
+                          width: '100%',
+                          bgcolor: grey[300],
+                          position: 'absolute',
+                          height: '100%',
+                          top: 0,
+                          left: 0,
+                        }}
+                      />
+                    )}
+                  </TableCell>
+                ))}
               </TableRow>
-            ))
-          )}
-        </TableBody>
+            ) : null}
+          </TableBody>
+        )}
       </Table>
       <Box sx={{ py: 2, display: disablePagination ? 'none' : 'flex', justifyContent: 'flex-end' }}>
         <Pagination onChange={pageOnchange} count={count} />
