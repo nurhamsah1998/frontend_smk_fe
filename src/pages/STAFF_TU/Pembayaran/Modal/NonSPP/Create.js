@@ -57,7 +57,7 @@ function Create({ openModalTransaction, setOpenModalTransaction, TableBill, item
         />
 
         <FormHelperText>
-          Masukkan nominal uang. jumlah uang yang dimasukan nanti akan secara otomatis menyesuaikan dengan total
+          Masukkan nominal uang. Amount uang yang dimasukan nanti akan secara otomatis menyesuaikan dengan total
           tagihan.
         </FormHelperText>
       </Box>

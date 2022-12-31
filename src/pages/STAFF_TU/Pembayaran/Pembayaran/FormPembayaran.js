@@ -15,15 +15,15 @@ function FormPembayaran({ data, refetchInvoice }) {
     },
   });
   const options = [
-    { label: 'Bebas', value: 'bebas' },
+    { label: 'All', value: 'bebas' },
     { label: 'Spp', value: 'spp' },
-    { label: 'Seragam', value: 'seragam' },
-    { label: 'Bagunan', value: 'bagunan' },
-    { label: 'Buku LKS', value: 'buku_lks' },
+    { label: 'Uniform', value: 'seragam' },
+    { label: 'Building', value: 'bagunan' },
+    { label: 'Books', value: 'buku_lks' },
     { label: 'Prakerin', value: 'prakerin' },
-    { label: 'Kunjungan industri', value: 'kunjungan_industri' },
+    { label: 'Industrial visits', value: 'kunjungan_industri' },
     { label: 'Jobsheet', value: 'jobsheet' },
-    { label: 'Pengembangan', value: 'pengembangan' },
+    { label: 'Development', value: 'pengembangan' },
   ];
   return (
     <Formik
@@ -60,7 +60,7 @@ function FormPembayaran({ data, refetchInvoice }) {
                 }}
                 value={values?.kode_pembayaran}
                 options={options}
-                renderInput={(params) => <TextField {...params} label="Pembayaran" />}
+                renderInput={(params) => <TextField {...params} label="Payment" />}
               />
               <TextFieldNumberFormat
                 onChange={(i) => {
@@ -70,11 +70,11 @@ function FormPembayaran({ data, refetchInvoice }) {
                 value={values?.uang_diterima}
                 fullWidth
               />
-              <TextField {...getFieldProps('note')} label="Keterangan" fullWidth />
+              <TextField {...getFieldProps('note')} label="Note" fullWidth />
             </Box>
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
               <Button disabled={values?.uang_diterima <= 1000} type="submit" variant="contained">
-                Bayar
+                Pay
               </Button>
             </Box>
           </Box>

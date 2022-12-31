@@ -38,7 +38,7 @@ export default function LoginForm() {
         {({ getFieldProps, values }) => (
           <Form>
             <Stack spacing={3}>
-              <TextField name="username" {...getFieldProps('username')} label="Username" />
+              <TextField name="username" {...getFieldProps('username')} label="Username / email" />
               <TextField
                 name="password"
                 label="Password"

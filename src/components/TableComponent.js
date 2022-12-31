@@ -117,7 +117,7 @@ function TableComponen({
               <TableRow>
                 <TableCell colSpan={6} sx={{ border: 'none', textAlign: 'center' }}>
                   <Typography fontSize={24} color={grey[600]}>
-                    Kosong
+                    Empty
                   </Typography>
                   <Typography color={grey[600]} variant="body">
                     {emptyTag}

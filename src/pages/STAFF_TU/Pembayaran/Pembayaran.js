@@ -20,23 +20,23 @@ function Pembayaran() {
   const tableHead = [
     {
       id: 'nama',
-      label: 'Nama siswa',
+      label: 'Student name',
     },
     {
       id: 'kelas',
-      label: 'Kelas',
+      label: 'Class',
     },
     {
       id: 'angkatan',
-      label: 'Angkatan',
+      label: 'Force',
     },
     {
       id: 'jurusan',
-      label: 'Jurusan',
+      label: 'Major',
     },
     {
       id: 'kode_siswa',
-      label: 'Kode siswa',
+      label: 'Student code',
     },
   ];
   return (
@@ -44,7 +44,7 @@ function Pembayaran() {
       <Box sx={{ display: location.pathname?.includes('/detail-tagihan') ? 'none' : 'grid' }}>
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
           <Box sx={{ display: 'grid' }}>
-            <FormHelperText>Masukan nama siswa / kode siswa</FormHelperText>
+            <FormHelperText>Enter Student name / student code</FormHelperText>
             <TextField value={search} onChange={(i) => setSearch(i.target.value)} size="small" />
           </Box>
         </Box>

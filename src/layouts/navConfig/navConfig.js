@@ -14,12 +14,12 @@ export const navConfigTU = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'Tagihan',
+    title: 'Bill',
     path: '/staff-tu/tagihan',
     icon: <RequestQuoteIcon />,
   },
   {
-    title: 'Pembayaran',
+    title: 'Payment',
     path: '/staff-tu/pembayaran',
     icon: <PointOfSaleIcon />,
   },
@@ -31,7 +31,7 @@ export const navConfigPPDB = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'Pendaftar',
+    title: 'Registrants',
     path: '/staff-ppdb/pendaftar',
     icon: <RequestQuoteIcon />,
   },

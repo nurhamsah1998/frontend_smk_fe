@@ -37,12 +37,12 @@ export default function FormRegisterStudent() {
         {({ getFieldProps, setFieldValue, values }) => (
           <Form>
             <Stack spacing={3}>
-              <TextField name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
-              <TextField name="username" {...getFieldProps('username')} label="username" />
-              <TextField name="noHP" {...getFieldProps('noHP')} type="number" label="Nomor Telpon/Wa" />
+              <TextField name="nama" {...getFieldProps('nama')} label="Full name" />
+              <TextField name="username" {...getFieldProps('username')} label="Username / email" />
+              <TextField name="noHP" {...getFieldProps('noHP')} type="number" label="Phone number" />
               <AutoCompleteAsync
                 module="jurusan"
-                label="Pilih jurusan"
+                label="Choose a major"
                 onChange={(x, y) => {
                   setFieldValue('jurusanId', y);
                 }}

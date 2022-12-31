@@ -35,14 +35,15 @@ function Tagihan() {
   const totalBillPaymentHistory =
     paymentHistory?.length <= 0 ? 0 : paymentHistory?.map((i) => i?.uang_diterima)?.reduce((x, y) => x + y);
   const totalBillStudent = itemsRebuild?.length <= 0 ? 0 : itemsRebuild?.map((i) => i?.value)?.reduce((x, y) => x + y);
+  console.log(totalBillStudent);
   const tableHeadTagihanSiswa = [
     {
       id: 'name',
-      label: 'Nama tagihan',
+      label: 'Bill name',
     },
     {
       id: 'value',
-      label: 'Jumlah',
+      label: 'Amount',
       isCurrency: true,
     },
   ];
@@ -53,41 +54,41 @@ function Tagihan() {
     },
     {
       id: 'createdAt',
-      label: 'Tanggal bayar',
+      label: 'Pay date',
       isDate: true,
     },
     {
       id: 'kode_pembayaran',
-      label: 'Nama tagihan',
+      label: 'Bill name',
     },
     {
       id: 'uang_diterima',
-      label: 'Jumlah',
+      label: 'Amount',
       isCurrency: true,
     },
   ];
   const detailBill = [
     {
-      label: 'Total tagihan',
-      value: totalBillStudent,
+      label: 'Total bill',
+      value: totalBillStudent || 0,
     },
     {
-      label: 'Terbayar',
+      label: 'Paid off',
       value: totalBillPaymentHistory,
     },
     {
-      label: 'Uang lebih',
+      label: 'excess money',
       value: totalBillPaymentHistory - totalBillStudent <= 0 ? 0 : totalBillPaymentHistory - totalBillStudent,
     },
     {
-      label: 'Kekurangan',
+      label: 'Deficiency',
       value: totalBillStudent - totalBillPaymentHistory <= 0 ? 0 : totalBillStudent - totalBillPaymentHistory,
     },
   ];
   return (
     <Box>
       <Box mb={2}>
-        <Typography variant="h5">Ringkasan</Typography>
+        <Typography variant="h5">Summary</Typography>
         {detailBill?.map((item, index) => (
           <Box key={index} sx={{ display: 'flex', gap: 2, width: '100%' }}>
             <Typography sx={{ width: '30%' }}>{item?.label}</Typography>
@@ -97,11 +98,11 @@ function Tagihan() {
       </Box>
       <Divider />
       <Box sx={{ my: 2 }}>
-        <Typography variant="h5">Tagihan Siswa</Typography>
+        <Typography variant="h5">Student Bills</Typography>
         <TableComponen
           isLoading={isLoading}
           isTotal
-          emptyTag="masih belum ada tagihan"
+          emptyTag="still no bill"
           hideOption
           totalBill={totalBillStudent}
           tableHead={tableHeadTagihanSiswa}
@@ -112,10 +113,10 @@ function Tagihan() {
       </Box>
       <Divider />
       <Box sx={{ my: 2 }}>
-        <Typography variant="h5">Riwayat pembayaran</Typography>
+        <Typography variant="h5">Payment history</Typography>
         <TableComponen
           isLoading={isLoading}
-          emptyTag="sepertinya belum ada transaksi"
+          emptyTag="there seems to be no transaction"
           hideOption
           isTotal
           totalBill={totalBillPaymentHistory}

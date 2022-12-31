@@ -1,11 +1,11 @@
 export const tableHeadTagihanSiswa = [
   {
     id: 'name',
-    label: 'Nama tagihan',
+    label: 'Bill name',
   },
   {
     id: 'value',
-    label: 'Jumlah',
+    label: 'Amount',
     isCurrency: true,
   },
 ];
@@ -16,16 +16,16 @@ export const tableHeadPembayaranSiswa = [
   },
   {
     id: 'createdAt',
-    label: 'Tanggal bayar',
+    label: 'Pay date',
     isDate: true,
   },
   {
     id: 'kode_pembayaran',
-    label: 'Nama tagihan',
+    label: 'Bill name',
   },
   {
     id: 'uang_diterima',
-    label: 'Jumlah',
+    label: 'Amount',
     isCurrency: true,
   },
 ];

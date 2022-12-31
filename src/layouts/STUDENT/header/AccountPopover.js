@@ -41,9 +41,9 @@ export default function AccountPopover() {
   };
   const handleLogOut = () => {
     setDialog({
-      title: 'Apakah anda yakin ingin keluar?',
-      labelClose: 'Batal',
-      labelSubmit: 'Keluar',
+      title: 'Are you sure you want to exit?',
+      labelClose: 'Cancel',
+      labelSubmit: 'Log Out',
       fullWidth: false,
       do: () => {
         window.localStorage.removeItem('accessToken');
@@ -112,7 +112,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
         <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
-          Keluar
+          Log Out
         </MenuItem>
       </Popover>
     </>

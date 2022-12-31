@@ -48,7 +48,7 @@ export default function RegisterStaffPage() {
   return (
     <>
       <Helmet>
-        <title> Login | SMK KRAS </title>
+        <title> Login </title>
       </Helmet>
 
       <StyledRoot>
@@ -66,7 +66,7 @@ export default function RegisterStaffPage() {
             </Typography>
             <FormRegister />
             <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography variant="subtitle2">Sudah punya akun ?</Typography>
+              <Typography variant="subtitle2">Already have an account?</Typography>
               <Typography
                 onClick={() => navigate('/staff-login')}
                 component="span"

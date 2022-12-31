@@ -47,19 +47,19 @@ export default function LoginStaff() {
   return (
     <>
       <Helmet>
-        <title> Login | SMK KRAS </title>
+        <title> Login </title>
       </Helmet>
 
       <StyledRoot>
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Staf Sekolah
+              School Staff
             </Typography>
           </StyledSection>
         )}
         <Box sx={{ position: 'fixed', top: 10, right: 10 }}>
-          <Button onClick={() => navigate('/siswa-login')}>login sebagai Siswa</Button>
+          <Button onClick={() => navigate('/siswa-login')}>login as Student</Button>
         </Box>
         <Container maxWidth="sm">
           <StyledContent>
@@ -68,7 +68,7 @@ export default function LoginStaff() {
             </Typography>
             <LoginForm />
             <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography variant="subtitle2">Belum punya akun ?</Typography>
+              <Typography variant="subtitle2">Don't have an account yet?</Typography>
               <Typography
                 onClick={() => navigate('/staff-register')}
                 component="span"
@@ -77,7 +77,7 @@ export default function LoginStaff() {
                 color="#2065D1"
                 variant="subtitle2"
               >
-                Daftar
+                Register
               </Typography>
             </Box>
           </StyledContent>

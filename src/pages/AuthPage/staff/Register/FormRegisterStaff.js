@@ -35,9 +35,9 @@ export default function FormRegisterStaff() {
         {({ getFieldProps, setFieldValue, values }) => (
           <Form>
             <Stack spacing={3}>
-              <TextField name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
+              <TextField name="nama" {...getFieldProps('nama')} label="Full name" />
               <TextField name="username" {...getFieldProps('username')} label="Username / email" />
-              <TextField name="noHP" {...getFieldProps('noHP')} type="number" label="Nomor Telpon/Wa" />
+              <TextField name="noHP" {...getFieldProps('noHP')} type="number" label="Phone number" />
               <TextField
                 name="password"
                 label="Password"

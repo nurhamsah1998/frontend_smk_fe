@@ -40,19 +40,19 @@ function DetailTagihanSiswa() {
       >
         <Box sx={{ display: 'grid' }}>
           <Box sx={{ display: 'flex' }}>
-            <Typography sx={{ width: '70px' }}>Nama</Typography>:
+            <Typography sx={{ width: '70px' }}>Name</Typography>:
             <Typography variant="subtitle2" ml={1}>
               {studentProfile?.nama}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', my: -0.5 }}>
-            <Typography sx={{ width: '70px' }}>Kelas</Typography>:
+            <Typography sx={{ width: '70px' }}>Class</Typography>:
             <Typography variant="subtitle2" ml={1}>
               {studentProfile?.kelas}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex' }}>
-            <Typography sx={{ width: '70px' }}>Jurusan</Typography>:
+            <Typography sx={{ width: '70px' }}>Force</Typography>:
             <Typography variant="subtitle2" ml={1}>
               {studentProfile?.jurusan?.nama}
             </Typography>

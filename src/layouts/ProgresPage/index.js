@@ -19,8 +19,8 @@ function index() {
       }}
     >
       <Box sx={{ width: '80%' }}>
-        <Typography variant="h4">Mohon Ditunggu.</Typography>
-        <Typography mt={-1}>Data diri anda dalam pengecekan petugas kami.</Typography>
+        <Typography variant="h4">Please wait.</Typography>
+        <Typography mt={-1}>Your personal data is checked by our officers.</Typography>
         <LinearProgress color="inherit" sx={{ height: 15, borderRadius: '100px', mt: 1 }} />
         <Button sx={{ mt: 2 }} color="error" onClick={handleLogOut} variant="contained">
           Log Out

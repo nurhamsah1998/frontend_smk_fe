@@ -50,37 +50,37 @@ function DetailTagihan() {
   const detailSiswaLeft = [
     {
       value: studentProfile?.nama,
-      label: 'Nama siswa',
+      label: 'Student name',
     },
     {
       value: studentProfile?.jurusan?.nama,
-      label: 'Jurusan',
+      label: 'Major',
     },
     {
       value: studentProfile?.kelas,
-      label: 'Kelas',
+      label: 'Class',
     },
     {
       value: studentProfile?.noHP,
-      label: 'Nomor Hp',
+      label: 'Phone number',
     },
   ];
   const detailSiswaRight = [
     {
       value: studentProfile?.nama_ayah,
-      label: 'Nama ayah',
+      label: 'Father name',
     },
     {
       value: studentProfile?.nama_ibu,
-      label: 'Nama ibu',
+      label: 'Mother name',
     },
     {
       value: studentProfile?.alamat,
-      label: 'Alamat',
+      label: 'Address',
     },
     {
       value: studentProfile?.angkatan,
-      label: 'Angkatan',
+      label: 'Force',
     },
   ];
 
@@ -90,19 +90,19 @@ function DetailTagihan() {
 
   const detailBill = [
     {
-      label: 'Total tagihan',
+      label: 'Total bill',
       value: totalBillStudent,
     },
     {
-      label: 'Terbayar',
+      label: 'Paid off',
       value: totalBillPaymentHistory,
     },
     {
-      label: 'Uang lebih',
+      label: 'excess money',
       value: totalBillPaymentHistory - totalBillStudent <= 0 ? 0 : totalBillPaymentHistory - totalBillStudent,
     },
     {
-      label: 'Kekurangan',
+      label: 'Deficiency',
       value: totalBillStudent - totalBillPaymentHistory <= 0 ? 0 : totalBillStudent - totalBillPaymentHistory,
     },
   ];
@@ -110,9 +110,9 @@ function DetailTagihan() {
     <Box sx={{ display: 'grid', gap: 4 }}>
       <Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h5">Profile Siswa</Typography>
+          <Typography variant="h5">Student Profiles</Typography>
           <Button variant="contained" disabled>
-            Edit profil siswa
+            Edit student profile
           </Button>
         </Box>
         <Grid container>
@@ -141,11 +141,11 @@ function DetailTagihan() {
       <Divider />
       <Box>
         <Typography variant="h5" mb={2}>
-          Tagihan Siswa
+          Student Bills
         </Typography>
         <TableComponen
           isLoading={isLoading}
-          emptyTag="masih belum ada tagihan"
+          emptyTag="still no bill"
           isTotal
           hideOption
           totalBill={totalBillStudent}
@@ -158,11 +158,11 @@ function DetailTagihan() {
       <Divider />
       <Box>
         <Typography variant="h5" mb={2}>
-          Riwayat pembayaran
+          Payment history
         </Typography>
         <TableComponen
           isLoading={isLoading}
-          emptyTag="sepertinya belum ada transaksi"
+          emptyTag="there seems to be no transaction"
           hideOption
           isTotal
           totalBill={totalBillPaymentHistory}
@@ -174,7 +174,7 @@ function DetailTagihan() {
       </Box>
       <Divider />
       <Box>
-        <Typography variant="h5">Pembayaran</Typography>
+        <Typography variant="h5">Payment</Typography>
         <Box>
           {detailBill?.map((item, index) => (
             <Box key={index} sx={{ display: 'flex', gap: 2, width: '100%' }}>

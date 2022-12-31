@@ -84,7 +84,7 @@ export default function TagihanStaff() {
           <Box>
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
               <Button variant="contained" onClick={handleSave}>
-                Simpan perubahan
+                Save changes
               </Button>
             </Box>
             <Formik
@@ -97,7 +97,7 @@ export default function TagihanStaff() {
                   labelClose: 'Batal',
                   labelSubmit: 'Simpan',
                   content:
-                    'Jumlah tagihan yang dirubah, nantinya akan disinkronisasikan dengan riwayat pembayaran siswa yang mana jika ada uang sisa dari hasil perubahan ini, maka hasil sisa tersebut akan muncul ditampilan siswa.',
+                    'Amount tagihan yang dirubah, nantinya akan disinkronisasikan dengan Payment history siswa yang mana jika ada uang sisa dari hasil perubahan ini, maka hasil sisa tersebut akan muncul ditampilan siswa.',
                   do: () => {
                     mutation.mutate(values);
                   },

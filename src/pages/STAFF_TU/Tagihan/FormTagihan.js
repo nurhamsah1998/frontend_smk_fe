@@ -22,7 +22,7 @@ function FormTagihan({ values, setFieldValue, getFieldProps }) {
         {[
           {
             name: 'nama',
-            label: 'Nama tagihan',
+            label: 'Bill name',
             type: 'text',
           },
           {
@@ -158,7 +158,7 @@ function FormTagihan({ values, setFieldValue, getFieldProps }) {
               <AutoCompleteAsync
                 key={index}
                 module="jurusan"
-                label="Pilih jurusan"
+                label="Choose a major"
                 onChange={(x, y) => {
                   setFieldValue(item.name, y);
                 }}

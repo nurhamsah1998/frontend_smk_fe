@@ -48,19 +48,19 @@ export default function RegisterStudentPage() {
   return (
     <>
       <Helmet>
-        <title> Login | SMK KRAS </title>
+        <title> Login </title>
       </Helmet>
 
       <StyledRoot>
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Selamat Datang, Website Resmi SMK PGRI KRAS
+              Welcome to official website school
             </Typography>
           </StyledSection>
         )}
         <Box sx={{ position: 'fixed', top: 10, right: 10 }}>
-          <Button onClick={() => navigate('/staff-login')}> login sebagai staf</Button>
+          <Button onClick={() => navigate('/staff-login')}> Login as staf</Button>
         </Box>
         <Container maxWidth="sm">
           <StyledContent>
@@ -69,7 +69,7 @@ export default function RegisterStudentPage() {
             </Typography>
             <FormRegister />
             <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography variant="subtitle2">Sudah punya akun ?</Typography>
+              <Typography variant="subtitle2">Already have account ?</Typography>
               <Typography
                 onClick={() => navigate('/siswa-login')}
                 component="span"

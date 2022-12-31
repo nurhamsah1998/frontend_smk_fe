@@ -24,7 +24,7 @@ function Pendaftar() {
   const tableHead = [
     {
       id: 'nama',
-      label: 'Nama tagihan',
+      label: 'Student name',
     },
     {
       id: 'username',
@@ -36,12 +36,12 @@ function Pendaftar() {
       variantStatusColor: [
         {
           variant: 'success',
-          label: 'Siswa',
+          label: 'Accepted',
           value: 'accepted',
         },
         {
           variant: 'error',
-          label: 'Calon siswa',
+          label: 'Checking',
           value: 'checking',
         },
       ],

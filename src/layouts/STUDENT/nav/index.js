@@ -84,7 +84,7 @@ export default function Nav({ openNav, onCloseNav }) {
                   variant="contained"
                   size="small"
                 >
-                  lihat profil
+                  view profile
                 </Button>
               </Stack>
             </Box>
@@ -139,13 +139,13 @@ export default function Nav({ openNav, onCloseNav }) {
         open={search?.includes('?profile-id=')}
         title="Buat tagihan baru"
         handleClose={() => navigate(-1)}
-        labelClose="tutup"
-        labelSubmit="buat"
+        labelClose="Close"
+        labelSubmit="Create"
       >
-        <ListItemText primary="Nama" secondary={itemsNoPagination?.nama} />
-        <ListItemText primary="Jurusan" secondary={itemsNoPagination?.jurusan?.nama} />
-        <ListItemText primary="Kelas" secondary={itemsNoPagination?.kelas} />
-        <ListItemText primary="Angkatan" secondary={itemsNoPagination?.angkatan} />
+        <ListItemText primary="Name" secondary={itemsNoPagination?.nama} />
+        <ListItemText primary="Major" secondary={itemsNoPagination?.jurusan?.nama} />
+        <ListItemText primary="Class" secondary={itemsNoPagination?.kelas} />
+        <ListItemText primary="Force" secondary={itemsNoPagination?.angkatan} />
       </ScreenDialog>
     </Box>
   );
