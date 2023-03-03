@@ -69,7 +69,7 @@ function Tagihan() {
   const detailBill = [
     {
       label: 'Total tagihan',
-      value: totalBillStudent,
+      value: totalBillStudent || 0,
     },
     {
       label: 'Terbayar',
@@ -77,11 +77,11 @@ function Tagihan() {
     },
     {
       label: 'Uang lebih',
-      value: totalBillPaymentHistory - totalBillStudent <= 0 ? 0 : totalBillPaymentHistory - totalBillStudent,
+      value: totalBillPaymentHistory - totalBillStudent <= 0 ? 0 : totalBillPaymentHistory - totalBillStudent || 0,
     },
     {
       label: 'Kekurangan',
-      value: totalBillStudent - totalBillPaymentHistory <= 0 ? 0 : totalBillStudent - totalBillPaymentHistory,
+      value: totalBillStudent - totalBillPaymentHistory <= 0 ? 0 : totalBillStudent - totalBillPaymentHistory || 0,
     },
   ];
   return (

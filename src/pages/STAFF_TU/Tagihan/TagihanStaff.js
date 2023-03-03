@@ -56,6 +56,7 @@ export default function TagihanStaff() {
     delete x?.createdAt;
     return Object.entries(x);
   });
+  const memoix = React.useMemo(() => dataTextField, [itemsNoPagination]);
   const formRef = React.useRef();
   const handleSave = () => {
     formRef.current?.handleSubmit();
@@ -111,7 +112,7 @@ export default function TagihanStaff() {
                     // eslint-disable-next-line react/jsx-key
                     <TabPanel value={value} index={y} key={y}>
                       <Box key={y} sx={{ display: 'grid', gap: 2 }}>
-                        {dataTextField[y]?.map((item, index) => {
+                        {memoix[y]?.map((item, index) => {
                           if (item?.includes('tahun_angkatan') || item?.includes('id')) {
                             return;
                           }
