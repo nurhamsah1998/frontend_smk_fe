@@ -35,6 +35,7 @@ export default function Router() {
         { element: <Navigate to="/staff-tu/dashboard" />, index: true },
         { path: 'dashboard', element: <AppStaffTU /> },
         { path: 'tagihan', element: <TagihanStaff /> },
+        { path: 'daftar-siswa', element: <Pendaftar /> },
         {
           path: 'pembayaran',
           element: <Pembayaran />,
@@ -50,15 +51,15 @@ export default function Router() {
         // { path: 'blog', element: <BlogPage /> },
       ],
     },
-    {
-      path: '/staff-ppdb',
-      element: <DashboardLayoutStaffPPDB />,
-      children: [
-        { element: <Navigate to="/staff-ppdb/dashboard" />, index: true },
-        { path: 'dashboard', element: <AppStaffPPDB /> },
-        { path: 'pendaftar', element: <Pendaftar /> },
-      ],
-    },
+    // {
+    //   path: '/staff-ppdb',
+    //   element: <DashboardLayoutStaffPPDB />,
+    //   children: [
+    //     { element: <Navigate to="/staff-ppdb/dashboard" />, index: true },
+    //     { path: 'dashboard', element: <AppStaffPPDB /> },
+    //     { path: 'pendaftar', element: <Pendaftar /> },
+    //   ],
+    // },
     {
       path: '/siswa',
       element: <DashboardLayoutStudent />,

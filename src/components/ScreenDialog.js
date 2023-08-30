@@ -35,7 +35,6 @@ export default function ScreenDialog({
           },
         }}
         open={open}
-        onClose={handleClose}
         scroll="paper"
       >
         <DialogTitle id="scroll-dialog-title">{title}</DialogTitle>

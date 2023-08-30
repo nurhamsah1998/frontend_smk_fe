@@ -3,15 +3,15 @@ import axios from 'axios';
 import React from 'react';
 import { apiUrl } from './api';
 
-function useFetch({ module, enabled = true, isCustom = false }) {
+function useFetch({ module, enabled = true, isCustom = false, params }) {
   const token = window.localStorage.getItem('accessToken');
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(1);
   const [search, setSearch] = React.useState('');
-  const [limit, setLimit] = React.useState(5);
+  const [limit, setLimit] = React.useState(10);
   const query = useQuery(
     [module, enabled, isCustom],
     () =>
-      axios.get(`${apiUrl}${module}${isCustom ? '' : `?page=${page}&search=${search}&limit=${limit}`}`, {
+      axios.get(`${apiUrl}${module}${isCustom ? '' : `?page=${page}&search=${search}&limit=${limit}${params}`}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -26,13 +26,12 @@ function useFetch({ module, enabled = true, isCustom = false }) {
   const totalPage = query.data?.data?.totalPage;
   const currentPage = query.data?.data?.page;
   const totalRows = query.data?.data?.totalRows;
-
   React.useEffect(() => {
     query.refetch();
     if (search) {
-      setPage(0);
+      setPage(1);
     }
-  }, [page, search]);
+  }, [page, search, params]);
   return { items, setPage, search, currentPage, totalRows, totalPage, setSearch, itemsNoPagination, page, ...query };
 }
 

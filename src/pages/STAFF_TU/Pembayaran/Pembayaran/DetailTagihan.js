@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import { Box, Button, Divider, FormHelperText, Grid, Typography } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { blue } from '@mui/material/colors';
 
 import TableComponen from '../../../../components/TableComponent';
 import useFetchById from '../../../../hooks/useFetchById';
@@ -140,10 +141,14 @@ function DetailTagihan() {
       </Box>
       <Divider />
       <Box>
-        <Typography variant="h5" mb={2}>
-          Tagihan Siswa
-        </Typography>
+        <Box mb={2}>
+          <Typography variant="h5"> Tagihan Siswa</Typography>
+          <FormHelperText sx={{ mt: '-5px', color: blue[500] }}>
+            Total ada {itemsRebuild?.length || 0} tagihan
+          </FormHelperText>
+        </Box>
         <TableComponen
+          stickyHeader="432px"
           isLoading={isLoading}
           emptyTag="masih belum ada tagihan"
           isTotal
@@ -157,10 +162,14 @@ function DetailTagihan() {
       </Box>
       <Divider />
       <Box>
-        <Typography variant="h5" mb={2}>
-          Riwayat pembayaran
-        </Typography>
+        <Box mb={2}>
+          <Typography variant="h5">Riwayat pembayaran</Typography>
+          <FormHelperText sx={{ mt: '-5px', color: blue[500] }}>
+            Total ada {paymentHistory?.length || 0} riwayat pembayaran
+          </FormHelperText>
+        </Box>
         <TableComponen
+          stickyHeader="432px"
           isLoading={isLoading}
           emptyTag="sepertinya belum ada transaksi"
           hideOption

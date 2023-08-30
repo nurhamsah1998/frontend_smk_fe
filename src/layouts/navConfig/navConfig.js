@@ -19,6 +19,11 @@ export const navConfigTU = [
     icon: <RequestQuoteIcon />,
   },
   {
+    title: 'Daftar Siswa',
+    path: '/staff-tu/daftar-siswa',
+    icon: <RequestQuoteIcon />,
+  },
+  {
     title: 'Pembayaran',
     path: '/staff-tu/pembayaran',
     icon: <PointOfSaleIcon />,

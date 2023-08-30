@@ -16,7 +16,7 @@ function Pembayaran() {
   const handleSeeBill = (item) => {
     navigate(`detail-tagihan?student-id=${item?.id}`);
   };
-
+  console.log(items);
   const tableHead = [
     {
       id: 'nama',
@@ -31,12 +31,39 @@ function Pembayaran() {
       label: 'Angkatan',
     },
     {
-      id: 'jurusan',
+      id: 'jurusan.nama',
       label: 'Jurusan',
     },
     {
-      id: 'kode_siswa',
-      label: 'Kode siswa',
+      id: 'status_bill',
+      label: 'Status',
+      variantStatusColor: [
+        {
+          variant: 'success',
+          label: 'Lunas',
+          value: 'paid',
+        },
+        {
+          variant: 'error',
+          label: 'Belum Lunas',
+          value: 'not_paid',
+        },
+        {
+          variant: 'grey',
+          label: 'Belum Ada Tagihan',
+          value: 'not_paid_yet',
+        },
+        {
+          variant: 'warning',
+          label: 'Deposit',
+          value: 'deposit',
+        },
+      ],
+    },
+    {
+      id: 'current_bill',
+      label: 'Kekurangan',
+      isCurrency: true,
     },
   ];
   return (
