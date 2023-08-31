@@ -17,10 +17,12 @@ import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
 import TableComponen from '../../../components/TableComponent';
 import Create from './Create';
+import CreateImport from './CreateImport';
 
 function Pendaftar() {
   const [checked, setChecked] = React.useState(null);
   const [openModalCreate, setOpenModalCreate] = React.useState(false);
+  const [openModalCreateImport, setOpenModalCreateImport] = React.useState(false);
   const [kelas, setKelas] = React.useState('');
   const [status, setStatus] = React.useState('');
   const [angkatan, setAngkatan] = React.useState('');
@@ -29,7 +31,6 @@ function Pendaftar() {
 
   const { items, totalPage, setPage, setSearch, page } = useFetch({
     module: `siswa`,
-
     params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}`,
   });
   const { data } = useFetch({
@@ -130,6 +131,7 @@ function Pendaftar() {
   };
   return (
     <Box>
+      <CreateImport openModalCreateImport={openModalCreateImport} setOpenModalCreateImport={setOpenModalCreateImport} />
       <Create openModalCreate={openModalCreate} setOpenModalCreate={setOpenModalCreate} />
       <Box
         sx={{
@@ -146,10 +148,12 @@ function Pendaftar() {
           }}
         >
           <Box>
-            <Button variant="contained">Tambah siswa baru</Button>
+            <Button variant="contained" onClick={() => setOpenModalCreate(true)}>
+              Tambah siswa baru
+            </Button>
           </Box>
           <Box>
-            <Button variant="outlined" onClick={() => setOpenModalCreate(true)}>
+            <Button variant="outlined" onClick={() => setOpenModalCreateImport(true)}>
               Tambah siswa secara masal
             </Button>
           </Box>

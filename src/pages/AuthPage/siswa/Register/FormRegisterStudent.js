@@ -16,22 +16,6 @@ export default function FormRegisterStudent() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-  const { itemsNoPagination, isError } = useFetch({
-    module: `tagihan-permanent-siswa?tahun_angkatan=${new Date().getFullYear()}`,
-  });
-  const isErrorGetBill = Boolean(itemsNoPagination?.length === 0) || isError;
-  delete itemsNoPagination?.[0]?.tahun_angkatan;
-  const listBill = Object.values(itemsNoPagination?.[0] || {});
-  const handleCountTotalBill = (arg) => {
-    let result = 0;
-    for (let index = 0; index < arg.length; index += 1) {
-      if (typeof arg[index] === 'number') {
-        result += arg[index];
-      }
-    }
-    return result;
-  };
-  const currentTotalBill = handleCountTotalBill(listBill);
   const { register, isLoading } = useRegister({
     module: 'register-siswa',
     // next: () => navigate('/siswa-login'),
@@ -47,8 +31,7 @@ export default function FormRegisterStudent() {
           jurusanId: '',
         }}
         onSubmit={(values) => {
-          console.log(currentTotalBill);
-          register.mutate({ ...values, jurusanId: values?.jurusanId?.id, current_bill: currentTotalBill });
+          register.mutate({ ...values, jurusanId: values?.jurusanId?.id });
         }}
       >
         {({ getFieldProps, setFieldValue, values }) => (
@@ -86,14 +69,7 @@ export default function FormRegisterStudent() {
                 Forgot password?
               </Link>
             </Stack>
-            <LoadingButton
-              disabled={isErrorGetBill}
-              fullWidth
-              size="large"
-              type="submit"
-              loading={isLoading}
-              variant="contained"
-            >
+            <LoadingButton fullWidth size="large" type="submit" loading={isLoading} variant="contained">
               Register
             </LoadingButton>
           </Form>

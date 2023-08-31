@@ -2,7 +2,7 @@ import React from 'react';
 import { Autocomplete, TextField, Box } from '@mui/material';
 import useFetch from '../../hooks/useFetch';
 
-function AutoCompleteAsync({ onChange, module, label }) {
+function AutoCompleteAsync({ onChange, module, label, size }) {
   const { itemsNoPagination, refetch, isLoading, data } = useFetch({
     module,
     enabled: false,
@@ -17,7 +17,7 @@ function AutoCompleteAsync({ onChange, module, label }) {
         options={itemsNoPagination || []}
         fullWidth
         onChange={onChange}
-        renderInput={(params) => <TextField {...params} label={label} />}
+        renderInput={(params) => <TextField {...params} size={size} label={label} />}
       />
     </Box>
   );

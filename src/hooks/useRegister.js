@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { apiUrl } from './api';
@@ -10,12 +10,14 @@ function useRegister({
   },
 }) {
   const { enqueueSnackbar } = useSnackbar();
+  const client = useQueryClient();
   const register = useMutation(
     [module],
     (values) => {
       axios
         .post(`${apiUrl}${module}`, { ...values })
         .then((res) => {
+          client.invalidateQueries(module);
           enqueueSnackbar(res?.data?.msg, { variant: 'success' });
           next();
         })
