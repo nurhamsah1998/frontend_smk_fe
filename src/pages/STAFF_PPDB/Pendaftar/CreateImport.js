@@ -1,15 +1,37 @@
 import React from 'react';
 import { TextField, Box, Typography } from '@mui/material';
 import { cyan, purple } from '@mui/material/colors';
+import axios from 'axios';
+import useMutationPost from '../../../hooks/useMutationPost';
+import { apiUrl } from '../../../hooks/api';
 
 import ScreenDialog from '../../../components/ScreenDialog';
 
 function CreateImport({ openModalCreateImport, setOpenModalCreateImport }) {
   const [files, setFiles] = React.useState({});
+  const handleImport = async () => {
+    const formData = new FormData();
+    formData.append('file', files);
+    console.log(files);
+    axios
+      .post(`${apiUrl}import-akun-siswa`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div>
       <ScreenDialog
         labelClose="Batal"
+        labelSubmit="Import File"
+        handleSubmit={handleImport}
         handleClose={() => setOpenModalCreateImport(false)}
         title="Tambah Siswa Secara Masal"
         open={openModalCreateImport}

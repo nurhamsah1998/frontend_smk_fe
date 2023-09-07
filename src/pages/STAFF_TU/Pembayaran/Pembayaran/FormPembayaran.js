@@ -1,14 +1,16 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import { Typography, Box, Autocomplete, TextField, Button } from '@mui/material';
+import { Box, Autocomplete, TextField, Button } from '@mui/material';
+import axios from 'axios';
 import TextFieldNumberFormat from '../../../../components/TextFieldNumberFormat';
-import useMutationPost from '../../../../hooks/useMutationPost';
 import formatNumberChange from '../../../../components/formatNumberChange';
+import useMutationPatch from '../../../../hooks/useMutationPatch';
+import { apiUrl } from '../../../../hooks/api';
 
-function FormPembayaran({ data, refetchInvoice }) {
+function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
   const formRef = React.useRef();
-  const mutation = useMutationPost({
-    module: 'invoice',
+  const mutationPatch = useMutationPatch({
+    module: 'siswa',
     next: () => {
       formRef.current?.resetForm();
       refetchInvoice();
@@ -25,6 +27,7 @@ function FormPembayaran({ data, refetchInvoice }) {
     { label: 'Jobsheet', value: 'jobsheet' },
     { label: 'Pengembangan', value: 'pengembangan' },
   ];
+
   return (
     <Formik
       innerRef={formRef}
@@ -37,14 +40,35 @@ function FormPembayaran({ data, refetchInvoice }) {
         nama: '',
         petugas: '',
       }}
-      onSubmit={(values) => {
+      onSubmit={async (values) => {
+        const totalPay = totalBillPaymentHistory + values?.uang_diterima;
         const body = {
           ...values,
           nama: data?.student?.nama,
           petugas: data?.staff?.nama,
           kode_tagihan: data?.student?.kode_siswa,
         };
-        mutation.mutate(body);
+        axios
+          .post(
+            `${apiUrl}invoice`,
+            { ...body },
+            {
+              headers: {
+                Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
+              },
+            }
+          )
+          .then((res) => {
+            const statusBill = data?.student?.current_bill - values?.uang_diterima;
+            mutationPatch.mutate({
+              id: data?.student?.id,
+              current_bill: data?.student?.current_bill - values?.uang_diterima,
+              status_bill: statusBill === 0 ? 'paid' : statusBill < 0 ? 'deposit' : 'not_paid',
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }}
       enableReinitialize
     >

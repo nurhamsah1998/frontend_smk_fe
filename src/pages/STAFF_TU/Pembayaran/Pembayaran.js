@@ -12,7 +12,18 @@ function Pembayaran() {
     module: 'siswa',
   });
 
-  const itemsRebuild = items?.map((i) => ({ ...i, jurusan: i?.jurusan?.nama }));
+  const itemsRebuild = items?.map((i) => ({
+    ...i,
+    jurusan: i?.jurusan?.nama,
+    status_bill:
+      i?.current_bill < 0
+        ? 'deposit'
+        : i?.current_bill > 0
+        ? 'not_paid'
+        : i?.status_bill?.includes('not_paid_yet')
+        ? 'not_paid_yet'
+        : 'paid',
+  }));
   const handleSeeBill = (item) => {
     navigate(`detail-tagihan?student-id=${item?.id}`);
   };
@@ -21,6 +32,10 @@ function Pembayaran() {
     {
       id: 'nama',
       label: 'Nama siswa',
+    },
+    {
+      id: 'gender',
+      label: 'Gender',
     },
     {
       id: 'kelas',

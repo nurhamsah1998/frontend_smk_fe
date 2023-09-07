@@ -11,7 +11,7 @@ function useFetch({ module, enabled = true, isCustom = false, params }) {
   const query = useQuery(
     [module, enabled, isCustom],
     () =>
-      axios.get(`${apiUrl}${module}${isCustom ? '' : `?page=${page}&search=${search}&limit=${limit}${params}`}`, {
+      axios.get(`${apiUrl}${module}${isCustom ? '' : `?page=${page}&search=${search}&limit=${limit || 10}${params}`}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -31,8 +31,20 @@ function useFetch({ module, enabled = true, isCustom = false, params }) {
     if (search) {
       setPage(1);
     }
-  }, [page, search, params]);
-  return { items, setPage, search, currentPage, totalRows, totalPage, setSearch, itemsNoPagination, page, ...query };
+  }, [page, search, params, limit]);
+  return {
+    items,
+    setPage,
+    search,
+    currentPage,
+    totalRows,
+    totalPage,
+    setSearch,
+    itemsNoPagination,
+    setLimit,
+    page,
+    ...query,
+  };
 }
 
 export default useFetch;

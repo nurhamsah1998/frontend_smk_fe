@@ -29,7 +29,7 @@ function Pendaftar() {
   const [jurusan, setJurusan] = React.useState('');
   const [jurusanId, setJurusanId] = React.useState('');
 
-  const { items, totalPage, setPage, setSearch, page } = useFetch({
+  const { items, totalPage, setPage, setSearch, page, setLimit } = useFetch({
     module: `siswa`,
     params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}`,
   });
@@ -59,23 +59,21 @@ function Pendaftar() {
     setPage(1);
     setStatus(String(event.target.value));
   };
-  const handleChangeSwitch = (i, data) => {
-    const valueSwitch = i.target.checked;
-    setChecked(valueSwitch);
-    delete data?.indicator;
-    mutationPatch.mutate({ ...data, status: valueSwitch ? 'accepted' : 'checking' });
-  };
   const tableHead = [
     {
       id: 'nama',
       label: 'Nama siswa',
     },
     {
+      id: 'gender',
+      label: 'Gender',
+    },
+    {
       id: 'kelas',
       label: 'Kelas',
     },
     {
-      id: 'nama_jurusan',
+      id: 'jurusan.nama',
       label: 'Jurusan',
     },
     {
@@ -159,14 +157,24 @@ function Pendaftar() {
           </Box>
         </Box>
         <Box>
-          <FormHelperText sx={{ mt: 1 }}>Cari siswa / Kode siswa / Username</FormHelperText>
-          <TextField
-            fullWidth
-            onChangeCapture={debounce((e) => {
-              setSearch(e.target.value);
-            }, 500)}
-            size="small"
-          />
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            <Box width="100%">
+              <FormHelperText>Cari siswa / Kode siswa / Username</FormHelperText>
+              <TextField
+                fullWidth
+                onChangeCapture={debounce((e) => {
+                  setSearch(e.target.value);
+                }, 500)}
+                size="small"
+              />
+            </Box>
+          </Box>
           <Box
             sx={{
               display: 'flex',
@@ -240,9 +248,26 @@ function Pendaftar() {
               >
                 <MenuItem value={'checking'}>Calon siswa</MenuItem>
                 <MenuItem value={'accepted'}>Siswa</MenuItem>
-                <MenuItem value={2023}>Terkunci</MenuItem>
-                <MenuItem value={2023}>Terblokir</MenuItem>
+                <MenuItem value={'lock'}>Terkunci</MenuItem>
+                <MenuItem value={'blokir'}>Terblokir</MenuItem>
               </Select>
+            </Box>
+            <Box>
+              <FormHelperText>Sort Status</FormHelperText>
+              <TextField
+                inputProps={{
+                  min: 1,
+                  max: 100,
+                }}
+                size="small"
+                type="number"
+                onChange={debounce((i) => {
+                  setLimit(i.target.value);
+                }, 500)}
+                sx={{
+                  width: '100px',
+                }}
+              />
             </Box>
           </Box>
         </Box>

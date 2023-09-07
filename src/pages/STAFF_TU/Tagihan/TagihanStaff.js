@@ -100,7 +100,32 @@ export default function TagihanStaff() {
                   content:
                     'Jumlah tagihan yang dirubah, nantinya akan disinkronisasikan dengan riwayat pembayaran siswa yang mana jika ada uang sisa dari hasil perubahan ini, maka hasil sisa tersebut akan muncul ditampilan siswa.',
                   do: () => {
-                    mutation.mutate(values);
+                    const totalAmountRaw = Object.values(values || {});
+                    const totalPreviousAmountRaw = Object.values(itemsNoPagination[value] || {});
+                    const semiTotalAmount = [];
+                    const semiTotalPreviousAmount = [];
+                    for (let index = 0; index < totalAmountRaw.length; index += 1) {
+                      if (typeof totalAmountRaw[index] === 'number') {
+                        semiTotalAmount.push(totalAmountRaw[index]);
+                      }
+                    }
+                    for (let index = 0; index < totalPreviousAmountRaw.length; index += 1) {
+                      if (typeof totalPreviousAmountRaw[index] === 'number') {
+                        semiTotalPreviousAmount.push(totalPreviousAmountRaw[index]);
+                      }
+                    }
+                    const finalTotalAmount = semiTotalAmount.reduce((a, b) => a + b, 0) - values?.tahun_angkatan;
+                    const finalTotalPreviousAmount =
+                      semiTotalPreviousAmount.reduce((a, b) => a + b, 0) - itemsNoPagination[value]?.tahun_angkatan;
+                    const body = {
+                      ...values,
+                      extra: {
+                        freq_bill: 0,
+                      },
+                    };
+                    body.extra.freq_bill = finalTotalAmount - finalTotalPreviousAmount;
+
+                    mutation.mutate(body);
                   },
                   isCloseAfterSubmit: true,
                 });

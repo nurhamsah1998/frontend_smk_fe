@@ -192,7 +192,7 @@ function DetailTagihan() {
             </Box>
           ))}
         </Box>
-        <FormPembayaran refetchInvoice={refetchInvoice} data={data} />
+        <FormPembayaran totalBillPaymentHistory={totalBillPaymentHistory} refetchInvoice={refetchInvoice} data={data} />
       </Box>
     </Box>
   );

@@ -188,7 +188,18 @@ function TableComponen({
                         return false;
                       };
                       const isIndicator = head?.variantStatusColor ? Status(body[head.id]) : body[head.id];
-                      const isCurrency = head?.isCurrency ? FormatCurrency(body[head.id]) : isIndicator;
+                      const isCurrency = head?.isCurrency ? (
+                        /// https://stackoverflow.com/a/4652112/18038473
+                        <>
+                          {body[head?.id] < 0 ? (
+                            <Typography color={green[400]}>+{FormatCurrency(Math.abs(body[head.id]))}</Typography>
+                          ) : (
+                            FormatCurrency(body[head.id])
+                          )}
+                        </>
+                      ) : (
+                        isIndicator
+                      );
                       const isDate = head?.isDate ? moment(body[head.id]).format('LLLL') : isCurrency;
 
                       return (
