@@ -1,25 +1,48 @@
 import {
   Box,
   Button,
-  InputLabel,
+  Menu,
   MenuItem,
   FormControl,
   Select,
   FormHelperText,
   Typography,
   TextField,
+  ListItemText,
 } from '@mui/material';
 
 import React from 'react';
 import { debounce } from 'lodash';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { orange } from '@mui/material/colors';
 
 import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
 import TableComponen from '../../../components/TableComponent';
 import Create from './Create';
 import CreateImport from './CreateImport';
+import ScreenDialog from '../../../components/ScreenDialog';
 
 function Pendaftar() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const [anchorElChild, setAnchorElChild] = React.useState(null);
+  const openChild = Boolean(anchorElChild);
+  const handleClickChild = (event) => {
+    setAnchorElChild(event.currentTarget);
+    console.log('HAI', event.currentTarget);
+  };
+  const handleCloseChild = () => {
+    setAnchorEl(null);
+    setAnchorElChild(null);
+  };
+
   const [checked, setChecked] = React.useState(null);
   const [openModalCreate, setOpenModalCreate] = React.useState(false);
   const [openModalCreateImport, setOpenModalCreateImport] = React.useState(false);
@@ -28,8 +51,9 @@ function Pendaftar() {
   const [angkatan, setAngkatan] = React.useState('');
   const [jurusan, setJurusan] = React.useState('');
   const [jurusanId, setJurusanId] = React.useState('');
+  const [modal, setModal] = React.useState({ type: '', message: [], title: '', open: false });
 
-  const { items, totalPage, setPage, setSearch, page, setLimit } = useFetch({
+  const { items, totalPage, setPage, setSearch, page, setLimit, limit, refetch } = useFetch({
     module: `siswa`,
     params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}`,
   });
@@ -39,11 +63,28 @@ function Pendaftar() {
   const { mutationPatch } = useMutationPatch({
     module: 'siswa',
   });
+  const { mutationPatch: mutationChangeStatus } = useMutationPatch({
+    module: `bulk-siswa-update/${items?.map((item) => item?.id)}`,
+    isBulk: true,
+    next: (res) => {
+      setModal({ type: 'success', open: true, message: res?.data?.message, title: 'List siswa berhasil diupdate' });
+    },
+    fail: (err) => {
+      setModal({
+        type: 'error',
+        open: true,
+        message: err?.response?.data?.message,
+        title: 'List siswa gagal diupdate',
+      });
+    },
+  });
+
   const itemsRebuild = items?.map((i) => ({
     ...i,
     indicator: i?.status?.includes('accepted'),
-    nama_jurusan: i?.jurusan?.nama,
+    nama_jurusan: `${i?.['jurusan.nama']} / ${i?.sub_kelas}`,
   }));
+  console.log(itemsRebuild);
   const handleChange = (event) => {
     setKelas(event.target.value);
   };
@@ -73,16 +114,12 @@ function Pendaftar() {
       label: 'Kelas',
     },
     {
-      id: 'jurusan.nama',
+      id: 'nama_jurusan',
       label: 'Jurusan',
     },
     {
       id: 'angkatan',
       label: 'Angkatan',
-    },
-    {
-      id: 'username',
-      label: 'Username',
     },
     {
       id: 'status',
@@ -113,22 +150,59 @@ function Pendaftar() {
   ];
   const handleLockAccount = (i) => {
     mutationPatch.mutate({ ...i, status: 'lock' });
-    console.log(i);
   };
   const handleAcceptAccount = (i) => {
     mutationPatch.mutate({ ...i, status: 'accepted' });
-    console.log(i);
   };
   const handleHoldAccount = (i) => {
     mutationPatch.mutate({ ...i, status: 'checking' });
-    console.log(i);
   };
   const handleBlockAccount = (i) => {
     mutationPatch.mutate({ ...i, status: 'blokir' });
-    console.log(i);
   };
+  const handleBulkChangeStatus = async (selectedStatus) => {
+    mutationChangeStatus.mutate({ status: selectedStatus, users: items });
+  };
+  const handleCLoseModal = () => {
+    if (modal.type?.includes('error')) {
+      handleCloseChild();
+      setModal({ open: false, message: [], title: '', type: '' });
+    } else {
+      setKelas('');
+      setStatus('');
+      setAngkatan('');
+      setJurusanId('');
+      setJurusan('');
+      refetch();
+      handleCloseChild();
+      setModal({ open: false, message: [], title: '', type: '' });
+    }
+  };
+
   return (
     <Box>
+      <ScreenDialog
+        type={modal.type}
+        open={modal.open}
+        labelClose="Tutup"
+        handleClose={handleCLoseModal}
+        title={modal.title}
+      >
+        {modal?.message?.map((item, index) => {
+          return (
+            <Box key={index}>
+              <ListItemText
+                primary={
+                  <Typography textTransform="capitalize" variant="h5">
+                    {item?.nama}
+                  </Typography>
+                }
+                secondary={item?.kode_siswa}
+              />
+            </Box>
+          );
+        })}
+      </ScreenDialog>
       <CreateImport openModalCreateImport={openModalCreateImport} setOpenModalCreateImport={setOpenModalCreateImport} />
       <Create openModalCreate={openModalCreate} setOpenModalCreate={setOpenModalCreate} />
       <Box
@@ -147,14 +221,54 @@ function Pendaftar() {
         >
           <Box>
             <Button variant="contained" onClick={() => setOpenModalCreate(true)}>
-              Tambah siswa baru
+              Tambah
             </Button>
           </Box>
           <Box>
             <Button variant="outlined" onClick={() => setOpenModalCreateImport(true)}>
-              Tambah siswa secara masal
+              Import
             </Button>
           </Box>
+          {Boolean(jurusanId) && Boolean(kelas) && Boolean(itemsRebuild?.length > 0) && (
+            <Box>
+              <Button variant="contained" color="warning" onClick={handleClick} startIcon={<SettingsIcon />}>
+                Group
+              </Button>
+
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+                sx={{
+                  '.css-6hp17o-MuiList-root-MuiMenu-list': {
+                    bgcolor: orange[50],
+                  },
+                }}
+              >
+                <MenuItem onClick={handleClose}>Kenaikan kelas</MenuItem>
+                <MenuItem onClick={handleClickChild}>Status</MenuItem>
+                <Menu
+                  sx={{
+                    '.css-6hp17o-MuiList-root-MuiMenu-list': {
+                      bgcolor: orange[100],
+                    },
+                  }}
+                  anchorEl={anchorElChild}
+                  open={openChild}
+                  onClose={handleCloseChild}
+                >
+                  <MenuItem onClick={() => handleBulkChangeStatus('checking')}>Calon Siswa</MenuItem>
+                  <MenuItem onClick={() => handleBulkChangeStatus('accepted')}>SIswa</MenuItem>
+                  <MenuItem onClick={() => handleBulkChangeStatus('lock')}>Terkunci</MenuItem>
+                  <MenuItem onClick={() => handleBulkChangeStatus('blokir')}>Blokir</MenuItem>
+                </Menu>
+              </Menu>
+            </Box>
+          )}
         </Box>
         <Box>
           <Box
@@ -253,7 +367,7 @@ function Pendaftar() {
               </Select>
             </Box>
             <Box>
-              <FormHelperText>Sort Status</FormHelperText>
+              <FormHelperText>Per page</FormHelperText>
               <TextField
                 inputProps={{
                   min: 1,
@@ -261,6 +375,7 @@ function Pendaftar() {
                 }}
                 size="small"
                 type="number"
+                placeholder="10"
                 onChange={debounce((i) => {
                   setLimit(i.target.value);
                 }, 500)}

@@ -27,7 +27,6 @@ function Pembayaran() {
   const handleSeeBill = (item) => {
     navigate(`detail-tagihan?student-id=${item?.id}`);
   };
-  console.log(items);
   const tableHead = [
     {
       id: 'nama',

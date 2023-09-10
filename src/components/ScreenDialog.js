@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import { LoadingButton } from '@mui/lab';
+import { green, red } from '@mui/material/colors';
 
 export default function ScreenDialog({
   children,
@@ -19,6 +20,7 @@ export default function ScreenDialog({
   handleSubmit,
   isLoading,
   fullWidth = true,
+  type = '',
 }) {
   const navigate = useNavigate();
 
@@ -37,7 +39,15 @@ export default function ScreenDialog({
         open={open}
         scroll="paper"
       >
-        <DialogTitle id="scroll-dialog-title">{title}</DialogTitle>
+        <DialogTitle
+          sx={{
+            bgcolor: type?.includes('error') ? red[500] : type?.includes('success') ? green[500] : '#fff',
+            color: Boolean(type) ? '#fff' : '#000',
+          }}
+          id="scroll-dialog-title"
+        >
+          {title}
+        </DialogTitle>
         <DialogContent dividers={fullWidth}>
           <DialogContentText component={Box} sx={{ width: '100%' }}>
             {children}

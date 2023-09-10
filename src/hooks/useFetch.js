@@ -43,6 +43,7 @@ function useFetch({ module, enabled = true, isCustom = false, params }) {
     itemsNoPagination,
     setLimit,
     page,
+    limit,
     ...query,
   };
 }

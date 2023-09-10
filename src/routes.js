@@ -21,7 +21,7 @@ import TagihanStaff from './pages/STAFF_TU/Tagihan/TagihanStaff';
 import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
 import AppStaffPPDB from './pages/STAFF_PPDB/AppStaffPPDB';
 import DashboardLayoutStaffPPDB from './layouts/STAFF_PPDB/DashboardLayoutStaffPPDB';
-import Pendaftar from './pages/STAFF_PPDB/Pendaftar/Pendaftar';
+import DaftarSiswa from './pages/STAFF_PPDB/DaftarSIswa/DaftarSiswa';
 import DetailTagihan from './pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan';
 
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@ export default function Router() {
         { element: <Navigate to="/staff-tu/dashboard" />, index: true },
         { path: 'dashboard', element: <AppStaffTU /> },
         { path: 'tagihan', element: <TagihanStaff /> },
-        { path: 'daftar-siswa', element: <Pendaftar /> },
+        { path: 'daftar-siswa', element: <DaftarSiswa /> },
         {
           path: 'pembayaran',
           element: <Pembayaran />,

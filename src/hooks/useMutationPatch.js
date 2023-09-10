@@ -8,6 +8,10 @@ function useMutationPatch({
   next = () => {
     return false;
   },
+  fail = () => {
+    return false;
+  },
+  isBulk = false,
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const client = useQueryClient();
@@ -16,7 +20,7 @@ function useMutationPatch({
     (values) => {
       axios
         .patch(
-          `${apiUrl}${module}/${values?.id}`,
+          `${apiUrl}${module}${isBulk ? '' : `/${values?.id}`}`,
           { ...values },
           {
             headers: {
@@ -27,12 +31,12 @@ function useMutationPatch({
         .then((res) => {
           enqueueSnackbar(res?.data?.msg, { variant: 'success' });
           client.invalidateQueries([module]);
-
-          next();
+          next(res);
         })
         .catch((error) => {
           console.log(error, 'ini');
           enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+          fail(error);
         });
     },
     { networkMode: 'always' }
