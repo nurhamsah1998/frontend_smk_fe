@@ -1,6 +1,8 @@
-import React from 'react';
-import { Box, FormHelperText, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, FormHelperText, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { debounce } from 'lodash';
+
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import DetailTagihanSiswa from './Modal/DetailTagihanSiswa';
@@ -8,8 +10,10 @@ import DetailTagihanSiswa from './Modal/DetailTagihanSiswa';
 function Pembayaran() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { items, totalPage, setPage, search, setSearch } = useFetch({
-    module: 'siswa',
+  const [bill, setBill] = useState('');
+  const { items, totalPage, setPage, search, setSearch, page } = useFetch({
+    module: `siswa`,
+    params: `&current_bill=${bill}`,
   });
 
   const itemsRebuild = items?.map((i) => ({
@@ -80,13 +84,47 @@ function Pembayaran() {
       isCurrency: true,
     },
   ];
+  const handleChangeStatusTagihan = (i) => {
+    setPage(1);
+    setBill(i.target.value);
+  };
   return (
     <Box>
       <Box sx={{ display: location.pathname?.includes('/detail-tagihan') ? 'none' : 'grid' }}>
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Box sx={{ display: 'grid' }}>
-            <FormHelperText>Masukan nama siswa / kode siswa</FormHelperText>
-            <TextField value={search} onChange={(i) => setSearch(i.target.value)} size="small" />
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+            }}
+          >
+            <Box sx={{ display: 'grid' }}>
+              <FormHelperText>Masukan nama siswa / kode siswa</FormHelperText>
+              <TextField
+                onChangeCapture={debounce((i) => {
+                  setSearch(i.target.value);
+                }, 500)}
+                size="small"
+              />
+            </Box>
+            <Box>
+              <FormHelperText>Sort Status Tagihan</FormHelperText>
+              <Select
+                sx={{
+                  minWidth: '200px',
+                }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                // value={status || ''}
+                size="small"
+                onChange={handleChangeStatusTagihan}
+              >
+                <MenuItem value={'paid'}>Lunas</MenuItem>
+                <MenuItem value={'not_paid'}>Belum Lunas</MenuItem>
+                <MenuItem value={'deposit'}>Deposit</MenuItem>
+                <MenuItem value={'not_paid_yet'}>Belum Ada Tagihan</MenuItem>
+              </Select>
+            </Box>
           </Box>
         </Box>
         <Box>
@@ -95,8 +133,9 @@ function Pembayaran() {
             colorHead="blue"
             count={totalPage}
             pageOnchange={(x, y) => {
-              setPage(y - 1);
+              setPage(y);
             }}
+            page={page}
             handleSeeBill={handleSeeBill}
             tableBody={itemsRebuild}
             tableHead={tableHead}

@@ -12,7 +12,7 @@ function DetailTagihanSiswa() {
   const idCode = queryString.parse(location.search);
   const { items: studentProfile } = useFetchById({
     module: 'siswa',
-    idCode: `${idCode?.id}`,
+    idCode: `${idCode?.id || ''}`,
   });
 
   const tabList = [

@@ -36,7 +36,6 @@ function Pendaftar() {
   const openChild = Boolean(anchorElChild);
   const handleClickChild = (event) => {
     setAnchorElChild(event.currentTarget);
-    console.log('HAI', event.currentTarget);
   };
   const handleCloseChild = () => {
     setAnchorEl(null);
