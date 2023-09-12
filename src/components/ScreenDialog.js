@@ -21,6 +21,7 @@ export default function ScreenDialog({
   isLoading,
   fullWidth = true,
   type = '',
+  disabledSubmitButton,
 }) {
   const navigate = useNavigate();
 
@@ -58,7 +59,12 @@ export default function ScreenDialog({
             {labelClose}
           </LoadingButton>
           {handleSubmit ? (
-            <LoadingButton loading={isLoading} variant="contained" onClick={handleSubmit}>
+            <LoadingButton
+              disabled={disabledSubmitButton}
+              loading={isLoading}
+              variant="contained"
+              onClick={handleSubmit}
+            >
               {labelSubmit}
             </LoadingButton>
           ) : null}

@@ -22,6 +22,7 @@ import TableComponen from '../../../components/TableComponent';
 import Create from './Create';
 import CreateImport from './CreateImport';
 import ScreenDialog from '../../../components/ScreenDialog';
+import KenaikanKelas from './KenaikanKelas';
 
 function Pendaftar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -45,7 +46,9 @@ function Pendaftar() {
   const [checked, setChecked] = React.useState(null);
   const [openModalCreate, setOpenModalCreate] = React.useState(false);
   const [openModalCreateImport, setOpenModalCreateImport] = React.useState(false);
+  const [openModalKenaikanKelas, setOpenModalKenaikanKelas] = React.useState(false);
   const [kelas, setKelas] = React.useState('');
+  const [subKelas, setSubKelasKelas] = React.useState('');
   const [status, setStatus] = React.useState('');
   const [angkatan, setAngkatan] = React.useState('');
   const [jurusan, setJurusan] = React.useState('');
@@ -54,7 +57,7 @@ function Pendaftar() {
 
   const { items, totalPage, setPage, setSearch, page, setLimit, limit, refetch } = useFetch({
     module: `siswa`,
-    params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}`,
+    params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
   });
   const { data } = useFetch({
     module: 'jurusan',
@@ -83,9 +86,11 @@ function Pendaftar() {
     indicator: i?.status?.includes('accepted'),
     nama_jurusan: `${i?.['jurusan.nama']} / ${i?.sub_kelas}`,
   }));
-  console.log(itemsRebuild);
   const handleChange = (event) => {
     setKelas(event.target.value);
+  };
+  const handleChangeSubKelas = (event) => {
+    setSubKelasKelas(event.target.value);
   };
   const handleChangesJurusan = (event, value) => {
     setPage(1);
@@ -180,6 +185,16 @@ function Pendaftar() {
 
   return (
     <Box>
+      <KenaikanKelas
+        listJurusan={data}
+        jurusanId={jurusanId}
+        kelas={kelas}
+        item={itemsRebuild}
+        subKelas={subKelas}
+        jurusan={jurusan}
+        openModalKenaikanKelas={openModalKenaikanKelas}
+        setOpenModalKenaikanKelas={setOpenModalKenaikanKelas}
+      />
       <ScreenDialog
         type={modal.type}
         open={modal.open}
@@ -248,7 +263,9 @@ function Pendaftar() {
                   },
                 }}
               >
-                <MenuItem onClick={handleClose}>Kenaikan kelas</MenuItem>
+                {Boolean(subKelas) && Boolean(limit) && (
+                  <MenuItem onClick={() => setOpenModalKenaikanKelas(true)}>Kenaikan kelas</MenuItem>
+                )}
                 <MenuItem onClick={handleClickChild}>Status</MenuItem>
                 <Menu
                   sx={{
@@ -287,6 +304,25 @@ function Pendaftar() {
                 size="small"
               />
             </Box>
+            <Box>
+              <FormHelperText>Sort Jurusan</FormHelperText>
+              <Select
+                sx={{
+                  minWidth: '100px',
+                }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={jurusan || ''}
+                size="small"
+                onChange={handleChangesJurusan}
+              >
+                {data?.data?.map((item, index) => (
+                  <MenuItem key={index} onClick={() => setJurusanId(item?.id)} value={item?.nama}>
+                    {item?.nama}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Box>
           </Box>
           <Box
             sx={{
@@ -312,24 +348,26 @@ function Pendaftar() {
               </Select>
             </Box>
             <Box>
-              <FormHelperText>Sort Jurusan</FormHelperText>
+              <FormHelperText>Sub Kelas</FormHelperText>
               <Select
                 sx={{
                   minWidth: '100px',
                 }}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={jurusan || ''}
+                value={subKelas}
                 size="small"
-                onChange={handleChangesJurusan}
+                onChange={handleChangeSubKelas}
               >
-                {data?.data?.map((item, index) => (
-                  <MenuItem key={index} onClick={() => setJurusanId(item?.id)} value={item?.nama}>
-                    {item?.nama}
-                  </MenuItem>
-                ))}
+                <MenuItem value={'01'}>1</MenuItem>
+                <MenuItem value={'02'}>2</MenuItem>
+                <MenuItem value={'03'}>3</MenuItem>
+                <MenuItem value={'04'}>4</MenuItem>
+                <MenuItem value={'05'}>5</MenuItem>
+                <MenuItem value={'06'}>6</MenuItem>
               </Select>
             </Box>
+
             <Box>
               <FormHelperText>Sort Angkatan</FormHelperText>
               <Select

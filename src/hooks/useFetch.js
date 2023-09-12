@@ -8,7 +8,6 @@ function useFetch({ module, enabled = true, isCustom = false, params = '' }) {
   const [page, setPage] = React.useState(1);
   const [search, setSearch] = React.useState('');
   const [limit, setLimit] = React.useState(10);
-  console.log(typeof params, ',========================');
   const query = useQuery(
     [module, enabled, isCustom],
     () =>
