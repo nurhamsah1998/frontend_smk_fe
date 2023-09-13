@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Box, FormHelperText, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { debounce } from 'lodash';
@@ -6,16 +6,17 @@ import { debounce } from 'lodash';
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import DetailTagihanSiswa from './Modal/DetailTagihanSiswa';
+import { LabelField } from '../../STAFF_PPDB/DaftarSIswa/DaftarSiswa';
 
 function Pembayaran() {
   const navigate = useNavigate();
   const location = useLocation();
   const [bill, setBill] = useState('');
+  const [inputView, setInputView] = useState('');
   const { items, totalPage, setPage, search, setSearch, page } = useFetch({
     module: `siswa`,
     params: `&current_bill=${bill}`,
   });
-
   const itemsRebuild = items?.map((i) => ({
     ...i,
     jurusan: i?.jurusan?.nama,
@@ -88,6 +89,10 @@ function Pembayaran() {
     setPage(1);
     setBill(i.target.value);
   };
+  const handleChangeDebounce = debounce((i) => {
+    setSearch(i);
+  }, 500);
+  const inputChange = useMemo(() => handleChangeDebounce, []);
   return (
     <Box>
       <Box sx={{ display: location.pathname?.includes('/detail-tagihan') ? 'none' : 'grid' }}>
@@ -99,23 +104,38 @@ function Pembayaran() {
             }}
           >
             <Box sx={{ display: 'grid' }}>
-              <FormHelperText>Masukan nama siswa / kode siswa</FormHelperText>
+              <LabelField
+                clearIcon={Boolean(search)}
+                onClickClearIcon={() => {
+                  setSearch('');
+                  setInputView('');
+                }}
+                title="Masukan nama siswa / kode siswa"
+              />
               <TextField
-                onChangeCapture={debounce((i) => {
-                  setSearch(i.target.value);
-                }, 500)}
+                value={inputView}
+                onChange={(i) => {
+                  inputChange(i.target.value);
+                  setInputView(i.target.value);
+                }}
                 size="small"
               />
             </Box>
             <Box>
-              <FormHelperText>Sort Status Tagihan</FormHelperText>
+              <LabelField
+                clearIcon={Boolean(bill)}
+                onClickClearIcon={() => {
+                  setBill('');
+                }}
+                title="Sort Status Pembayaran"
+              />
               <Select
                 sx={{
                   minWidth: '200px',
                 }}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                // value={status || ''}
+                value={bill || ''}
                 size="small"
                 onChange={handleChangeStatusTagihan}
               >

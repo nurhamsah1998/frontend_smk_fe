@@ -9,12 +9,14 @@ import {
   Typography,
   TextField,
   ListItemText,
+  IconButton,
 } from '@mui/material';
 
 import React from 'react';
 import { debounce } from 'lodash';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { orange } from '@mui/material/colors';
+import CloseIcon from '@mui/icons-material/Close';
 
 import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
@@ -23,6 +25,45 @@ import Create from './Create';
 import CreateImport from './CreateImport';
 import ScreenDialog from '../../../components/ScreenDialog';
 import KenaikanKelas from './KenaikanKelas';
+
+export const ButtonClear = ({ onClick }) => {
+  return (
+    <IconButton
+      onClick={onClick}
+      size="small"
+      sx={{
+        width: '25px',
+        height: '25px',
+      }}
+      aria-label="closeicon"
+      va
+      color="error"
+    >
+      <CloseIcon
+        sx={{
+          width: '20px',
+          height: '20px',
+        }}
+      />
+    </IconButton>
+  );
+};
+
+export const LabelField = ({ title, onClickClearIcon, clearIcon }) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        gap: 1,
+        alignItems: 'center',
+        mb: 0.5,
+      }}
+    >
+      <FormHelperText>{title}</FormHelperText>
+      {clearIcon && <ButtonClear onClick={onClickClearIcon} />}
+    </Box>
+  );
+};
 
 function Pendaftar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -55,7 +96,7 @@ function Pendaftar() {
   const [jurusanId, setJurusanId] = React.useState('');
   const [modal, setModal] = React.useState({ type: '', message: [], title: '', open: false });
 
-  const { items, totalPage, setPage, setSearch, page, setLimit, limit, refetch } = useFetch({
+  const { items, totalPage, setPage, setSearch, page, setLimit, limit, refetch, search } = useFetch({
     module: `siswa`,
     params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
   });
@@ -295,7 +336,11 @@ function Pendaftar() {
             }}
           >
             <Box width="100%">
-              <FormHelperText>Cari siswa / Kode siswa / Username</FormHelperText>
+              <LabelField
+                title="Cari siswa / Kode siswa / Username"
+                onClickClearIcon={() => setSearch('')}
+                clearIcon={Boolean(search)}
+              />
               <TextField
                 fullWidth
                 onChangeCapture={debounce((e) => {
@@ -305,10 +350,17 @@ function Pendaftar() {
               />
             </Box>
             <Box>
-              <FormHelperText>Sort Jurusan</FormHelperText>
+              <LabelField
+                title="Sort Jurusan"
+                clearIcon={Boolean(jurusan)}
+                onClickClearIcon={() => {
+                  setJurusanId('');
+                  setJurusan('');
+                }}
+              />
               <Select
                 sx={{
-                  minWidth: '100px',
+                  minWidth: '270px',
                 }}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -328,10 +380,11 @@ function Pendaftar() {
             sx={{
               display: 'flex',
               gap: 1,
+              mt: 0.5,
             }}
           >
             <Box>
-              <FormHelperText>Sort Kelas</FormHelperText>
+              <LabelField title="Sort Kelas" onClickClearIcon={() => setKelas('')} clearIcon={Boolean(kelas)} />
               <Select
                 sx={{
                   minWidth: '100px',
@@ -348,10 +401,15 @@ function Pendaftar() {
               </Select>
             </Box>
             <Box>
-              <FormHelperText>Sub Kelas</FormHelperText>
+              <LabelField
+                title="Sort Sub Kelas"
+                onClickClearIcon={() => setSubKelasKelas('')}
+                clearIcon={Boolean(subKelas)}
+              />
+
               <Select
                 sx={{
-                  minWidth: '100px',
+                  minWidth: '130px',
                 }}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -369,10 +427,14 @@ function Pendaftar() {
             </Box>
 
             <Box>
-              <FormHelperText>Sort Angkatan</FormHelperText>
+              <LabelField
+                title="Sort Angkatan"
+                clearIcon={Boolean(angkatan)}
+                onClickClearIcon={() => setAngkatan('')}
+              />
               <Select
                 sx={{
-                  minWidth: '100px',
+                  minWidth: '130px',
                 }}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -386,10 +448,10 @@ function Pendaftar() {
               </Select>
             </Box>
             <Box>
-              <FormHelperText>Sort Status</FormHelperText>
+              <LabelField title="Sort Status" clearIcon={Boolean(status)} onClickClearIcon={() => setStatus('')} />
               <Select
                 sx={{
-                  minWidth: '100px',
+                  minWidth: '150px',
                 }}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -404,7 +466,7 @@ function Pendaftar() {
               </Select>
             </Box>
             <Box>
-              <FormHelperText>Per page</FormHelperText>
+              <LabelField title="/Page" onClickClearIcon={() => setLimit(10)} clearIcon={Boolean(limit !== 10)} />
               <TextField
                 inputProps={{
                   min: 1,
