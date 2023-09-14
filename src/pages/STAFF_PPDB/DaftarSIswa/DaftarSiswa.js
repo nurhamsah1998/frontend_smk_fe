@@ -94,6 +94,7 @@ function Pendaftar() {
   const [angkatan, setAngkatan] = React.useState('');
   const [jurusan, setJurusan] = React.useState('');
   const [jurusanId, setJurusanId] = React.useState('');
+  const [inputView, setInputView] = React.useState('');
   const [modal, setModal] = React.useState({ type: '', message: [], title: '', open: false });
 
   const { items, totalPage, setPage, setSearch, page, setLimit, limit, refetch, search } = useFetch({
@@ -223,7 +224,10 @@ function Pendaftar() {
       setModal({ open: false, message: [], title: '', type: '' });
     }
   };
-
+  const handleChangeDebounce = debounce((i) => {
+    setSearch(i);
+  }, 500);
+  const inputChange = React.useMemo(() => handleChangeDebounce, []);
   return (
     <Box>
       <KenaikanKelas
@@ -258,7 +262,11 @@ function Pendaftar() {
           );
         })}
       </ScreenDialog>
-      <CreateImport openModalCreateImport={openModalCreateImport} setOpenModalCreateImport={setOpenModalCreateImport} />
+      <CreateImport
+        refetch={refetch}
+        openModalCreateImport={openModalCreateImport}
+        setOpenModalCreateImport={setOpenModalCreateImport}
+      />
       <Create openModalCreate={openModalCreate} setOpenModalCreate={setOpenModalCreate} />
       <Box
         sx={{
@@ -338,14 +346,19 @@ function Pendaftar() {
             <Box width="100%">
               <LabelField
                 title="Cari siswa / Kode siswa / Username"
-                onClickClearIcon={() => setSearch('')}
+                onClickClearIcon={() => {
+                  setSearch('');
+                  setInputView('');
+                }}
                 clearIcon={Boolean(search)}
               />
               <TextField
                 fullWidth
-                onChangeCapture={debounce((e) => {
-                  setSearch(e.target.value);
-                }, 500)}
+                value={inputView}
+                onChange={(i) => {
+                  inputChange(i.target.value);
+                  setInputView(i.target.value);
+                }}
                 size="small"
               />
             </Box>

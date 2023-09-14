@@ -2,26 +2,29 @@ import React from 'react';
 import { TextField, Box, Typography } from '@mui/material';
 import { cyan, purple, red } from '@mui/material/colors';
 import axios from 'axios';
-import useMutationPost from '../../../hooks/useMutationPost';
+import { useSnackbar } from 'notistack';
 import { apiUrl } from '../../../hooks/api';
 
 import ScreenDialog from '../../../components/ScreenDialog';
 
-function CreateImport({ openModalCreateImport, setOpenModalCreateImport }) {
+function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch }) {
   const [files, setFiles] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState({ open: false, message: [], title: '', type: '' });
+  const { enqueueSnackbar } = useSnackbar();
   const handleImport = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append('xlsx', files);
-    console.log(files);
-    axios
+    await axios
       .post(`${apiUrl}import-akun-siswa`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
       .then((res) => {
-        console.log(res);
+        enqueueSnackbar('Import berhasil', { variant: 'success' });
+        refetch();
       })
       .catch((error) => {
         console.log(error);
@@ -31,6 +34,10 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport }) {
           type: error?.response?.data?.code,
           title: 'Gagal upload file',
         });
+      })
+      .finally(() => {
+        setLoading(false);
+        setOpenModalCreateImport(false);
       });
   };
 
@@ -116,7 +123,11 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport }) {
         labelClose="Batal"
         labelSubmit="Import File"
         handleSubmit={handleImport}
-        handleClose={() => setOpenModalCreateImport(false)}
+        isLoading={loading}
+        handleClose={() => {
+          setOpenModalCreateImport(false);
+          setFiles({});
+        }}
         title="Tambah Siswa Secara Masal"
         open={openModalCreateImport}
       >
