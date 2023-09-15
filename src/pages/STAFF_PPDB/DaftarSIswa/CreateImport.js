@@ -40,7 +40,10 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
         setOpenModalCreateImport(false);
       });
   };
-
+  const handleDownloadTemplate = async () => {
+    /// https://stackoverflow.com/a/64545660/18038473
+    window.location.href = `${apiUrl}download/template-import-siswa`;
+  };
   return (
     <div>
       <ScreenDialog
@@ -133,6 +136,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
       >
         <Box display="grid" gap={2}>
           <Box
+            onClick={handleDownloadTemplate}
             sx={{
               bgcolor: purple[100],
               height: '150px',

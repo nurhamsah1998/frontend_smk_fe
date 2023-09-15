@@ -112,6 +112,7 @@ function Pendaftar() {
     isBulk: true,
     next: (res) => {
       setModal({ type: 'success', open: true, message: res?.data?.message, title: 'List siswa berhasil diupdate' });
+      refetch();
     },
     fail: (err) => {
       setModal({

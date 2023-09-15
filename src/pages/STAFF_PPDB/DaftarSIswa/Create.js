@@ -11,15 +11,19 @@ import useFetch from '../../../hooks/useFetch';
 
 function Create({ openModalCreate, setOpenModalCreate }) {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [gender, setGender] = React.useState('');
   const formRef = React.useRef();
   const { data } = useFetch({
     module: `total-tagihan-permanent?tahun_angkatan=${new Date().getFullYear()}`,
   });
   const { register, isLoading } = useRegister({
     module: 'register-siswa',
-    next: () => formRef.current?.resetForm(),
+    next: () => {
+      formRef.current?.resetForm();
+      formRef.current?.setFieldValue('jurusanId', '');
+      setGender('');
+    },
   });
-  const [gender, setGender] = React.useState('');
 
   const handleChange = (event) => {
     setGender(event.target.value);
@@ -54,9 +58,9 @@ function Create({ openModalCreate, setOpenModalCreate }) {
               current_bill: data?.data,
               kode_siswa: `CODE-${uid(7).toUpperCase()}`,
             };
-            console.log(body);
             register.mutate(body);
           }}
+          enableReinitialize
         >
           {({ values, getFieldProps, setFieldValue }) => {
             return (
