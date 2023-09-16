@@ -15,7 +15,15 @@ function useRegister({
     [module],
     (values) => {
       axios
-        .post(`${apiUrl}${module}`, { ...values })
+        .post(
+          `${apiUrl}${module}`,
+          { ...values },
+          {
+            headers: {
+              authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
+            },
+          }
+        )
         .then((res) => {
           client.invalidateQueries(module);
           enqueueSnackbar(res?.data?.msg, { variant: 'success' });

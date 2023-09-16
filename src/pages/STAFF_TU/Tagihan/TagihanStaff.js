@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography, Tab, Tabs, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Box, Button, Typography, Tab, Tabs, TextField, FormHelperText } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 
@@ -46,7 +45,6 @@ export default function TagihanStaff() {
     module: 'tagihan-permanent',
   });
 
-  const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -102,16 +100,31 @@ export default function TagihanStaff() {
                   do: () => {
                     const totalAmountRaw = Object.values(values || {});
                     const totalPreviousAmountRaw = Object.values(itemsNoPagination[value] || {});
+                    const keyItemChange = Object.keys(itemsNoPagination[value] || {});
                     const semiTotalAmount = [];
                     const semiTotalPreviousAmount = [];
+                    const valueChanged = [];
+
+                    for (let indexChanged = 0; indexChanged < keyItemChange.length; indexChanged += 1) {
+                      if (
+                        itemsNoPagination[value][keyItemChange[indexChanged]] !== values[keyItemChange[indexChanged]]
+                      ) {
+                        valueChanged.push({
+                          name: keyItemChange[indexChanged],
+                          from: itemsNoPagination[value][keyItemChange[indexChanged]],
+                          to: values[keyItemChange[indexChanged]],
+                        });
+                      }
+                    }
+
                     for (let index = 0; index < totalAmountRaw.length; index += 1) {
                       if (typeof totalAmountRaw[index] === 'number') {
                         semiTotalAmount.push(totalAmountRaw[index]);
                       }
                     }
-                    for (let index = 0; index < totalPreviousAmountRaw.length; index += 1) {
-                      if (typeof totalPreviousAmountRaw[index] === 'number') {
-                        semiTotalPreviousAmount.push(totalPreviousAmountRaw[index]);
+                    for (let indexPrev = 0; indexPrev < totalPreviousAmountRaw.length; indexPrev += 1) {
+                      if (typeof totalPreviousAmountRaw[indexPrev] === 'number') {
+                        semiTotalPreviousAmount.push(totalPreviousAmountRaw[indexPrev]);
                       }
                     }
                     const finalTotalAmount = semiTotalAmount.reduce((a, b) => a + b, 0) - values?.tahun_angkatan;
@@ -122,9 +135,9 @@ export default function TagihanStaff() {
                       extra: {
                         freq_bill: 0,
                       },
+                      history: valueChanged,
                     };
                     body.extra.freq_bill = finalTotalAmount - finalTotalPreviousAmount;
-
                     mutation.mutate(body);
                   },
                   isCloseAfterSubmit: true,
@@ -147,21 +160,23 @@ export default function TagihanStaff() {
                               key={index}
                               sx={{
                                 display: 'flex',
-                                alignItems: 'center',
-                                gap: 3,
-                                justifyContent: 'space-between',
+                                flexDirection: 'column',
                               }}
                             >
-                              <Typography width="35%" textTransform="capitalize">
+                              <FormHelperText
+                                sx={{
+                                  textTransform: 'capitalize',
+                                }}
+                              >
                                 {item[0].replace(/_/g, ' ')}
-                              </Typography>
+                              </FormHelperText>
                               <TextFieldNumberFormat
                                 onChange={(i) => {
                                   setFieldValue(item[0], formatNumberChange(i?.target?.value));
                                 }}
                                 width="50%"
                                 size="small"
-                                label="Nominal"
+                                placeholder="Nominal"
                                 value={item[1]}
                                 fullWidth
                                 id={item[0]}

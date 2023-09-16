@@ -85,6 +85,7 @@ function Create({ openModalCreate, setOpenModalCreate }) {
                   />
                   <AutoCompleteAsync
                     size="small"
+                    value={values.jurusanId || {}}
                     module="jurusan"
                     label="Pilih jurusan"
                     onChange={(x, y) => {

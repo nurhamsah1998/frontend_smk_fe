@@ -127,7 +127,7 @@ function DetailTagihan() {
               </Box>
             ))}
           </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
+          {/* <Grid item xs={12} sm={12} md={6} lg={6}>
             {detailSiswaRight.map((x, y) => (
               <Box key={y} sx={{ display: 'flex' }}>
                 <Typography sx={{ width: '120px' }}>{x?.label}</Typography>:
@@ -136,7 +136,7 @@ function DetailTagihan() {
                 </Typography>
               </Box>
             ))}
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
       <Divider />
