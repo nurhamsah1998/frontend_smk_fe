@@ -95,12 +95,14 @@ function Pendaftar() {
   const [jurusan, setJurusan] = React.useState('');
   const [jurusanId, setJurusanId] = React.useState('');
   const [inputView, setInputView] = React.useState('');
+  const [listSiswaKelasManagement, setListSiswaKelasManagement] = React.useState([]);
   const [modal, setModal] = React.useState({ type: '', message: [], title: '', open: false });
 
-  const { items, totalPage, setPage, setSearch, page, setLimit, limit, refetch, search } = useFetch({
-    module: `siswa`,
-    params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
-  });
+  const { items, totalPage, setPage, setSearch, page, setLimit, limit, refetch, search, totalRows, totalData } =
+    useFetch({
+      module: `siswa`,
+      params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
+    });
   const { data } = useFetch({
     module: 'jurusan',
   });
@@ -124,11 +126,13 @@ function Pendaftar() {
     },
   });
 
-  const itemsRebuild = items?.map((i) => ({
-    ...i,
-    indicator: i?.status?.includes('accepted'),
-    nama_jurusan: `${i?.['jurusan.nama']} / ${i?.sub_kelas}`,
-  }));
+  const itemsRebuild = React.useMemo(() => {
+    return items?.map((i) => ({
+      ...i,
+      indicator: i?.status?.includes('accepted'),
+      nama_jurusan: `${i?.['jurusan.nama']} / ${i?.sub_kelas}`,
+    }));
+  }, [items]);
   const handleChange = (event) => {
     setKelas(event.target.value);
   };
@@ -238,8 +242,12 @@ function Pendaftar() {
         item={itemsRebuild}
         subKelas={subKelas}
         jurusan={jurusan}
+        refetch={refetch}
+        handleCloseMenuGroub={handleClose}
         openModalKenaikanKelas={openModalKenaikanKelas}
         setOpenModalKenaikanKelas={setOpenModalKenaikanKelas}
+        listSiswaKelasManagement={listSiswaKelasManagement}
+        setListSiswaKelasManagement={setListSiswaKelasManagement}
       />
       <ScreenDialog
         type={modal.type}
@@ -314,7 +322,14 @@ function Pendaftar() {
                 }}
               >
                 {Boolean(subKelas) && Boolean(limit) && (
-                  <MenuItem onClick={() => setOpenModalKenaikanKelas(true)}>Kenaikan kelas</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setOpenModalKenaikanKelas(true);
+                      setListSiswaKelasManagement(itemsRebuild);
+                    }}
+                  >
+                    Management kelas
+                  </MenuItem>
                 )}
                 <MenuItem onClick={handleClickChild}>Status</MenuItem>
                 <Menu
@@ -516,6 +531,8 @@ function Pendaftar() {
           page={page}
           tableBody={itemsRebuild}
           tableHead={tableHead}
+          totalRows={totalRows}
+          totalData={totalData}
         />
       </Box>
     </Box>

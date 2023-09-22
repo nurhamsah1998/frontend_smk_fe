@@ -43,6 +43,8 @@ function TableComponen({
   handleHoldAccount,
   handleAcceptAccount,
   handleBlockAccount,
+  totalRows,
+  totalData,
 }) {
   moment.locale('id');
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -331,7 +333,12 @@ function TableComponen({
           )}
         </Table>
       </TableContainer>
-      <Box sx={{ py: 2, display: disablePagination ? 'none' : 'flex', justifyContent: 'flex-end' }}>
+      <Box
+        sx={{ py: 2, display: disablePagination ? 'none' : 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+      >
+        <span>
+          <strong>{totalRows || 0}</strong> data ditampilkan, dari <strong>{totalData || 0}</strong> total data
+        </span>{' '}
         <Pagination page={page} onChange={pageOnchange} count={count} />
       </Box>
     </Box>

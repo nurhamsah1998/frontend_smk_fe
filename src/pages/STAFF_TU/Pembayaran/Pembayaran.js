@@ -13,7 +13,7 @@ function Pembayaran() {
   const location = useLocation();
   const [bill, setBill] = useState('');
   const [inputView, setInputView] = useState('');
-  const { items, totalPage, setPage, search, setSearch, page } = useFetch({
+  const { items, totalPage, setPage, search, totalData, totalRows, setSearch, page } = useFetch({
     module: `siswa`,
     params: `&current_bill=${bill}`,
   });
@@ -159,6 +159,8 @@ function Pembayaran() {
             handleSeeBill={handleSeeBill}
             tableBody={itemsRebuild}
             tableHead={tableHead}
+            totalRows={totalRows}
+            totalData={totalData}
           />
         </Box>
       </Box>

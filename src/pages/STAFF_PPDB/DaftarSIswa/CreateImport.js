@@ -23,6 +23,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
         },
       })
       .then((res) => {
+        setFiles({});
         enqueueSnackbar('Import berhasil', { variant: 'success' });
         refetch();
       })

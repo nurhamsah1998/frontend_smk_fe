@@ -26,6 +26,7 @@ function useFetch({ module, enabled = true, isCustom = false, params = '' }) {
   const totalPage = query.data?.data?.totalPage;
   const currentPage = query.data?.data?.page;
   const totalRows = query.data?.data?.totalRows;
+  const totalData = query.data?.data?.totalData;
   React.useEffect(() => {
     query.refetch();
     if (search) {
@@ -39,6 +40,7 @@ function useFetch({ module, enabled = true, isCustom = false, params = '' }) {
     currentPage,
     totalRows,
     totalPage,
+    totalData,
     setSearch,
     itemsNoPagination,
     setLimit,
