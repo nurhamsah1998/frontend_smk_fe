@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Divider, FormHelperText, Grid, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Divider, FormHelperText, Grid, Typography } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { blue } from '@mui/material/colors';
@@ -188,7 +188,7 @@ function DetailTagihan() {
           {detailBill?.map((item, index) => (
             <Box key={index} sx={{ display: 'flex', gap: 2, width: '100%' }}>
               <Typography sx={{ width: '30%' }}>{item?.label}</Typography>
-              <Typography>: {FormatCurrency(item?.value)}</Typography>
+              {isLoading ? <CircularProgress size={20} /> : <Typography>: {FormatCurrency(item?.value)}</Typography>}
             </Box>
           ))}
         </Box>

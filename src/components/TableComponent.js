@@ -15,6 +15,7 @@ import {
   Switch,
   FormHelperText,
   TableContainer,
+  CircularProgress,
 } from '@mui/material';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import moment from 'moment/moment';
@@ -86,7 +87,7 @@ function TableComponen({
   return (
     <Box sx={{ bgcolor: '#fff', width: '100%' }}>
       <TableContainer sx={Boolean(stickyHeader) ? { maxHeight: stickyHeader } : {}}>
-        <Table padding="none" stickyHeader={stickyHeader}>
+        <Table padding="none" stickyHeader={Boolean(stickyHeader)}>
           <TableHead>
             <TableRow sx={{ bgcolor: '#1BC5BD' }}>
               {tableHead?.map((head, index) => (
@@ -111,8 +112,18 @@ function TableComponen({
           {isLoading ? (
             <TableBody>
               <TableRow>
-                <TableCell colSpan={6} sx={{ textAlign: 'center' }}>
-                  Memuat
+                <TableCell align="center" colSpan={6}>
+                  <Box
+                    sx={{
+                      justifyContent: 'center',
+                      py: 3,
+                      alignItems: 'center',
+                      display: 'flex',
+                      gap: 2,
+                    }}
+                  >
+                    <CircularProgress /> <span>Memuat</span>
+                  </Box>
                 </TableCell>
               </TableRow>
             </TableBody>

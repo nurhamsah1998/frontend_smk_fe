@@ -53,7 +53,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
         handleClose={() => setError({ open: false, message: [], title: '', type: '' })}
         title={error.title}
       >
-        {error.type?.includes('error_validation') &&
+        {error.type === 'error_validation' &&
           error?.message?.map((item, index) => {
             return (
               <Box key={index}>
@@ -63,6 +63,11 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
               </Box>
             );
           })}
+        {error.type?.includes('error_validation_no_data') && (
+          <Box>
+            <Typography color={red[500]}>{error?.message}</Typography>
+          </Box>
+        )}
         {error.type?.includes('server') && (
           <Box>
             <Typography color={red[500]}>{error?.message}</Typography>

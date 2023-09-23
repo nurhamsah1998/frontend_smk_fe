@@ -98,11 +98,23 @@ function Pendaftar() {
   const [listSiswaKelasManagement, setListSiswaKelasManagement] = React.useState([]);
   const [modal, setModal] = React.useState({ type: '', message: [], title: '', open: false });
 
-  const { items, totalPage, setPage, setSearch, page, setLimit, limit, refetch, search, totalRows, totalData } =
-    useFetch({
-      module: `siswa`,
-      params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
-    });
+  const {
+    items,
+    totalPage,
+    setPage,
+    setSearch,
+    page,
+    setLimit,
+    limit,
+    refetch,
+    search,
+    totalRows,
+    totalData,
+    isLoading,
+  } = useFetch({
+    module: `siswa`,
+    params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
+  });
   const { data } = useFetch({
     module: 'jurusan',
   });
@@ -532,6 +544,7 @@ function Pendaftar() {
           tableBody={itemsRebuild}
           tableHead={tableHead}
           totalRows={totalRows}
+          isLoading={isLoading}
           totalData={totalData}
         />
       </Box>
