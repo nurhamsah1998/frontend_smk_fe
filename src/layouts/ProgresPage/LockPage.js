@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 
-function BannedPage() {
+function LockPage() {
   return (
     <Box
       sx={{
@@ -16,14 +16,14 @@ function BannedPage() {
     >
       <Box sx={{ display: 'grid' }}>
         <Typography fontSize={25} fontWeight={700} color="#fff" textAlign="center">
-          Maaf akun anda diblokir oleh pihak sekolah
+          Maaf akun anda dikunci oleh pihak sekolah
         </Typography>
         <Typography color="#fff" textAlign="center">
-          anda sudah tidak bisa mengakses situs sekolahan ini
+          Hubungi kantor untuk lebih jelas
         </Typography>
       </Box>
     </Box>
   );
 }
 
-export default BannedPage;
+export default LockPage;

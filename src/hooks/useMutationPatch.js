@@ -12,6 +12,7 @@ function useMutationPatch({
     return false;
   },
   isBulk = false,
+  successMessage,
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const client = useQueryClient();
@@ -29,7 +30,7 @@ function useMutationPatch({
           }
         )
         .then((res) => {
-          enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+          enqueueSnackbar(successMessage || res?.data?.msg, { variant: 'success' });
           client.invalidateQueries([module]);
           next(res);
         })

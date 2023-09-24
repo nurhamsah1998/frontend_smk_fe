@@ -10,6 +10,7 @@ import ProgresPage from '../ProgresPage';
 import { PROFILE } from '../../hooks/useHelperContext';
 import LoadingPageReload from '../ProgresPage/LoadingPageReload';
 import BannedPage from '../ProgresPage/BannedPage';
+import LockPage from '../ProgresPage/LockPage';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +59,8 @@ export default function DashboardLayoutStudent() {
   const jsxElement = (
     <>
       {itemsNoPagination?.status?.includes('checking') && <ProgresPage />}
-      {itemsNoPagination?.status?.includes('lock') && <BannedPage />}
+      {itemsNoPagination?.status?.includes('lock') && <LockPage />}
+      {itemsNoPagination?.status?.includes('blokir') && <BannedPage />}
       {itemsNoPagination?.status?.includes('accepted') && (
         <StyledRoot>
           <Header onOpenNav={() => setOpen(true)} />

@@ -6,15 +6,20 @@ import TextFieldNumberFormat from '../../../../components/TextFieldNumberFormat'
 import formatNumberChange from '../../../../components/formatNumberChange';
 import useMutationPatch from '../../../../hooks/useMutationPatch';
 import { apiUrl } from '../../../../hooks/api';
+import ModalSuccessPayment from './ModalSuccessPayment';
 
 function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
   const formRef = React.useRef();
+  const [openModalSuccess, setOpenModalSuccess] = React.useState(false);
+  const [dataAfterSuccess, setDataAfterSuccess] = React.useState({});
   const mutationPatch = useMutationPatch({
     module: 'siswa',
-    next: () => {
+    next: (res) => {
       formRef.current?.resetForm();
       refetchInvoice();
+      setOpenModalSuccess(true);
     },
+    successMessage: 'Transaksi berhasil',
   });
   const options = [
     { label: 'Bebas', value: 'bebas' },
@@ -29,82 +34,94 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
   ];
 
   return (
-    <Formik
-      innerRef={formRef}
-      initialValues={{
-        uang_diterima: '',
-        total: '',
-        note: '',
-        kode_tagihan: '',
-        kode_pembayaran: '',
-        nama: '',
-        petugas: '',
-      }}
-      onSubmit={async (values) => {
-        const totalPay = totalBillPaymentHistory + values?.uang_diterima;
-        const body = {
-          ...values,
-          nama: data?.student?.nama,
-          petugas: data?.staff?.nama,
-          kode_tagihan: data?.student?.kode_siswa,
-        };
-        axios
-          .post(
-            `${apiUrl}invoice`,
-            { ...body },
-            {
-              headers: {
-                Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
-              },
-            }
-          )
-          .then((res) => {
-            const statusBill = data?.student?.current_bill - values?.uang_diterima;
-            mutationPatch.mutate({
-              id: data?.student?.id,
-              current_bill: data?.student?.current_bill - values?.uang_diterima,
-              status_bill: statusBill === 0 ? 'paid' : statusBill < 0 ? 'deposit' : 'not_paid',
+    <>
+      <ModalSuccessPayment
+        open={openModalSuccess}
+        data={dataAfterSuccess}
+        handleClose={() => setOpenModalSuccess(false)}
+      />
+      <Formik
+        innerRef={formRef}
+        initialValues={{
+          uang_diterima: '',
+          total: '',
+          note: '',
+          kode_tagihan: '',
+          kode_pembayaran: '',
+          nama: '',
+          petugas: '',
+        }}
+        onSubmit={async (values) => {
+          const body = {
+            ...values,
+            nama: data?.student?.nama,
+            petugas: data?.staff?.nama,
+            kode_tagihan: data?.student?.kode_siswa,
+            kelas: `${data?.student?.kelas}-${data?.student?.jurusan?.nama}`,
+          };
+          axios
+            .post(
+              `${apiUrl}invoice`,
+              { ...body },
+              {
+                headers: {
+                  Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
+                },
+              }
+            )
+            .then((res) => {
+              setDataAfterSuccess(res?.data?.data);
+              const statusBill = data?.student?.current_bill - values?.uang_diterima;
+              mutationPatch.mutate({
+                id: data?.student?.id,
+                current_bill: data?.student?.current_bill - values?.uang_diterima,
+                status_bill: statusBill === 0 ? 'paid' : statusBill < 0 ? 'deposit' : 'not_paid',
+              });
+            })
+            .catch((error) => {
+              console.log(error);
             });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }}
-      enableReinitialize
-    >
-      {({ getFieldProps, setFieldValue, values }) => (
-        <Form>
-          <Box>
-            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-              <Autocomplete
-                disablePortal
-                fullWidth
-                onChange={(x, y) => {
-                  setFieldValue('kode_pembayaran', y.label);
-                }}
-                value={values?.kode_pembayaran}
-                options={options}
-                renderInput={(params) => <TextField {...params} label="Pembayaran" />}
-              />
-              <TextFieldNumberFormat
-                onChange={(i) => {
-                  setFieldValue('uang_diterima', formatNumberChange(i.target.value));
-                }}
-                label="Nominal"
-                value={values?.uang_diterima}
-                fullWidth
-              />
-              <TextField {...getFieldProps('note')} label="Keterangan" fullWidth />
+        }}
+        enableReinitialize
+      >
+        {({ getFieldProps, setFieldValue, values }) => (
+          <Form>
+            <Box>
+              <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+                <Autocomplete
+                  disablePortal
+                  fullWidth
+                  onChange={(x, y) => {
+                    setFieldValue('kode_pembayaran', y.label);
+                  }}
+                  value={values?.kode_pembayaran}
+                  options={options}
+                  renderInput={(params) => <TextField {...params} label="Pembayaran" />}
+                />
+                <TextFieldNumberFormat
+                  onChange={(i) => {
+                    setFieldValue('uang_diterima', formatNumberChange(i.target.value));
+                  }}
+                  label="Nominal"
+                  value={values?.uang_diterima}
+                  fullWidth
+                />
+                <TextField {...getFieldProps('note')} label="Keterangan" fullWidth />
+              </Box>
+              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  disabled={values?.uang_diterima <= 1000 || !Boolean(values?.kode_pembayaran)}
+                  type="submit"
+                  variant="contained"
+                >
+                  Bayar
+                </Button>
+              </Box>
             </Box>
-            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-              <Button disabled={values?.uang_diterima <= 1000} type="submit" variant="contained">
-                Bayar
-              </Button>
-            </Box>
-          </Box>
-        </Form>
-      )}
-    </Formik>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 }
 
