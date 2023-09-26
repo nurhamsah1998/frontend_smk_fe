@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
-import { NavLink as RouterLink } from 'react-router-dom';
+import { useContext } from 'react';
+import { NavLink as RouterLink, useNavigate } from 'react-router-dom';
+
 // @mui
-import { Box, List, ListItemText } from '@mui/material';
+import { Box, Button, List, ListItemText } from '@mui/material';
 //
 import { StyledNavItem, StyledNavItemIcon } from './styles';
+import { Dialog } from '../../hooks/useContextHook';
 
 // ----------------------------------------------------------------------
 
@@ -12,12 +15,41 @@ NavSection.propTypes = {
 };
 
 export default function NavSection({ data = [], ...other }) {
+  const { setDialog } = useContext(Dialog);
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    setDialog((i) => ({
+      title: 'Apakah anda yakin ingin keluar?',
+      labelClose: 'Batal',
+      labelSubmit: 'Keluar',
+      fullWidth: false,
+      do: () => {
+        window.localStorage.removeItem('accessToken');
+        navigate('/');
+      },
+      isCloseAfterSubmit: true,
+    }));
+  };
   return (
     <Box {...other}>
       <List disablePadding sx={{ p: 1 }}>
-        {data.map((item) => (
-          <NavItem key={item.title} item={item} />
-        ))}
+        {data.map((item) => {
+          if (item?.path?.includes('/log-out')) {
+            return (
+              <Button
+                onClick={handleLogOut}
+                color="error"
+                startIcon={item.icon}
+                variant="contained"
+                sx={{ mt: 5 }}
+                fullWidth
+              >
+                {item.title}
+              </Button>
+            );
+          }
+          return <NavItem key={item.title} item={item} />;
+        })}
       </List>
     </Box>
   );
@@ -34,6 +66,7 @@ function NavItem({ item }) {
 
   return (
     <StyledNavItem
+      onC
       component={RouterLink}
       to={path}
       sx={{

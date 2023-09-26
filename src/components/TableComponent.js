@@ -12,8 +12,6 @@ import {
   MenuItem,
   IconButton,
   Pagination,
-  Switch,
-  FormHelperText,
   TableContainer,
   CircularProgress,
 } from '@mui/material';
@@ -32,7 +30,7 @@ function TableComponen({
   count,
   page,
   pageOnchange,
-  handleSwitch,
+  handleCustomOnClickRow,
   handleSeeBill,
   disablePagination = false,
   isTotal = false,
@@ -46,6 +44,7 @@ function TableComponen({
   handleBlockAccount,
   totalRows,
   totalData,
+  customIcon,
 }) {
   moment.locale('id');
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -234,15 +233,8 @@ function TableComponen({
                             <RequestQuoteIcon color="primary" />
                           </IconButton>
                         ) : null}
-                        {handleSwitch ? (
-                          <MenuItem>
-                            <Switch
-                              checked={body?.indicator}
-                              onChange={(i) => handleSwitch(i, body)}
-                              inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                            <FormHelperText>Status</FormHelperText>
-                          </MenuItem>
+                        {handleCustomOnClickRow ? (
+                          <IconButton onClick={() => handleCustomOnClickRow(body)}>{customIcon}</IconButton>
                         ) : null}
                         {handleAccount && (
                           <Box>

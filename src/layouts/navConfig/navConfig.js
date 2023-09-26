@@ -1,6 +1,8 @@
 // component
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 import SvgColor from '../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -27,6 +29,11 @@ export const navConfigTU = [
     title: 'Pembayaran',
     path: '/staff-tu/pembayaran',
     icon: <PointOfSaleIcon />,
+  },
+  {
+    title: 'Keluar',
+    path: '/log-out',
+    icon: <LogoutIcon />,
   },
 ];
 export const navConfigPPDB = [

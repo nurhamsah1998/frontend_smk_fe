@@ -8,7 +8,7 @@ import useMutationPatch from '../../../../hooks/useMutationPatch';
 import { apiUrl } from '../../../../hooks/api';
 import ModalSuccessPayment from './ModalSuccessPayment';
 
-function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
+function FormPembayaran({ data, refetchInvoice }) {
   const formRef = React.useRef();
   const [openModalSuccess, setOpenModalSuccess] = React.useState(false);
   const [dataAfterSuccess, setDataAfterSuccess] = React.useState({});

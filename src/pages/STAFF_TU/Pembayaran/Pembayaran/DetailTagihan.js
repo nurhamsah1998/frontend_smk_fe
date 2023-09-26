@@ -1,8 +1,10 @@
 import React from 'react';
-import { Box, Button, CircularProgress, Divider, FormHelperText, Grid, Typography } from '@mui/material';
+import { Box, Button, Paper, CircularProgress, Divider, FormHelperText, Grid, Typography } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { blue } from '@mui/material/colors';
+import { useReactToPrint } from 'react-to-print';
+import PrintIcon from '@mui/icons-material/Print';
 
 import TableComponen from '../../../../components/TableComponent';
 import useFetchById from '../../../../hooks/useFetchById';
@@ -11,11 +13,14 @@ import FormPembayaran from './FormPembayaran';
 import { PROFILE } from '../../../../hooks/useHelperContext';
 import { tableHeadTagihanSiswa, tableHeadPembayaranSiswa } from './tableConfig';
 import { FormatCurrency } from '../../../../components/FormatCurrency';
+import { PrintTemplateInvoice } from './ModalSuccessPayment';
 
 function DetailTagihan() {
   const { itemsNoPagination } = React.useContext(PROFILE);
+  const printRef = React.useRef();
   const navigate = useNavigate();
   const location = useLocation();
+  const [selectedDataForPrint, setSelectedDataForPrint] = React.useState({});
   const idCode = queryString.parse(location.search);
   const { items: studentProfile } = useFetchById({
     module: 'siswa',
@@ -107,9 +112,32 @@ function DetailTagihan() {
       value: totalBillStudent - totalBillPaymentHistory <= 0 ? 0 : totalBillStudent - totalBillPaymentHistory,
     },
   ];
+  const print = useReactToPrint({
+    content: () => printRef.current,
+  });
+
+  const handleCustomOnClickRow = (i) => {
+    setSelectedDataForPrint(i);
+    setTimeout(() => {
+      print();
+    }, 1);
+  };
   return (
-    <Box sx={{ display: 'grid', gap: 4 }}>
-      <Box>
+    <Box sx={{ display: 'grid', gap: 4, position: 'relative' }}>
+      <Paper
+        elevation={3}
+        sx={{
+          position: 'fixed',
+          left: { xs: 0, sm: 0, md: 280 },
+          right: 0,
+          top: 0,
+          bgcolor: '#f9fafb',
+          zIndex: 99,
+          pt: '10px',
+          px: '10px',
+          pb: '20px',
+        }}
+      >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h5">Profile Siswa</Typography>
           <Button variant="contained" disabled>
@@ -138,9 +166,8 @@ function DetailTagihan() {
             ))}
           </Grid> */}
         </Grid>
-      </Box>
-      <Divider />
-      <Box>
+      </Paper>
+      <Box mt={'177px'}>
         <Box mb={2}>
           <Typography variant="h5"> Tagihan Siswa</Typography>
           <FormHelperText sx={{ mt: '-5px', color: blue[500] }}>
@@ -173,7 +200,9 @@ function DetailTagihan() {
           isLoading={isLoading}
           emptyTag="sepertinya belum ada transaksi"
           hideOption
+          handleCustomOnClickRow={handleCustomOnClickRow}
           isTotal
+          customIcon={<PrintIcon />}
           totalBill={totalBillPaymentHistory}
           tableHead={tableHeadPembayaranSiswa}
           disablePagination
@@ -193,6 +222,7 @@ function DetailTagihan() {
           ))}
         </Box>
         <FormPembayaran totalBillPaymentHistory={totalBillPaymentHistory} refetchInvoice={refetchInvoice} data={data} />
+        <PrintTemplateInvoice width="40%" printRef={printRef} data={selectedDataForPrint} />
       </Box>
     </Box>
   );
