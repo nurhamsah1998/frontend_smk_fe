@@ -1,8 +1,13 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import { AppWidgetSummary } from '../../sections/@dashboard/app';
+import useFetch from '../../hooks/useFetch';
 
 function AppStaffTU() {
+  const { items } = useFetch({
+    module: 'dashboard-report',
+  });
+  console.log(items, '<-------------');
   return (
     <Box>
       <Grid container spacing={2}>
