@@ -19,8 +19,6 @@ import RouterPath from './RouterPath';
 import TagihanSiswa from './pages/SISWA/Tagihan/Tagihan';
 import TagihanStaff from './pages/STAFF_TU/Tagihan/TagihanStaff';
 import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
-import AppStaffPPDB from './pages/STAFF_PPDB/AppStaffPPDB';
-import DashboardLayoutStaffPPDB from './layouts/STAFF_PPDB/DashboardLayoutStaffPPDB';
 import DaftarSiswa from './pages/STAFF_PPDB/DaftarSIswa/DaftarSiswa';
 import DetailTagihan from './pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan';
 
@@ -46,20 +44,8 @@ export default function Router() {
             },
           ],
         },
-        // { path: 'user', element: <UserPage /> },
-        // { path: 'products', element: <ProductsPage /> },
-        // { path: 'blog', element: <BlogPage /> },
       ],
     },
-    // {
-    //   path: '/staff-ppdb',
-    //   element: <DashboardLayoutStaffPPDB />,
-    //   children: [
-    //     { element: <Navigate to="/staff-ppdb/dashboard" />, index: true },
-    //     { path: 'dashboard', element: <AppStaffPPDB /> },
-    //     { path: 'pendaftar', element: <Pendaftar /> },
-    //   ],
-    // },
     {
       path: '/siswa',
       element: <DashboardLayoutStudent />,

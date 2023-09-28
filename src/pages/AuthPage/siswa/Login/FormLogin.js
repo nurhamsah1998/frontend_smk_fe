@@ -19,6 +19,7 @@ export default function FormLogin() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
     if (token) {
@@ -34,6 +35,7 @@ export default function FormLogin() {
           password: '',
         }}
         onSubmit={async (values) => {
+          setLoading(true);
           axios({
             method: 'post',
             url: `${apiUrl}login-siswa`,
@@ -47,6 +49,9 @@ export default function FormLogin() {
             .catch((error) => {
               console.log(error, 'ini');
               enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+            })
+            .finally(() => {
+              setLoading(false);
             });
         }}
       >
@@ -78,7 +83,7 @@ export default function FormLogin() {
               </Link>
             </Stack>
 
-            <LoadingButton fullWidth size="large" type="submit" variant="contained" disabled={!dirty}>
+            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loading} disabled={!dirty}>
               Login
             </LoadingButton>
           </Form>

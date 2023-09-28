@@ -25,16 +25,16 @@ const Main = styled('div')(({ theme }) => ({
   flexGrow: 1,
   overflow: 'auto',
   minHeight: '100%',
-  // paddingTop: APP_BAR_MOBILE + 24,
-  paddingTop: '10px',
+  paddingTop: APP_BAR_MOBILE,
+  // paddingTop: '10px',
   paddingBottom: theme.spacing(10),
   [theme.breakpoints.up('md')]: {
-    // paddingTop: APP_BAR_DESKTOP + 24,
+    paddingTop: APP_BAR_DESKTOP,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
   [theme.breakpoints.up('xs')]: {
-    // paddingTop: APP_BAR_DESKTOP + 24,
+    paddingTop: APP_BAR_DESKTOP,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
@@ -68,7 +68,7 @@ export default function DashboardLayoutStaff() {
     <>
       <PROFILE.Provider value={{ itemsNoPagination, isLoading }}>
         <StyledRoot>
-          {/* <Header onOpenNav={() => setOpen(true)} /> */}
+          <Header onOpenNav={() => setOpen(true)} />
           <Nav openNav={open} navConfig={navConfigTU} onCloseNav={() => setOpen(false)} />
           <Main>
             <Outlet />

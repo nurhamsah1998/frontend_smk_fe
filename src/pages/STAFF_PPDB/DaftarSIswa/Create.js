@@ -32,6 +32,7 @@ function Create({ openModalCreate, setOpenModalCreate }) {
     <div>
       <ScreenDialog
         labelClose="Batal"
+        isLoading={isLoading}
         handleClose={() => setOpenModalCreate(false)}
         handleSubmit={() => formRef.current?.handleSubmit()}
         labelSubmit="Tambah"
@@ -52,6 +53,7 @@ function Create({ openModalCreate, setOpenModalCreate }) {
             const body = {
               ...values,
               gender,
+              isAdminCreation: true,
               status_bill: data?.data === 0 ? 'not_paid_yet' : 'not_paid',
               jurusanId: values?.jurusanId?.id,
               code_jurusan: values?.jurusanId?.code,

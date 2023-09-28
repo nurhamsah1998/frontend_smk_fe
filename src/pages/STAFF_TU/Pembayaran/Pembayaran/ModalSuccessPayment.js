@@ -180,7 +180,7 @@ function ModalSuccessPayment({ open, handleClose, data }) {
           Print Invoice
         </Button>
       </div>
-      <PrintTemplateInvoice data={data} printRef={printRef} />
+      <PrintTemplateInvoice width="40%" data={data} printRef={printRef} />
     </ScreenDialog>
   );
 }

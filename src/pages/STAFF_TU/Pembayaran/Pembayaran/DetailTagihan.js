@@ -71,25 +71,6 @@ function DetailTagihan() {
       label: 'Nomor Hp',
     },
   ];
-  const detailSiswaRight = [
-    {
-      value: studentProfile?.nama_ayah,
-      label: 'Nama ayah',
-    },
-    {
-      value: studentProfile?.nama_ibu,
-      label: 'Nama ibu',
-    },
-    {
-      value: studentProfile?.alamat,
-      label: 'Alamat',
-    },
-    {
-      value: studentProfile?.angkatan,
-      label: 'Angkatan',
-    },
-  ];
-
   const totalBillPaymentHistory =
     paymentHistory?.length <= 0 ? 0 : paymentHistory?.map((i) => i?.uang_diterima)?.reduce((x, y) => x + y);
   const totalBillStudent = itemsRebuild?.length <= 0 ? 0 : itemsRebuild?.map((i) => i?.value)?.reduce((x, y) => x + y);
@@ -130,7 +111,7 @@ function DetailTagihan() {
           position: 'fixed',
           left: { xs: 0, sm: 0, md: 280 },
           right: 0,
-          top: 0,
+          top: { xs: 64, sm: 64, md: 64, lg: 92 },
           bgcolor: '#f9fafb',
           zIndex: 99,
           pt: '10px',
@@ -144,27 +125,39 @@ function DetailTagihan() {
             Edit profil siswa
           </Button>
         </Box>
-        <Grid container>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            {detailSiswaLeft.map((x, y) => (
-              <Box key={y} sx={{ display: 'flex' }}>
-                <Typography sx={{ width: '120px' }}>{x?.label}</Typography>:
-                <Typography variant="subtitle2" ml={1} textTransform="capitalize">
-                  {x?.value}
-                </Typography>
-              </Box>
-            ))}
+        <Grid container direction="row" justifyContent="space-between" alignItems="flex-start">
+          <Grid item xs={6}>
+            <Box sx={{ display: 'flex' }}>
+              <Typography sx={{ width: '120px' }}>Nama siswa</Typography>:
+              <Typography variant="subtitle2" ml={1} textTransform="capitalize">
+                {studentProfile?.nama}
+              </Typography>
+            </Box>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={6} lg={6}>
-            {detailSiswaRight.map((x, y) => (
-              <Box key={y} sx={{ display: 'flex' }}>
-                <Typography sx={{ width: '120px' }}>{x?.label}</Typography>:
-                <Typography variant="subtitle2" ml={1} textTransform="capitalize">
-                  {x?.value}
-                </Typography>
-              </Box>
-            ))}
-          </Grid> */}
+          <Grid item xs={6}>
+            <Box sx={{ display: 'flex' }}>
+              <Typography sx={{ width: '120px' }}>Jurusan</Typography>:
+              <Typography variant="subtitle2" ml={1} textTransform="capitalize">
+                {studentProfile?.jurusan?.nama}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box sx={{ display: 'flex' }}>
+              <Typography sx={{ width: '120px' }}>Kelas</Typography>:
+              <Typography variant="subtitle2" ml={1} textTransform="capitalize">
+                {studentProfile?.kelas}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box sx={{ display: 'flex' }}>
+              <Typography sx={{ width: '120px' }}>No. HP</Typography>:
+              <Typography variant="subtitle2" ml={1} textTransform="capitalize">
+                {studentProfile?.noHP}
+              </Typography>
+            </Box>
+          </Grid>
         </Grid>
       </Paper>
       <Box mt={'177px'}>

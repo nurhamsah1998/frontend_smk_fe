@@ -1,8 +1,12 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography, Button } from '@mui/material';
 import { red } from '@mui/material/colors';
 
 function LockPage() {
+  const handleLogOut = () => {
+    window.localStorage.removeItem('accessToken');
+    window.location.reload();
+  };
   return (
     <Box
       sx={{
@@ -21,6 +25,9 @@ function LockPage() {
         <Typography color="#fff" textAlign="center">
           Hubungi kantor untuk lebih jelas
         </Typography>
+        <Button sx={{ mt: 2 }} color="error" onClick={handleLogOut} variant="contained">
+          Log Out
+        </Button>
       </Box>
     </Box>
   );

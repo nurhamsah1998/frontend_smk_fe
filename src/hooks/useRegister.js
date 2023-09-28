@@ -13,8 +13,8 @@ function useRegister({
   const client = useQueryClient();
   const register = useMutation(
     [module],
-    (values) => {
-      axios
+    async (values) => {
+      await axios
         .post(
           `${apiUrl}${module}`,
           { ...values },

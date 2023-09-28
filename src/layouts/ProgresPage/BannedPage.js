@@ -1,8 +1,12 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography, Button } from '@mui/material';
 import { red } from '@mui/material/colors';
 
 function BannedPage() {
+  const handleLogOut = () => {
+    window.localStorage.removeItem('accessToken');
+    window.location.reload();
+  };
   return (
     <Box
       sx={{
@@ -21,6 +25,9 @@ function BannedPage() {
         <Typography color="#fff" textAlign="center">
           anda sudah tidak bisa mengakses situs sekolahan ini
         </Typography>
+        <Button sx={{ mt: 2 }} color="error" onClick={handleLogOut} variant="contained">
+          Log Out
+        </Button>
       </Box>
     </Box>
   );
