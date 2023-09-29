@@ -94,6 +94,7 @@ function Pendaftar() {
   const [jurusan, setJurusan] = React.useState('');
   const [jurusanId, setJurusanId] = React.useState('');
   const [inputView, setInputView] = React.useState('');
+  const [limitView, setLimitView] = React.useState('40');
   const [listSiswaKelasManagement, setListSiswaKelasManagement] = React.useState([]);
   const [modal, setModal] = React.useState({ type: '', message: [], title: '', open: false });
 
@@ -239,7 +240,11 @@ function Pendaftar() {
   const handleChangeDebounce = debounce((i) => {
     setSearch(i);
   }, 500);
+  const handleChangeDebounceLimit = debounce((i) => {
+    setLimit(i);
+  }, 500);
   const inputChange = React.useMemo(() => handleChangeDebounce, []);
+  const inputChangeLimit = React.useMemo(() => handleChangeDebounceLimit, []);
   return (
     <Box>
       <KenaikanKelas
@@ -431,9 +436,9 @@ function Pendaftar() {
                 size="small"
                 onChange={handleChange}
               >
-                <MenuItem value={'10'}>1</MenuItem>
-                <MenuItem value={'11'}>2</MenuItem>
-                <MenuItem value={'12'}>3</MenuItem>
+                <MenuItem value={'10'}>10</MenuItem>
+                <MenuItem value={'11'}>11</MenuItem>
+                <MenuItem value={'12'}>12</MenuItem>
               </Select>
             </Box>
             <Box>
@@ -502,7 +507,14 @@ function Pendaftar() {
               </Select>
             </Box>
             <Box>
-              <LabelField title="/Page" onClickClearIcon={() => setLimit(10)} clearIcon={Boolean(limit !== 10)} />
+              <LabelField
+                title="/Page"
+                onClickClearIcon={() => {
+                  setLimit(40);
+                  setLimitView('');
+                }}
+                clearIcon={Boolean(limit !== 40)}
+              />
               <TextField
                 inputProps={{
                   min: 1,
@@ -510,10 +522,12 @@ function Pendaftar() {
                 }}
                 size="small"
                 type="number"
-                placeholder="10"
-                onChange={debounce((i) => {
-                  setLimit(i.target.value);
-                }, 500)}
+                placeholder="40"
+                value={limitView || ''}
+                onChange={(i) => {
+                  inputChangeLimit(i.target.value);
+                  setLimitView(i.target.value);
+                }}
                 sx={{
                   width: '100px',
                 }}

@@ -39,6 +39,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
       .finally(() => {
         setLoading(false);
         setOpenModalCreateImport(false);
+        setFiles({});
       });
   };
   const handleDownloadTemplate = async () => {
@@ -50,7 +51,10 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
       <ScreenDialog
         open={error.open}
         labelClose="Tutup"
-        handleClose={() => setError({ open: false, message: [], title: '', type: '' })}
+        handleClose={() => {
+          setError({ open: false, message: [], title: '', type: '' });
+          setFiles({});
+        }}
         title={error.title}
       >
         {error.type === 'error_validation' &&

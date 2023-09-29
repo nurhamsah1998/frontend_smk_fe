@@ -152,9 +152,9 @@ function KenaikanKelas({
                     size="small"
                     onChange={(event) => setNewKelas(event.target.value)}
                   >
-                    <MenuItem value={'01'}>1</MenuItem>
-                    <MenuItem value={'02'}>2</MenuItem>
-                    <MenuItem value={'03'}>3</MenuItem>
+                    <MenuItem value={'10'}>10</MenuItem>
+                    <MenuItem value={'11'}>11</MenuItem>
+                    <MenuItem value={'12'}>12</MenuItem>
                   </Select>
                 </Box>
               </Box>

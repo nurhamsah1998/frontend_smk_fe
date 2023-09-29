@@ -22,6 +22,8 @@ export default function ScreenDialog({
   fullWidth = true,
   type = '',
   disabledSubmitButton,
+  labelTopBtn,
+  handleTopBtn,
 }) {
   const navigate = useNavigate();
 
@@ -40,15 +42,22 @@ export default function ScreenDialog({
         open={open}
         scroll="paper"
       >
-        <DialogTitle
-          sx={{
-            bgcolor: type?.includes('error') ? red[500] : type?.includes('success') ? green[500] : '#fff',
-            color: Boolean(type) ? '#fff' : '#000',
-          }}
-          id="scroll-dialog-title"
-        >
-          {title}
-        </DialogTitle>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <DialogTitle
+            sx={{
+              bgcolor: type?.includes('error') ? red[500] : type?.includes('success') ? green[500] : '#fff',
+              color: Boolean(type) ? '#fff' : '#000',
+            }}
+            id="scroll-dialog-title"
+          >
+            {title}
+          </DialogTitle>
+          {labelTopBtn && (
+            <Button onClick={handleTopBtn} sx={{ mr: 1 }} variant="contained" color="success">
+              Edit
+            </Button>
+          )}
+        </Box>
         <DialogContent dividers={fullWidth}>
           <DialogContentText component={Box} sx={{ width: '100%' }}>
             {children}
@@ -58,7 +67,7 @@ export default function ScreenDialog({
           <LoadingButton variant="contained" color="error" onClick={handleClose || handleCloseDefault}>
             {labelClose}
           </LoadingButton>
-          {handleSubmit ? (
+          {labelSubmit ? (
             <LoadingButton
               disabled={disabledSubmitButton}
               loading={isLoading}
