@@ -431,9 +431,9 @@ function Pendaftar() {
                 size="small"
                 onChange={handleChange}
               >
-                <MenuItem value={'01'}>1</MenuItem>
-                <MenuItem value={'02'}>2</MenuItem>
-                <MenuItem value={'03'}>3</MenuItem>
+                <MenuItem value={'10'}>1</MenuItem>
+                <MenuItem value={'11'}>2</MenuItem>
+                <MenuItem value={'12'}>3</MenuItem>
               </Select>
             </Box>
             <Box>
