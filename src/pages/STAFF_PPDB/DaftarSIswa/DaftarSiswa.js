@@ -453,12 +453,12 @@ function Pendaftar() {
                 size="small"
                 onChange={handleChangeSubKelas}
               >
-                <MenuItem value={'01'}>1</MenuItem>
-                <MenuItem value={'02'}>2</MenuItem>
-                <MenuItem value={'03'}>3</MenuItem>
-                <MenuItem value={'04'}>4</MenuItem>
-                <MenuItem value={'05'}>5</MenuItem>
-                <MenuItem value={'06'}>6</MenuItem>
+                <MenuItem value={'1'}>1</MenuItem>
+                <MenuItem value={'2'}>2</MenuItem>
+                <MenuItem value={'3'}>3</MenuItem>
+                <MenuItem value={'4'}>4</MenuItem>
+                <MenuItem value={'5'}>5</MenuItem>
+                <MenuItem value={'6'}>6</MenuItem>
               </Select>
             </Box>
 
