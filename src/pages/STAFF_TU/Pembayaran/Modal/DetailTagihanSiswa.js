@@ -1,4 +1,4 @@
-import { Box, ListItemText, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import queryString from 'query-string';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';

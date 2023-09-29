@@ -50,7 +50,6 @@ export default function DashboardLayoutStaff() {
   const navigate = useNavigate();
   const token = window.localStorage.getItem('accessToken');
   const localToken = jwtDecode(token || '');
-  console.log('tes loop from TU');
   useEffect(() => {
     if (!token) {
       navigate('/staff-login');

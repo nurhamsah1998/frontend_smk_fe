@@ -30,7 +30,6 @@ export default function FormRegisterStudent() {
       navigate('/siswa-login');
     },
   });
-  console.log(register.isLoading);
   const handleChange = (event) => {
     setGender(event.target.value);
   };

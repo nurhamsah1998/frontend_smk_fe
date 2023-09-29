@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
 import { uid } from 'uid';
-import { TextField, InputAdornment, IconButton, Box, Select, MenuItem, InputLabel } from '@mui/material';
+import { TextField, InputAdornment, IconButton, Box, MenuItem } from '@mui/material';
 
 import ScreenDialog from '../../../components/ScreenDialog';
 import useRegister from '../../../hooks/useRegister';
