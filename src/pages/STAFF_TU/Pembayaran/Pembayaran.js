@@ -17,9 +17,11 @@ function Pembayaran() {
     module: `siswa`,
     params: `&current_bill=${bill}`,
   });
+
   const itemsRebuild = items?.map((i) => ({
     ...i,
     jurusan: i?.jurusan?.nama,
+    kelas: `${i?.kelas} ${i?.['jurusan.kode_jurusan']} ${i?.sub_kelas}`,
     status_bill:
       i?.current_bill < 0
         ? 'deposit'
@@ -48,10 +50,6 @@ function Pembayaran() {
     {
       id: 'angkatan',
       label: 'Angkatan',
-    },
-    {
-      id: 'jurusan.nama',
-      label: 'Jurusan',
     },
     {
       id: 'status_bill',

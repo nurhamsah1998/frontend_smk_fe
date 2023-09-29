@@ -18,8 +18,8 @@ function useMutationPatch({
   const client = useQueryClient();
   const mutationPatch = useMutation(
     [module],
-    (values) => {
-      axios
+    async (values) => {
+      await axios
         .patch(
           `${apiUrl}${module}${isBulk ? '' : `/${values?.id}`}`,
           { ...values },

@@ -142,7 +142,7 @@ function Pendaftar() {
     return items?.map((i) => ({
       ...i,
       indicator: i?.status?.includes('accepted'),
-      nama_jurusan: `${i?.['jurusan.nama']} / ${i?.sub_kelas}`,
+      kelas: `${i?.kelas} ${i?.['jurusan.kode_jurusan']} ${i?.sub_kelas}`,
     }));
   }, [items]);
   const handleChange = (event) => {
@@ -175,10 +175,6 @@ function Pendaftar() {
     {
       id: 'kelas',
       label: 'Kelas',
-    },
-    {
-      id: 'nama_jurusan',
-      label: 'Jurusan',
     },
     {
       id: 'angkatan',

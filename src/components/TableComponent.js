@@ -204,7 +204,9 @@ function TableComponen({
                         /// https://stackoverflow.com/a/4652112/18038473
                         <>
                           {body[head?.id] < 0 ? (
-                            <Typography color={green[400]}>+{FormatCurrency(Math.abs(body[head.id]))}</Typography>
+                            <Typography fontSize="14px" color={green[400]}>
+                              +{FormatCurrency(Math.abs(body[head.id]))}
+                            </Typography>
                           ) : (
                             FormatCurrency(body[head.id])
                           )}
