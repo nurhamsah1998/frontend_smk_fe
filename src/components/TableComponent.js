@@ -342,7 +342,12 @@ function TableComponen({
         sx={{ py: 2, display: disablePagination ? 'none' : 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
       >
         <span>
-          <strong>{totalRows || 0}</strong> data ditampilkan, dari <strong>{totalData || 0}</strong> total data
+          {Boolean(totalRows) && (
+            <span>
+              <strong>{totalRows || 0}</strong> data ditampilkan, dari{' '}
+            </span>
+          )}
+          <strong>{totalData || 0}</strong> total data
         </span>{' '}
         <Pagination page={page} onChange={pageOnchange} count={count} />
       </Box>

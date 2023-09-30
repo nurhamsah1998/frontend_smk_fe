@@ -15,7 +15,6 @@ import React from 'react';
 import { debounce } from 'lodash';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { orange } from '@mui/material/colors';
-import CloseIcon from '@mui/icons-material/Close';
 
 import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
@@ -24,45 +23,7 @@ import Create from './Create';
 import CreateImport from './CreateImport';
 import ScreenDialog from '../../../components/ScreenDialog';
 import KenaikanKelas from './KenaikanKelas';
-
-export const ButtonClear = ({ onClick }) => {
-  return (
-    <IconButton
-      onClick={onClick}
-      size="small"
-      sx={{
-        width: '25px',
-        height: '25px',
-      }}
-      aria-label="closeicon"
-      va
-      color="error"
-    >
-      <CloseIcon
-        sx={{
-          width: '20px',
-          height: '20px',
-        }}
-      />
-    </IconButton>
-  );
-};
-
-export const LabelField = ({ title, onClickClearIcon, clearIcon }) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        gap: 1,
-        alignItems: 'center',
-        mb: 0.5,
-      }}
-    >
-      <FormHelperText>{title}</FormHelperText>
-      {clearIcon && <ButtonClear onClick={onClickClearIcon} />}
-    </Box>
-  );
-};
+import { LabelField } from '../../../components/Commons';
 
 function Pendaftar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -552,7 +513,16 @@ function Pendaftar() {
           page={page}
           tableBody={itemsRebuild}
           tableHead={tableHead}
-          totalRows={totalRows}
+          totalRows={
+            Boolean(jurusanId) ||
+            Boolean(kelas) ||
+            Boolean(subKelas) ||
+            Boolean(angkatan) ||
+            Boolean(status) ||
+            Boolean(search)
+              ? totalRows
+              : null
+          }
           isLoading={isLoading}
           totalData={totalData}
         />

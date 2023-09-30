@@ -2,12 +2,8 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import SimpleLayout from './layouts/simple';
 //
-import BlogPage from './pages/BlogPage';
-import UserPage from './pages/UserPage';
 import LoginStudentPage from './pages/AuthPage/siswa/Login/LoginStudentPage';
 import Page404 from './pages/Page404';
-import ProductsPage from './pages/ProductsPage';
-import DashboardAppPage from './pages/DashboardAppPage';
 import LoginStaff from './pages/AuthPage/staff/Login/LoginStaff';
 import RegisterStudentPage from './pages/AuthPage/siswa/Register/RegisterStudentPage';
 import AppSiswa from './pages/SISWA/AppSiswa';
@@ -21,6 +17,8 @@ import TagihanStaff from './pages/STAFF_TU/Tagihan/TagihanStaff';
 import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
 import DaftarSiswa from './pages/STAFF_PPDB/DaftarSIswa/DaftarSiswa';
 import DetailTagihan from './pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan';
+import ReportTransaksi from './pages/Laporan/transaksi/ReportTransaksi';
+import ReportTagihan from './pages/Laporan/tagihan/ReportTagihan';
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +42,8 @@ export default function Router() {
             },
           ],
         },
+        { path: 'laporan-transaksi', element: <ReportTransaksi /> },
+        { path: 'laporan-tagihan', element: <ReportTagihan /> },
       ],
     },
     {

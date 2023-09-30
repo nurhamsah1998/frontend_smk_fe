@@ -31,6 +31,16 @@ export const navConfigTU = [
     icon: <PointOfSaleIcon />,
   },
   {
+    title: 'Laporan Transaksi',
+    path: '/staff-tu/laporan-transaksi',
+    icon: <PointOfSaleIcon />,
+  },
+  {
+    title: 'Laporan Tagihan',
+    path: '/staff-tu/laporan-tagihan',
+    icon: <PointOfSaleIcon />,
+  },
+  {
     title: 'Keluar',
     path: '/log-out',
     icon: <LogoutIcon />,

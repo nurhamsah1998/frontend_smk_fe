@@ -7,7 +7,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import DetailTagihanSiswa from './Modal/DetailTagihanSiswa';
-import { LabelField } from '../../STAFF_PPDB/DaftarSIswa/DaftarSiswa';
+import { LabelField } from '../../../components/Commons';
 import StudentDetail from './Modal/StudentDetail';
 
 function Pembayaran() {
@@ -257,7 +257,7 @@ function Pembayaran() {
             handleCustomOnClickRow={handleCustomOnClickRow}
             tableBody={itemsRebuild}
             tableHead={tableHead}
-            totalRows={totalRows}
+            totalRows={Boolean(jurusanId) || Boolean(kelas) || Boolean(search) || Boolean(bill) ? totalRows : null}
             totalData={totalData}
             isLoading={isLoading}
           />
