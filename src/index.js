@@ -22,8 +22,8 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <SnackbarProvider
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: 'top',
+          horizontal: 'center',
         }}
         maxSnack={1}
       >

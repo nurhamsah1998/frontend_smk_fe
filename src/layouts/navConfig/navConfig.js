@@ -2,6 +2,9 @@
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import LogoutIcon from '@mui/icons-material/Logout';
+import Groups2Icon from '@mui/icons-material/Groups2';
+import PaymentIcon from '@mui/icons-material/Payment';
+import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHorizontalCircle';
 
 import SvgColor from '../../components/svg-color';
 
@@ -23,17 +26,17 @@ export const navConfigTU = [
   {
     title: 'Daftar Siswa',
     path: '/staff-tu/daftar-siswa',
-    icon: <RequestQuoteIcon />,
+    icon: <Groups2Icon />,
   },
   {
     title: 'Pembayaran',
     path: '/staff-tu/pembayaran',
-    icon: <PointOfSaleIcon />,
+    icon: <PaymentIcon />,
   },
   {
-    title: 'Laporan Transaksi',
+    title: 'Transaksi',
     path: '/staff-tu/laporan-transaksi',
-    icon: <PointOfSaleIcon />,
+    icon: <SwapHorizontalCircleIcon />,
   },
   {
     title: 'Laporan Tagihan',

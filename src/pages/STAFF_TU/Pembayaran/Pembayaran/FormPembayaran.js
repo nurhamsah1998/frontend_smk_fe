@@ -32,7 +32,6 @@ function FormPembayaran({ data, refetchInvoice }) {
     { label: 'Jobsheet', value: 'jobsheet' },
     { label: 'Pengembangan', value: 'pengembangan' },
   ];
-
   return (
     <>
       <ModalSuccessPayment
@@ -57,7 +56,9 @@ function FormPembayaran({ data, refetchInvoice }) {
             nama: data?.student?.nama,
             petugas: data?.staff?.nama,
             kode_tagihan: data?.student?.kode_siswa,
-            kelas: `${data?.student?.kelas}-${data?.student?.jurusan?.nama}`,
+            jurusan: data?.student?.jurusan?.nama,
+            sub_kelas: data?.student?.sub_kelas,
+            kelas: data?.student?.kelas,
           };
           axios
             .post(

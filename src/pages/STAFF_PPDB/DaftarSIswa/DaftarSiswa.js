@@ -1,15 +1,4 @@
-import {
-  Box,
-  Button,
-  Menu,
-  MenuItem,
-  Select,
-  FormHelperText,
-  Typography,
-  TextField,
-  ListItemText,
-  IconButton,
-} from '@mui/material';
+import { Box, Button, Menu, MenuItem, Select, Typography, TextField, ListItemText } from '@mui/material';
 
 import React from 'react';
 import { debounce } from 'lodash';
@@ -107,9 +96,11 @@ function Pendaftar() {
     }));
   }, [items]);
   const handleChange = (event) => {
+    setPage(1);
     setKelas(event.target.value);
   };
   const handleChangeSubKelas = (event) => {
+    setPage(1);
     setSubKelasKelas(event.target.value);
   };
   const handleChangesJurusan = (event, value) => {
