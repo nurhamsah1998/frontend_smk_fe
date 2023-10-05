@@ -3,12 +3,16 @@ import { Box, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { debounce } from 'lodash';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import { jsPDF as JSPDF } from 'jspdf';
 
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import DetailTagihanSiswa from './Modal/DetailTagihanSiswa';
 import { LabelField } from '../../../components/Commons';
 import StudentDetail from './Modal/StudentDetail';
+/// https://stackoverflow.com/a/45526690/18038473
+import imgs from './avatar_1.jpg';
 
 function Pembayaran() {
   const navigate = useNavigate();
@@ -100,6 +104,14 @@ function Pembayaran() {
   const handleCustomOnClickRow = (i) => {
     setModalDetailStudent({ isOpen: true, data: i });
   };
+  const handlePrintTagihan = (i) => {
+    const img = new Image();
+    img.src = imgs;
+    const doc = new JSPDF();
+    doc.text('Hello world!', 100, 100);
+    doc.addImage(img, 'jpg', 0, 0);
+    window.open(URL.createObjectURL(doc.output('blob')));
+  };
   const handleChangeStatusTagihan = (i) => {
     setPage(1);
     setBill(i.target.value);
@@ -119,6 +131,7 @@ function Pembayaran() {
         itemStudent={modalDetailStudent?.data}
         setModalDetailStudent={setModalDetailStudent}
       />
+
       <Box sx={{ display: location.pathname?.includes('/detail-tagihan') ? 'none' : 'grid' }}>
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
           <Box sx={{ display: 'grid', gap: 1 }}>
@@ -247,6 +260,7 @@ function Pembayaran() {
           <TableComponen
             hideOption
             customIcon={<AccountBoxIcon />}
+            customIconSecondary={<LocalPrintshopIcon />}
             colorHead="blue"
             count={totalPage}
             pageOnchange={(x, y) => {
@@ -255,6 +269,9 @@ function Pembayaran() {
             page={page}
             handleSeeBill={handleSeeBill}
             handleCustomOnClickRow={handleCustomOnClickRow}
+            handlePrint={handlePrintTagihan}
+            tooltipHandlePrint="Print Surat Tagihan"
+            tooltipCustom="Detail Siswa"
             tableBody={itemsRebuild}
             tableHead={tableHead}
             totalRows={Boolean(jurusanId) || Boolean(kelas) || Boolean(search) || Boolean(bill) ? totalRows : null}

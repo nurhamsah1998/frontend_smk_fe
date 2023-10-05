@@ -43,7 +43,7 @@ function FormPembayaran({ data, refetchInvoice }) {
         innerRef={formRef}
         initialValues={{
           uang_diterima: '',
-          total: '',
+          tahun_angkatan: '',
           note: '',
           kode_tagihan: '',
           kode_pembayaran: '',
@@ -53,6 +53,7 @@ function FormPembayaran({ data, refetchInvoice }) {
         onSubmit={async (values) => {
           const body = {
             ...values,
+            tahun_angkatan: data?.student?.angkatan,
             nama: data?.student?.nama,
             petugas: data?.staff?.nama,
             kode_tagihan: data?.student?.kode_siswa,

@@ -1,14 +1,16 @@
-import { Box, MenuItem, Select, TextField } from '@mui/material';
+import { Box, MenuItem, Select, TextField, Menu, Button } from '@mui/material';
 import React from 'react';
 import { debounce, range } from 'lodash';
 import DatePicker from 'react-datepicker';
 import getMonth from 'date-fns/getMonth';
 import getYear from 'date-fns/getYear';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
 
 import { LabelField } from '../../../components/Commons';
 import TableComponen from '../../../components/TableComponent';
 import useFetch from '../../../hooks/useFetch';
+import { apiUrl } from '../../../hooks/api';
 
 function ReportTransaksi() {
   const [limitView, setLimitView] = React.useState('40');
@@ -16,6 +18,7 @@ function ReportTransaksi() {
   const [kelas, setKelas] = React.useState('');
   const [subKelas, setSubKelasKelas] = React.useState('');
   const [jurusan, setJurusan] = React.useState('');
+  const [typeFile, setTypeFile] = React.useState('');
   const [endDate, setEndDate] = React.useState(null);
 
   const years = range(2000, getYear(new Date()) + 1, 1);
@@ -90,9 +93,64 @@ function ReportTransaksi() {
     setPage(1);
     setSubKelasKelas(event.target.value);
   };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleDownloadFile = async (event) => {
+    if (event === 'xlsx') {
+      await axios
+        .get(
+          `${apiUrl}download/report-transaction?page=${page}&limit=${
+            limit || 10
+          }&startDate=${startDate}&endDate=${endDate}&kelas=${kelas}&jurusan=${jurusan}&sub_kelas=${subKelas}&type_file=${typeFile}`,
+          {
+            headers: {
+              authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
+            },
+          }
+        )
+        .then((res) => {
+          /// https://stackoverflow.com/a/64545660/18038473
+          window.location.href = `${apiUrl}download/report-transaction/${res?.data?.data}`;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {});
+    }
+  };
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3, gap: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 3, gap: 1 }}>
+        <Box>
+          <Button
+            variant="contained"
+            id="basic-button"
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+          >
+            Download File
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={() => handleDownloadFile('pdf')}>Download PDF</MenuItem>
+            <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
+          </Menu>
+        </Box>
         <Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mb: '4px' }}>
             <Box>
