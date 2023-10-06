@@ -18,7 +18,6 @@ import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
 import DaftarSiswa from './pages/STAFF_PPDB/DaftarSIswa/DaftarSiswa';
 import DetailTagihan from './pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan';
 import ReportTransaksi from './pages/Laporan/transaksi/ReportTransaksi';
-import ReportTagihan from './pages/Laporan/tagihan/ReportTagihan';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +42,6 @@ export default function Router() {
           ],
         },
         { path: 'laporan-transaksi', element: <ReportTransaksi /> },
-        { path: 'laporan-tagihan', element: <ReportTagihan /> },
       ],
     },
     {

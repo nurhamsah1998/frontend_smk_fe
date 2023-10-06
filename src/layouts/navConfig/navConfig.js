@@ -39,11 +39,6 @@ export const navConfigTU = [
     icon: <SwapHorizontalCircleIcon />,
   },
   {
-    title: 'Laporan Tagihan',
-    path: '/staff-tu/laporan-tagihan',
-    icon: <PointOfSaleIcon />,
-  },
-  {
     title: 'Keluar',
     path: '/log-out',
     icon: <LogoutIcon />,

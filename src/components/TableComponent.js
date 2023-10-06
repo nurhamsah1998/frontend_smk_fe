@@ -38,7 +38,7 @@ function TableComponen({
   totalBill = 0,
   isLoading,
   stickyHeader = 0,
-  handleAccount,
+  handleAccount = false,
   handleLockAccount,
   handleHoldAccount,
   handleAcceptAccount,
@@ -48,8 +48,8 @@ function TableComponen({
   customIcon,
   customIconSecondary,
   handlePrint,
-  tooltipHandlePrint,
-  tooltipCustom,
+  tooltipHandlePrint = '',
+  tooltipCustom = '',
 }) {
   moment.locale('id');
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -230,7 +230,7 @@ function TableComponen({
                     <TableCell sx={{ py: 0 }}>
                       <Box>
                         {handleSeeBill ? (
-                          <Tooltip title="Detail Pembayaran">
+                          <Tooltip arrow title="Detail Pembayaran">
                             <IconButton
                               size="small"
                               onClick={() => {
@@ -243,69 +243,68 @@ function TableComponen({
                           </Tooltip>
                         ) : null}
                         {handleCustomOnClickRow ? (
-                          <Tooltip title={tooltipCustom}>
+                          <Tooltip arrow title={tooltipCustom}>
                             <IconButton onClick={() => handleCustomOnClickRow(body)}>{customIcon}</IconButton>
                           </Tooltip>
                         ) : null}
                         {handlePrint && !Boolean(body?.status_bill !== 'not_paid') ? (
-                          <Tooltip title={tooltipHandlePrint}>
+                          <Tooltip arrow title={tooltipHandlePrint}>
                             <IconButton onClick={() => handlePrint(body)}>{customIconSecondary}</IconButton>
                           </Tooltip>
                         ) : null}
-                        {handleAccount && (
+                        {Boolean(handleAccount) && (
                           <Box>
-                            <Tooltip title="Status Akun">
-                              <IconButton onClick={(event) => handleClickAccount(event, body)}>
+                            <IconButton onClick={(event) => handleClickAccount(event, body)}>
+                              <Tooltip arrow title={'Status akun'}>
                                 <AccountBoxIcon />
-                              </IconButton>
+                              </Tooltip>
+                            </IconButton>
 
-                              <Menu
-                                id="basic-menu"
-                                anchorEl={anchorEl}
-                                sx={{
-                                  '.css-1h30a5t-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper': {
-                                    boxShadow:
-                                      '0px 5px 5px -3px rgb(145 158 171 / 0%), 0px 8px 10px 1px rgb(145 158 171 / 0%), 0px 3px 14px 2px rgb(145 158 171 / 5%)',
-                                  },
+                            <Menu
+                              id="basic-menu"
+                              anchorEl={anchorEl}
+                              sx={{
+                                '.css-1h30a5t-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper': {
+                                  boxShadow:
+                                    '0px 5px 5px -3px rgb(145 158 171 / 0%), 0px 8px 10px 1px rgb(145 158 171 / 0%), 0px 3px 14px 2px rgb(145 158 171 / 5%)',
+                                },
+                              }}
+                              open={open}
+                              onClose={handleClose}
+                            >
+                              <MenuItem
+                                onClick={() => {
+                                  handleLockAccount(selectedData);
+                                  setAnchorEl(null);
                                 }}
-                                box
-                                open={open}
-                                onClose={handleClose}
                               >
-                                <MenuItem
-                                  onClick={() => {
-                                    handleLockAccount(selectedData);
-                                    setAnchorEl(null);
-                                  }}
-                                >
-                                  Kunci akun
-                                </MenuItem>
-                                <MenuItem
-                                  onClick={() => {
-                                    handleBlockAccount(selectedData);
-                                    setAnchorEl(null);
-                                  }}
-                                >
-                                  Blokir akun
-                                </MenuItem>
-                                <MenuItem
-                                  onClick={() => {
-                                    handleAcceptAccount(selectedData);
-                                    setAnchorEl(null);
-                                  }}
-                                >
-                                  Terima akun
-                                </MenuItem>
-                                <MenuItem
-                                  onClick={() => {
-                                    handleHoldAccount(selectedData);
-                                    setAnchorEl(null);
-                                  }}
-                                >
-                                  Tahan akun
-                                </MenuItem>
-                              </Menu>
-                            </Tooltip>
+                                Kunci akun
+                              </MenuItem>
+                              <MenuItem
+                                onClick={() => {
+                                  handleBlockAccount(selectedData);
+                                  setAnchorEl(null);
+                                }}
+                              >
+                                Blokir akun
+                              </MenuItem>
+                              <MenuItem
+                                onClick={() => {
+                                  handleAcceptAccount(selectedData);
+                                  setAnchorEl(null);
+                                }}
+                              >
+                                Terima akun
+                              </MenuItem>
+                              <MenuItem
+                                onClick={() => {
+                                  handleHoldAccount(selectedData);
+                                  setAnchorEl(null);
+                                }}
+                              >
+                                Tahan akun
+                              </MenuItem>
+                            </Menu>
                           </Box>
                         )}
                       </Box>

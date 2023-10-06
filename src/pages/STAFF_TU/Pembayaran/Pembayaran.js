@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Box, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, Menu, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { debounce } from 'lodash';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -124,6 +124,15 @@ function Pembayaran() {
   }, 500);
   const inputChange = useMemo(() => handleChangeDebounce, []);
   const inputChangeLimit = useMemo(() => handleChangeDebounceLimit, []);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleDownloadFile = async (event) => {};
   return (
     <Box>
       <StudentDetail
@@ -133,125 +142,153 @@ function Pembayaran() {
       />
 
       <Box sx={{ display: location.pathname?.includes('/detail-tagihan') ? 'none' : 'grid' }}>
-        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Box sx={{ display: 'grid', gap: 1 }}>
-            <Box sx={{ display: 'grid' }}>
-              <LabelField
-                clearIcon={Boolean(search)}
-                onClickClearIcon={() => {
-                  setSearch('');
-                  setInputView('');
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2 }}>
+          <Box>
+            <Box>
+              <Button
+                variant="contained"
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+              >
+                Download File
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
                 }}
-                title="Masukan nama siswa / kode siswa"
-              />
-              <TextField
-                value={inputView}
-                onChange={(i) => {
-                  inputChange(i.target.value);
-                  setInputView(i.target.value);
-                }}
-                size="small"
-              />
+              >
+                <MenuItem onClick={() => handleDownloadFile('pdf')}>Download PDF</MenuItem>
+                <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
+              </Menu>
             </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 1,
-              }}
-            >
-              <Box>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Box sx={{ display: 'grid', gap: 1 }}>
+              <Box sx={{ display: 'grid' }}>
                 <LabelField
-                  clearIcon={Boolean(bill)}
+                  clearIcon={Boolean(search)}
                   onClickClearIcon={() => {
-                    setBill('');
+                    setSearch('');
+                    setInputView('');
                   }}
-                  title="Sort Status Pembayaran"
-                />
-                <Select
-                  sx={{
-                    minWidth: '200px',
-                  }}
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={bill || ''}
-                  size="small"
-                  onChange={handleChangeStatusTagihan}
-                >
-                  <MenuItem value={'paid'}>Lunas</MenuItem>
-                  <MenuItem value={'not_paid'}>Belum Lunas</MenuItem>
-                  <MenuItem value={'deposit'}>Deposit</MenuItem>
-                  <MenuItem value={'not_paid_yet'}>Belum Ada Tagihan</MenuItem>
-                </Select>
-              </Box>
-              <Box>
-                <LabelField
-                  title="Sort Jurusan"
-                  clearIcon={Boolean(jurusan)}
-                  onClickClearIcon={() => {
-                    setJurusanId('');
-                    setJurusan('');
-                  }}
-                />
-                <Select
-                  sx={{
-                    minWidth: '270px',
-                  }}
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={jurusan || ''}
-                  size="small"
-                  onChange={handleChangesJurusan}
-                >
-                  {data?.data?.map((item, index) => (
-                    <MenuItem key={index} onClick={() => setJurusanId(item?.id)} value={item?.nama}>
-                      {item?.nama}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </Box>
-              <Box>
-                <LabelField title="Sort Kelas" onClickClearIcon={() => setKelas('')} clearIcon={Boolean(kelas)} />
-                <Select
-                  sx={{
-                    minWidth: '100px',
-                  }}
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={kelas}
-                  size="small"
-                  onChange={(event) => setKelas(event.target.value)}
-                >
-                  <MenuItem value={'10'}>10</MenuItem>
-                  <MenuItem value={'11'}>11</MenuItem>
-                  <MenuItem value={'12'}>12</MenuItem>
-                </Select>
-              </Box>
-              <Box>
-                <LabelField
-                  title="/Page"
-                  onClickClearIcon={() => {
-                    setLimit(40);
-                    setLimitView('');
-                  }}
-                  clearIcon={Boolean(limit !== 40)}
+                  title="Masukan nama siswa / kode siswa"
                 />
                 <TextField
-                  inputProps={{
-                    min: 1,
-                    max: 100,
+                  value={inputView}
+                  onChange={(i) => {
+                    inputChange(i.target.value);
+                    setInputView(i.target.value);
                   }}
                   size="small"
-                  type="number"
-                  placeholder="40"
-                  value={limitView || ''}
-                  onChange={(i) => {
-                    inputChangeLimit(i.target.value);
-                    setLimitView(i.target.value);
-                  }}
-                  sx={{
-                    width: '100px',
-                  }}
                 />
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 1,
+                }}
+              >
+                <Box>
+                  <LabelField
+                    clearIcon={Boolean(bill)}
+                    onClickClearIcon={() => {
+                      setBill('');
+                    }}
+                    title="Sort Status Pembayaran"
+                  />
+                  <Select
+                    sx={{
+                      minWidth: '200px',
+                    }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={bill || ''}
+                    size="small"
+                    onChange={handleChangeStatusTagihan}
+                  >
+                    <MenuItem value={'paid'}>Lunas</MenuItem>
+                    <MenuItem value={'not_paid'}>Belum Lunas</MenuItem>
+                    <MenuItem value={'deposit'}>Deposit</MenuItem>
+                    <MenuItem value={'not_paid_yet'}>Belum Ada Tagihan</MenuItem>
+                  </Select>
+                </Box>
+                <Box>
+                  <LabelField
+                    title="Sort Jurusan"
+                    clearIcon={Boolean(jurusan)}
+                    onClickClearIcon={() => {
+                      setJurusanId('');
+                      setJurusan('');
+                    }}
+                  />
+                  <Select
+                    sx={{
+                      minWidth: '270px',
+                    }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={jurusan || ''}
+                    size="small"
+                    onChange={handleChangesJurusan}
+                  >
+                    {data?.data?.map((item, index) => (
+                      <MenuItem key={index} onClick={() => setJurusanId(item?.id)} value={item?.nama}>
+                        {item?.nama}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Box>
+                <Box>
+                  <LabelField title="Sort Kelas" onClickClearIcon={() => setKelas('')} clearIcon={Boolean(kelas)} />
+                  <Select
+                    sx={{
+                      minWidth: '100px',
+                    }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={kelas}
+                    size="small"
+                    onChange={(event) => setKelas(event.target.value)}
+                  >
+                    <MenuItem value={'10'}>10</MenuItem>
+                    <MenuItem value={'11'}>11</MenuItem>
+                    <MenuItem value={'12'}>12</MenuItem>
+                  </Select>
+                </Box>
+                <Box>
+                  <LabelField
+                    title="/Page"
+                    onClickClearIcon={() => {
+                      setLimit(40);
+                      setLimitView('');
+                    }}
+                    clearIcon={Boolean(limit !== 40)}
+                  />
+                  <TextField
+                    inputProps={{
+                      min: 1,
+                      max: 100,
+                    }}
+                    size="small"
+                    type="number"
+                    placeholder="40"
+                    value={limitView || ''}
+                    onChange={(i) => {
+                      inputChangeLimit(i.target.value);
+                      setLimitView(i.target.value);
+                    }}
+                    sx={{
+                      width: '100px',
+                    }}
+                  />
+                </Box>
               </Box>
             </Box>
           </Box>

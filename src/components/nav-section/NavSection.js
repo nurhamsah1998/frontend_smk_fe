@@ -33,10 +33,11 @@ export default function NavSection({ data = [], ...other }) {
   return (
     <Box {...other}>
       <List disablePadding sx={{ p: 1 }}>
-        {data.map((item) => {
+        {data.map((item, index) => {
           if (item?.path?.includes('/log-out')) {
             return (
               <Button
+                key={index}
                 onClick={handleLogOut}
                 color="error"
                 startIcon={item.icon}
@@ -48,7 +49,7 @@ export default function NavSection({ data = [], ...other }) {
               </Button>
             );
           }
-          return <NavItem key={item.title} item={item} />;
+          return <NavItem key={index} item={item} />;
         })}
       </List>
     </Box>
@@ -66,7 +67,6 @@ function NavItem({ item }) {
 
   return (
     <StyledNavItem
-      onC
       component={RouterLink}
       to={path}
       sx={{

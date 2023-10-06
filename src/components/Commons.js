@@ -11,7 +11,6 @@ export const ButtonClear = ({ onClick }) => {
         height: '25px',
       }}
       aria-label="closeicon"
-      va
       color="error"
     >
       <CloseIcon
