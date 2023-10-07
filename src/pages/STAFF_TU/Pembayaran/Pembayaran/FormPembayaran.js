@@ -8,7 +8,7 @@ import useMutationPatch from '../../../../hooks/useMutationPatch';
 import { apiUrl } from '../../../../hooks/api';
 import ModalSuccessPayment from './ModalSuccessPayment';
 
-function FormPembayaran({ data, refetchInvoice }) {
+function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
   const formRef = React.useRef();
   const [openModalSuccess, setOpenModalSuccess] = React.useState(false);
   const [dataAfterSuccess, setDataAfterSuccess] = React.useState({});
@@ -77,6 +77,7 @@ function FormPembayaran({ data, refetchInvoice }) {
               mutationPatch.mutate({
                 id: data?.student?.id,
                 current_bill: data?.student?.current_bill - values?.uang_diterima,
+                total_payment: Number(totalBillPaymentHistory) + Number(values?.uang_diterima),
                 status_bill: statusBill === 0 ? 'paid' : statusBill < 0 ? 'deposit' : 'not_paid',
               });
             })
