@@ -5,8 +5,10 @@ import { debounce } from 'lodash';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import { jsPDF as JSPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import axios from 'axios';
 import moment from 'moment';
+import { uid } from 'uid';
 
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
@@ -14,10 +16,12 @@ import DetailTagihanSiswa from './Modal/DetailTagihanSiswa';
 import { LabelField } from '../../../components/Commons';
 import StudentDetail from './Modal/StudentDetail';
 /// https://stackoverflow.com/a/45526690/18038473
-import imgs from './avatar_1.jpg';
 import { apiUrl } from '../../../hooks/api';
+import { FormatCurrency } from '../../../components/FormatCurrency';
+import { PROFILE } from '../../../hooks/useHelperContext';
 
 function Pembayaran() {
+  const { itemsNoPagination } = React.useContext(PROFILE);
   const navigate = useNavigate();
   const location = useLocation();
   const [bill, setBill] = useState('');
@@ -107,18 +111,35 @@ function Pembayaran() {
   const handleCustomOnClickRow = (i) => {
     setModalDetailStudent({ isOpen: true, data: i });
   };
+  const dataFIlePDF = React.useMemo(() => {
+    return items
+      ?.map((item) => ({
+        nama: item?.nama,
+        gender: item?.gender,
+        kelas: `${item?.kelas} ${item?.['jurusan.kode_jurusan']} ${item?.sub_kelas}`,
+        angkatan: item?.angkatan,
+        status_bill:
+          item?.current_bill < 0
+            ? 'DEPOSIT'
+            : item?.current_bill > 0
+            ? 'BELUM LUNAS'
+            : item?.status_bill?.includes('BELUM ADA TAGIHAN')
+            ? 'BELUM ADA TAGIHAN'
+            : 'LUNAS',
+        current_bill: item?.current_bill < 0 ? '-' : FormatCurrency(item?.current_bill),
+      }))
+      ?.map((item) => {
+        return Object.values(item);
+      });
+  }, [items]);
   const handlePrintTagihan = (i) => {
-    const img = new Image();
-    img.src = imgs;
-    const doc = new JSPDF();
-    doc.text('Hello world!', 100, 100);
-    doc.addImage(img, 'jpg', 0, 0);
-    window.open(URL.createObjectURL(doc.output('blob')));
+    console.log('-----');
   };
   const handleChangeStatusTagihan = (i) => {
     setPage(1);
     setBill(i.target.value);
   };
+
   const handleChangeDebounce = debounce((i) => {
     setSearch(i);
   }, 500);
@@ -160,6 +181,64 @@ function Pembayaran() {
           console.log(error);
         })
         .finally(() => {});
+    } else {
+      const img = new Image();
+      img.src = '/assets/logo_pgri.png';
+      const doc = new JSPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+      });
+      autoTable(doc, {
+        html: '#my-table',
+        margin: { top: 70 },
+      });
+      doc.addImage(img, 'jpg', 10, 5, 30, 30);
+      /// https://stackoverflow.com/a/64022128/18038473
+      doc.setFontSize(14);
+      doc.setFont('', '', 700);
+      doc.text('YAYASAN PEMBINA LEMBAGA PENDIDIKAN', doc.internal.pageSize.width / 1.7, 15, { align: 'center' });
+      doc.text('PERSATUAN GURU REPUBLIK INDONESIA (YPLP PGRI) KEDIRI', doc.internal.pageSize.width / 1.7, 22, {
+        align: 'center',
+      });
+      doc.text('SEKOLAH MENENGAH KEJURUAN PGRI KRAS KEDIRI', doc.internal.pageSize.width / 1.7, 29, {
+        align: 'center',
+      });
+      doc.setFontSize(12);
+      doc.setFont('', '', '', '');
+      doc.text('Jalan Raya Desa Kras Kec. Kras Kab. Kediri', doc.internal.pageSize.width / 1.7, 38, {
+        align: 'center',
+      });
+      doc.text('Telp. 0354-479487 e-mail: smk_pgri_kras007@yahoo.co.id', doc.internal.pageSize.width / 1.7, 43, {
+        align: 'center',
+      });
+      /// https://stackoverflow.com/a/53360710/18038473
+      doc.setLineWidth(1.0);
+      doc.line(10, 50, 201, 50, 'FD');
+      doc.setLineWidth(0);
+      doc.line(10, 51, 201, 51, 'FD');
+      doc.setFontSize(14);
+      doc.text(`Laporan Tagihan ${moment().format('MMMM Do YYYY')}`, doc.internal.pageSize.width - 10, 58, {
+        align: 'right',
+      });
+      doc.setFontSize(10);
+      doc.text(
+        `TGH/CODE-${uid(7).toUpperCase()}/${itemsNoPagination?.nama?.toUpperCase()}`,
+        doc.internal.pageSize.width - 10,
+        63,
+        {
+          align: 'right',
+        }
+      );
+      doc.setFontSize(10);
+      doc.text(itemsNoPagination?.role?.toUpperCase(), doc.internal.pageSize.width - 10, 67, {
+        align: 'right',
+      });
+      autoTable(doc, {
+        head: [tableHead?.map((item) => item?.label)],
+        body: dataFIlePDF,
+      });
+      window.open(URL.createObjectURL(doc.output('blob')));
     }
   };
   return (
