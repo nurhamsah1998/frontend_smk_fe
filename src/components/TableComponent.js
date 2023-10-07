@@ -52,15 +52,20 @@ function TableComponen({
   tooltipCustom = '',
 }) {
   moment.locale('id');
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedData, setSelectedData] = React.useState({});
-  const open = Boolean(anchorEl);
-  const handleClickAccount = (event, body) => {
-    setAnchorEl(event.currentTarget);
+  /// https://stackoverflow.com/a/72384851/18038473
+  const [anchorEl, setAnchorEl] = React.useState(
+    Array(tableBody?.length)
+      .fill(1)
+      .map((item, index) => ({ [`set_anchorEl_${index}`]: null }))
+  );
+
+  const handleClickAccount = (event, body, bodyIndex) => {
+    setAnchorEl((prev) => ({ ...prev, [`set_anchorEl_${bodyIndex}`]: event.currentTarget }));
     setSelectedData(body);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose = (bodyIndex) => {
+    setAnchorEl((prev) => ({ ...prev, [`set_anchorEl_${bodyIndex}`]: null }));
   };
   const variantColorTableHead = [
     {
@@ -149,14 +154,14 @@ function TableComponen({
                   </TableCell>
                 </TableRow>
               ) : (
-                tableBody?.map((body, index) => (
+                tableBody?.map((body, bodyIndex) => (
                   <TableRow
-                    key={index}
+                    key={bodyIndex}
                     sx={{
                       height: '40px',
                     }}
                   >
-                    {tableHead?.map((head, index) => {
+                    {tableHead?.map((head, headIndex) => {
                       const Status = (params) => {
                         const isVariantStatusColor = head?.variantStatusColor?.find((i) => i?.value === params);
                         const colorVariant = [
@@ -222,7 +227,7 @@ function TableComponen({
                       const isDate = head?.isDate ? moment(body[head.id]).format('LLLL') : isCurrency;
 
                       return (
-                        <TableCell sx={{ px: 2, py: 0, textTransform: 'capitalize' }} key={index}>
+                        <TableCell sx={{ px: 2, py: 0, textTransform: 'capitalize' }} key={headIndex}>
                           {isDate || '-'}
                         </TableCell>
                       );
@@ -254,7 +259,7 @@ function TableComponen({
                         ) : null}
                         {Boolean(handleAccount) && (
                           <Box>
-                            <IconButton onClick={(event) => handleClickAccount(event, body)}>
+                            <IconButton onClick={(event) => handleClickAccount(event, body, bodyIndex)}>
                               <Tooltip arrow title={'Status akun'}>
                                 <AccountBoxIcon />
                               </Tooltip>
@@ -262,15 +267,15 @@ function TableComponen({
 
                             <Menu
                               id="basic-menu"
-                              anchorEl={anchorEl}
+                              anchorEl={anchorEl?.[`set_anchorEl_${bodyIndex}`]}
                               sx={{
-                                '.css-1h30a5t-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper': {
+                                '& .css-6hp17o-MuiList-root-MuiMenu-list': {
                                   boxShadow:
                                     '0px 5px 5px -3px rgb(145 158 171 / 0%), 0px 8px 10px 1px rgb(145 158 171 / 0%), 0px 3px 14px 2px rgb(145 158 171 / 5%)',
                                 },
                               }}
-                              open={open}
-                              onClose={handleClose}
+                              open={Boolean(anchorEl?.[`set_anchorEl_${bodyIndex}`])}
+                              onClose={() => handleClose(bodyIndex)}
                             >
                               <MenuItem
                                 onClick={() => {

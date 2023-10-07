@@ -5,6 +5,8 @@ import { debounce } from 'lodash';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import { jsPDF as JSPDF } from 'jspdf';
+import axios from 'axios';
+import moment from 'moment';
 
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
@@ -13,6 +15,7 @@ import { LabelField } from '../../../components/Commons';
 import StudentDetail from './Modal/StudentDetail';
 /// https://stackoverflow.com/a/45526690/18038473
 import imgs from './avatar_1.jpg';
+import { apiUrl } from '../../../hooks/api';
 
 function Pembayaran() {
   const navigate = useNavigate();
@@ -132,7 +135,33 @@ function Pembayaran() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleDownloadFile = async (event) => {};
+  const handleDownloadFile = async (event) => {
+    if (event === 'xlsx') {
+      await axios
+        .get(
+          `${apiUrl}download/report-bill?page=${page}&limit=${limit}&search=${search}&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}`,
+          {
+            responseType: 'blob',
+            headers: {
+              authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
+            },
+          }
+        )
+        .then((res) => {
+          /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+          const url = URL.createObjectURL(new Blob([res?.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `tagihan-${moment().format('MMMM-Do-YYYY-h-mm-ss')}.xlsx`);
+          document.body.appendChild(link);
+          link.click();
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {});
+    }
+  };
   return (
     <Box>
       <StudentDetail

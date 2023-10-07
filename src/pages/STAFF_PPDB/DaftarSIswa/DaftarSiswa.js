@@ -64,17 +64,19 @@ function Pendaftar() {
   } = useFetch({
     module: `siswa`,
     params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
+    enabled: true,
   });
   const { data } = useFetch({
     module: 'jurusan',
   });
-  const { mutationPatch } = useMutationPatch({
+  const { mutationPatch, isIdle } = useMutationPatch({
     module: 'siswa',
   });
   const { mutationPatch: mutationChangeStatus } = useMutationPatch({
     module: `bulk-siswa-update/${items?.map((item) => item?.id)}`,
     isBulk: true,
     next: (res) => {
+      setSubKelasKelas('');
       setModal({ type: 'success', open: true, message: res?.data?.message, title: 'List siswa berhasil diupdate' });
       refetch();
     },
@@ -160,16 +162,16 @@ function Pendaftar() {
     },
   ];
   const handleLockAccount = (i) => {
-    mutationPatch.mutate({ ...i, status: 'lock' });
+    mutationPatch.mutate({ id: i?.id, status: 'lock' });
   };
   const handleAcceptAccount = (i) => {
-    mutationPatch.mutate({ ...i, status: 'accepted' });
+    mutationPatch.mutate({ id: i?.id, status: 'accepted' });
   };
   const handleHoldAccount = (i) => {
-    mutationPatch.mutate({ ...i, status: 'checking' });
+    mutationPatch.mutate({ id: i?.id, status: 'checking' });
   };
   const handleBlockAccount = (i) => {
-    mutationPatch.mutate({ ...i, status: 'blokir' });
+    mutationPatch.mutate({ id: i?.id, status: 'blokir' });
   };
   const handleBulkChangeStatus = async (selectedStatus) => {
     mutationChangeStatus.mutate({ status: selectedStatus, users: items });

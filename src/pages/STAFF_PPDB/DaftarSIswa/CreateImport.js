@@ -90,7 +90,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
                   >
                     {item?.username}
                   </span>{' '}
-                  dibagian Row {item?.row} Column {item?.column}, sudah terdaftar!
+                  dibagian Row {item?.row} Column {item?.column}, sudah terdaftar didatabase !
                 </Typography>
               </Box>
             );
