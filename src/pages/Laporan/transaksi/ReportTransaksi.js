@@ -116,6 +116,7 @@ function ReportTransaksi() {
         uang_diterima: FormatCurrency(item?.uang_diterima),
         invoice: item?.invoice,
         kode_pembayaran: item?.kode_pembayaran,
+        createdAt: moment(item?.createdAt).format('Do MMM YYYY hh:mm a'),
       }))
       ?.map((item) => {
         return Object.values(item);
@@ -201,6 +202,15 @@ function ReportTransaksi() {
             align: 'right',
           }
         );
+      if (Boolean(kelas) && Boolean(jurusan) && Boolean(subKelas))
+        doc.text(
+          `Kelas: ${kelas} ${jurusan} ${subKelas}`,
+          doc.internal.pageSize.width - 10,
+          !Boolean(endDate) ? 60 : 65,
+          {
+            align: 'right',
+          }
+        );
 
       doc.setFontSize(10);
       doc.setFont('', '', '');
@@ -211,12 +221,17 @@ function ReportTransaksi() {
       doc.text(`Kode download : TGH/CODE-${uid(7).toUpperCase()}/${itemsNoPagination?.nama?.toUpperCase()}`, 10, 69, {
         align: 'left',
       });
-      doc.text(`Tanggal dibuat : ${moment().format('MMMM Do YYYY')}`, 10, 73, {
+      doc.text(`Tanggal dibuat : ${moment().format('Do MMMM YYYY hh:mm a')}`, 10, 73, {
         align: 'left',
+      });
+      const tableHeadPdf = [...tableHead];
+      tableHeadPdf.push({
+        id: 'createdAt',
+        label: 'Tanggal',
       });
       autoTable(doc, {
         margin: { horizontal: 10 },
-        head: [tableHead?.map((item) => item?.label)],
+        head: [tableHeadPdf?.map((item) => item?.label)],
         body: dataFIlePDF,
       });
       doc.text(`SMK PGRI KRAS`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 7, {
@@ -273,7 +288,7 @@ function ReportTransaksi() {
                 onChange={handleChangesJurusan}
               >
                 {data?.data?.map((item, index) => (
-                  <MenuItem key={index} onClick={() => setJurusan(item?.nama)} value={item?.nama}>
+                  <MenuItem key={index} onClick={() => setJurusan(item?.kode_jurusan)} value={item?.kode_jurusan}>
                     {item?.nama}
                   </MenuItem>
                 ))}
@@ -433,7 +448,7 @@ function ReportTransaksi() {
         page={page}
         tableBody={itemsRebuild}
         tableHead={tableHead}
-        totalRows={Boolean(endDate) ? totalRows : null}
+        totalRows={Boolean(endDate) || Boolean(kelas) || Boolean(subKelas) || Boolean(jurusan) ? totalRows : null}
         totalData={totalData}
         isLoading={isLoading}
       />

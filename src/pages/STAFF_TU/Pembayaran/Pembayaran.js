@@ -27,6 +27,7 @@ function Pembayaran() {
   const [bill, setBill] = useState('');
   const [inputView, setInputView] = useState('');
   const [kelas, setKelas] = useState('');
+  const [subKelas, setSubKelasKelas] = React.useState('');
   const [modalDetailStudent, setModalDetailStudent] = useState({ data: {}, isOpen: false });
   const [limitView, setLimitView] = useState('40');
   const [jurusan, setJurusan] = useState('');
@@ -34,7 +35,7 @@ function Pembayaran() {
   const { items, totalPage, setPage, search, totalData, totalRows, setSearch, page, isLoading, setLimit, limit } =
     useFetch({
       module: `siswa`,
-      params: `&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}`,
+      params: `&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}`,
     });
   const { data } = useFetch({
     module: 'jurusan',
@@ -110,6 +111,10 @@ function Pembayaran() {
   ];
   const handleCustomOnClickRow = (i) => {
     setModalDetailStudent({ isOpen: true, data: i });
+  };
+  const handleChangeSubKelas = (event) => {
+    setPage(1);
+    setSubKelasKelas(event.target.value);
   };
   const dataFIlePDF = React.useMemo(() => {
     return items
@@ -266,6 +271,12 @@ function Pembayaran() {
       doc.text(`Laporan Tagihan`, 10, 60, {
         align: 'left',
       });
+      doc.setFont('', '', '');
+      doc.setFontSize(12);
+      if (Boolean(kelas) && Boolean(jurusan) && Boolean(subKelas))
+        doc.text(`Kelas: ${kelas} ${jurusan} ${subKelas}`, doc.internal.pageSize.width - 10, 60, {
+          align: 'right',
+        });
       doc.setFontSize(10);
       doc.setFont('', '', '');
       doc.text(itemsNoPagination?.role?.toUpperCase(), 10, 65, {
@@ -275,7 +286,7 @@ function Pembayaran() {
       doc.text(`Kode download : TGH/CODE-${uid(7).toUpperCase()}/${itemsNoPagination?.nama?.toUpperCase()}`, 10, 69, {
         align: 'left',
       });
-      doc.text(`Tanggal dibuat : ${moment().format('MMMM Do YYYY')}`, 10, 73, {
+      doc.text(`Tanggal dibuat : ${moment().format('Do MMM YYYY hh:mm a')}`, 10, 73, {
         align: 'left',
       });
       autoTable(doc, {
@@ -327,30 +338,26 @@ function Pembayaran() {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Box sx={{ display: 'grid', gap: 1 }}>
-              <Box sx={{ display: 'grid' }}>
-                <LabelField
-                  clearIcon={Boolean(search)}
-                  onClickClearIcon={() => {
-                    setSearch('');
-                    setInputView('');
-                  }}
-                  title="Masukan nama siswa / kode siswa"
-                />
-                <TextField
-                  value={inputView}
-                  onChange={(i) => {
-                    inputChange(i.target.value);
-                    setInputView(i.target.value);
-                  }}
-                  size="small"
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: 1,
-                }}
-              >
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Box sx={{ display: 'grid', width: '100%' }}>
+                  <LabelField
+                    clearIcon={Boolean(search)}
+                    onClickClearIcon={() => {
+                      setSearch('');
+                      setInputView('');
+                    }}
+                    title="Masukan nama siswa / kode siswa"
+                  />
+                  <TextField
+                    value={inputView}
+                    onChange={(i) => {
+                      inputChange(i.target.value);
+                      setInputView(i.target.value);
+                    }}
+                    size="small"
+                    fullWidth
+                  />
+                </Box>
                 <Box>
                   <LabelField
                     clearIcon={Boolean(bill)}
@@ -375,6 +382,14 @@ function Pembayaran() {
                     <MenuItem value={'not_paid_yet'}>Belum Ada Tagihan</MenuItem>
                   </Select>
                 </Box>
+              </Box>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 1,
+                }}
+              >
                 <Box>
                   <LabelField
                     title="Sort Jurusan"
@@ -416,6 +431,31 @@ function Pembayaran() {
                     <MenuItem value={'10'}>10</MenuItem>
                     <MenuItem value={'11'}>11</MenuItem>
                     <MenuItem value={'12'}>12</MenuItem>
+                  </Select>
+                </Box>
+                <Box>
+                  <LabelField
+                    title="Sort Sub Kelas"
+                    onClickClearIcon={() => setSubKelasKelas('')}
+                    clearIcon={Boolean(subKelas)}
+                  />
+
+                  <Select
+                    sx={{
+                      minWidth: '100px',
+                    }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={subKelas}
+                    size="small"
+                    onChange={handleChangeSubKelas}
+                  >
+                    <MenuItem value={'1'}>1</MenuItem>
+                    <MenuItem value={'2'}>2</MenuItem>
+                    <MenuItem value={'3'}>3</MenuItem>
+                    <MenuItem value={'4'}>4</MenuItem>
+                    <MenuItem value={'5'}>5</MenuItem>
+                    <MenuItem value={'6'}>6</MenuItem>
                   </Select>
                 </Box>
                 <Box>

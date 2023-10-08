@@ -57,7 +57,7 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
             nama: data?.student?.nama,
             petugas: data?.staff?.nama,
             kode_tagihan: data?.student?.kode_siswa,
-            jurusan: data?.student?.jurusan?.nama,
+            jurusan: data?.student?.jurusan?.kode_jurusan,
             sub_kelas: data?.student?.sub_kelas,
             kelas: data?.student?.kelas,
           };

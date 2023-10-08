@@ -5,7 +5,7 @@ import useFetch from '../../hooks/useFetch';
 import { FormatCurrency } from '../../components/FormatCurrency';
 
 function AppStaffTU() {
-  const { items } = useFetch({
+  const { items, isLoading } = useFetch({
     module: 'dashboard-report',
   });
   return (
@@ -13,12 +13,12 @@ function AppStaffTU() {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={6}>
           <AppWidgetSummary
-            title={`Transaksi hari ini dari ${items?.today_profit?.total_student} siswa`}
-            total={FormatCurrency(items?.today_profit?.amount)}
+            title={`Transaksi hari ini dari ${isLoading ? 0 : items?.today_profit?.total_student} siswa`}
+            total={FormatCurrency(isLoading ? 0 : items?.today_profit?.amount)}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6}>
-          <AppWidgetSummary title="Total siswa" total={items?.total_student} color="error" />
+          <AppWidgetSummary title="Total siswa" total={isLoading ? 0 : items?.total_student} color="error" />
         </Grid>
       </Grid>
     </Box>
