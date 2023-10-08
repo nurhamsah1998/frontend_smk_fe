@@ -6,13 +6,20 @@ import getMonth from 'date-fns/getMonth';
 import getYear from 'date-fns/getYear';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import { jsPDF as JSPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import moment from 'moment';
+import { uid } from 'uid';
 
 import { LabelField } from '../../../components/Commons';
 import TableComponen from '../../../components/TableComponent';
 import useFetch from '../../../hooks/useFetch';
 import { apiUrl } from '../../../hooks/api';
+import { PROFILE } from '../../../hooks/useHelperContext';
+import { FormatCurrency } from '../../../components/FormatCurrency';
 
 function ReportTransaksi() {
+  const { itemsNoPagination } = React.useContext(PROFILE);
   const [limitView, setLimitView] = React.useState('40');
   const [startDate, setStartDate] = React.useState(null);
   const [kelas, setKelas] = React.useState('');
@@ -101,7 +108,22 @@ function ReportTransaksi() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const dataFIlePDF = React.useMemo(() => {
+    return items
+      ?.map((item) => ({
+        nama: item?.nama,
+        kelas: `${item?.kelas} ${item?.jurusan} ${item?.sub_kelas}`,
+        uang_diterima: FormatCurrency(item?.uang_diterima),
+        invoice: item?.invoice,
+        kode_pembayaran: item?.kode_pembayaran,
+      }))
+      ?.map((item) => {
+        return Object.values(item);
+      });
+  }, [items]);
+
   const handleDownloadFile = async (event) => {
+    setAnchorEl(null);
     if (event === 'xlsx') {
       await axios
         .get(
@@ -122,6 +144,85 @@ function ReportTransaksi() {
           console.log(error);
         })
         .finally(() => {});
+    } else {
+      const img = new Image();
+      img.src = '/assets/logo_pgri.png';
+      const doc = new JSPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+      });
+      autoTable(doc, {
+        html: '#my-table',
+        margin: { top: 70 },
+      });
+      doc.addImage(img, 'jpg', 10, 5, 30, 30);
+      /// https://stackoverflow.com/a/64022128/18038473
+      doc.setFontSize(14);
+      doc.setFont('', '', 700);
+      doc.text('YAYASAN PEMBINA LEMBAGA PENDIDIKAN', doc.internal.pageSize.width / 1.7, 15, { align: 'center' });
+      doc.text('PERSATUAN GURU REPUBLIK INDONESIA (YPLP PGRI) KEDIRI', doc.internal.pageSize.width / 1.7, 22, {
+        align: 'center',
+      });
+      doc.text('SEKOLAH MENENGAH KEJURUAN PGRI KRAS KEDIRI', doc.internal.pageSize.width / 1.7, 29, {
+        align: 'center',
+      });
+      doc.setFontSize(12);
+      doc.setFont('', '', '', '');
+      doc.text('Jalan Raya Desa Kras Kec. Kras Kab. Kediri', doc.internal.pageSize.width / 1.7, 38, {
+        align: 'center',
+      });
+      doc.text('Telp. 0354-479487 e-mail: smk_pgri_kras007@yahoo.co.id', doc.internal.pageSize.width / 1.7, 43, {
+        align: 'center',
+      });
+      /// https://stackoverflow.com/a/53360710/18038473
+      doc.setLineWidth(1.0);
+      doc.line(10, 50, 201, 50, 'FD');
+      doc.setLineWidth(0);
+      doc.line(10, 51, 201, 51, 'FD');
+      doc.setFontSize(14);
+      doc.setFont('', '', 700);
+      doc.text(`Laporan Transaksi`, 10, 60, {
+        align: 'left',
+      });
+      doc.setFont('', '', '');
+      doc.setFontSize(12);
+      const isSingleFilterDate = moment(startDate).format('Do MMMM YYYY') === moment(endDate).format('Do MMMM YYYY');
+      if (Boolean(endDate))
+        doc.text(
+          `Transaksi dari : ${
+            Boolean(isSingleFilterDate)
+              ? moment(startDate).format('Do MMMM YYYY')
+              : `${moment(startDate).format('Do MMMM YYYY')} - ${moment(endDate).format('Do MMMM YYYY')}`
+          }`,
+          doc.internal.pageSize.width - 10,
+          60,
+          {
+            align: 'right',
+          }
+        );
+
+      doc.setFontSize(10);
+      doc.setFont('', '', '');
+      doc.text(itemsNoPagination?.role?.toUpperCase(), 10, 65, {
+        align: 'left',
+      });
+      doc.setFontSize(10);
+      doc.text(`Kode download : TGH/CODE-${uid(7).toUpperCase()}/${itemsNoPagination?.nama?.toUpperCase()}`, 10, 69, {
+        align: 'left',
+      });
+      doc.text(`Tanggal dibuat : ${moment().format('MMMM Do YYYY')}`, 10, 73, {
+        align: 'left',
+      });
+      autoTable(doc, {
+        margin: { horizontal: 10 },
+        head: [tableHead?.map((item) => item?.label)],
+        body: dataFIlePDF,
+      });
+      doc.text(`SMK PGRI KRAS`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 7, {
+        align: 'center',
+      });
+      window.open(URL.createObjectURL(doc.output('blob')));
     }
   };
   return (
