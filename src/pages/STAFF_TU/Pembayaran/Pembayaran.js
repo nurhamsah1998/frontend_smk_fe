@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Box, Button, Menu, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, FormHelperText, Menu, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { debounce } from 'lodash';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -9,6 +9,10 @@ import autoTable from 'jspdf-autotable';
 import axios from 'axios';
 import moment from 'moment';
 import { uid } from 'uid';
+import DatePicker from 'react-datepicker';
+import getMonth from 'date-fns/getMonth';
+import getYear from 'date-fns/getYear';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
@@ -19,6 +23,7 @@ import StudentDetail from './Modal/StudentDetail';
 import { apiUrl } from '../../../hooks/api';
 import { FormatCurrency } from '../../../components/FormatCurrency';
 import { PROFILE } from '../../../hooks/useHelperContext';
+import ScreenDialog from '../../../components/ScreenDialog';
 
 function Pembayaran() {
   const { itemsNoPagination } = React.useContext(PROFILE);
@@ -32,6 +37,8 @@ function Pembayaran() {
   const [limitView, setLimitView] = useState('40');
   const [jurusan, setJurusan] = useState('');
   const [jurusanId, setJurusanId] = React.useState('');
+  const [startUjian, setStartUjian] = React.useState('');
+  const [expiredDate, setExpiredDate] = React.useState('');
   const { items, totalPage, setPage, search, totalData, totalRows, setSearch, page, isLoading, setLimit, limit } =
     useFetch({
       module: `siswa`,
@@ -141,7 +148,7 @@ function Pembayaran() {
         return Object.values(item);
       });
   }, [items]);
-  const pdfSuratTagihan = (doc) => {
+  const pdfSuratTagihan = (doc, data) => {
     const img = new Image();
     img.src = '/assets/logo_pgri.png';
     autoTable(doc, {
@@ -172,7 +179,174 @@ function Pembayaran() {
     doc.line(10, 50, 201, 50, 'FD');
     doc.setLineWidth(0);
     doc.line(10, 51, 201, 51, 'FD');
-    // doc.addPage();
+    doc.text(`Kepada : `, doc.internal.pageSize.width - 90, 59, {
+      align: 'left',
+    });
+    doc.setFont('', '', 700);
+    doc.text(data?.nama?.toUpperCase(), doc.internal.pageSize.width / 1.31, 69 + 2, {
+      align: 'center',
+    });
+    doc.setFont('', '', '', '');
+    doc.setFontSize(10);
+    doc.text(
+      `${data?.kelas} / ${data?.['jurusan.nama']} / ${data?.sub_kelas}`,
+      doc.internal.pageSize.width / 1.31,
+      73 + 2,
+      {
+        align: 'center',
+      }
+    );
+    doc.setFont('', '', 700);
+    doc.text(`${data?.kode_siswa}`, doc.internal.pageSize.width / 1.31, 77 + 2, {
+      align: 'center',
+    });
+
+    doc.roundedRect(doc.internal.pageSize.width - 90, 62, 80, 25, 5, 5);
+    doc.setFontSize(15);
+
+    doc.text(`SURAT PENAGIHAN`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height / 3 + 10, {
+      align: 'center',
+    });
+    doc.setFontSize(8);
+    doc.setFont('', '', '', '');
+    doc.text(
+      `TAHUN PELAJARAN ${moment().add(-1, 'year').format('YYYY')} / ${moment().format('YYYY')}`,
+      doc.internal.pageSize.width / 2,
+      doc.internal.pageSize.height / 3 + 14,
+      {
+        align: 'center',
+      }
+    );
+    doc.setFontSize(12);
+    doc.text(`YTH. Orang tua/wali,`, 10, doc.internal.pageSize.height / 3 + 34, {
+      align: 'left',
+    });
+    doc.text(
+      `Berkaitan dengan akan datangnya hari ujian sekolah, kami selaku staff pihak sekolahan memberitahukan bahwa `,
+      10,
+      doc.internal.pageSize.height / 3 + 45,
+      {
+        align: 'left',
+      }
+    );
+    doc.text(
+      `semua tagihan  siswa yang belum lunas harus  segera dilunasi sebelum memasuki hari ujian sekolah yang akan`,
+      10,
+      doc.internal.pageSize.height / 3 + 50,
+      {
+        align: 'left',
+      }
+    );
+    doc.text(
+      `diselenggarakan pada tanggal ${moment(startUjian).format('Do MMMM YYYY')}.`,
+      10,
+      doc.internal.pageSize.height / 3 + 55,
+      {
+        align: 'left',
+      }
+    );
+    doc.text(
+      `Berikut total tagihan ananda ${data?.nama} tahun ajaran ${moment()
+        .add(-1, 'year')
+        .format('YYYY')} / ${moment().format('YYYY')}`,
+      10,
+      doc.internal.pageSize.height / 3 + 60,
+      {
+        align: 'left',
+      }
+    );
+    const lenghtAmountText = `sebesar : `;
+    doc.text(lenghtAmountText, 10, doc.internal.pageSize.height / 3 + 65, {
+      align: 'left',
+    });
+    doc.setFont('', '', 700);
+    doc.text(
+      `${FormatCurrency(data?.current_bill || 0)}`,
+      10 + lenghtAmountText?.length + 6,
+      doc.internal.pageSize.height / 3 + 65,
+      {
+        align: 'left',
+      }
+    );
+    doc.setFont('', '', '');
+    doc.text(
+      `Surat tagihan ini kami maksutkan agar orang tua/wali siswa bisa melunasi tagihan sebelum datangnya hari ujian.`,
+      10,
+      doc.internal.pageSize.height / 3 + 75,
+      {
+        align: 'left',
+      }
+    );
+    doc.text(
+      `Siswa harus melakukan pembayaran sebelum  jatuh tempo pada tanggal ${moment(expiredDate).format(
+        'Do MMMM YYYY'
+      )}.`,
+      10,
+      doc.internal.pageSize.height / 3 + 80,
+      {
+        align: 'left',
+      }
+    );
+    doc.text(
+      `kecuali jika dirasa tagihan ini memberatkan,  orang tua/wali siswa bisa datang langsung ke sekolah untuk`,
+      10,
+      doc.internal.pageSize.height / 3 + 90,
+      {
+        align: 'left',
+      }
+    );
+    doc.text(
+      `mediasi batas waktu pembayaran yang ditentukan. Sekian surat tagihan ini kami buat, jika dirasa ada yang salah`,
+      10,
+      doc.internal.pageSize.height / 3 + 95,
+      {
+        align: 'left',
+      }
+    );
+    doc.text(
+      `dalam penulisan surat tagihan ini kami meminta maaf sebesar-besarnya.`,
+      10,
+      doc.internal.pageSize.height / 3 + 100,
+      {
+        align: 'left',
+      }
+    );
+    doc.text(
+      `Kediri, ${moment().format('Do MMMM YYYY')}`,
+      doc.internal.pageSize.width - 90 / 2,
+      doc.internal.pageSize.height / 3 + 130,
+      {
+        align: 'center',
+      }
+    );
+    doc.text(
+      `${itemsNoPagination?.nama} (Petugas TU)`,
+      doc.internal.pageSize.width - 90 / 2,
+      doc.internal.pageSize.height / 3 + 150,
+      {
+        align: 'center',
+      }
+    );
+    doc.setFont('', 'italic');
+    doc.text(
+      `Surat tagihan ini dicetak secara otomatis menggunakan sistem aplikasi sekolah.`,
+      doc.internal.pageSize.width / 2,
+      doc.internal.pageSize.height - 20,
+      {
+        align: 'center',
+      }
+    );
+    doc.text(
+      `Jika dirasa ada yang tidak sesuai berkaitan dengan nominal tagihan dll, bisa lapor ke petugas.`,
+      doc.internal.pageSize.width / 2,
+      doc.internal.pageSize.height - 15,
+      {
+        align: 'center',
+      }
+    );
+    doc.text(`Terimakasih`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, {
+      align: 'center',
+    });
   };
   const handlePrintTagihan = (i) => {
     const doc = new JSPDF({
@@ -180,7 +354,7 @@ function Pembayaran() {
       unit: 'mm',
       format: 'a4',
     });
-    pdfSuratTagihan(doc);
+    pdfSuratTagihan(doc, i);
     window.open(URL.createObjectURL(doc.output('blob')));
   };
   const handleChangeStatusTagihan = (i) => {
@@ -197,6 +371,7 @@ function Pembayaran() {
   const inputChange = useMemo(() => handleChangeDebounce, []);
   const inputChangeLimit = useMemo(() => handleChangeDebounceLimit, []);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openModalInputDate, setOpenModalInputDate] = React.useState({ isBulk: false, openModal: false, data });
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -300,6 +475,20 @@ function Pembayaran() {
       window.open(URL.createObjectURL(doc.output('blob')));
     }
   };
+  const handlePrintMassalTagihan = () => {
+    const doc = new JSPDF({
+      orientation: 'p',
+      unit: 'mm',
+      format: 'a4',
+    });
+    for (let index = 0; index < items.length; index += 1) {
+      pdfSuratTagihan(doc, items[index]);
+      if (index < items?.length - 1) {
+        doc.addPage();
+      }
+    }
+    window.open(URL.createObjectURL(doc.output('blob')));
+  };
   return (
     <Box>
       <StudentDetail
@@ -307,10 +496,58 @@ function Pembayaran() {
         itemStudent={modalDetailStudent?.data}
         setModalDetailStudent={setModalDetailStudent}
       />
+      <ScreenDialog
+        disabledOverflow
+        title="Masukkan tanggal hari ujian dan jatuh tempo"
+        labelClose="Batal"
+        labelSubmit="Generate"
+        open={openModalInputDate.openModal}
+        handleClose={() => {
+          setOpenModalInputDate((prev) => ({ ...prev, openModal: false }));
+          setExpiredDate('');
+          setStartUjian('');
+        }}
+        handleSubmit={
+          openModalInputDate.isBulk ? handlePrintMassalTagihan : () => handlePrintTagihan(openModalInputDate.data)
+        }
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Box>
+            <FormHelperText>Masukan tanggal ujian</FormHelperText>
+            <DatePicker
+              customInput={
+                <TextField
+                  size="small"
+                  sx={{
+                    mt: 1,
+                    mb: 3,
+                  }}
+                />
+              }
+              selected={startUjian}
+              onChange={(date) => setStartUjian(date)}
+            />
 
+            <FormHelperText>Masukan tanggal jatuh tempo pembayaran</FormHelperText>
+            <DatePicker
+              customInput={
+                <TextField
+                  size="small"
+                  sx={{
+                    mt: 1,
+                    mb: 3,
+                  }}
+                />
+              }
+              selected={expiredDate}
+              onChange={(date) => setExpiredDate(date)}
+            />
+          </Box>
+        </Box>
+      </ScreenDialog>
       <Box sx={{ display: location.pathname?.includes('/detail-tagihan') ? 'none' : 'grid' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2 }}>
-          <Box>
+          <Box sx={{ display: 'flex', gap: 1 }}>
             <Box>
               <Button
                 variant="contained"
@@ -335,6 +572,15 @@ function Pembayaran() {
                 <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
               </Menu>
             </Box>
+            {Boolean(bill === 'not_paid') && Boolean(jurusan) && Boolean(kelas) && Boolean(subKelas) && (
+              <Button
+                onClick={() => setOpenModalInputDate((prev) => ({ isBulk: true, openModal: true }))}
+                color="warning"
+                variant="contained"
+              >
+                Print Tagihan Massal
+              </Button>
+            )}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Box sx={{ display: 'grid', gap: 1 }}>
@@ -502,7 +748,7 @@ function Pembayaran() {
             page={page}
             handleSeeBill={handleSeeBill}
             handleCustomOnClickRow={handleCustomOnClickRow}
-            handlePrint={handlePrintTagihan}
+            handlePrint={(i) => setOpenModalInputDate((prev) => ({ isBulk: false, openModal: true, data: i }))}
             tooltipHandlePrint="Print Surat Tagihan"
             tooltipCustom="Detail Siswa"
             tableBody={itemsRebuild}
