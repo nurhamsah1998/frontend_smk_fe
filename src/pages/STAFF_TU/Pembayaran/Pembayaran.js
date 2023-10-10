@@ -497,7 +497,6 @@ function Pembayaran() {
         setModalDetailStudent={setModalDetailStudent}
       />
       <ScreenDialog
-        disabledOverflow
         title="Masukkan tanggal hari ujian dan jatuh tempo"
         labelClose="Batal"
         labelSubmit="Generate"

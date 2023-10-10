@@ -24,7 +24,6 @@ export default function ScreenDialog({
   disabledSubmitButton,
   labelTopBtn,
   handleTopBtn,
-  disabledOverflow = false,
 }) {
   const navigate = useNavigate();
 
@@ -38,7 +37,10 @@ export default function ScreenDialog({
         sx={{
           '& .css-4ygzoj-MuiPaper-root-MuiDialog-paper': {
             maxWidth: '777px',
-            overflowY: disabledOverflow ? 'unset' : 'auto',
+            overflowY: 'unset !important',
+          },
+          '& .css-1yenlpl': {
+            overflowY: 'unset !important',
           },
         }}
         open={open}

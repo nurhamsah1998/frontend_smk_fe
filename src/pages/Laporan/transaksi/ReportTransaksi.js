@@ -25,6 +25,7 @@ function ReportTransaksi() {
   const [kelas, setKelas] = React.useState('');
   const [subKelas, setSubKelasKelas] = React.useState('');
   const [jurusan, setJurusan] = React.useState('');
+  const [jurusanFullName, setJurusanFullName] = React.useState('');
   const [typeFile, setTypeFile] = React.useState('');
   const [endDate, setEndDate] = React.useState(null);
 
@@ -204,7 +205,7 @@ function ReportTransaksi() {
         );
       if (Boolean(kelas) && Boolean(jurusan) && Boolean(subKelas))
         doc.text(
-          `Kelas: ${kelas} ${jurusan} ${subKelas}`,
+          `Kelas: ${kelas} ${jurusanFullName} ${subKelas}`,
           doc.internal.pageSize.width - 10,
           !Boolean(endDate) ? 60 : 65,
           {
@@ -288,7 +289,14 @@ function ReportTransaksi() {
                 onChange={handleChangesJurusan}
               >
                 {data?.data?.map((item, index) => (
-                  <MenuItem key={index} onClick={() => setJurusan(item?.kode_jurusan)} value={item?.kode_jurusan}>
+                  <MenuItem
+                    key={index}
+                    onClick={() => {
+                      setJurusan(item?.kode_jurusan);
+                      setJurusanFullName(item?.nama);
+                    }}
+                    value={item?.kode_jurusan}
+                  >
                     {item?.nama}
                   </MenuItem>
                 ))}
