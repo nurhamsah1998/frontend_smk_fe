@@ -1,7 +1,20 @@
 import React from 'react';
-import { Box, Button, Typography, Tab, Tabs, TextField, FormHelperText, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  Tab,
+  Tabs,
+  TextField,
+  FormHelperText,
+  CircularProgress,
+  Paper,
+  IconButton,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
@@ -38,17 +51,23 @@ function a11yProps(index) {
 }
 export default function TagihanStaff() {
   const { setDialog } = React.useContext(Dialog);
-  const { itemsNoPagination, isLoading } = useFetch({
-    module: 'tagihan-permanent',
+  const { data, isLoading, setPage, page, totalPage } = useFetch({
+    module: `tagihan-permanent`,
+    initialLimit: 3,
   });
+  const itemsNoPagination = React.useMemo(() => data?.data?.data, [data, page]);
   const mutation = useMutationPatch({
     module: 'tagihan-permanent',
   });
 
   const [value, setValue] = React.useState(0);
+  console.log(itemsNoPagination);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  React.useEffect(() => {
+    console.log('jahit');
+  }, []);
   const dataTextField = itemsNoPagination?.map((x) => {
     delete x?.updatedAt;
     delete x?.createdAt;
@@ -70,25 +89,69 @@ export default function TagihanStaff() {
         </Box>
       ) : (
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs
-              variant="scrollable"
-              scrollButtons="auto"
-              value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-            >
-              {itemsNoPagination?.map((item, index) => (
-                <Tab key={index} label={item?.tahun_angkatan} {...a11yProps(index)} />
-              ))}
-            </Tabs>
-          </Box>
-          <Box>
-            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+          <Paper
+            elevation={3}
+            sx={{
+              borderBottom: 1,
+              borderColor: 'divider',
+              position: 'fixed',
+              top: { xs: 64, sm: 64, md: 64, lg: 92 },
+              right: 0,
+              left: { xs: 0, sm: 0, md: 280, lg: 280 },
+              px: 3,
+              pb: '12px',
+              bgcolor: '#f8fafb',
+              zIndex: 1,
+            }}
+          >
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <IconButton
+                disabled={page === 1}
+                onClick={() =>
+                  setPage((prev) => {
+                    return prev - 1;
+                  })
+                }
+              >
+                <NavigateBeforeIcon />
+              </IconButton>
+              <Tabs
+                variant="scrollable"
+                scrollButtons="auto"
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs example"
+              >
+                {itemsNoPagination?.map((item, index) => (
+                  <Tab key={index} label={item?.tahun_angkatan} {...a11yProps(index)} />
+                ))}
+              </Tabs>
+              <IconButton
+                disabled={totalPage === page}
+                onClick={() =>
+                  setPage((prev) => {
+                    return prev + 1;
+                  })
+                }
+              >
+                <NavigateNextIcon />
+              </IconButton>
+            </Box>
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                {/* <Button variant="contained" onClick={handleSave}>
+                  Simpan perubahan
+                </Button> */}
+                <Button color="warning" variant="contained" onClick={handleSave}>
+                  Tambah tahun ajaran
+                </Button>
+              </Box>
               <Button variant="contained" onClick={handleSave}>
                 Simpan perubahan
               </Button>
             </Box>
+          </Paper>
+          <Box sx={{ mt: { xs: '80px', sm: '80px', md: '80px', lg: '100px' } }}>
             <Formik
               initialValues={itemsNoPagination[value]}
               innerRef={formRef}
