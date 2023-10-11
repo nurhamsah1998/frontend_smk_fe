@@ -2,9 +2,11 @@ import React from 'react';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import { useReactToPrint } from 'react-to-print';
 import moment from 'moment';
+import { jsPDF as JSPDF } from 'jspdf';
 
 import ScreenDialog from '../../../../components/ScreenDialog';
 import { FormatCurrency } from '../../../../components/FormatCurrency';
+import { KopPdf } from '../../../Laporan/transaksi/ReportTransaksi';
 
 export const PrintTemplateInvoice = ({ data, printRef, width = '100%' }) => {
   return (
@@ -101,11 +103,88 @@ function ModalSuccessPayment({ open, handleClose, data }) {
   const print = useReactToPrint({
     content: () => printRef.current,
   });
+
+  const handleDownloadPdf = () => {
+    const doc = new JSPDF({
+      orientation: 'p',
+      unit: 'mm',
+      format: 'a4',
+    });
+    KopPdf(doc);
+    const globalPosition = 10;
+    doc.setFontSize(14);
+    doc.setFont('', '', 700);
+    doc.text(`Nota Pembayaran`, 10, 69 - globalPosition, {
+      align: 'left',
+    });
+    doc.setFontSize(12);
+    doc.setFont('', '', '');
+    doc.text(`Note : ${data?.note || '-'}`, 10, 74 - globalPosition, {
+      align: 'left',
+    });
+    doc.setFont('', '', '');
+    ///
+    doc.text(`Nama : ${data?.nama?.toUpperCase()}`, 10, 84 - globalPosition, {
+      align: 'left',
+    });
+    doc.text(
+      `Kelas :${data?.kelas} ${data?.jurusan} ${data?.sub_kelas}/${data?.tahun_angkatan}`,
+      10,
+      89 - globalPosition,
+      {
+        align: 'left',
+      }
+    );
+    doc.text(`No. Invoice : ${data?.invoice}`, 10, 94 - globalPosition, {
+      align: 'left',
+    });
+    /// right section
+    doc.text(`Pembayaran : ${data?.kode_pembayaran}`, doc.internal.pageSize.width - 10, 84 - globalPosition, {
+      align: 'right',
+    });
+    doc.text(
+      `Nominal : ${FormatCurrency(data?.uang_diterima)}`,
+      doc.internal.pageSize.width - 10,
+      89 - globalPosition,
+      {
+        align: 'right',
+      }
+    );
+    doc.text(
+      `Tanggal dibuat : ${moment(data?.createdAt).format('Do MMMM YYYY')}`,
+      doc.internal.pageSize.width - 10,
+      94 - globalPosition,
+      {
+        align: 'right',
+      }
+    );
+    doc.text(
+      `Kediri, ${moment().format('Do MMMM YYYY')}`,
+      doc.internal.pageSize.width - 90 / 2,
+      doc.internal.pageSize.height - 310 + 130,
+      {
+        align: 'center',
+      }
+    );
+    doc.text(
+      `${data?.petugas} (Petugas TU)`,
+      doc.internal.pageSize.width - 90 / 2,
+      doc.internal.pageSize.height - 310 + 150,
+      {
+        align: 'center',
+      }
+    );
+    doc.save(
+      `invoice_pembayaran_siswa_${data?.nama}-${data?.kelas}-${data?.jurusan}-${data?.sub_kelas}-${data?.tahun_angkatan}.pdf`
+    );
+  };
   const HandlePrint = () => {
     print();
+    handleDownloadPdf();
   };
   return (
     <ScreenDialog
+      disabledSubmitButton
       labelClose="Tutup"
       type="success"
       title="Pembayaran berhasil"
@@ -173,9 +252,9 @@ function ModalSuccessPayment({ open, handleClose, data }) {
           gap: '10px',
         }}
       >
-        <Button variant="contained" color="warning">
+        {/* <Button onClick={handleDownloadPdf} variant="contained" color="warning">
           Download PDF
-        </Button>
+        </Button> */}
         <Button onClick={HandlePrint} variant="outlined" color="success">
           Print Invoice
         </Button>

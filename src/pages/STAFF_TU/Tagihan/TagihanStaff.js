@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography, Tab, Tabs, TextField, FormHelperText } from '@mui/material';
+import { Box, Button, Typography, Tab, Tabs, TextField, FormHelperText, CircularProgress } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 
@@ -62,8 +62,11 @@ export default function TagihanStaff() {
   return (
     <Box>
       {isLoading ? (
-        <Box>
-          <Typography textAlign="center">Memuat</Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'calc(100vh - 200px)' }}>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <CircularProgress />
+            <Typography>Memuat</Typography>
+          </Box>
         </Box>
       ) : (
         <Box sx={{ width: '100%' }}>

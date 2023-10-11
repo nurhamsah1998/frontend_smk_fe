@@ -31,6 +31,9 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
     { label: 'Kunjungan industri', value: 'kunjungan_industri' },
     { label: 'Jobsheet', value: 'jobsheet' },
     { label: 'Pengembangan', value: 'pengembangan' },
+    { label: 'Ujian akhir kelas', value: 'ujian_akhir_kelas' },
+    { label: 'Pas smt', value: 'pas_smt' },
+    { label: 'Pts smt', value: 'pts_smt' },
   ];
   return (
     <>

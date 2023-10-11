@@ -44,6 +44,18 @@ export const navConfigTU = [
     icon: <LogoutIcon />,
   },
 ];
+export const navConfigDEV = [
+  {
+    title: 'Dashboard',
+    path: '/dev/dashboard',
+    icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Log Activity',
+    path: '/dev/log-activity',
+    icon: <RequestQuoteIcon />,
+  },
+];
 export const navConfigPPDB = [
   {
     title: 'Dashboard',

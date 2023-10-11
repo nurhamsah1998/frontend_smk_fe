@@ -18,11 +18,23 @@ import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
 import DaftarSiswa from './pages/STAFF_PPDB/DaftarSIswa/DaftarSiswa';
 import DetailTagihan from './pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan';
 import ReportTransaksi from './pages/Laporan/transaksi/ReportTransaksi';
+import DashboardLayoutDEV from './layouts/DEV/DashboardLayoutDEV';
+import LogActivity from './pages/DEV/Log/LogActivity';
+import DashboardDev from './pages/DEV/Dashboard/Dashboard';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
   const routes = useRoutes([
+    {
+      path: '/dev',
+      element: <DashboardLayoutDEV />,
+      children: [
+        { element: <Navigate to="/dev/dashboard" />, index: true },
+        { path: 'dashboard', element: <DashboardDev /> },
+        { path: 'log-activity', element: <LogActivity /> },
+      ],
+    },
     {
       path: '/staff-tu',
       element: <DashboardLayoutStaff />,
@@ -53,6 +65,7 @@ export default function Router() {
         { path: 'tagihan', element: <TagihanSiswa /> },
       ],
     },
+
     {
       path: 'siswa-login',
       element: <LoginStudentPage />,

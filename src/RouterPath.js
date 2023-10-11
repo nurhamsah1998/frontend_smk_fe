@@ -13,6 +13,10 @@ function RouterPath() {
       const token = jwtDecode(localToken || '');
       const traficRole = [
         {
+          role: 'DEV',
+          path: '/dev/dashboard',
+        },
+        {
           role: 'ADMINISTRASI',
           path: '/staff-tu/dashboard',
         },

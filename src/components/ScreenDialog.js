@@ -51,6 +51,7 @@ export default function ScreenDialog({
             sx={{
               bgcolor: type?.includes('error') ? red[500] : type?.includes('success') ? green[500] : '#fff',
               color: Boolean(type) ? '#fff' : '#000',
+              width: '100%',
             }}
             id="scroll-dialog-title"
           >

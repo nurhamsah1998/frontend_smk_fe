@@ -11,8 +11,12 @@ function useLogin({ module }) {
   const { enqueueSnackbar } = useSnackbar();
   const traficRole = [
     {
+      role: 'DEV',
+      path: '/dev/dashboard',
+    },
+    {
       role: 'ADMINISTRASI',
-      path: '/staff-tu/tagihan',
+      path: '/staff-tu/dashboard',
     },
     {
       role: 'GURU',
@@ -38,6 +42,7 @@ function useLogin({ module }) {
           const token = jwt_decode(window.localStorage.getItem('accessToken'));
           if (token) {
             const findRole = traficRole?.find((i) => i.role === token.roleStaff);
+
             navigate(findRole.path);
           }
         })
