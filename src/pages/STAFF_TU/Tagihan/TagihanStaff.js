@@ -61,13 +61,9 @@ export default function TagihanStaff() {
   });
 
   const [value, setValue] = React.useState(0);
-  console.log(itemsNoPagination);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  React.useEffect(() => {
-    console.log('jahit');
-  }, []);
   const dataTextField = itemsNoPagination?.map((x) => {
     delete x?.updatedAt;
     delete x?.createdAt;
@@ -142,7 +138,7 @@ export default function TagihanStaff() {
                 {/* <Button variant="contained" onClick={handleSave}>
                   Simpan perubahan
                 </Button> */}
-                <Button color="warning" variant="contained" onClick={handleSave}>
+                <Button color="warning" variant="contained" disabled>
                   Tambah tahun ajaran
                 </Button>
               </Box>
@@ -179,6 +175,7 @@ export default function TagihanStaff() {
                           name: keyItemChange[indexChanged],
                           from: itemsNoPagination[value][keyItemChange[indexChanged]],
                           to: values[keyItemChange[indexChanged]],
+                          tahun_angkatan: values?.tahun_angkatan,
                         });
                       }
                     }
