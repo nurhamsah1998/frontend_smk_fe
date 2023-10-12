@@ -46,7 +46,15 @@ export default function ScreenDialog({
         open={open}
         scroll="paper"
       >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            position: 'relative',
+          }}
+        >
           <DialogTitle
             sx={{
               bgcolor: type?.includes('error') ? red[500] : type?.includes('success') ? green[500] : '#fff',
@@ -58,7 +66,12 @@ export default function ScreenDialog({
             {title}
           </DialogTitle>
           {labelTopBtn && (
-            <Button onClick={handleTopBtn} sx={{ mr: 1 }} variant="contained" color="success">
+            <Button
+              onClick={handleTopBtn}
+              sx={{ mr: 1, position: 'absolute', right: 0 }}
+              variant="contained"
+              color="secondary"
+            >
               Edit
             </Button>
           )}

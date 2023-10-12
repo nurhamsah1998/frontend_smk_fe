@@ -41,7 +41,7 @@ export default function NavSection({ data = [], ...other }) {
                 onClick={handleLogOut}
                 color="error"
                 startIcon={item.icon}
-                variant="contained"
+                variant="outlined"
                 sx={{ mt: 5 }}
                 fullWidth
               >
@@ -71,13 +71,13 @@ function NavItem({ item }) {
       to={path}
       sx={{
         '&.active': {
-          color: 'text.primary',
-          bgcolor: 'action.selected',
+          color: '#2ea9b8',
+          bgcolor: '#2ea9b81f',
           fontWeight: 'fontWeightBold',
         },
       }}
     >
-      <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
+      <StyledNavItemIcon sx={{ color: '#2ea9b8' }}>{icon && icon}</StyledNavItemIcon>
 
       <ListItemText disableTypography primary={title} />
 

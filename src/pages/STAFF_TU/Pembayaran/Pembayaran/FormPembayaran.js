@@ -2,6 +2,8 @@ import React from 'react';
 import { Formik, Form } from 'formik';
 import { Box, Autocomplete, TextField, Button } from '@mui/material';
 import axios from 'axios';
+import PaymentsIcon from '@mui/icons-material/Payments';
+
 import TextFieldNumberFormat from '../../../../components/TextFieldNumberFormat';
 import formatNumberChange from '../../../../components/formatNumberChange';
 import useMutationPatch from '../../../../hooks/useMutationPatch';
@@ -119,6 +121,7 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
                   disabled={values?.uang_diterima <= 1000 || !Boolean(values?.kode_pembayaran)}
                   type="submit"
                   variant="contained"
+                  startIcon={<PaymentsIcon />}
                 >
                   Bayar
                 </Button>

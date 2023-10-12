@@ -9,6 +9,7 @@ import axios from 'axios';
 import { jsPDF as JSPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import moment from 'moment';
+import DownloadIcon from '@mui/icons-material/Download';
 import { uid } from 'uid';
 
 import { LabelField } from '../../../components/Commons';
@@ -18,6 +19,20 @@ import { apiUrl } from '../../../hooks/api';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import { FormatCurrency } from '../../../components/FormatCurrency';
 
+export const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 export const KopPdf = (doc) => {
   const img = new Image();
   img.src = '/assets/logo_pgri.png';
@@ -58,20 +73,7 @@ function ReportTransaksi() {
   const [endDate, setEndDate] = React.useState(null);
 
   const years = range(2000, getYear(new Date()) + 1, 1);
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+
   const { data } = useFetch({
     module: 'jurusan',
   });
@@ -249,6 +251,7 @@ function ReportTransaksi() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 3, gap: 1 }}>
         <Box>
           <Button
+            startIcon={<DownloadIcon />}
             variant="contained"
             id="basic-button"
             aria-controls={open ? 'basic-menu' : undefined}
@@ -451,7 +454,7 @@ function ReportTransaksi() {
         </Box>
       </Box>
       <TableComponen
-        colorHead="blue"
+        colorHead="cyan"
         count={totalPage}
         pageOnchange={(x, y) => {
           setPage(y);

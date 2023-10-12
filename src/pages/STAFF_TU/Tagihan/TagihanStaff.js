@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import SaveIcon from '@mui/icons-material/Save';
 
 import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
@@ -142,7 +143,7 @@ export default function TagihanStaff() {
                   Tambah tahun ajaran
                 </Button>
               </Box>
-              <Button variant="contained" onClick={handleSave}>
+              <Button startIcon={<SaveIcon />} variant="contained" onClick={handleSave}>
                 Simpan perubahan
               </Button>
             </Box>

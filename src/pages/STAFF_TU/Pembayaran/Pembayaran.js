@@ -10,9 +10,9 @@ import axios from 'axios';
 import moment from 'moment';
 import { uid } from 'uid';
 import DatePicker from 'react-datepicker';
-import getMonth from 'date-fns/getMonth';
-import getYear from 'date-fns/getYear';
+import { orange, purple, red } from '@mui/material/colors';
 import 'react-datepicker/dist/react-datepicker.css';
+import DownloadIcon from '@mui/icons-material/Download';
 
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
@@ -504,6 +504,7 @@ function Pembayaran() {
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Box>
               <Button
+                startIcon={<DownloadIcon />}
                 variant="contained"
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
@@ -692,9 +693,9 @@ function Pembayaran() {
         <Box>
           <TableComponen
             hideOption
-            customIcon={<AccountBoxIcon />}
-            customIconSecondary={<LocalPrintshopIcon />}
-            colorHead="blue"
+            customIcon={<AccountBoxIcon sx={{ color: red[500] }} />}
+            customIconSecondary={<LocalPrintshopIcon sx={{ color: purple[500] }} />}
+            colorHead="cyan"
             count={totalPage}
             pageOnchange={(x, y) => {
               setPage(y);

@@ -1,4 +1,5 @@
 // component
+import PaymentIcon from '@mui/icons-material/Payment';
 import SvgColor from '../../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -14,7 +15,7 @@ const navConfig = [
   {
     title: 'tagihan',
     path: '/siswa/tagihan',
-    icon: icon('ic_analytics'),
+    icon: <PaymentIcon />,
   },
 ];
 

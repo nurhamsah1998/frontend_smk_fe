@@ -86,7 +86,7 @@ function TableComponen({
     },
     {
       variant: 'cyan',
-      color: cyan[600],
+      color: '#2ea9b8',
     },
     {
       variant: 'purple',
@@ -261,7 +261,7 @@ function TableComponen({
                           <Box>
                             <IconButton onClick={(event) => handleClickAccount(event, body, bodyIndex)}>
                               <Tooltip arrow title={'Status akun'}>
-                                <AccountBoxIcon />
+                                <AccountBoxIcon sx={{ color: red[500] }} />
                               </Tooltip>
                             </IconButton>
 

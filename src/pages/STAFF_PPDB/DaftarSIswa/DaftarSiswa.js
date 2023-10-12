@@ -4,6 +4,8 @@ import React from 'react';
 import { debounce } from 'lodash';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { orange } from '@mui/material/colors';
+import AddIcon from '@mui/icons-material/Add';
+import ImportExportIcon from '@mui/icons-material/ImportExport';
 
 import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
@@ -258,12 +260,12 @@ function Pendaftar() {
           }}
         >
           <Box>
-            <Button variant="contained" onClick={() => setOpenModalCreate(true)}>
+            <Button startIcon={<AddIcon />} variant="contained" onClick={() => setOpenModalCreate(true)}>
               Tambah
             </Button>
           </Box>
           <Box>
-            <Button variant="outlined" onClick={() => setOpenModalCreateImport(true)}>
+            <Button startIcon={<ImportExportIcon />} variant="outlined" onClick={() => setOpenModalCreateImport(true)}>
               Import
             </Button>
           </Box>
@@ -492,6 +494,7 @@ function Pendaftar() {
       </Box>
       <Box>
         <TableComponen
+          colorHead="cyan"
           checked={checked}
           handleAccount
           handleLockAccount={handleLockAccount}

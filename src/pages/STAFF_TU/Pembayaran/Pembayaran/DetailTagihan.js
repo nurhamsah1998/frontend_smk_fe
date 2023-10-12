@@ -176,7 +176,7 @@ function DetailTagihan() {
           totalBill={totalBillStudent}
           tableHead={tableHeadTagihanSiswa}
           disablePagination
-          colorHead="blue"
+          colorHead="cyan"
           tableBody={itemsRebuild}
         />
       </Box>
@@ -199,7 +199,7 @@ function DetailTagihan() {
           totalBill={totalBillPaymentHistory}
           tableHead={tableHeadPembayaranSiswa}
           disablePagination
-          colorHead="blue"
+          colorHead="cyan"
           tableBody={paymentHistory}
         />
       </Box>

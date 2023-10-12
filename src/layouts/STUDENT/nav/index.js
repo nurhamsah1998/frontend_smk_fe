@@ -137,10 +137,9 @@ export default function Nav({ openNav, onCloseNav }) {
       <ScreenDialog
         isLoading={isLoading}
         open={search?.includes('?profile-id=')}
-        title="Buat tagihan baru"
+        title="Profile Siswa"
         handleClose={() => navigate(-1)}
         labelClose="tutup"
-        labelSubmit="buat"
       >
         <ListItemText primary="Nama" secondary={itemsNoPagination?.nama} />
         <ListItemText primary="Jurusan" secondary={itemsNoPagination?.jurusan?.nama} />

@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack, Toolbar, LinearProgress } from '@mui/material';
+import { cyan } from '@mui/material/colors';
 // mock
 import account from '../../../_mock/account';
 // hooks

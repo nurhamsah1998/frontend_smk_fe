@@ -87,7 +87,7 @@ function Tagihan() {
   return (
     <Box>
       <Box mb={2}>
-        <Typography variant="h5">Ringkasan</Typography>
+        <Typography variant="h5">Ringkasan tagihanmu</Typography>
         {detailBill?.map((item, index) => (
           <Box key={index} sx={{ display: 'flex', gap: 2, width: '100%' }}>
             <Typography sx={{ width: '30%' }}>{item?.label}</Typography>
@@ -97,7 +97,7 @@ function Tagihan() {
       </Box>
       <Divider />
       <Box sx={{ my: 2 }}>
-        <Typography variant="h5">Tagihan Siswa</Typography>
+        <Typography variant="h5">Tagihan mu</Typography>
         <TableComponen
           isLoading={isLoading}
           isTotal
@@ -106,13 +106,13 @@ function Tagihan() {
           totalBill={totalBillStudent}
           tableHead={tableHeadTagihanSiswa}
           disablePagination
-          colorHead="blue"
+          colorHead="cyan"
           tableBody={itemsRebuild}
         />
       </Box>
       <Divider />
       <Box sx={{ my: 2 }}>
-        <Typography variant="h5">Riwayat pembayaran</Typography>
+        <Typography variant="h5">Riwayat pembayaranmu</Typography>
         <TableComponen
           isLoading={isLoading}
           emptyTag="sepertinya belum ada transaksi"
@@ -121,7 +121,7 @@ function Tagihan() {
           totalBill={totalBillPaymentHistory}
           tableHead={tableHeadPembayaranSiswa}
           disablePagination
-          colorHead="blue"
+          colorHead="cyan"
           tableBody={paymentHistory}
         />
       </Box>
