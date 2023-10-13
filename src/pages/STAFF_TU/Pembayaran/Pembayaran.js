@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { Box, Button, FormHelperText, Menu, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { debounce } from 'lodash';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import { jsPDF as JSPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -10,7 +9,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { uid } from 'uid';
 import DatePicker from 'react-datepicker';
-import { orange, purple, red } from '@mui/material/colors';
+import { purple } from '@mui/material/colors';
 import 'react-datepicker/dist/react-datepicker.css';
 import DownloadIcon from '@mui/icons-material/Download';
 
@@ -18,7 +17,7 @@ import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import DetailTagihanSiswa from './Modal/DetailTagihanSiswa';
 import { LabelField } from '../../../components/Commons';
-import StudentDetail from './Modal/StudentDetail';
+
 /// https://stackoverflow.com/a/45526690/18038473
 import { apiUrl } from '../../../hooks/api';
 import { FormatCurrency } from '../../../components/FormatCurrency';
@@ -34,7 +33,6 @@ function Pembayaran() {
   const [inputView, setInputView] = useState('');
   const [kelas, setKelas] = useState('');
   const [subKelas, setSubKelasKelas] = React.useState('');
-  const [modalDetailStudent, setModalDetailStudent] = useState({ data: {}, isOpen: false });
   const [limitView, setLimitView] = useState('40');
   const [jurusan, setJurusan] = useState('');
   const [jurusanId, setJurusanId] = React.useState('');
@@ -117,9 +115,6 @@ function Pembayaran() {
       isCurrency: true,
     },
   ];
-  const handleCustomOnClickRow = (i) => {
-    setModalDetailStudent({ isOpen: true, data: i });
-  };
   const handleChangeSubKelas = (event) => {
     setPage(1);
     setSubKelasKelas(event.target.value);
@@ -446,11 +441,6 @@ function Pembayaran() {
   };
   return (
     <Box>
-      <StudentDetail
-        openModal={modalDetailStudent.isOpen}
-        itemStudent={modalDetailStudent?.data}
-        setModalDetailStudent={setModalDetailStudent}
-      />
       <ScreenDialog
         title="Masukkan tanggal hari ujian dan jatuh tempo"
         labelClose="Batal"
@@ -693,7 +683,6 @@ function Pembayaran() {
         <Box>
           <TableComponen
             hideOption
-            customIcon={<AccountBoxIcon sx={{ color: red[500] }} />}
             customIconSecondary={<LocalPrintshopIcon sx={{ color: purple[500] }} />}
             colorHead="cyan"
             count={totalPage}
@@ -702,10 +691,9 @@ function Pembayaran() {
             }}
             page={page}
             handleSeeBill={handleSeeBill}
-            handleCustomOnClickRow={handleCustomOnClickRow}
             handlePrint={(i) => setOpenModalInputDate((prev) => ({ isBulk: false, openModal: true, data: i }))}
             tooltipHandlePrint="Print Surat Tagihan"
-            tooltipCustom="Detail Siswa"
+            emptyTag="( sepertinya tidak ada siswa )"
             tableBody={itemsRebuild}
             tableHead={tableHead}
             totalRows={Boolean(jurusanId) || Boolean(kelas) || Boolean(search) || Boolean(bill) ? totalRows : null}

@@ -6,8 +6,7 @@ import { Link, Container, Typography, Divider, Stack, Button, Box } from '@mui/m
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
 // components
-import Logo from '../../../../components/logo';
-import Iconify from '../../../../components/iconify';
+import { themeAppColors } from '../../../../theme/themeAppColor';
 // sections
 import { LoginForm } from '../../../../sections/auth/login';
 
@@ -26,7 +25,7 @@ const StyledSection = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   justifyContent: 'center',
   boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: themeAppColors.main,
 }));
 
 const StyledContent = styled('div')(({ theme }) => ({
@@ -53,8 +52,8 @@ export default function LoginStaff() {
       <StyledRoot>
         {mdUp && (
           <StyledSection>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Staf Sekolah
+            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5, color: '#fff' }}>
+              Aplikasi Management Sekolah - SMK PGRI KRAS
             </Typography>
           </StyledSection>
         )}

@@ -76,14 +76,22 @@ export default function FormLogin() {
               />
             </Stack>
 
-            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+            {/* <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
               <Checkbox name="remember" label="Remember me" />
               <Link variant="subtitle2" underline="hover">
                 Forgot password?
               </Link>
-            </Stack>
+            </Stack> */}
 
-            <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loading} disabled={!dirty}>
+            <LoadingButton
+              sx={{ mt: 2 }}
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+              loading={loading}
+              disabled={!dirty}
+            >
               Login
             </LoadingButton>
           </Form>

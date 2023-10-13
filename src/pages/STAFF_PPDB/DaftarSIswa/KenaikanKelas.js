@@ -1,6 +1,5 @@
 import React from 'react';
 import { TextField, Box, Typography, FormHelperText, Select, MenuItem, Button, Divider } from '@mui/material';
-import { cyan, purple, red } from '@mui/material/colors';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import ScreenDialog from '../../../components/ScreenDialog';
 import useMutationPatch from '../../../hooks/useMutationPatch';
@@ -179,12 +178,12 @@ function KenaikanKelas({
                     size="small"
                     onChange={(event) => setNewSubKelas(event.target.value)}
                   >
-                    <MenuItem value={'01'}>1</MenuItem>
-                    <MenuItem value={'02'}>2</MenuItem>
-                    <MenuItem value={'03'}>3</MenuItem>
-                    <MenuItem value={'04'}>4</MenuItem>
-                    <MenuItem value={'05'}>5</MenuItem>
-                    <MenuItem value={'06'}>6</MenuItem>
+                    <MenuItem value={'1'}>1</MenuItem>
+                    <MenuItem value={'2'}>2</MenuItem>
+                    <MenuItem value={'3'}>3</MenuItem>
+                    <MenuItem value={'4'}>4</MenuItem>
+                    <MenuItem value={'5'}>5</MenuItem>
+                    <MenuItem value={'6'}>6</MenuItem>
                   </Select>
                 </Box>
               </Box>

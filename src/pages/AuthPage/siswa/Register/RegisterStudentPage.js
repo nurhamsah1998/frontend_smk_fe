@@ -11,6 +11,7 @@ import Iconify from '../../../../components/iconify';
 // sections
 import { LoginForm } from '../../../../sections/auth/login';
 import FormRegister from './FormRegisterStudent';
+import { themeAppColors } from '../../../../theme/themeAppColor';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,7 @@ const StyledSection = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   justifyContent: 'center',
   boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: themeAppColors.main,
 }));
 
 const StyledContent = styled('div')(({ theme }) => ({
@@ -55,7 +56,7 @@ export default function RegisterStudentPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Selamat Datang, Website Resmi SMK PGRI KRAS
+              Aplikasi Management Sekolah - SMK PGRI KRAS
             </Typography>
           </StyledSection>
         )}

@@ -122,7 +122,7 @@ function LogActivity() {
       </Box>
       <TableComponen
         hideOption
-        colorHead="blue"
+        colorHead="cyan"
         count={totalPage}
         pageOnchange={(x, y) => {
           setPage(y);

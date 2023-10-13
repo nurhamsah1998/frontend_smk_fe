@@ -29,8 +29,8 @@ function useLogin({ module }) {
   ];
   const login = useMutation(
     [module],
-    (values) => {
-      axios({
+    async (values) => {
+      await axios({
         method: 'post',
         url: `${apiUrl}${module}`,
         data: { ...values },

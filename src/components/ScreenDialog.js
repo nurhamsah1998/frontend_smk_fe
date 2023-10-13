@@ -68,7 +68,7 @@ export default function ScreenDialog({
           {labelTopBtn && (
             <Button
               onClick={handleTopBtn}
-              sx={{ mr: 1, position: 'absolute', right: 0 }}
+              sx={{ mr: 1, position: 'absolute', right: 0, boxShadow: 'none' }}
               variant="contained"
               color="secondary"
             >

@@ -3,10 +3,10 @@ import { Box, Button, Menu, MenuItem, Select, Typography, TextField, ListItemTex
 import React from 'react';
 import { debounce } from 'lodash';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { orange } from '@mui/material/colors';
+import { blue, orange, red } from '@mui/material/colors';
 import AddIcon from '@mui/icons-material/Add';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
-
+import InfoIcon from '@mui/icons-material/Info';
 import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
 import TableComponen from '../../../components/TableComponent';
@@ -15,9 +15,11 @@ import CreateImport from './CreateImport';
 import ScreenDialog from '../../../components/ScreenDialog';
 import KenaikanKelas from './KenaikanKelas';
 import { LabelField } from '../../../components/Commons';
+import StudentDetail from '../../STAFF_TU/Pembayaran/Modal/StudentDetail';
 
 function Pendaftar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [modalDetailStudent, setModalDetailStudent] = React.useState({ data: {}, isOpen: false });
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -96,7 +98,7 @@ function Pendaftar() {
     return items?.map((i) => ({
       ...i,
       indicator: i?.status?.includes('accepted'),
-      kelas: `${i?.kelas} ${i?.['jurusan.kode_jurusan']} ${i?.sub_kelas}`,
+      kelas_rebuild: `${i?.kelas} ${i?.['jurusan.kode_jurusan']} ${i?.sub_kelas}`,
     }));
   }, [items]);
   const handleChange = (event) => {
@@ -129,7 +131,7 @@ function Pendaftar() {
       label: 'Gender',
     },
     {
-      id: 'kelas',
+      id: 'kelas_rebuild',
       label: 'Kelas',
     },
     {
@@ -178,6 +180,9 @@ function Pendaftar() {
   const handleBulkChangeStatus = async (selectedStatus) => {
     mutationChangeStatus.mutate({ status: selectedStatus, users: items });
   };
+  const handleCustomOnClickRow = (i) => {
+    setModalDetailStudent({ isOpen: true, data: i });
+  };
   const handleCLoseModal = () => {
     if (modal.type?.includes('error')) {
       handleCloseChild();
@@ -216,6 +221,11 @@ function Pendaftar() {
         setOpenModalKenaikanKelas={setOpenModalKenaikanKelas}
         listSiswaKelasManagement={listSiswaKelasManagement}
         setListSiswaKelasManagement={setListSiswaKelasManagement}
+      />
+      <StudentDetail
+        openModal={modalDetailStudent.isOpen}
+        itemStudent={modalDetailStudent?.data}
+        setModalDetailStudent={setModalDetailStudent}
       />
       <ScreenDialog
         type={modal.type}
@@ -494,12 +504,15 @@ function Pendaftar() {
       </Box>
       <Box>
         <TableComponen
+          customIcon={<InfoIcon sx={{ color: blue[500] }} />}
           colorHead="cyan"
           checked={checked}
           handleAccount
           handleLockAccount={handleLockAccount}
           handleAcceptAccount={handleAcceptAccount}
           handleHoldAccount={handleHoldAccount}
+          handleCustomOnClickRow={handleCustomOnClickRow}
+          tooltipCustom="Detail Siswa"
           handleBlockAccount={handleBlockAccount}
           setChecked={setChecked}
           count={totalPage}
@@ -519,6 +532,7 @@ function Pendaftar() {
               ? totalRows
               : null
           }
+          emptyTag="( sepertinya tidak ada siswa )"
           isLoading={isLoading}
           totalData={totalData}
         />

@@ -7,6 +7,7 @@ import { Box, Button, List, ListItemText } from '@mui/material';
 //
 import { StyledNavItem, StyledNavItemIcon } from './styles';
 import { Dialog } from '../../hooks/useContextHook';
+import { themeAppColors } from '../../theme/themeAppColor';
 
 // ----------------------------------------------------------------------
 
@@ -71,13 +72,13 @@ function NavItem({ item }) {
       to={path}
       sx={{
         '&.active': {
-          color: '#2ea9b8',
-          bgcolor: '#2ea9b81f',
+          color: themeAppColors.main,
+          bgcolor: themeAppColors.light,
           fontWeight: 'fontWeightBold',
         },
       }}
     >
-      <StyledNavItemIcon sx={{ color: '#2ea9b8' }}>{icon && icon}</StyledNavItemIcon>
+      <StyledNavItemIcon sx={{ color: themeAppColors.main }}>{icon && icon}</StyledNavItemIcon>
 
       <ListItemText disableTypography primary={title} />
 

@@ -1,4 +1,5 @@
 import { alpha } from '@mui/material/styles';
+import { themeAppColors } from './themeAppColor';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +20,7 @@ const GREY = {
 const PRIMARY = {
   lighter: '#d1f8fd',
   light: '#5acedc',
-  main: '#2ea9b8',
+  main: themeAppColors.main,
   dark: '#207f8a',
   darker: '#145f68',
   contrastText: '#fff',

@@ -5,7 +5,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import PaymentIcon from '@mui/icons-material/Payment';
 import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHorizontalCircle';
-
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import SvgColor from '../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -53,7 +53,7 @@ export const navConfigDEV = [
   {
     title: 'Log Activity',
     path: '/dev/log-activity',
-    icon: <RequestQuoteIcon />,
+    icon: <ContentPasteIcon />,
   },
 ];
 export const navConfigPPDB = [

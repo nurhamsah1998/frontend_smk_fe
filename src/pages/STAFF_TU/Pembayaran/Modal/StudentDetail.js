@@ -160,7 +160,6 @@ function StudentDetail({ openModal, itemStudent, setModalDetailStudent }) {
             body.gender = values?.genderId;
             delete body.jurusan;
             delete body.genderId;
-
             mutation.mutate(body);
           }}
           enableReinitialize

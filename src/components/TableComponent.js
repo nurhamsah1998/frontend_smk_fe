@@ -22,6 +22,7 @@ import 'moment/locale/id';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import { grey, green, red, blue, orange, cyan, purple } from '@mui/material/colors';
 import { FormatCurrency } from './FormatCurrency';
+import { themeAppColors } from '../theme/themeAppColor';
 
 function TableComponen({
   tableHead,
@@ -86,7 +87,7 @@ function TableComponen({
     },
     {
       variant: 'cyan',
-      color: '#2ea9b8',
+      color: themeAppColors.main,
     },
     {
       variant: 'purple',
@@ -98,16 +99,16 @@ function TableComponen({
       <TableContainer sx={Boolean(stickyHeader) ? { maxHeight: stickyHeader } : {}}>
         <Table padding="none" stickyHeader={Boolean(stickyHeader)}>
           <TableHead>
-            <TableRow sx={{ bgcolor: '#1BC5BD' }}>
+            <TableRow>
               {tableHead?.map((head, index) => (
                 <TableCell
                   colSpan={index === tableHead?.length - 1 ? 6 : 'false'}
                   sx={{
                     fontWeight: 600,
                     border: 'none',
-                    bgcolor: variantColorTableHead?.color,
                     color: '#fff',
                     px: 2,
+                    bgcolor: variantColorTableHead?.color,
                     py: 1,
                     textAlign: head?.align || 'left',
                   }}
@@ -121,7 +122,7 @@ function TableComponen({
           {isLoading ? (
             <TableBody>
               <TableRow>
-                <TableCell align="center" colSpan={6}>
+                <TableCell align="center" colSpan={6} sx={{ height: '200px' }}>
                   <Box
                     sx={{
                       justifyContent: 'center',
@@ -144,9 +145,9 @@ function TableComponen({
             >
               {tableBody?.length <= 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} sx={{ border: 'none', textAlign: 'center' }}>
+                  <TableCell colSpan={6} sx={{ border: 'none', textAlign: 'center', height: '200px' }}>
                     <Typography fontSize={24} color={grey[600]}>
-                      Kosong
+                      Tidak ada yang ditampilkan
                     </Typography>
                     <Typography color={grey[600]} variant="body">
                       {emptyTag}
@@ -233,7 +234,7 @@ function TableComponen({
                       );
                     })}
                     <TableCell sx={{ py: 0 }}>
-                      <Box>
+                      <Box sx={{ display: 'flex' }}>
                         {handleSeeBill ? (
                           <Tooltip arrow title="Detail Pembayaran">
                             <IconButton
@@ -335,6 +336,7 @@ function TableComponen({
                         bgcolor: grey[300],
                         fontWeight: 700,
                         position: 'relative',
+                        height: '40px',
                       }}
                     >
                       {y === tableHead?.length - 2 ? 'Total :' : FormatCurrency(totalBill)}
