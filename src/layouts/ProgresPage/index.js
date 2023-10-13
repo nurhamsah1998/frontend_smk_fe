@@ -18,7 +18,7 @@ function index() {
         alignItems: 'center',
       }}
     >
-      <Box sx={{ width: '80%' }}>
+      <Box sx={{ width: { xs: '80%', sm: '80%', md: '50%', lg: '50%' } }}>
         <Typography variant="h4">Mohon Ditunggu.</Typography>
         <Typography mt={-1}>Data diri anda dalam pengecekan petugas kami.</Typography>
         <LinearProgress color="inherit" sx={{ height: 15, borderRadius: '100px', mt: 1 }} />

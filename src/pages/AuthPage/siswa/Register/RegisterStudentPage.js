@@ -29,6 +29,7 @@ const StyledSection = styled('div')(({ theme }) => ({
   justifyContent: 'center',
   boxShadow: theme.customShadows.card,
   backgroundColor: themeAppColors.main,
+  position: 'relative',
 }));
 
 const StyledContent = styled('div')(({ theme }) => ({
@@ -55,8 +56,11 @@ export default function RegisterStudentPage() {
       <StyledRoot>
         {mdUp && (
           <StyledSection>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5, color: '#fff' }}>
               Aplikasi Management Sekolah - SMK PGRI KRAS
+            </Typography>
+            <Typography sx={{ position: 'absolute', bottom: 20, color: '#fff', right: 10 }}>
+              ©️ Copyright | SMK PGRI KRAS
             </Typography>
           </StyledSection>
         )}

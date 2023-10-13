@@ -92,7 +92,7 @@ export default function TagihanStaff() {
               borderBottom: 1,
               borderColor: 'divider',
               position: 'fixed',
-              top: { xs: 64, sm: 64, md: 64, lg: 92 },
+              top: 60,
               right: 0,
               left: { xs: 0, sm: 0, md: 280, lg: 280 },
               px: 3,

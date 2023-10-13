@@ -18,7 +18,6 @@ import { PrintTemplateInvoice } from './ModalSuccessPayment';
 function DetailTagihan() {
   const { itemsNoPagination } = React.useContext(PROFILE);
   const printRef = React.useRef();
-  const navigate = useNavigate();
   const location = useLocation();
   const [selectedDataForPrint, setSelectedDataForPrint] = React.useState({});
   const idCode = queryString.parse(location.search);
@@ -31,7 +30,6 @@ function DetailTagihan() {
   });
   const {
     itemsNoPagination: paymentHistory,
-    isFetched,
     isLoading,
     refetch: refetchInvoice,
   } = useFetch({
@@ -111,7 +109,7 @@ function DetailTagihan() {
           position: 'fixed',
           left: { xs: 0, sm: 0, md: 280 },
           right: 0,
-          top: { xs: 64, sm: 64, md: 64, lg: 92 },
+          top: 60,
           bgcolor: '#f9fafb',
           zIndex: 99,
           pt: '10px',

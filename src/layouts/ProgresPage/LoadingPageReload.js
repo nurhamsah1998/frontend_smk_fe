@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { orange } from '@mui/material/colors';
+import { themeAppColors } from '../../theme/themeAppColor';
 
 function LoadingPageReload() {
   return (
@@ -8,7 +9,7 @@ function LoadingPageReload() {
       sx={{
         width: '100%',
         height: '100vh',
-        bgcolor: orange[600],
+        bgcolor: themeAppColors.main,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

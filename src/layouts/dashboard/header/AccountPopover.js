@@ -3,6 +3,7 @@ import { useState, useContext } from 'react';
 import { alpha } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
+import jwtDecode from 'jwt-decode';
 // mocks_
 import account from '../../../_mock/account';
 import { Dialog } from '../../../hooks/useContextHook';
@@ -28,6 +29,8 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const token = window.localStorage.getItem('accessToken');
+  const localToken = jwtDecode(token || '');
   const [open, setOpen] = useState(null);
   const { setDialog } = useContext(Dialog);
   const { itemsNoPagination, isLoading } = useContext(PROFILE);
@@ -114,10 +117,11 @@ export default function AccountPopover() {
         </Stack> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
-          Logout
-        </MenuItem>
+        {localToken?.roleStaff !== 'ADMINISTRASI' && (
+          <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
+            Logout
+          </MenuItem>
+        )}
       </Popover>
     </>
   );

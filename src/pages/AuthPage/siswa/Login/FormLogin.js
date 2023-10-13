@@ -83,15 +83,7 @@ export default function FormLogin() {
               </Link>
             </Stack> */}
 
-            <LoadingButton
-              sx={{ mt: 2 }}
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-              loading={loading}
-              disabled={!dirty}
-            >
+            <LoadingButton sx={{ mt: 2 }} fullWidth size="large" type="submit" variant="contained" loading={loading}>
               Login
             </LoadingButton>
           </Form>
