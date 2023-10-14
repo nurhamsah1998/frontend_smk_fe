@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { orange } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
+import { themeAppColors } from './theme/themeAppColor';
 
 function RouterPath() {
   const navigate = useNavigate();
@@ -28,6 +29,10 @@ function RouterPath() {
           role: 'PPDB',
           path: '/staff-ppdb/dashboard',
         },
+        {
+          role: 'ANONIM',
+          path: '/brand',
+        },
       ];
       const findRole = traficRole.find((i) => i.role === token.roleStaff);
       if (findRole) {
@@ -46,7 +51,7 @@ function RouterPath() {
       sx={{
         width: '100%',
         height: '100vh',
-        bgcolor: orange[600],
+        bgcolor: themeAppColors,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

@@ -21,6 +21,7 @@ import ReportTransaksi from './pages/Laporan/transaksi/ReportTransaksi';
 import DashboardLayoutDEV from './layouts/DEV/DashboardLayoutDEV';
 import LogActivity from './pages/DEV/Log/LogActivity';
 import DashboardDev from './pages/DEV/Dashboard/Dashboard';
+import Brand from './pages/Anonim/Brand';
 
 // ----------------------------------------------------------------------
 
@@ -69,6 +70,10 @@ export default function Router() {
     {
       path: 'siswa-login',
       element: <LoginStudentPage />,
+    },
+    {
+      path: 'brand',
+      element: <Brand />,
     },
     {
       path: 'siswa-register',

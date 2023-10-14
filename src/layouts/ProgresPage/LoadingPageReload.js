@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import { orange } from '@mui/material/colors';
 import { themeAppColors } from '../../theme/themeAppColor';
 
 function LoadingPageReload() {

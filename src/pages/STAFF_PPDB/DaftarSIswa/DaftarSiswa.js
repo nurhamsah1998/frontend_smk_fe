@@ -260,7 +260,7 @@ function Pendaftar() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'end',
-          mb: 3,
+          mb: 2,
         }}
       >
         <Box
@@ -532,7 +532,7 @@ function Pendaftar() {
               ? totalRows
               : null
           }
-          emptyTag="( sepertinya tidak ada siswa )"
+          emptyTag={Boolean(search) ? `( tidak bisa menemukan "${search}")` : '( sepertinya tidak ada siswa )'}
           isLoading={isLoading}
           totalData={totalData}
         />

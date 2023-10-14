@@ -248,7 +248,7 @@ function ReportTransaksi() {
   };
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 3, gap: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2, gap: 1 }}>
         <Box>
           <Button
             startIcon={<DownloadIcon />}
@@ -256,6 +256,7 @@ function ReportTransaksi() {
             id="basic-button"
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
+            disabled={Boolean(itemsRebuild?.length === 0)}
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
           >

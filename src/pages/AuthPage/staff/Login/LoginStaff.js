@@ -2,13 +2,13 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { Link, Container, Typography, Divider, Stack, Button, Box } from '@mui/material';
+import { Container, Typography, Button, Box } from '@mui/material';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
 // components
-import { themeAppColors } from '../../../../theme/themeAppColor';
 // sections
 import { LoginForm } from '../../../../sections/auth/login';
+import { SideAuthBox } from '../../siswa/Login/LoginStudentPage';
 
 // ----------------------------------------------------------------------
 
@@ -16,17 +16,6 @@ const StyledRoot = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     display: 'flex',
   },
-}));
-
-const StyledSection = styled('div')(({ theme }) => ({
-  width: '100%',
-  maxWidth: 480,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  boxShadow: theme.customShadows.card,
-  position: 'relative',
-  backgroundColor: themeAppColors.main,
 }));
 
 const StyledContent = styled('div')(({ theme }) => ({
@@ -51,16 +40,7 @@ export default function LoginStaff() {
       </Helmet>
 
       <StyledRoot>
-        {mdUp && (
-          <StyledSection>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5, color: '#fff' }}>
-              Aplikasi Management Sekolah - SMK PGRI KRAS
-            </Typography>
-            <Typography sx={{ position: 'absolute', bottom: 20, color: '#fff', right: 10 }}>
-              ©️ Copyright | SMK PGRI KRAS
-            </Typography>
-          </StyledSection>
-        )}
+        {mdUp && <SideAuthBox />}
         <Box sx={{ position: 'fixed', top: 10, right: 10 }}>
           <Button onClick={() => navigate('/siswa-login')}>login sebagai Siswa</Button>
         </Box>

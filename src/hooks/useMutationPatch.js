@@ -36,7 +36,9 @@ function useMutationPatch({
         })
         .catch((error) => {
           console.log(error, 'ini');
-          enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+          enqueueSnackbar(error?.response?.data?.msg || error?.response?.data || 'Internal server error !', {
+            variant: 'error',
+          });
           fail(error);
         });
     },

@@ -43,32 +43,15 @@ function DetailTagihan() {
     delete x?.tahun_angkatan;
     return Object.entries(x);
   });
-  const itemsRebuild = dataTextField
-    ?.map((i) => i?.map((o) => ({ name: o[0].replace(/_/g, ' '), value: o[1] })))[0]
-    ?.filter((y) => y?.value !== 0);
+  const itemsRebuild =
+    dataTextField
+      ?.map((i) => i?.map((o) => ({ name: o[0].replace(/_/g, ' '), value: o[1] })))[0]
+      ?.filter((y) => y?.value !== 0) || [];
   const data = {
     student: studentProfile,
     staff: itemsNoPagination,
   };
 
-  const detailSiswaLeft = [
-    {
-      value: studentProfile?.nama,
-      label: 'Nama siswa',
-    },
-    {
-      value: studentProfile?.jurusan?.nama,
-      label: 'Jurusan',
-    },
-    {
-      value: studentProfile?.kelas,
-      label: 'Kelas',
-    },
-    {
-      value: studentProfile?.noHP,
-      label: 'Nomor Hp',
-    },
-  ];
   const totalBillPaymentHistory =
     paymentHistory?.length <= 0 ? 0 : paymentHistory?.map((i) => i?.uang_diterima)?.reduce((x, y) => x + y);
   const totalBillStudent = itemsRebuild?.length <= 0 ? 0 : itemsRebuild?.map((i) => i?.value)?.reduce((x, y) => x + y);

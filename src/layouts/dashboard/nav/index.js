@@ -13,6 +13,7 @@ import useResponsive from '../../../hooks/useResponsive';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
+import { themeAppColors } from '../../../theme/themeAppColor';
 
 //
 
@@ -25,7 +26,7 @@ const StyledAccount = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: alpha(theme.palette.grey[500], 0.12),
+  backgroundColor: themeAppColors.light,
 }));
 
 // ----------------------------------------------------------------------

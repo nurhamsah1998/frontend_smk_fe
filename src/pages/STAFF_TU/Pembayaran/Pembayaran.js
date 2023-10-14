@@ -499,6 +499,7 @@ function Pembayaran() {
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
+                disabled={Boolean(itemsRebuild?.length === 0)}
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
               >
@@ -517,15 +518,19 @@ function Pembayaran() {
                 <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
               </Menu>
             </Box>
-            {Boolean(bill === 'not_paid') && Boolean(jurusan) && Boolean(kelas) && Boolean(subKelas) && (
-              <Button
-                onClick={() => setOpenModalInputDate((prev) => ({ isBulk: true, openModal: true }))}
-                color="warning"
-                variant="contained"
-              >
-                Print Tagihan Massal
-              </Button>
-            )}
+            {Boolean(bill === 'not_paid') &&
+              Boolean(jurusan) &&
+              Boolean(kelas) &&
+              Boolean(subKelas) &&
+              Boolean(itemsRebuild?.length !== 0) && (
+                <Button
+                  onClick={() => setOpenModalInputDate((prev) => ({ isBulk: true, openModal: true }))}
+                  color="warning"
+                  variant="contained"
+                >
+                  Print Tagihan Massal
+                </Button>
+              )}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Box sx={{ display: 'grid', gap: 1 }}>

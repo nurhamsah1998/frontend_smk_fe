@@ -39,7 +39,30 @@ const StyledContent = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
+export const SideAuthBox = () => {
+  return (
+    <StyledSection>
+      <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5, color: '#fff', zIndex: 1 }}>
+        Aplikasi Management Sekolah - SMK PGRI KRAS
+      </Typography>
+      <Typography sx={{ position: 'absolute', bottom: 20, color: '#fff', right: 10, fontSize: '12px', zIndex: 1 }}>
+        ©️ Copyright 2023 | SMK PGRI KRAS
+      </Typography>
+      <Box
+        sx={{
+          position: 'absolute',
+          width: '70%',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          opacity: '0.2',
+        }}
+      >
+        <img alt="pgri" src="/assets/logo_pgri.png" />
+      </Box>
+    </StyledSection>
+  );
+};
 export default function LoginStudentPage() {
   const mdUp = useResponsive('up', 'md');
   const navigate = useNavigate();
@@ -58,16 +81,7 @@ export default function LoginStudentPage() {
       </Helmet>
 
       <StyledRoot>
-        {mdUp && (
-          <StyledSection>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5, color: '#fff' }}>
-              Aplikasi Management Sekolah - SMK PGRI KRAS
-            </Typography>
-            <Typography sx={{ position: 'absolute', bottom: 20, color: '#fff', right: 10 }}>
-              ©️ Copyright | SMK PGRI KRAS
-            </Typography>
-          </StyledSection>
-        )}
+        {mdUp && <SideAuthBox />}
         <Box sx={{ position: 'fixed', top: 10, right: 10 }}>
           <Button onClick={() => navigate('/staff-login')}> login sebagai staf</Button>
         </Box>

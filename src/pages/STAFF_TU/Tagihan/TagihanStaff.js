@@ -1,17 +1,7 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Typography,
-  Tab,
-  Tabs,
-  TextField,
-  FormHelperText,
-  CircularProgress,
-  Paper,
-  IconButton,
-} from '@mui/material';
+import { Box, Button, Typography, Tab, Tabs, FormHelperText, CircularProgress, Paper, IconButton } from '@mui/material';
 import PropTypes from 'prop-types';
+import AddIcon from '@mui/icons-material/Add';
 import { Formik, Form } from 'formik';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
@@ -22,6 +12,7 @@ import useMutationPatch from '../../../hooks/useMutationPatch';
 import { Dialog } from '../../../hooks/useContextHook';
 import formatNumberChange from '../../../components/formatNumberChange';
 import TextFieldNumberFormat from '../../../components/TextFieldNumberFormat';
+import useMutationPost from '../../../hooks/useMutationPost';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -60,6 +51,9 @@ export default function TagihanStaff() {
   const mutation = useMutationPatch({
     module: 'tagihan-permanent',
   });
+  const createMutation = useMutationPost({
+    module: 'tagihan-permanent',
+  });
 
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -74,6 +68,9 @@ export default function TagihanStaff() {
   const formRef = React.useRef();
   const handleSave = () => {
     formRef.current?.handleSubmit();
+  };
+  const handleAddTahunTagihan = () => {
+    createMutation.mutate({ date: new Date().getFullYear() });
   };
   return (
     <Box>
@@ -134,15 +131,10 @@ export default function TagihanStaff() {
                 <NavigateNextIcon />
               </IconButton>
             </Box>
-            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                {/* <Button variant="contained" onClick={handleSave}>
-                  Simpan perubahan
-                </Button> */}
-                <Button color="warning" variant="contained" disabled>
-                  Tambah tahun ajaran
-                </Button>
-              </Box>
+            <Box sx={{ mt: 2, display: 'flex', gap: 1, alignItems: 'center' }}>
+              <Button color="warning" variant="contained" startIcon={<AddIcon />} onClick={handleAddTahunTagihan}>
+                Tambah tahun ajaran
+              </Button>
               <Button startIcon={<SaveIcon />} variant="contained" onClick={handleSave}>
                 Simpan perubahan
               </Button>

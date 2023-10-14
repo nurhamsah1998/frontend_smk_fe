@@ -2,6 +2,7 @@ import React from 'react';
 import { Formik, Form } from 'formik';
 import { Box, Autocomplete, TextField, Button } from '@mui/material';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import PaymentsIcon from '@mui/icons-material/Payments';
 
 import TextFieldNumberFormat from '../../../../components/TextFieldNumberFormat';
@@ -23,6 +24,7 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
     },
     successMessage: 'Transaksi berhasil',
   });
+  const { enqueueSnackbar } = useSnackbar();
   const options = [
     { label: 'Bebas', value: 'bebas' },
     { label: 'Spp', value: 'spp' },
@@ -88,6 +90,9 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
             })
             .catch((error) => {
               console.log(error);
+              enqueueSnackbar(error?.response?.data?.msg || error?.response?.data || 'Internal server error !', {
+                variant: 'error',
+              });
             });
         }}
         enableReinitialize
@@ -99,8 +104,9 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
                 <Autocomplete
                   disablePortal
                   fullWidth
+                  freeSolo
                   onChange={(x, y) => {
-                    setFieldValue('kode_pembayaran', y.label);
+                    setFieldValue('kode_pembayaran', y?.label || '');
                   }}
                   value={values?.kode_pembayaran}
                   options={options}
@@ -118,7 +124,9 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
               </Box>
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
-                  disabled={values?.uang_diterima <= 1000 || !Boolean(values?.kode_pembayaran)}
+                  disabled={
+                    values?.uang_diterima <= 1000 || !Boolean(values?.kode_pembayaran) || mutationPatch.isLoading
+                  }
                   type="submit"
                   variant="contained"
                   startIcon={<PaymentsIcon />}

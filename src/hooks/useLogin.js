@@ -26,6 +26,10 @@ function useLogin({ module }) {
       role: 'PPDB',
       path: '/staff-ppdb/dashboard',
     },
+    {
+      role: 'ANONIM',
+      path: '/brand',
+    },
   ];
   const login = useMutation(
     [module],

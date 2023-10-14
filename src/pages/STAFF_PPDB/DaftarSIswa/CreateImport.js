@@ -9,6 +9,7 @@ import ScreenDialog from '../../../components/ScreenDialog';
 
 function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch }) {
   const [files, setFiles] = React.useState({});
+  const token = window.localStorage.getItem('accessToken');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState({ open: false, message: [], title: '', type: '' });
   const { enqueueSnackbar } = useSnackbar();
@@ -20,6 +21,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
       .post(`${apiUrl}import-akun-siswa`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
@@ -31,7 +33,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
         console.log(error);
         setError({
           open: true,
-          message: error?.response?.data?.message,
+          message: error?.response?.data?.message || error?.response?.data || 'Internal server error !',
           type: error?.response?.data?.code,
           title: 'Gagal upload file',
         });
@@ -75,6 +77,11 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
         {error.type?.includes('server') && (
           <Box>
             <Typography color={red[500]}>{error?.message}</Typography>
+          </Box>
+        )}
+        {error.message?.includes('Forbidden') && (
+          <Box>
+            <Typography color={red[500]}>Token issue FORBIDDEN !!</Typography>
           </Box>
         )}
         {error.type?.includes('error_inject_username') &&
