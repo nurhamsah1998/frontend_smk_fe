@@ -46,6 +46,7 @@ function LogActivity() {
   const handleCalenderClose = () => {
     console.log(new Date(startDate).toISOString(), endDate);
   };
+
   const onChangeDate = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
@@ -130,7 +131,12 @@ function LogActivity() {
         page={page}
         tableBody={itemsRebuild}
         tableHead={head}
-        totalRows={totalRows}
+        totalRows={Boolean(endDate) ? totalRows : null}
+        emptyTag={
+          Boolean(endDate)
+            ? `( tidak bisa menemukan, mungkin masih belum ada aktivitas diwaktu tersebut )`
+            : '( sepertinya tidak aktivitas )'
+        }
         totalData={totalData}
         isLoading={isLoading}
       />

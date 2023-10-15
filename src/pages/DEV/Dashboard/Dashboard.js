@@ -11,7 +11,7 @@ function DashboardDev() {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h3">Hello Developer and Founder</Typography>
+        <Typography variant="h2">DEVELOPER</Typography>
       </Box>
     </div>
   );

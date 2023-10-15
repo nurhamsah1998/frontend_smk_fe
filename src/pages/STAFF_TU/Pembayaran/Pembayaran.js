@@ -461,6 +461,9 @@ function Pembayaran() {
             <DatePicker
               customInput={
                 <TextField
+                  InputProps={{
+                    readOnly: true,
+                  }}
                   size="small"
                   sx={{
                     mt: 1,
@@ -477,6 +480,9 @@ function Pembayaran() {
               customInput={
                 <TextField
                   size="small"
+                  InputProps={{
+                    readOnly: true,
+                  }}
                   sx={{
                     mt: 1,
                     mb: 3,
