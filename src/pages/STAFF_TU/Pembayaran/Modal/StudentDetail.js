@@ -125,11 +125,12 @@ function StudentDetail({ openModal, itemStudent, setModalDetailStudent }) {
     setModalDetailStudent(false);
     setEdit(true);
   };
+
   return (
     <div>
       <ScreenDialog
         handleSubmit={() => inputRef?.current?.handleSubmit()}
-        open={openModal}
+        open={Boolean(openModal)}
         handleTopBtn={() => setEdit(false)}
         labelClose="Tutup"
         isLoading={mutation.isLoading}

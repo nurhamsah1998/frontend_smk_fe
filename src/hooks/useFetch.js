@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { apiUrl } from './api';
 
 function useFetch({ module, enabled = true, isCustom = false, params = '', initialLimit = 40 }) {
@@ -8,6 +10,7 @@ function useFetch({ module, enabled = true, isCustom = false, params = '', initi
   const [page, setPage] = React.useState(1);
   const [search, setSearch] = React.useState('');
   const [limit, setLimit] = React.useState(initialLimit);
+  const navigate = useNavigate();
   const query = useQuery(
     [module, enabled, isCustom],
     () =>
@@ -19,6 +22,12 @@ function useFetch({ module, enabled = true, isCustom = false, params = '', initi
     {
       enabled: Boolean(enabled),
       networkMode: 'always',
+      onError: (error) => {
+        if (error?.response?.status === 403) {
+          window.localStorage.clear();
+          navigate('/');
+        }
+      },
     }
   );
   const items = query.data?.data?.data || [];

@@ -15,7 +15,6 @@ import DownloadIcon from '@mui/icons-material/Download';
 
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
-import DetailTagihanSiswa from './Modal/DetailTagihanSiswa';
 import { LabelField } from '../../../components/Commons';
 
 /// https://stackoverflow.com/a/45526690/18038473
@@ -722,7 +721,6 @@ function Pembayaran() {
           />
         </Box>
       </Box>
-      <DetailTagihanSiswa />
       <Outlet />
     </Box>
   );
