@@ -163,14 +163,24 @@ function ReportTransaksi() {
             limit || 10
           }&startDate=${startDate}&endDate=${endDate}&kelas=${kelas}&jurusan=${jurusan}&sub_kelas=${subKelas}&type_file=${typeFile}`,
           {
+            responseType: 'blob',
             headers: {
               authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
             },
           }
         )
         .then((res) => {
-          /// https://stackoverflow.com/a/64545660/18038473
-          window.location.href = `${apiUrl}download/report-transaction/${res?.data?.data}`;
+          const isUserHasFilter = Boolean(kelas) || Boolean(jurusan) || Boolean(subKelas);
+          const specifictFilter = ` ${isUserHasFilter ? '(' : ''} ${Boolean(kelas) ? `Kelas ${kelas}` : ''} ${
+            Boolean(jurusan) ? `Jurusan ${jurusan}` : ''
+          } ${Boolean(subKelas) ? `${subKelas}` : ''} ${isUserHasFilter ? ')' : ''}`;
+          /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+          const url = URL.createObjectURL(new Blob([res?.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `Laporan Transaksi${specifictFilter} ${moment().format('Do-MMMM-YYYY')}.xlsx`);
+          document.body.appendChild(link);
+          link.click();
         })
         .catch((error) => {
           console.log(error);

@@ -1,7 +1,7 @@
 import { Box, TextField } from '@mui/material';
 import React from 'react';
 import { range } from 'lodash';
-import { JsonView, allExpanded, darkStyles } from 'react-json-view-lite';
+import { JsonView, darkStyles, collapseAllNested } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import DatePicker from 'react-datepicker';
 import getMonth from 'date-fns/getMonth';
@@ -39,7 +39,9 @@ function LogActivity() {
   const itemsRebuild = React.useMemo(() => {
     return items?.map((item) => ({
       action: item?.action,
-      data: <JsonView data={item?.data} shouldExpandNode={allExpanded} style={darkStyles} />,
+      data: (
+        <JsonView data={item?.data} allExpanded={() => false} shouldExpandNode={collapseAllNested} style={darkStyles} />
+      ),
       author: item?.author?.namaStaff,
     }));
   }, [items]);
@@ -135,7 +137,7 @@ function LogActivity() {
         emptyTag={
           Boolean(endDate)
             ? `( tidak bisa menemukan, mungkin masih belum ada aktivitas diwaktu tersebut )`
-            : '( sepertinya tidak aktivitas )'
+            : '( sepertinya belum ada aktivitas )'
         }
         totalData={totalData}
         isLoading={isLoading}

@@ -3,6 +3,9 @@ import { Box, Typography } from '@mui/material';
 import { cyan, purple, red } from '@mui/material/colors';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 import { apiUrl } from '../../../hooks/api';
 
 import ScreenDialog from '../../../components/ScreenDialog';
@@ -51,6 +54,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
   return (
     <div>
       <ScreenDialog
+        type="error"
         open={error.open}
         labelClose="Tutup"
         handleClose={() => {
@@ -164,14 +168,29 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
               cursor: 'pointer',
             }}
           >
-            <Typography
-              variant="h4"
+            <Box
               sx={{
-                color: purple[800],
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                border: `dashed 1px ${purple[800]}`,
+                p: '20px 60px',
+                borderRadius: '10px',
               }}
             >
-              Unduh Template
-            </Typography>
+              <FileDownloadIcon
+                sx={{
+                  color: purple[800],
+                }}
+              />
+              <Typography
+                sx={{
+                  color: purple[800],
+                }}
+              >
+                Unduh file template import siswa
+              </Typography>
+            </Box>
           </Box>
           <Box
             sx={{
@@ -198,14 +217,29 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
               }}
               type="file"
             />
-            <Typography
-              variant="h4"
+            <Box
               sx={{
-                color: cyan[800],
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                border: `dashed 1px ${cyan[800]}`,
+                p: '20px 60px',
+                borderRadius: '10px',
               }}
             >
-              {files?.name || 'Import File.xlsx'}
-            </Typography>
+              <InsertDriveFileIcon
+                sx={{
+                  color: cyan[800],
+                }}
+              />
+              <Typography
+                sx={{
+                  color: cyan[800],
+                }}
+              >
+                {files?.name || 'Import file berformat .xlsx'}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </ScreenDialog>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress, Typography, Button } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import { red } from '@mui/material/colors';
 
 function BannedPage() {

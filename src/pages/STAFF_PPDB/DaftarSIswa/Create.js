@@ -48,6 +48,9 @@ function Create({ openModalCreate, setOpenModalCreate }) {
             noHP: '',
             jurusanId: '',
             gender: '',
+            nama_ayah: '',
+            nama_ibu: '',
+            alamat: '',
           }}
           onSubmit={(values) => {
             const body = {
@@ -70,6 +73,15 @@ function Create({ openModalCreate, setOpenModalCreate }) {
                 <Box display="grid" gap={2}>
                   <TextField size="small" fullWidth name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
                   <TextField size="small" fullWidth name="username" {...getFieldProps('username')} label="Username" />
+                  <TextField
+                    size="small"
+                    fullWidth
+                    name="nama_ayah"
+                    {...getFieldProps('nama_ayah')}
+                    label="Nama Ayah"
+                  />
+                  <TextField size="small" fullWidth name="nama_ibu" {...getFieldProps('nama_ibu')} label="Nama Ibu" />
+                  <TextField size="small" fullWidth name="alamat" {...getFieldProps('alamat')} label="Alamat" />
                   <Box>
                     {/* /// https://stackoverflow.com/a/67068903/18038473 */}
                     <TextField fullWidth size="small" select onChange={handleChange} value={gender} label="Gender">

@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
+import { Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
 // mocks_
 import account from '../../../_mock/account';
 import { PROFILE } from '../../../hooks/useHelperContext';

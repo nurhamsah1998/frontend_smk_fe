@@ -1,6 +1,5 @@
 // component
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
-import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import PaymentIcon from '@mui/icons-material/Payment';

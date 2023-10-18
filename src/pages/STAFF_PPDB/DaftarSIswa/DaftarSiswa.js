@@ -275,7 +275,12 @@ function Pendaftar() {
             </Button>
           </Box>
           <Box>
-            <Button startIcon={<ImportExportIcon />} variant="outlined" onClick={() => setOpenModalCreateImport(true)}>
+            <Button
+              startIcon={<ImportExportIcon />}
+              variant="contained"
+              color="warning"
+              onClick={() => setOpenModalCreateImport(true)}
+            >
               Import
             </Button>
           </Box>

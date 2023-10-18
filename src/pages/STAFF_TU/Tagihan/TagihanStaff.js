@@ -6,6 +6,8 @@ import { Formik, Form } from 'formik';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import SaveIcon from '@mui/icons-material/Save';
+import InfoIcon from '@mui/icons-material/Info';
+import { grey, red } from '@mui/material/colors';
 
 import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
@@ -139,8 +141,15 @@ export default function TagihanStaff() {
                 Simpan perubahan
               </Button>
             </Box>
+            <Box sx={{ display: 'flex', alignItem: 'flex-start', gap: 1, mt: 1 }}>
+              <InfoIcon sx={{ color: red[400] }} />
+              <FormHelperText sx={{ color: red[400] }}>
+                PENTING : Jika melakukan perubahan tagihan dan ingin berpindah tab tahun ajaran, simpan perubahan
+                terlebih dahulu !
+              </FormHelperText>
+            </Box>
           </Paper>
-          <Box sx={{ mt: { xs: '80px', sm: '80px', md: '80px', lg: '100px' } }}>
+          <Box sx={{ mt: { xs: '100px', sm: '100px', md: '100px', lg: '100px' } }}>
             <Formik
               initialValues={itemsNoPagination[value]}
               innerRef={formRef}

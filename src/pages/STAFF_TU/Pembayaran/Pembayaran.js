@@ -155,11 +155,12 @@ function Pembayaran() {
     doc.text(`Kepada : `, doc.internal.pageSize.width - 90, 59, {
       align: 'left',
     });
-    doc.setFont('', '', 700);
+    doc.setFont('regular', '', '');
+    doc.setFontSize(10);
     doc.text(data?.nama?.toUpperCase(), doc.internal.pageSize.width / 1.31, 69 + 2, {
       align: 'center',
     });
-    doc.setFont('', '', '', '');
+    doc.setFont('', '', '');
     doc.setFontSize(10);
     doc.text(
       `${data?.kelas} / ${data?.['jurusan.nama']} / ${data?.sub_kelas}`,
@@ -357,7 +358,7 @@ function Pembayaran() {
     if (event === 'xlsx') {
       await axios
         .get(
-          `${apiUrl}download/report-bill?page=${page}&limit=${limit}&search=${search}&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}`,
+          `${apiUrl}download/report-bill?page=${page}&limit=${limit}&search=${search}&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}`,
           {
             responseType: 'blob',
             headers: {
@@ -366,11 +367,15 @@ function Pembayaran() {
           }
         )
         .then((res) => {
+          const isUserHasFilter = Boolean(kelas) || Boolean(jurusan) || Boolean(subKelas);
+          const specifictFilter = ` ${isUserHasFilter ? '(' : ''} ${Boolean(kelas) ? `Kelas ${kelas}` : ''} ${
+            Boolean(jurusan) ? `Jurusan ${jurusan}` : ''
+          } ${Boolean(subKelas) ? `${subKelas}` : ''} ${isUserHasFilter ? ')' : ''}`;
           /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
           const url = URL.createObjectURL(new Blob([res?.data]));
           const link = document.createElement('a');
           link.href = url;
-          link.setAttribute('download', `tagihan-${moment().format('MMMM-Do-YYYY-h-mm-ss')}.xlsx`);
+          link.setAttribute('download', `Laporan Tagihan${specifictFilter} ${moment().format('Do-MMMM-YYYY')}.xlsx`);
           document.body.appendChild(link);
           link.click();
         })
@@ -707,7 +712,11 @@ function Pembayaran() {
             emptyTag="( sepertinya tidak ada siswa )"
             tableBody={itemsRebuild}
             tableHead={tableHead}
-            totalRows={Boolean(jurusanId) || Boolean(kelas) || Boolean(search) || Boolean(bill) ? totalRows : null}
+            totalRows={
+              Boolean(jurusanId) || Boolean(kelas) || Boolean(search) || Boolean(subKelas) || Boolean(bill)
+                ? totalRows
+                : null
+            }
             totalData={totalData}
             isLoading={isLoading}
           />
