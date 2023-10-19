@@ -1,0 +1,12 @@
+.react-datepicker__header:not(.react-datepicker__header--has-time-select) {
+  background-color: #e6f5f6;
+}
+
+.react-datepicker__day--today {
+  background-color: #2ea9b8;
+  border-radius: 5px;
+  color: #fff;
+}
+.react-datepicker__day-names {
+  color: #fff !important;
+}

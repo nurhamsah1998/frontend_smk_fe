@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
-import { NavLink as RouterLink, useNavigate } from 'react-router-dom';
+import { useContext, useMemo } from 'react';
+import { NavLink as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 // @mui
 import { Box, Button, List, ListItemText } from '@mui/material';
@@ -18,6 +19,7 @@ NavSection.propTypes = {
 export default function NavSection({ data = [], ...other }) {
   const { setDialog } = useContext(Dialog);
   const navigate = useNavigate();
+  const location = useLocation();
   const handleLogOut = () => {
     setDialog((i) => ({
       title: 'Apakah anda yakin ingin keluar?',
@@ -31,8 +33,13 @@ export default function NavSection({ data = [], ...other }) {
       isCloseAfterSubmit: true,
     }));
   };
+  const titleHead = useMemo(() => data.find((item) => item?.path === location.pathname), [location.pathname]);
   return (
     <Box {...other}>
+      <Helmet>
+        <title>{titleHead?.title || ''} | SMK Kras Kediri</title>
+        <link rel="canonical" href="/" />
+      </Helmet>
       <List disablePadding sx={{ p: 1 }}>
         {data.map((item, index) => {
           if (item?.path?.includes('/log-out')) {

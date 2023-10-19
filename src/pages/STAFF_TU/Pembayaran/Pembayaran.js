@@ -12,6 +12,7 @@ import DatePicker from 'react-datepicker';
 import { purple } from '@mui/material/colors';
 import 'react-datepicker/dist/react-datepicker.css';
 import DownloadIcon from '@mui/icons-material/Download';
+import { Helmet } from 'react-helmet-async';
 
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
@@ -23,6 +24,7 @@ import { FormatCurrency } from '../../../components/FormatCurrency';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import ScreenDialog from '../../../components/ScreenDialog';
 import { KopPdf } from '../../Laporan/transaksi/ReportTransaksi';
+import CustomDatePicker from '../../../components/CustomDatePicker';
 
 function Pembayaran() {
   const { itemsNoPagination } = React.useContext(PROFILE);
@@ -445,6 +447,10 @@ function Pembayaran() {
   };
   return (
     <Box>
+      <Helmet>
+        <title>Detail Pembayaran | SMK Kras Kediri</title>
+        <link rel="canonical" href="/" />
+      </Helmet>
       <ScreenDialog
         title="Masukkan tanggal hari ujian dan jatuh tempo"
         labelClose="Batal"
@@ -460,42 +466,15 @@ function Pembayaran() {
         }
       >
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Box>
-            <FormHelperText>Masukan tanggal ujian</FormHelperText>
-            <DatePicker
-              customInput={
-                <TextField
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  size="small"
-                  sx={{
-                    mt: 1,
-                    mb: 3,
-                  }}
-                />
-              }
-              selected={startUjian}
-              onChange={(date) => setStartUjian(date)}
-            />
-
-            <FormHelperText>Masukan tanggal jatuh tempo pembayaran</FormHelperText>
-            <DatePicker
-              customInput={
-                <TextField
-                  size="small"
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  sx={{
-                    mt: 1,
-                    mb: 3,
-                  }}
-                />
-              }
-              selected={expiredDate}
-              onChange={(date) => setExpiredDate(date)}
-            />
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box>
+              <FormHelperText>Masukan tanggal ujian</FormHelperText>
+              <CustomDatePicker disabledMultipick startDate={startUjian} setStartDate={setStartUjian} />
+            </Box>
+            <Box>
+              <FormHelperText>Masukan tanggal jatuh tempo pembayaran</FormHelperText>
+              <CustomDatePicker disabledMultipick startDate={expiredDate} setStartDate={setExpiredDate} />
+            </Box>
           </Box>
         </Box>
       </ScreenDialog>

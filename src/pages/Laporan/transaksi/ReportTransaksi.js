@@ -1,9 +1,6 @@
 import { Box, MenuItem, Select, TextField, Menu, Button } from '@mui/material';
 import React from 'react';
-import { debounce, range } from 'lodash';
-import DatePicker from 'react-datepicker';
-import getMonth from 'date-fns/getMonth';
-import getYear from 'date-fns/getYear';
+import { debounce } from 'lodash';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { jsPDF as JSPDF } from 'jspdf';
@@ -18,21 +15,8 @@ import useFetch from '../../../hooks/useFetch';
 import { apiUrl } from '../../../hooks/api';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import { FormatCurrency } from '../../../components/FormatCurrency';
+import CustomDatePicker from '../../../components/CustomDatePicker';
 
-export const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
 export const KopPdf = (doc) => {
   const img = new Image();
   img.src = '/assets/logo_pgri.png';
@@ -71,8 +55,6 @@ function ReportTransaksi() {
   const [jurusanFullName, setJurusanFullName] = React.useState('');
   const [typeFile, setTypeFile] = React.useState('');
   const [endDate, setEndDate] = React.useState(null);
-
-  const years = range(2000, getYear(new Date()) + 1, 1);
 
   const { data } = useFetch({
     module: 'jurusan',
@@ -115,14 +97,6 @@ function ReportTransaksi() {
     setLimit(i);
   }, 500);
   const inputChangeLimit = React.useMemo(() => handleChangeDebounceLimit, []);
-  const onChangeDate = (dates) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-  };
-  const handleCalenderClose = () => {
-    console.log(new Date(startDate).toISOString(), endDate);
-  };
   const handleChangesJurusan = (event, value) => {
     setPage(1);
     setJurusan(String(event.target.value));
@@ -323,69 +297,11 @@ function ReportTransaksi() {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
             <Box>
               <LabelField title="Filter tanggal" />
-              <DatePicker
-                selectsRange
-                onCalendarClose={handleCalenderClose}
-                renderCustomHeader={({
-                  date,
-                  changeYear,
-                  changeMonth,
-                  decreaseMonth,
-                  increaseMonth,
-                  prevMonthButtonDisabled,
-                  nextMonthButtonDisabled,
-                }) => {
-                  const disabledNextBtn = getMonth(date) === 11 && getYear(date) === getYear(new Date());
-                  const disabledPrevBtn = getMonth(date) === 0 && getYear(date) === 2000;
-                  return (
-                    <div
-                      style={{
-                        margin: 10,
-                        display: 'flex',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled || disabledPrevBtn}>
-                        {'<'}
-                      </button>
-                      <select value={getYear(date)} onChange={({ target: { value } }) => changeYear(value)}>
-                        {years.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-
-                      <select
-                        value={months[getMonth(date)]}
-                        onChange={({ target: { value } }) => changeMonth(months.indexOf(value))}
-                      >
-                        {months.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-
-                      <button onClick={increaseMonth} disabled={nextMonthButtonDisabled || disabledNextBtn}>
-                        {'>'}
-                      </button>
-                    </div>
-                  );
-                }}
-                selected={startDate}
-                startDate={startDate}
+              <CustomDatePicker
+                setEndDate={setEndDate}
                 endDate={endDate}
-                isClearable
-                onChange={onChangeDate}
-                customInput={
-                  <TextField
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    size="small"
-                  />
-                }
+                setStartDate={setStartDate}
+                startDate={startDate}
               />
             </Box>
             <Box>
