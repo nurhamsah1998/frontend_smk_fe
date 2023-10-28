@@ -7,7 +7,6 @@ import { jsPDF as JSPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import moment from 'moment';
 import DownloadIcon from '@mui/icons-material/Download';
-import { uid } from 'uid';
 
 import { LabelField } from '../../../components/Commons';
 import TableComponen from '../../../components/TableComponent';
@@ -50,18 +49,21 @@ function ReportTransaksi() {
   const [limitView, setLimitView] = React.useState('40');
   const [startDate, setStartDate] = React.useState(null);
   const [kelas, setKelas] = React.useState('');
+  const [filterTanggal, setFilterTanggal] = React.useState('');
+  const [filteraTanggalOption, setFilteraTanggalOption] = React.useState({ start: null, end: null });
   const [subKelas, setSubKelasKelas] = React.useState('');
   const [jurusan, setJurusan] = React.useState('');
-  const [jurusanFullName, setJurusanFullName] = React.useState('');
+  // const [jurusanFullName, setJurusanFullName] = React.useState('');
   const [typeFile, setTypeFile] = React.useState('');
   const [endDate, setEndDate] = React.useState(null);
-
   const { data } = useFetch({
     module: 'jurusan',
   });
   const { items, totalData, totalPage, totalRows, setPage, page, isLoading, setLimit, limit } = useFetch({
     module: 'get-all-invoice',
-    params: `&startDate=${startDate}&endDate=${endDate}&kelas=${kelas}&jurusan=${jurusan}&sub_kelas=${subKelas}`,
+    params: `&startDate=${startDate || filteraTanggalOption.start}&endDate=${
+      endDate || filteraTanggalOption.end
+    }&kelas=${kelas}&jurusan=${jurusan}&sub_kelas=${subKelas}`,
   });
 
   const tableHead = [
@@ -121,7 +123,7 @@ function ReportTransaksi() {
         uang_diterima: FormatCurrency(item?.uang_diterima),
         invoice: item?.invoice,
         kode_pembayaran: item?.kode_pembayaran,
-        createdAt: moment(item?.createdAt).format('Do MMM YYYY hh:mm a'),
+        createdAt: moment(item?.createdAt).format('Do MMM YYYY H:mm'),
       }))
       ?.map((item) => {
         return Object.values(item);
@@ -179,39 +181,49 @@ function ReportTransaksi() {
       doc.setFont('', '', '');
       doc.setFontSize(12);
       const isSingleFilterDate = moment(startDate).format('Do MMMM YYYY') === moment(endDate).format('Do MMMM YYYY');
-      if (Boolean(endDate))
-        doc.text(
-          `Transaksi dari : ${
-            Boolean(isSingleFilterDate)
-              ? moment(startDate).format('Do MMMM YYYY')
-              : `${moment(startDate).format('Do MMMM YYYY')} - ${moment(endDate).format('Do MMMM YYYY')}`
-          }`,
-          doc.internal.pageSize.width - 10,
-          60,
-          {
-            align: 'right',
-          }
-        );
-      if (Boolean(kelas) && Boolean(jurusan) && Boolean(subKelas))
-        doc.text(
-          `Kelas: ${kelas} ${jurusanFullName} ${subKelas}`,
-          doc.internal.pageSize.width - 10,
-          !Boolean(endDate) ? 60 : 65,
-          {
-            align: 'right',
-          }
-        );
 
       doc.setFontSize(10);
       doc.setFont('', '', '');
-      doc.text(itemsNoPagination?.role?.toUpperCase(), 10, 65, {
-        align: 'left',
-      });
+      if (Boolean(filteraTanggalOption.start)) {
+        doc.text(
+          `Tanggal : ${
+            filterTanggal === 'day'
+              ? moment(filteraTanggalOption.start).format('DD MMMM YYYY')
+              : filterTanggal === ''
+              ? '-'
+              : `${moment(filteraTanggalOption.start).format('DD MMMM YYYY')} - ${moment(
+                  filteraTanggalOption.end
+                ).format('DD MMMM YYYY')}`
+          }`,
+          10,
+          65,
+          {
+            align: 'left',
+          }
+        );
+      }
+      if (Boolean(startDate)) {
+        doc.text(
+          `Tanggal : ${moment(startDate).format('DD MMMM YYYY')} - ${moment(endDate).format('DD MMMM YYYY')}`,
+          10,
+          65,
+          {
+            align: 'left',
+          }
+        );
+      }
+
       doc.setFontSize(10);
-      doc.text(`Kode download : TGH/CODE-${uid(7).toUpperCase()}/${itemsNoPagination?.nama?.toUpperCase()}`, 10, 69, {
-        align: 'left',
-      });
-      doc.text(`Tanggal dibuat : ${moment().format('Do MMMM YYYY hh:mm a')}`, 10, 73, {
+      doc.text(
+        `Kelas : ${Boolean(kelas) && Boolean(jurusan) && Boolean(subKelas) ? `${kelas} ${jurusan} ${subKelas}` : '-'}`,
+        10,
+        69,
+        {
+          align: 'left',
+        }
+      );
+      /// https://stackoverflow.com/a/12970385/18038473
+      doc.text(`Tanggal dibuat : ${moment().format('Do MMMM YYYY H:mm')}`, 10, 73, {
         align: 'left',
       });
       const tableHeadPdf = [...tableHead];
@@ -284,7 +296,7 @@ function ReportTransaksi() {
                     key={index}
                     onClick={() => {
                       setJurusan(item?.kode_jurusan);
-                      setJurusanFullName(item?.nama);
+                      // setJurusanFullName(item?.nama);
                     }}
                     value={item?.kode_jurusan}
                   >
@@ -293,11 +305,71 @@ function ReportTransaksi() {
                 ))}
               </Select>
             </Box>
+            <Box>
+              <LabelField
+                title="Filter tanggal"
+                onClickClearIcon={() => {
+                  setFilterTanggal('');
+                  setFilteraTanggalOption({ start: null, end: null });
+                }}
+                clearIcon={Boolean(filterTanggal)}
+              />
+              <Select
+                sx={{
+                  minWidth: '140px',
+                }}
+                disabled={Boolean(startDate)}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={filterTanggal}
+                size="small"
+                onChange={(event) => {
+                  const type = event.target.value;
+                  const date = new Date();
+                  setPage(1);
+                  if (type === 'day') {
+                    /// https://stackoverflow.com/a/12970385/18038473
+                    setFilteraTanggalOption({
+                      start: moment(date).startOf('day').format('YYYY-MM-DD H:mm:ss'),
+                      end: moment(date).endOf('day').format('YYYY-MM-DD H:mm:ss'),
+                    });
+                  }
+                  if (type === 'week') {
+                    /// https://stackoverflow.com/a/12970385/18038473
+                    setFilteraTanggalOption({
+                      start: moment(date).startOf('week').format('YYYY-MM-DD H:mm:ss'),
+                      end: moment(date).endOf('week').format('YYYY-MM-DD H:mm:ss'),
+                    });
+                  }
+                  if (type === 'month') {
+                    /// https://stackoverflow.com/a/12970385/18038473
+                    setFilteraTanggalOption({
+                      start: moment(date).startOf('month').format('YYYY-MM-DD H:mm:ss'),
+                      end: moment(date).endOf('month').format('YYYY-MM-DD H:mm:ss'),
+                    });
+                  }
+                  if (type === 'year') {
+                    /// https://stackoverflow.com/a/12970385/18038473
+                    setFilteraTanggalOption({
+                      start: moment(date).startOf('year').format('YYYY-MM-DD H:mm:ss'),
+                      end: moment(date).endOf('year').format('YYYY-MM-DD H:mm:ss'),
+                    });
+                  }
+                  setFilterTanggal(event.target.value);
+                }}
+              >
+                <MenuItem value={`day`}>Harian</MenuItem>
+                <MenuItem value={'week'}>Mingguan</MenuItem>
+                <MenuItem value={'month'}>Bulanan</MenuItem>
+                <MenuItem value={'year'}>Tahunan</MenuItem>
+              </Select>
+            </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
             <Box>
-              <LabelField title="Filter tanggal" />
+              <LabelField title="Custom filter tanggal" />
               <CustomDatePicker
+                disabled={Boolean(filteraTanggalOption.start)}
                 setEndDate={setEndDate}
                 endDate={endDate}
                 setStartDate={setStartDate}

@@ -13,7 +13,14 @@ import id from 'date-fns/locale/id';
 
 registerLocale('id', id);
 
-function CustomDatePicker({ startDate, endDate, setStartDate, setEndDate, disabledMultipick = false }) {
+function CustomDatePicker({
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+  disabledMultipick = false,
+  disabled = false,
+}) {
   const months = [
     'January',
     'February',
@@ -104,6 +111,7 @@ function CustomDatePicker({ startDate, endDate, setStartDate, setEndDate, disabl
           <TextField
             InputProps={{
               readOnly: true,
+              disabled,
             }}
             size="small"
           />
