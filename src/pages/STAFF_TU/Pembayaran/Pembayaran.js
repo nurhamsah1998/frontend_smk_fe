@@ -404,15 +404,20 @@ function Pembayaran() {
       });
       doc.setFont('', '', '');
       doc.setFontSize(12);
-      if (Boolean(kelas) && Boolean(jurusan) && Boolean(subKelas))
-        doc.text(`Kelas: ${kelas} ${jurusan} ${subKelas}`, doc.internal.pageSize.width - 10, 60, {
-          align: 'right',
-        });
       doc.setFontSize(10);
       doc.setFont('', '', '');
-      doc.text(itemsNoPagination?.role?.toUpperCase(), 10, 65, {
-        align: 'left',
-      });
+      doc.text(
+        `Kelas : ${
+          Boolean(kelas) && Boolean(jurusan) && Boolean(subKelas)
+            ? `${kelas} ${data?.data?.find((item) => item?.nama === jurusan)?.kode_jurusan} ${subKelas}`
+            : '-'
+        }`,
+        10,
+        65,
+        {
+          align: 'left',
+        }
+      );
       doc.setFontSize(10);
       doc.text(`Kode download : TGH/CODE-${uid(7).toUpperCase()}/${itemsNoPagination?.nama?.toUpperCase()}`, 10, 69, {
         align: 'left',

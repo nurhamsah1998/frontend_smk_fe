@@ -65,7 +65,6 @@ function ReportTransaksi() {
       endDate || filteraTanggalOption.end
     }&kelas=${kelas}&jurusan=${jurusan}&sub_kelas=${subKelas}`,
   });
-
   const tableHead = [
     {
       id: 'nama',
@@ -135,9 +134,11 @@ function ReportTransaksi() {
     if (event === 'xlsx') {
       await axios
         .get(
-          `${apiUrl}download/report-transaction?page=${page}&limit=${
-            limit || 10
-          }&startDate=${startDate}&endDate=${endDate}&kelas=${kelas}&jurusan=${jurusan}&sub_kelas=${subKelas}&type_file=${typeFile}`,
+          `${apiUrl}download/report-transaction?page=${page}&limit=${limit || 10}&startDate=${
+            startDate || filteraTanggalOption.start
+          }&endDate=${
+            endDate || filteraTanggalOption.end
+          }&kelas=${kelas}&jurusan=${jurusan}&sub_kelas=${subKelas}&type_file=${typeFile}`,
           {
             responseType: 'blob',
             headers: {
@@ -180,8 +181,6 @@ function ReportTransaksi() {
       });
       doc.setFont('', '', '');
       doc.setFontSize(12);
-      const isSingleFilterDate = moment(startDate).format('Do MMMM YYYY') === moment(endDate).format('Do MMMM YYYY');
-
       doc.setFontSize(10);
       doc.setFont('', '', '');
       if (Boolean(filteraTanggalOption.start)) {
@@ -211,6 +210,11 @@ function ReportTransaksi() {
             align: 'left',
           }
         );
+      }
+      if (!Boolean(startDate) && !Boolean(filteraTanggalOption.start)) {
+        doc.text(`Tanggal : -`, 10, 65, {
+          align: 'left',
+        });
       }
 
       doc.setFontSize(10);
