@@ -167,7 +167,7 @@ function ReportTransaksi() {
       const doc = new JSPDF({
         orientation: 'p',
         unit: 'mm',
-        format: 'a4',
+        format: 'legal',
       });
       autoTable(doc, {
         html: '#my-table',

@@ -196,7 +196,7 @@ function DetailTagihan() {
           ))}
         </Box>
         <FormPembayaran totalBillPaymentHistory={totalBillPaymentHistory} refetchInvoice={refetchInvoice} data={data} />
-        <PrintTemplateInvoice width="40%" printRef={printRef} data={selectedDataForPrint} />
+        <PrintTemplateInvoice printRef={printRef} data={selectedDataForPrint} />
       </Box>
     </Box>
   );

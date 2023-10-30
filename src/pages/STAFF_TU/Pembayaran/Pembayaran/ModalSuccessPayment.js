@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Button, Divider, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { useReactToPrint } from 'react-to-print';
 import moment from 'moment';
+import 'moment/locale/id';
 import { jsPDF as JSPDF } from 'jspdf';
 
 import ScreenDialog from '../../../../components/ScreenDialog';
@@ -21,43 +22,79 @@ export const PrintTemplateInvoice = ({ data, printRef, width = '100%' }) => {
       <div
         className="print"
         style={{
-          padding: '10px',
+          padding: '10px 55px 10px 55px',
           width,
         }}
         ref={printRef}
       >
-        <p style={{ textAlign: 'center', fontSize: '24px', fontWeight: 700, margin: 0 }}>INVOICE PEMBAYARAN</p>
-        <p style={{ textAlign: 'center', fontSize: '16px', fontWeight: 500, margin: 0 }}>SMK PGRI KRAS</p>
+        <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: 500, margin: 0 }}>SMK PGRI KRAS</p>
         <p
           style={{
             textAlign: 'center',
-            fontSize: '16px',
+            fontSize: '14px',
             fontWeight: 500,
-            margin: 0,
             marginTop: '-5px',
-            marginBottom: '20px',
-            borderBottom: 'dashed 4px #ccc',
-            paddingBottom: '20px',
+            margin: 0,
           }}
         >
           Jl. Raya Desa Kras Kec.Kras Kab.Kediri
         </p>
-        <div style={{ display: 'flex', gap: '5px' }}>
-          <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px' }}>Nama</p>
-          <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, textTransform: 'capitalize' }}>
-            : {data?.nama}
-          </p>
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: '16px',
+            fontWeight: 700,
+            margin: 0,
+            marginTop: '-15px',
+            borderBottom: 'dashed 4px #ccc',
+            marginBottom: '10px',
+            paddingBottom: '10px',
+          }}
+        >
+          BUKTI PEMBAYARAN
+        </p>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0, width: '75px' }}>Nama</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0, textTransform: 'capitalize' }}>
+                : {data?.nama}
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0, width: '75px' }}>Kelas</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0 }}>
+                : {data?.kelas} {data?.jurusan} {data?.sub_kelas}
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0, width: '75px' }}>Waktu</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0 }}>
+                : {moment(data?.createdAt).format('DD MMMM YYYY H:mm')}
+              </p>
+            </div>
+          </div>
+          <div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0, width: '75px' }}>Kode siswa</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0 }}>: {data?.kode_tagihan}</p>
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0, width: '75px' }}>No. INVOICE</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0 }}>: {data?.invoice}</p>
+            </div>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: '5px' }}>
-          <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px' }}>Kelas</p>
-          <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0 }}>: {data?.kelas}</p>
-        </div>
-        <div style={{ display: 'flex', gap: '5px' }}>
-          <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px' }}>No. INVOICE</p>
-          <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0 }}>: {data?.invoice}</p>
-        </div>
-        <div style={{ marginTop: '20px' }}>
-          <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px', fontWeight: 700 }}>
+
+        <div style={{ marginTop: '10px' }}>
+          <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0, width: '75px', fontWeight: 700 }}>
             DETAIL PEMBAYARAN :{' '}
           </p>
           <div
@@ -68,30 +105,32 @@ export const PrintTemplateInvoice = ({ data, printRef, width = '100%' }) => {
               gap: '5px',
             }}
           >
-            <p style={{ whiteSpace: 'nowrap', margin: 0, fontSize: '14px' }}>{data?.kode_pembayaran}</p>
+            <p style={{ whiteSpace: 'nowrap', margin: 0, fontSize: '12px' }}>{data?.kode_pembayaran}</p>
             <div style={{ borderBottom: 'dotted 2px #ccc', width: '100%' }} />
             <p style={{ whiteSpace: 'nowrap', margin: 0, fontFamily: 'monospace' }}>
               {FormatCurrency(data?.uang_diterima)}
             </p>
           </div>
         </div>
-        <div style={{ marginTop: '20px' }}>
-          <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px', fontWeight: 700 }}>NOTE : </p>
+        <div style={{ marginTop: '10px' }}>
+          <p style={{ whiteSpace: 'nowrap', fontSize: '12px', margin: 0, width: '95px', fontWeight: 700 }}>
+            Catatan :{' '}
+          </p>
           <div>
-            <p style={{ margin: 0, fontSize: '14px', maxWidth: '400px' }}>{data?.note}</p>
+            <p style={{ margin: 0, fontSize: '12px' }}>{data?.note}</p>
           </div>
         </div>
         <div
           style={{
-            marginTop: '40px',
+            marginTop: '15px',
             display: 'flex',
             justifyContent: 'flex-end',
+            marginRight: '20px',
           }}
         >
           <div>
-            <p style={{ margin: 0 }}>Kediri, {moment(data?.createdAt).format('DD MMM YYYY')}</p>
-            <p style={{ margin: 0, marginTop: '30px', textAlign: 'center' }}>{data?.petugas}</p>
-            <p style={{ margin: 0, marginTop: '-5px', textAlign: 'center' }}>(Petugas TU)</p>
+            <p style={{ margin: 0, textAlign: 'center', fontSize: '12px' }}>Kasir</p>
+            <p style={{ margin: 0, marginTop: '15px', textAlign: 'center', fontSize: '12px' }}>{data?.petugas}</p>
           </div>
         </div>
       </div>
@@ -108,7 +147,7 @@ function ModalSuccessPayment({ open, handleClose, data }) {
     const doc = new JSPDF({
       orientation: 'p',
       unit: 'mm',
-      format: 'a4',
+      format: 'legal',
     });
     KopPdf(doc);
     const globalPosition = 10;
@@ -259,7 +298,7 @@ function ModalSuccessPayment({ open, handleClose, data }) {
           Print Invoice
         </Button>
       </div>
-      <PrintTemplateInvoice width="40%" data={data} printRef={printRef} />
+      <PrintTemplateInvoice data={data} printRef={printRef} />
     </ScreenDialog>
   );
 }

@@ -327,7 +327,7 @@ function Pembayaran() {
     const doc = new JSPDF({
       orientation: 'p',
       unit: 'mm',
-      format: 'a4',
+      format: 'legal',
     });
     pdfSuratTagihan(doc, i);
     window.open(URL.createObjectURL(doc.output('blob')));
@@ -369,14 +369,14 @@ function Pembayaran() {
         )
         .then((res) => {
           const isUserHasFilter = Boolean(kelas) || Boolean(jurusan) || Boolean(subKelas);
-          const specifictFilter = ` ${isUserHasFilter ? '(' : ''} ${Boolean(kelas) ? `Kelas ${kelas}` : ''} ${
-            Boolean(jurusan) ? `Jurusan ${jurusan}` : ''
-          } ${Boolean(subKelas) ? `${subKelas}` : ''} ${isUserHasFilter ? ')' : ''}`;
+          const specifictFilter = `${isUserHasFilter ? '(' : ''}${Boolean(kelas) ? `Kelas ${kelas}` : ''}${
+            Boolean(jurusan) ? ` ${data?.data?.find((item) => item?.nama === jurusan)?.kode_jurusan}` : ''
+          }${Boolean(subKelas) ? ` ${subKelas}` : ''}${isUserHasFilter ? ')' : ''}`;
           /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
           const url = URL.createObjectURL(new Blob([res?.data]));
           const link = document.createElement('a');
           link.href = url;
-          link.setAttribute('download', `Laporan Tagihan${specifictFilter} ${moment().format('Do-MMMM-YYYY')}.xlsx`);
+          link.setAttribute('download', `Laporan Tagihan ${specifictFilter} ${moment().format('Do-MMMM-YYYY')}.xlsx`);
           document.body.appendChild(link);
           link.click();
         })
@@ -390,7 +390,7 @@ function Pembayaran() {
       const doc = new JSPDF({
         orientation: 'p',
         unit: 'mm',
-        format: 'a4',
+        format: 'legal',
       });
       autoTable(doc, {
         html: '#my-table',
@@ -419,7 +419,7 @@ function Pembayaran() {
         }
       );
       doc.setFontSize(10);
-      doc.text(`Kode download : TGH/CODE-${uid(7).toUpperCase()}/${itemsNoPagination?.nama?.toUpperCase()}`, 10, 69, {
+      doc.text(`Status pembayaran : ${Boolean(bill) ? bill?.toUpperCase() : '-'}`, 10, 69, {
         align: 'left',
       });
       doc.text(`Tanggal dibuat : ${moment().format('Do MMM YYYY hh:mm a')}`, 10, 73, {
@@ -440,7 +440,7 @@ function Pembayaran() {
     const doc = new JSPDF({
       orientation: 'p',
       unit: 'mm',
-      format: 'a4',
+      format: 'legal',
     });
     for (let index = 0; index < items.length; index += 1) {
       pdfSuratTagihan(doc, items[index]);
