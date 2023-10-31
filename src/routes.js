@@ -75,10 +75,10 @@ export default function Router() {
       path: 'brand',
       element: <Brand />,
     },
-    {
-      path: 'siswa-register',
-      element: <RegisterStudentPage />,
-    },
+    // {
+    //   path: 'siswa-register',
+    //   element: <RegisterStudentPage />,
+    // },
     {
       path: 'staff-register',
       element: <RegisterStaffPage />,

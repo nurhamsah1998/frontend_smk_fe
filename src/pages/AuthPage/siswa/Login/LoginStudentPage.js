@@ -91,7 +91,7 @@ export default function LoginStudentPage() {
               Login
             </Typography>
             <FormLogin />
-            <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            {/* <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>
               <Typography variant="subtitle2">Belum punya akun ?</Typography>
               <Typography
                 onClick={() => navigate('/siswa-register')}
@@ -103,7 +103,7 @@ export default function LoginStudentPage() {
               >
                 Daftar
               </Typography>
-            </Box>
+            </Box> */}
           </StyledContent>
         </Container>
       </StyledRoot>

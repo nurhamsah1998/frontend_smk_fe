@@ -27,13 +27,14 @@ export const PrintTemplateInvoice = ({ data, printRef, width = '100%' }) => {
         }}
         ref={printRef}
       >
-        <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: 500, margin: 0 }}>SMK PGRI KRAS</p>
+        <p style={{ textAlign: 'center', fontSize: '14px', marginBottom: '-20px', fontWeight: 500, margin: 0 }}>
+          SMK PGRI KRAS
+        </p>
         <p
           style={{
             textAlign: 'center',
             fontSize: '14px',
             fontWeight: 500,
-            marginTop: '-5px',
             margin: 0,
           }}
         >
@@ -45,7 +46,7 @@ export const PrintTemplateInvoice = ({ data, printRef, width = '100%' }) => {
             fontSize: '16px',
             fontWeight: 700,
             margin: 0,
-            marginTop: '-15px',
+            marginTop: '-5px',
             borderBottom: 'dashed 4px #ccc',
             marginBottom: '10px',
             paddingBottom: '10px',

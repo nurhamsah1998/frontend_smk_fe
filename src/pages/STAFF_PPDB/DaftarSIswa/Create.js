@@ -28,6 +28,14 @@ function Create({ openModalCreate, setOpenModalCreate }) {
   const handleChange = (event) => {
     setGender(event.target.value);
   };
+  const angkatan = () => {
+    const result = [];
+    const date = new Date();
+    result.push(date.getFullYear() - 1);
+    result.push(date.getFullYear());
+    result.push(date.getFullYear() + 1);
+    return result;
+  };
   return (
     <div>
       <ScreenDialog
@@ -51,6 +59,7 @@ function Create({ openModalCreate, setOpenModalCreate }) {
             nama_ayah: '',
             nama_ibu: '',
             alamat: '',
+            angkatan: '',
           }}
           onSubmit={(values) => {
             const body = {
@@ -76,39 +85,6 @@ function Create({ openModalCreate, setOpenModalCreate }) {
                   <TextField
                     size="small"
                     fullWidth
-                    name="nama_ayah"
-                    {...getFieldProps('nama_ayah')}
-                    label="Nama Ayah"
-                  />
-                  <TextField size="small" fullWidth name="nama_ibu" {...getFieldProps('nama_ibu')} label="Nama Ibu" />
-                  <TextField size="small" fullWidth name="alamat" {...getFieldProps('alamat')} label="Alamat" />
-                  <Box>
-                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
-                    <TextField fullWidth size="small" select onChange={handleChange} value={gender} label="Gender">
-                      <MenuItem value={'L'}>Laki - Laki</MenuItem>
-                      <MenuItem value={'P'}>Perempuan</MenuItem>
-                    </TextField>
-                  </Box>
-                  <TextField
-                    size="small"
-                    fullWidth
-                    name="noHP"
-                    {...getFieldProps('noHP')}
-                    type="number"
-                    label="Nomor Telpon/Wa"
-                  />
-                  <AutoCompleteAsync
-                    size="small"
-                    value={values.jurusanId || {}}
-                    module="jurusan"
-                    label="Pilih jurusan"
-                    onChange={(x, y) => {
-                      setFieldValue('jurusanId', y);
-                    }}
-                  />
-                  <TextField
-                    size="small"
-                    fullWidth
                     name="password"
                     label="Password"
                     {...getFieldProps('password')}
@@ -122,6 +98,59 @@ function Create({ openModalCreate, setOpenModalCreate }) {
                         </InputAdornment>
                       ),
                     }}
+                  />
+                  <Box>
+                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                    <TextField
+                      fullWidth
+                      size="small"
+                      select
+                      onChange={(event) => {
+                        setFieldValue('angkatan', event.target.value);
+                      }}
+                      value={values.angkatan}
+                      label="Angkatan"
+                    >
+                      {angkatan()?.map((item, index) => (
+                        <MenuItem key={index} value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Box>
+                  <AutoCompleteAsync
+                    size="small"
+                    value={values.jurusanId || {}}
+                    module="jurusan"
+                    label="Pilih jurusan"
+                    onChange={(x, y) => {
+                      setFieldValue('jurusanId', y);
+                    }}
+                  />
+                  <Box>
+                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                    <TextField fullWidth size="small" select onChange={handleChange} value={gender} label="Gender">
+                      <MenuItem value={'L'}>Laki - Laki</MenuItem>
+                      <MenuItem value={'P'}>Perempuan</MenuItem>
+                    </TextField>
+                  </Box>
+                  <TextField
+                    size="small"
+                    fullWidth
+                    name="nama_ayah"
+                    {...getFieldProps('nama_ayah')}
+                    label="Nama Ayah"
+                  />
+                  <TextField size="small" fullWidth name="nama_ibu" {...getFieldProps('nama_ibu')} label="Nama Ibu" />
+                  <TextField size="small" fullWidth name="alamat" {...getFieldProps('alamat')} label="Alamat" />
+
+                  <TextField
+                    size="small"
+                    fullWidth
+                    name="noHP"
+                    {...getFieldProps('noHP')}
+                    type="number"
+                    label="Nomor Telpon/Wa"
                   />
                 </Box>
               </Form>

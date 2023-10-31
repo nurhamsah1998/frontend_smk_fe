@@ -87,11 +87,16 @@ function ReportTransaksi() {
       id: 'kode_pembayaran',
       label: 'Keterangan',
     },
+    {
+      id: 'createdAt',
+      label: 'Tanggal',
+    },
   ];
   const itemsRebuild = React.useMemo(() => {
     return items?.map((i) => ({
       ...i,
       kelas: `${i?.kelas} ${i?.jurusan} ${i?.sub_kelas}`,
+      createdAt: moment(i?.createdAt).format('Do MMM YYYY H:mm'),
     }));
   }, [items]);
   const handleChangeDebounceLimit = debounce((i) => {
@@ -231,10 +236,6 @@ function ReportTransaksi() {
         align: 'left',
       });
       const tableHeadPdf = [...tableHead];
-      tableHeadPdf.push({
-        id: 'createdAt',
-        label: 'Tanggal',
-      });
       autoTable(doc, {
         margin: { horizontal: 10 },
         head: [tableHeadPdf?.map((item) => item?.label)],
