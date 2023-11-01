@@ -22,6 +22,7 @@ import DashboardLayoutDEV from './layouts/DEV/DashboardLayoutDEV';
 import LogActivity from './pages/DEV/Log/LogActivity';
 import DashboardDev from './pages/DEV/Dashboard/Dashboard';
 import Brand from './pages/Anonim/Brand';
+import Account from './pages/DEV/Account/Account';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,7 @@ export default function Router() {
         { element: <Navigate to="/dev/dashboard" />, index: true },
         { path: 'dashboard', element: <DashboardDev /> },
         { path: 'log-activity', element: <LogActivity /> },
+        { path: 'account', element: <Account /> },
       ],
     },
     {

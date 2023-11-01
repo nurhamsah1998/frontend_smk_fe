@@ -5,6 +5,8 @@ import Groups2Icon from '@mui/icons-material/Groups2';
 import PaymentIcon from '@mui/icons-material/Payment';
 import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHorizontalCircle';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+
 import SvgColor from '../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -53,6 +55,11 @@ export const navConfigDEV = [
     title: 'Log Activity',
     path: '/dev/log-activity',
     icon: <ContentPasteIcon />,
+  },
+  {
+    title: 'Akun Staff',
+    path: '/dev/account',
+    icon: <AssignmentIndIcon />,
   },
 ];
 export const navConfigPPDB = [

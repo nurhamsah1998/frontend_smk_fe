@@ -32,6 +32,7 @@ function Pembayaran() {
   const location = useLocation();
   const [bill, setBill] = useState('');
   const [inputView, setInputView] = useState('');
+  const [nomor, setNomor] = useState('');
   const [kelas, setKelas] = useState('');
   const [subKelas, setSubKelasKelas] = React.useState('');
   const [limitView, setLimitView] = useState('40');
@@ -153,155 +154,101 @@ function Pembayaran() {
       margin: { top: 70 },
     });
     KopPdf(doc);
-    doc.text(`Kepada : `, doc.internal.pageSize.width - 90, 59, {
+    doc.text(`No    : ${nomor}`, 10, 59, {
       align: 'left',
     });
-    doc.setFont('regular', '', '');
-    doc.setFontSize(10);
-    doc.text(data?.nama?.toUpperCase(), doc.internal.pageSize.width / 1.31, 69 + 2, {
-      align: 'center',
-    });
-    doc.setFont('', '', '');
-    doc.setFontSize(10);
-    doc.text(
-      `${data?.kelas} / ${data?.['jurusan.nama']} / ${data?.sub_kelas}`,
-      doc.internal.pageSize.width / 1.31,
-      73 + 2,
-      {
-        align: 'center',
-      }
-    );
-    doc.setFont('', '', 700);
-    doc.text(`${data?.kode_siswa}`, doc.internal.pageSize.width / 1.31, 77 + 2, {
-      align: 'center',
-    });
-
-    doc.roundedRect(doc.internal.pageSize.width - 90, 62, 80, 25, 5, 5);
-    doc.setFontSize(15);
-
-    doc.text(`SURAT PENAGIHAN`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height / 3 + 10, {
-      align: 'center',
-    });
-    doc.setFontSize(8);
-    doc.setFont('', '', '', '');
-    doc.text(
-      `TAHUN PELAJARAN ${moment().add(-1, 'year').format('YYYY')} / ${moment().format('YYYY')}`,
-      doc.internal.pageSize.width / 2,
-      doc.internal.pageSize.height / 3 + 14,
-      {
-        align: 'center',
-      }
-    );
-    doc.setFontSize(12);
-    doc.text(`YTH. Orang tua/wali,`, 10, doc.internal.pageSize.height / 3 + 34, {
+    doc.text(`Hal   : PEMBERITAHUAN`, 10, 65, {
       align: 'left',
     });
-    doc.text(
-      `Berkaitan dengan akan datangnya hari ujian sekolah, kami selaku staff pihak sekolahan memberitahukan bahwa `,
-      10,
-      doc.internal.pageSize.height / 3 + 45,
-      {
-        align: 'left',
-      }
-    );
-    doc.text(
-      `semua tagihan  siswa yang belum lunas harus  segera dilunasi sebelum memasuki hari ujian sekolah yang akan`,
-      10,
-      doc.internal.pageSize.height / 3 + 50,
-      {
-        align: 'left',
-      }
-    );
-    doc.text(
-      `diselenggarakan pada tanggal ${moment(startUjian).format('Do MMMM YYYY')}.`,
-      10,
-      doc.internal.pageSize.height / 3 + 55,
-      {
-        align: 'left',
-      }
-    );
-    doc.text(
-      `Berikut total tagihan ananda ${data?.nama} tahun ajaran ${moment()
-        .add(-1, 'year')
-        .format('YYYY')} / ${moment().format('YYYY')}`,
-      10,
-      doc.internal.pageSize.height / 3 + 60,
-      {
-        align: 'left',
-      }
-    );
-    const lenghtAmountText = `sebesar : `;
-    doc.text(lenghtAmountText, 10, doc.internal.pageSize.height / 3 + 65, {
+    /// KEPADA YTH
+    doc.text(`Kepada :`, 10, 75, {
+      align: 'left',
+    });
+    doc.text(`Yth. Bapak / Ibu Wali Murid ${data?.nama?.toUpperCase()}`, 10, 81, {
+      align: 'left',
+    });
+    doc.text(`Kelas ${data?.kelas} ${data['jurusan.kode_jurusan']} ${data?.sub_kelas}`, 10, 87, {
+      align: 'left',
+    });
+    doc.text('Di tempat', 10, 93, {
       align: 'left',
     });
     doc.setFont('', '', 700);
-    doc.text(
-      `${FormatCurrency(data?.current_bill || 0)}`,
-      10 + lenghtAmountText?.length + 6,
-      doc.internal.pageSize.height / 3 + 65,
-      {
-        align: 'left',
-      }
-    );
+    doc.text('Assalamualaikum Wr. Wb', 10, 113, {
+      align: 'left',
+    });
     doc.setFont('', '', '');
     doc.text(
-      `Surat tagihan ini kami maksutkan agar orang tua/wali siswa bisa melunasi tagihan sebelum datangnya hari ujian.`,
-      10,
-      doc.internal.pageSize.height / 3 + 75,
-      {
-        align: 'left',
-      }
-    );
-    doc.text(
-      `Siswa harus melakukan pembayaran sebelum  jatuh tempo pada tanggal ${moment(expiredDate).format(
+      `Diberitahukan dengan hormat bahwa ujian sekolah akan dilaksanakan mulai ${moment(startUjian).format(
         'Do MMMM YYYY'
-      )}.`,
+      )}. Sehubungan `,
       10,
-      doc.internal.pageSize.height / 3 + 80,
+      122,
       {
         align: 'left',
       }
     );
     doc.text(
-      `kecuali jika dirasa tagihan ini memberatkan,  orang tua/wali siswa bisa datang langsung ke sekolah untuk`,
+      `dengan ini maka kami mohon dengan hormat agar Bapak / Ibu / Wali murid segera melunasi tanggungan`,
       10,
-      doc.internal.pageSize.height / 3 + 90,
+      128,
       {
         align: 'left',
       }
     );
+    /// https://stackoverflow.com/a/25675981/18038473
+    const widthTextOne = doc.getTextWidth('pembayaran Sekolah puta putri bapak ibu yang bernama ');
+    doc.text(`pembayaran Sekolah puta putri bapak ibu yang bernama `, 10, 134, {
+      align: 'left',
+    });
+    doc.setFont('', '', 700);
+    const lineTextWidth = doc.getTextWidth(data?.nama?.toUpperCase());
+    doc.line(widthTextOne + 10, 135, widthTextOne + lineTextWidth + 10, 135);
+
+    doc.text(`${data?.nama?.toUpperCase()}`, widthTextOne + 10, 134, {
+      align: 'left',
+    });
+    doc.setFont('', '', '');
+    doc.text(`Paling akhir tanggal ${moment(expiredDate).format('Do MMMM YYYY')} kepada petugas di Sekolah.`, 10, 140, {
+      align: 'left',
+    });
+    const lengthTextBeforeAmount = doc.getTextWidth('Adapun tanggungan yang harus dilunasi adalah sebesar ');
+    doc.text(`Adapun tanggungan yang harus dilunasi adalah sebesar`, 10, 146, {
+      align: 'left',
+    });
+    doc.setFont('', '', 700);
+    doc.text(`${FormatCurrency(data?.current_bill || 0)}`, lengthTextBeforeAmount + 10, 146, {
+      align: 'left',
+    });
+    doc.setFont('', '', '');
+    doc.text(`Demikian atas kerja samanya di ucapkan terima kasih.`, 10, 166, {
+      align: 'left',
+    });
+    doc.text(`Semoga rahmad dan pertolongan Allah selalu dilimpahkan pada kita bersama.`, 10, 172, {
+      align: 'left',
+    });
+    doc.setFont('', '', 700);
+    doc.text(`Wassalamu'alaikum Wr. Wb.`, 10, 181, {
+      align: 'left',
+    });
+    doc.setFont('', '', '');
     doc.text(
-      `mediasi batas waktu pembayaran yang ditentukan. Sekian surat tagihan ini kami buat, jika dirasa ada yang salah`,
-      10,
-      doc.internal.pageSize.height / 3 + 95,
-      {
-        align: 'left',
-      }
-    );
-    doc.text(
-      `dalam penulisan surat tagihan ini kami meminta maaf sebesar-besarnya.`,
-      10,
-      doc.internal.pageSize.height / 3 + 100,
-      {
-        align: 'left',
-      }
-    );
-    doc.text(
-      `Kediri, ${moment().format('Do MMMM YYYY')}`,
+      `Kras, ${moment().format('Do MMMM YYYY')}`,
       doc.internal.pageSize.width - 90 / 2,
       doc.internal.pageSize.height / 3 + 130,
       {
         align: 'center',
       }
     );
-    doc.text(
-      `${itemsNoPagination?.nama} (Petugas TU)`,
-      doc.internal.pageSize.width - 90 / 2,
-      doc.internal.pageSize.height / 3 + 150,
-      {
-        align: 'center',
-      }
-    );
+    doc.text(`Kepala SMK PGRI Kras`, doc.internal.pageSize.width - 90 / 2, doc.internal.pageSize.height / 3 + 135, {
+      align: 'center',
+    });
+    doc.setFont('', '', 700);
+    doc.text(`SUWARNI,S.Pd i`, doc.internal.pageSize.width - 90 / 2, doc.internal.pageSize.height / 3 + 155, {
+      align: 'center',
+    });
+    doc.setFont('', '', '');
+    doc.setFontSize(9);
     doc.setFont('', 'italic');
     doc.text(
       `Surat tagihan ini dicetak secara otomatis menggunakan sistem aplikasi sekolah.`,
@@ -312,7 +259,7 @@ function Pembayaran() {
       }
     );
     doc.text(
-      `Jika dirasa ada yang tidak sesuai berkaitan dengan nominal tagihan dll, bisa lapor ke petugas.`,
+      `Jika dirasa ada yang tidak sesuai berkaitan dengan nominal tagihan dll, bisa menghubungi ke petugas.`,
       doc.internal.pageSize.width / 2,
       doc.internal.pageSize.height - 15,
       {
@@ -422,7 +369,7 @@ function Pembayaran() {
       doc.text(`Status pembayaran : ${Boolean(bill) ? bill?.toUpperCase() : '-'}`, 10, 69, {
         align: 'left',
       });
-      doc.text(`Tanggal dibuat : ${moment().format('Do MMM YYYY hh:mm a')}`, 10, 73, {
+      doc.text(`Tanggal dibuat : ${moment().format('Do MMM YYYY H:mm')}`, 10, 73, {
         align: 'left',
       });
       autoTable(doc, {
@@ -457,7 +404,8 @@ function Pembayaran() {
         <link rel="canonical" href="/" />
       </Helmet>
       <ScreenDialog
-        title="Masukkan tanggal hari ujian dan jatuh tempo"
+        disabledSubmitButton={!Boolean(startUjian) || !Boolean(expiredDate) || !Boolean(nomor)}
+        title="Masukkan tanggal hari ujian, jatuh tempo dan nomor"
         labelClose="Batal"
         labelSubmit="Generate"
         open={openModalInputDate.openModal}
@@ -465,13 +413,23 @@ function Pembayaran() {
           setOpenModalInputDate((prev) => ({ ...prev, openModal: false }));
           setExpiredDate('');
           setStartUjian('');
+          setNomor('');
         }}
         handleSubmit={
           openModalInputDate.isBulk ? handlePrintMassalTagihan : () => handlePrintTagihan(openModalInputDate.data)
         }
       >
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <FormHelperText>Masukan nomor, contoh : 247//104.E8/SMK-PGRI/Krs/IX/2023</FormHelperText>
+            <TextField
+              value={nomor}
+              onChange={(i) => setNomor(i.target.value)}
+              sx={{
+                mt: '-15px',
+              }}
+              size="small"
+            />
             <Box>
               <FormHelperText>Masukan tanggal ujian</FormHelperText>
               <CustomDatePicker disabledMultipick startDate={startUjian} setStartDate={setStartUjian} />

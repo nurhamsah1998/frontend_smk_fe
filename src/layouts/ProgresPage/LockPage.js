@@ -2,10 +2,18 @@ import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { red } from '@mui/material/colors';
 
-function LockPage() {
+function LockPage({
+  title = 'Maaf akun anda dikunci oleh pihak sekolah',
+  tag = 'Hubungi kantor untuk lebih jelas',
+  customHandleLogOut = false,
+}) {
   const handleLogOut = () => {
-    window.localStorage.removeItem('accessToken');
-    window.location.reload();
+    if (!Boolean(customHandleLogOut)) {
+      window.localStorage.removeItem('accessToken');
+      window.location.reload();
+    } else {
+      customHandleLogOut();
+    }
   };
   return (
     <Box
@@ -20,10 +28,10 @@ function LockPage() {
     >
       <Box sx={{ display: 'grid' }}>
         <Typography fontSize={25} fontWeight={700} color="#fff" textAlign="center">
-          Maaf akun anda dikunci oleh pihak sekolah
+          {title}
         </Typography>
         <Typography color="#fff" textAlign="center">
-          Hubungi kantor untuk lebih jelas
+          {tag}
         </Typography>
         <Button sx={{ mt: 2 }} color="error" onClick={handleLogOut} variant="contained">
           Log Out

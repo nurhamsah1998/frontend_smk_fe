@@ -47,7 +47,7 @@ export default function TagihanStaff() {
   const { setDialog } = React.useContext(Dialog);
   const { data, isLoading, setPage, page, totalPage } = useFetch({
     module: `tagihan-permanent`,
-    initialLimit: 3,
+    initialLimit: 6,
   });
   const itemsNoPagination = React.useMemo(() => data?.data?.data, [data, page]);
   const mutation = useMutationPatch({

@@ -50,6 +50,8 @@ function TableComponen({
   handlePrint,
   tooltipHandlePrint = '',
   tooltipCustom = '',
+  disabledBlokir = false,
+  disabledLock = false,
 }) {
   moment.locale('id');
   const [selectedData, setSelectedData] = React.useState({});
@@ -278,6 +280,7 @@ function TableComponen({
                               onClose={() => handleClose(bodyIndex)}
                             >
                               <MenuItem
+                                disabled={disabledLock}
                                 onClick={() => {
                                   handleLockAccount(selectedData);
                                   setAnchorEl(null);
@@ -286,6 +289,7 @@ function TableComponen({
                                 Kunci akun
                               </MenuItem>
                               <MenuItem
+                                disabled={disabledBlokir}
                                 onClick={() => {
                                   handleBlockAccount(selectedData);
                                   setAnchorEl(null);

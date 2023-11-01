@@ -83,7 +83,9 @@ export default function LoginStudentPage() {
       <StyledRoot>
         {mdUp && <SideAuthBox />}
         <Box sx={{ position: 'fixed', top: 10, right: 10 }}>
-          <Button onClick={() => navigate('/staff-login')}> login sebagai staf</Button>
+          <Button onClick={() => navigate('/staff-login')} variant="outlined">
+            Staff
+          </Button>
         </Box>
         <Container maxWidth="sm">
           <StyledContent>
