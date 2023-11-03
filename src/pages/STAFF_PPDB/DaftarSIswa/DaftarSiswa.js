@@ -15,7 +15,9 @@ import CreateImport from './CreateImport';
 import ScreenDialog from '../../../components/ScreenDialog';
 import KenaikanKelas from './KenaikanKelas';
 import { LabelField } from '../../../components/Commons';
+import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 import StudentDetail from '../../STAFF_TU/Pembayaran/Modal/StudentDetail';
+import { ClearFilter } from '../../STAFF_TU/Pembayaran/Pembayaran';
 
 function Pendaftar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -67,7 +69,9 @@ function Pendaftar() {
     isLoading,
   } = useFetch({
     module: `siswa`,
-    params: `&angkatan=${angkatan}&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
+    params: `&angkatan=${
+      Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
+    }&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
     enabled: true,
   });
   const { data } = useFetch({
@@ -113,9 +117,9 @@ function Pendaftar() {
     setPage(1);
     setJurusan(String(event.target.value));
   };
-  const handleChangeAngkatan = (event) => {
+  const handleChangeAngkatan = (x, event) => {
     setPage(1);
-    setAngkatan(String(event.target.value));
+    setAngkatan({ tahun_angkatan: String(event?.tahun_angkatan) });
   };
   const handleChangeStatus = (event) => {
     setPage(1);
@@ -338,7 +342,7 @@ function Pendaftar() {
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-end',
               gap: 1,
             }}
           >
@@ -387,6 +391,27 @@ function Pendaftar() {
                 ))}
               </Select>
             </Box>
+            {[
+              Boolean(jurusan),
+              Boolean(kelas),
+              Boolean(subKelas),
+              Boolean(search),
+              Boolean(angkatan),
+              Boolean(status),
+            ].filter((item) => item)?.length > 2 ? (
+              <ClearFilter
+                handleClear={() => {
+                  setJurusan('');
+                  setJurusanId('');
+                  setSearch('');
+                  setInputView('');
+                  setKelas('');
+                  setSubKelasKelas('');
+                  setAngkatan('');
+                  setStatus('');
+                }}
+              />
+            ) : null}
           </Box>
           <Box
             sx={{
@@ -437,27 +462,22 @@ function Pendaftar() {
                 <MenuItem value={'6'}>6</MenuItem>
               </Select>
             </Box>
-
-            <Box>
+            <Box sx={{ minWidth: '100px' }}>
               <LabelField
                 title="Sort Angkatan"
                 clearIcon={Boolean(angkatan)}
                 onClickClearIcon={() => setAngkatan('')}
               />
-              <Select
-                sx={{
-                  minWidth: '130px',
-                }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={angkatan || ''}
+              <AutoCompleteAsync
                 size="small"
-                onChange={handleChangeAngkatan}
-              >
-                <MenuItem value={2021}>2021</MenuItem>
-                <MenuItem value={2022}>2022</MenuItem>
-                <MenuItem value={2023}>2023</MenuItem>
-              </Select>
+                keyAttribute="tahun_angkatan"
+                paginateData
+                initialLimit={5}
+                value={angkatan || {}}
+                module="tahun-angkatan"
+                type="number"
+                onChange={(x, y) => handleChangeAngkatan(x, y)}
+              />
             </Box>
             <Box>
               <LabelField title="Sort Status" clearIcon={Boolean(status)} onClickClearIcon={() => setStatus('')} />

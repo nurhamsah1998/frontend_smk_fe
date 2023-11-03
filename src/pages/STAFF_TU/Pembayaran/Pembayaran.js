@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Button, FormHelperText, Menu, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { debounce } from 'lodash';
@@ -25,15 +25,25 @@ import { PROFILE } from '../../../hooks/useHelperContext';
 import ScreenDialog from '../../../components/ScreenDialog';
 import { KopPdf } from '../../Laporan/transaksi/ReportTransaksi';
 import CustomDatePicker from '../../../components/CustomDatePicker';
+import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 
+export const ClearFilter = ({ handleClear }) => {
+  return (
+    <Box>
+      <Button onClick={handleClear} fullWidth sx={{ minWidth: '100px', minHeight: '40px' }} size="small">
+        Clear filter
+      </Button>
+    </Box>
+  );
+};
 function Pembayaran() {
   const { itemsNoPagination } = React.useContext(PROFILE);
   const navigate = useNavigate();
   const location = useLocation();
   const [bill, setBill] = useState('');
   const [inputView, setInputView] = useState('');
-  const [nomor, setNomor] = useState('');
   const [kelas, setKelas] = useState('');
+  const [angkatan, setAngkatan] = React.useState('');
   const [subKelas, setSubKelasKelas] = React.useState('');
   const [limitView, setLimitView] = useState('40');
   const [jurusan, setJurusan] = useState('');
@@ -43,24 +53,47 @@ function Pembayaran() {
   const { items, totalPage, setPage, search, totalData, totalRows, setSearch, page, isLoading, setLimit, limit } =
     useFetch({
       module: `siswa`,
-      params: `&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}`,
+      params: `&current_bill=${bill}&angkatan=${
+        Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
+      }&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}`,
     });
   const { data } = useFetch({
     module: 'jurusan',
   });
-  const itemsRebuild = items?.map((i) => ({
-    ...i,
-    jurusan: i?.jurusan?.nama,
-    kelas_student: `${i?.kelas} ${i?.['jurusan.kode_jurusan']} ${i?.sub_kelas}`,
-    status_bill:
-      i?.current_bill < 0
-        ? 'deposit'
-        : i?.current_bill > 0
-        ? 'not_paid'
-        : i?.status_bill?.includes('not_paid_yet')
-        ? 'not_paid_yet'
-        : 'paid',
-  }));
+  const billStatus = [
+    {
+      name: 'deposit',
+      title: 'DEPOSIT',
+    },
+    {
+      name: 'not_paid_yet',
+      title: 'BELUM ADA TAGIHAN',
+    },
+    {
+      name: 'paid',
+      title: 'LUNAS',
+    },
+    {
+      name: 'not_paid',
+      title: 'BELUM LUNAS',
+    },
+  ];
+  const jurusanList = useMemo(() => data?.data, [data?.data]);
+  const itemsRebuild = useMemo(() => {
+    return items?.map((i) => ({
+      ...i,
+      jurusan: i?.jurusan?.nama,
+      kelas_student: `${i?.kelas} ${i?.['jurusan.kode_jurusan']} ${i?.sub_kelas}`,
+      status_bill:
+        i?.current_bill < 0
+          ? 'deposit'
+          : i?.current_bill > 0
+          ? 'not_paid'
+          : i?.status_bill?.includes('not_paid_yet')
+          ? 'not_paid_yet'
+          : 'paid',
+    }));
+  }, [items]);
   const handleSeeBill = (item) => {
     navigate(`detail-tagihan?student-id=${item?.id}`);
   };
@@ -146,6 +179,7 @@ function Pembayaran() {
         return Object.values(item);
       });
   }, [items]);
+  const nomorRef = useRef({ value: '' });
   const pdfSuratTagihan = (doc, data) => {
     const img = new Image();
     img.src = '/assets/logo_pgri.png';
@@ -154,7 +188,7 @@ function Pembayaran() {
       margin: { top: 70 },
     });
     KopPdf(doc);
-    doc.text(`No    : ${nomor}`, 10, 59, {
+    doc.text(`No    : ${nomorRef.current.value}`, 10, 59, {
       align: 'left',
     });
     doc.text(`Hal   : PEMBERITAHUAN`, 10, 65, {
@@ -261,14 +295,22 @@ function Pembayaran() {
     doc.text(
       `Jika dirasa ada yang tidak sesuai berkaitan dengan nominal tagihan dll, bisa menghubungi ke petugas.`,
       doc.internal.pageSize.width / 2,
-      doc.internal.pageSize.height - 15,
+      doc.internal.pageSize.height - 16,
       {
         align: 'center',
       }
     );
-    doc.text(`Terimakasih`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, {
+    doc.text(`Terimakasih`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 12, {
       align: 'center',
     });
+    doc.text(
+      `printed by ${itemsNoPagination?.nama}`,
+      doc.internal.pageSize.width / 2,
+      doc.internal.pageSize.height - 7,
+      {
+        align: 'center',
+      }
+    );
   };
   const handlePrintTagihan = (i) => {
     const doc = new JSPDF({
@@ -306,7 +348,9 @@ function Pembayaran() {
     if (event === 'xlsx') {
       await axios
         .get(
-          `${apiUrl}download/report-bill?page=${page}&limit=${limit}&search=${search}&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}`,
+          `${apiUrl}download/report-bill?page=${page}&limit=${limit}&search=${search}&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}&angkatan=${
+            Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
+          }`,
           {
             responseType: 'blob',
             headers: {
@@ -356,7 +400,9 @@ function Pembayaran() {
       doc.text(
         `Kelas : ${
           Boolean(kelas) && Boolean(jurusan) && Boolean(subKelas)
-            ? `${kelas} ${data?.data?.find((item) => item?.nama === jurusan)?.kode_jurusan} ${subKelas}`
+            ? `${kelas} ${data?.data?.find((item) => item?.nama === jurusan)?.kode_jurusan} ${subKelas} ${
+                Boolean(angkatan) ? `/ ${angkatan?.tahun_angkatan}` : ''
+              }`
             : '-'
         }`,
         10,
@@ -366,9 +412,14 @@ function Pembayaran() {
         }
       );
       doc.setFontSize(10);
-      doc.text(`Status pembayaran : ${Boolean(bill) ? bill?.toUpperCase() : '-'}`, 10, 69, {
-        align: 'left',
-      });
+      doc.text(
+        `Status pembayaran : ${Boolean(bill) ? billStatus?.find((item) => item.name === bill)?.title : '-'}`,
+        10,
+        69,
+        {
+          align: 'left',
+        }
+      );
       doc.text(`Tanggal dibuat : ${moment().format('Do MMM YYYY H:mm')}`, 10, 73, {
         align: 'left',
       });
@@ -382,6 +433,10 @@ function Pembayaran() {
       });
       window.open(URL.createObjectURL(doc.output('blob')));
     }
+  };
+  const handleChangeAngkatan = (x, event) => {
+    setPage(1);
+    setAngkatan({ tahun_angkatan: String(event?.tahun_angkatan) });
   };
   const handlePrintMassalTagihan = () => {
     const doc = new JSPDF({
@@ -397,6 +452,7 @@ function Pembayaran() {
     }
     window.open(URL.createObjectURL(doc.output('blob')));
   };
+
   return (
     <Box>
       <Helmet>
@@ -404,7 +460,7 @@ function Pembayaran() {
         <link rel="canonical" href="/" />
       </Helmet>
       <ScreenDialog
-        disabledSubmitButton={!Boolean(startUjian) || !Boolean(expiredDate) || !Boolean(nomor)}
+        disabledSubmitButton={!Boolean(startUjian) || !Boolean(expiredDate)}
         title="Masukkan tanggal hari ujian, jatuh tempo dan nomor"
         labelClose="Batal"
         labelSubmit="Generate"
@@ -413,7 +469,7 @@ function Pembayaran() {
           setOpenModalInputDate((prev) => ({ ...prev, openModal: false }));
           setExpiredDate('');
           setStartUjian('');
-          setNomor('');
+          nomorRef.current.value = '';
         }}
         handleSubmit={
           openModalInputDate.isBulk ? handlePrintMassalTagihan : () => handlePrintTagihan(openModalInputDate.data)
@@ -423,8 +479,10 @@ function Pembayaran() {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <FormHelperText>Masukan nomor, contoh : 247//104.E8/SMK-PGRI/Krs/IX/2023</FormHelperText>
             <TextField
-              value={nomor}
-              onChange={(i) => setNomor(i.target.value)}
+              ref={nomorRef}
+              onChange={(i) => {
+                nomorRef.current.value = i.target.value;
+              }}
               sx={{
                 mt: '-15px',
               }}
@@ -486,7 +544,7 @@ function Pembayaran() {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Box sx={{ display: 'grid', gap: 1 }}>
-              <Box sx={{ display: 'flex', gap: 1 }}>
+              <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-end' }}>
                 <Box sx={{ display: 'grid', width: '100%' }}>
                   <LabelField
                     clearIcon={Boolean(search)}
@@ -530,6 +588,27 @@ function Pembayaran() {
                     <MenuItem value={'not_paid_yet'}>Belum Ada Tagihan</MenuItem>
                   </Select>
                 </Box>
+                {[
+                  Boolean(jurusan),
+                  Boolean(kelas),
+                  Boolean(subKelas),
+                  Boolean(bill),
+                  Boolean(search),
+                  Boolean(angkatan),
+                ].filter((item) => item)?.length > 2 ? (
+                  <ClearFilter
+                    handleClear={() => {
+                      setJurusanId('');
+                      setJurusan('');
+                      setSearch('');
+                      setInputView('');
+                      setKelas('');
+                      setSubKelasKelas('');
+                      setBill('');
+                      setAngkatan('');
+                    }}
+                  />
+                ) : null}
               </Box>
 
               <Box
@@ -557,7 +636,7 @@ function Pembayaran() {
                     size="small"
                     onChange={handleChangesJurusan}
                   >
-                    {data?.data?.map((item, index) => (
+                    {jurusanList?.map((item, index) => (
                       <MenuItem key={index} onClick={() => setJurusanId(item?.id)} value={item?.nama}>
                         {item?.nama}
                       </MenuItem>
@@ -605,6 +684,23 @@ function Pembayaran() {
                     <MenuItem value={'5'}>5</MenuItem>
                     <MenuItem value={'6'}>6</MenuItem>
                   </Select>
+                </Box>
+                <Box sx={{ minWidth: '100px' }}>
+                  <LabelField
+                    title="Sort Angkatan"
+                    clearIcon={Boolean(angkatan)}
+                    onClickClearIcon={() => setAngkatan('')}
+                  />
+                  <AutoCompleteAsync
+                    size="small"
+                    keyAttribute="tahun_angkatan"
+                    paginateData
+                    initialLimit={5}
+                    value={angkatan || {}}
+                    module="tahun-angkatan"
+                    type="number"
+                    onChange={(x, y) => handleChangeAngkatan(x, y)}
+                  />
                 </Box>
                 <Box>
                   <LabelField

@@ -44,7 +44,7 @@ function Account() {
               color: item?.role === 'ANONIM' ? red[700] : green[700],
             }}
           >
-            {item?.role === 'ANONIM' ? 'Anonim' : 'Staff'}
+            {item?.role === 'ANONIM' ? 'Tidak Aktif' : 'Aktif'}
           </Typography>
         ),
       })),

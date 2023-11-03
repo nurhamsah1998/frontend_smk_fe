@@ -15,6 +15,7 @@ import { apiUrl } from '../../../hooks/api';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import { FormatCurrency } from '../../../components/FormatCurrency';
 import CustomDatePicker from '../../../components/CustomDatePicker';
+import { ClearFilter } from '../../STAFF_TU/Pembayaran/Pembayaran';
 
 export const KopPdf = (doc) => {
   const img = new Image();
@@ -277,7 +278,7 @@ function ReportTransaksi() {
           </Menu>
         </Box>
         <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mb: '4px' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', gap: 1, mb: '4px' }}>
             <Box>
               <LabelField
                 title="Sort Jurusan"
@@ -369,6 +370,21 @@ function ReportTransaksi() {
                 <MenuItem value={'year'}>Tahunan</MenuItem>
               </Select>
             </Box>
+            {[Boolean(jurusan), Boolean(kelas), Boolean(subKelas), Boolean(filterTanggal), Boolean(startDate)].filter(
+              (item) => item
+            )?.length > 2 ? (
+              <ClearFilter
+                handleClear={() => {
+                  setJurusan('');
+                  setKelas('');
+                  setSubKelasKelas('');
+                  setFilterTanggal('');
+                  setFilteraTanggalOption({ start: null, end: null });
+                  setEndDate(null);
+                  setStartDate(null);
+                }}
+              />
+            ) : null}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
             <Box>

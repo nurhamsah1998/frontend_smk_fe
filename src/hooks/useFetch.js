@@ -13,12 +13,17 @@ function useFetch({ module, enabled = true, isCustom = false, params = '', initi
   const navigate = useNavigate();
   const query = useQuery(
     [module, enabled, isCustom],
-    () =>
-      axios.get(`${apiUrl}${module}${isCustom ? '' : `?page=${page}&search=${search}&limit=${limit || 10}${params}`}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      }),
+    async () => {
+      const data = await axios.get(
+        `${apiUrl}${module}${isCustom ? '' : `?page=${page}&search=${search}&limit=${limit || 10}${params}`}`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return data;
+    },
     {
       enabled: Boolean(enabled),
       networkMode: 'always',
