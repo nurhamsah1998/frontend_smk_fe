@@ -226,7 +226,7 @@ function TableComponen({
                       ) : (
                         isIndicator
                       );
-                      const isDate = head?.isDate ? moment(body[head.id]).format('LLLL') : isCurrency;
+                      const isDate = head?.isDate ? moment(body[head.id]).format('DD MMM YYYY H:mm') : isCurrency;
 
                       return (
                         <TableCell sx={{ px: 2, py: 0, textTransform: 'capitalize' }} key={headIndex}>

@@ -303,14 +303,6 @@ function Pembayaran() {
     doc.text(`Terimakasih`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 12, {
       align: 'center',
     });
-    doc.text(
-      `printed by ${itemsNoPagination?.nama}`,
-      doc.internal.pageSize.width / 2,
-      doc.internal.pageSize.height - 7,
-      {
-        align: 'center',
-      }
-    );
   };
   const handlePrintTagihan = (i) => {
     const doc = new JSPDF({
@@ -528,19 +520,15 @@ function Pembayaran() {
                 <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
               </Menu>
             </Box>
-            {Boolean(bill === 'not_paid') &&
-              Boolean(jurusan) &&
-              Boolean(kelas) &&
-              Boolean(subKelas) &&
-              Boolean(itemsRebuild?.length !== 0) && (
-                <Button
-                  onClick={() => setOpenModalInputDate((prev) => ({ isBulk: true, openModal: true }))}
-                  color="warning"
-                  variant="contained"
-                >
-                  Print Tagihan Massal
-                </Button>
-              )}
+            {Boolean(bill === 'not_paid') && Boolean(jurusan) && Boolean(kelas) && Boolean(itemsRebuild?.length !== 0) && (
+              <Button
+                onClick={() => setOpenModalInputDate((prev) => ({ isBulk: true, openModal: true }))}
+                color="warning"
+                variant="contained"
+              >
+                Print Tagihan Massal
+              </Button>
+            )}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Box sx={{ display: 'grid', gap: 1 }}>

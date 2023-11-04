@@ -28,6 +28,7 @@ function useFetch({ module, enabled = true, isCustom = false, params = '', initi
       enabled: Boolean(enabled),
       networkMode: 'always',
       onError: (error) => {
+        console.log(error, '<---- ERROR');
         if (error?.response?.status === 403) {
           window.localStorage.clear();
           navigate('/');

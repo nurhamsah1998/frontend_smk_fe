@@ -75,9 +75,10 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
 
 export default function DashboardLayoutStaff() {
   const [open, setOpen] = useState(false);
-  const { itemsNoPagination, isLoading, isFetched } = useFetch({
+  const { itemsNoPagination, isLoading, isFetched, isSuccess } = useFetch({
     module: 'staff-profile',
   });
+  console.log(isSuccess, '<-----');
   const navigate = useNavigate();
   const token = window.localStorage.getItem('accessToken');
   const localToken = jwtDecode(token || {});

@@ -364,10 +364,10 @@ function ReportTransaksi() {
                   setFilterTanggal(event.target.value);
                 }}
               >
-                <MenuItem value={`day`}>Harian</MenuItem>
-                <MenuItem value={'week'}>Mingguan</MenuItem>
-                <MenuItem value={'month'}>Bulanan</MenuItem>
-                <MenuItem value={'year'}>Tahunan</MenuItem>
+                <MenuItem value={`day`}>Hari ini</MenuItem>
+                <MenuItem value={'week'}>Minggu ini</MenuItem>
+                <MenuItem value={'month'}>Bulan ini</MenuItem>
+                <MenuItem value={'year'}>Tahun ini</MenuItem>
               </Select>
             </Box>
             {[Boolean(jurusan), Boolean(kelas), Boolean(subKelas), Boolean(filterTanggal), Boolean(startDate)].filter(
