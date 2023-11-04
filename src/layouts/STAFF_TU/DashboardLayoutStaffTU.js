@@ -2,7 +2,9 @@ import { useState, useEffect, memo } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
+import { Typography, Box, Button } from '@mui/material';
 import jwtDecode from 'jwt-decode';
+import { grey } from '@mui/material/colors';
 //
 import { PROFILE } from '../../hooks/useHelperContext';
 import useFetch from '../../hooks/useFetch';
@@ -44,9 +46,22 @@ const Main = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen, open }) => {
+const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen, open, isError }) => {
   return (
     <>
+      {isError && (
+        <Box sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ px: 3 }}>
+            <Typography variant="h5" color={grey[700]}>
+              Internal server error
+            </Typography>
+            <Typography color={grey[600]}>saat ini server mengalami kegagal saat memproses data</Typography>
+            <Button sx={{ mt: 2 }} onClick={() => window.location.reload()} variant="contained">
+              Muat ulang
+            </Button>
+          </Box>
+        </Box>
+      )}
       {itemsNoPagination?.role === 'ANONIM' && (
         <LockPage
           customHandleLogOut={() => {
@@ -75,10 +90,9 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
 
 export default function DashboardLayoutStaff() {
   const [open, setOpen] = useState(false);
-  const { itemsNoPagination, isLoading, isFetched, isSuccess } = useFetch({
+  const { itemsNoPagination, isLoading, isFetched, isError } = useFetch({
     module: 'staff-profile',
   });
-  console.log(isSuccess, '<-----');
   const navigate = useNavigate();
   const token = window.localStorage.getItem('accessToken');
   const localToken = jwtDecode(token || {});
@@ -106,6 +120,7 @@ export default function DashboardLayoutStaff() {
               itemsNoPagination={itemsNoPagination}
               navigate={navigate}
               setOpen={setOpen}
+              isError={isError}
               open={open}
             />
           )}

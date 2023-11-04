@@ -93,7 +93,7 @@ function Account() {
       >
         <Box>
           <LabelField
-            title="Cari nama / Username"
+            title="Cari nama / username"
             onClickClearIcon={() => {
               setSearch('');
               setInputView('');
