@@ -51,6 +51,10 @@ function Tagihan() {
       isDate: true,
     },
     {
+      id: 'petugas',
+      label: 'Petugas',
+    },
+    {
       id: 'kode_pembayaran',
       label: 'Nama tagihan',
     },
@@ -58,6 +62,10 @@ function Tagihan() {
       id: 'uang_diterima',
       label: 'Jumlah',
       isCurrency: true,
+    },
+    {
+      id: 'note',
+      label: 'Catatan',
     },
   ];
   const detailBill = [

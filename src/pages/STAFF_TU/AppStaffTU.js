@@ -46,7 +46,7 @@ function AppStaffTU() {
         </Grid>
         <Grid item xs={12} sm={6} md={6}>
           <AppCurrentVisits
-            title="Persentase jurusan siswa"
+            title="Ringkasan minat jurusan siswa"
             chartData={majorSummary}
             chartColors={[theme.palette.info.main, theme.palette.error.main, theme.palette.warning.main]}
           />

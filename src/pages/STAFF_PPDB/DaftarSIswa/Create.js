@@ -1,18 +1,20 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import { uid } from 'uid';
 import { TextField, InputAdornment, IconButton, Box, MenuItem } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
 import ScreenDialog from '../../../components/ScreenDialog';
 import useRegister from '../../../hooks/useRegister';
 import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 import Iconify from '../../../components/iconify';
 import useFetch from '../../../hooks/useFetch';
+import { isEmpty } from '../../../utils/helper';
 
 function Create({ openModalCreate, setOpenModalCreate }) {
   const [showPassword, setShowPassword] = React.useState(false);
   const [gender, setGender] = React.useState('');
   const formRef = React.useRef();
+  const { enqueueSnackbar } = useSnackbar();
   const { data } = useFetch({
     module: `total-tagihan-permanent?tahun_angkatan=${new Date().getFullYear()}`,
   });
@@ -36,6 +38,7 @@ function Create({ openModalCreate, setOpenModalCreate }) {
     result.push(date.getFullYear() + 1);
     return result;
   };
+
   return (
     <div>
       <ScreenDialog
@@ -62,6 +65,18 @@ function Create({ openModalCreate, setOpenModalCreate }) {
             angkatan: '',
           }}
           onSubmit={(values) => {
+            if (
+              isEmpty(values?.nama) ||
+              isEmpty(values?.username) ||
+              isEmpty(values?.password) ||
+              values?.jurusanId === '' ||
+              values?.angkatan === ''
+            ) {
+              enqueueSnackbar('Nama, Username, Password, Angkatan, dan Jurusan wajib diisi !!!', {
+                variant: 'error',
+              });
+              return;
+            }
             const body = {
               ...values,
               gender,
@@ -70,7 +85,6 @@ function Create({ openModalCreate, setOpenModalCreate }) {
               jurusanId: values?.jurusanId?.id,
               code_jurusan: values?.jurusanId?.code,
               current_bill: data?.data,
-              kode_siswa: `CODE-${uid(7).toUpperCase()}`,
             };
             register.mutate(body);
           }}

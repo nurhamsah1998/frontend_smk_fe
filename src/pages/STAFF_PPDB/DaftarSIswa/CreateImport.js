@@ -68,7 +68,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
             return (
               <Box key={index}>
                 <Typography color={red[500]}>
-                  Row {item?.row} Column {item?.column}, tidak boleh kosong!
+                  Column {item?.row} Row {item?.column}, tidak boleh kosong!
                 </Typography>
               </Box>
             );
@@ -101,7 +101,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
                   >
                     {item?.username}
                   </span>{' '}
-                  dibagian Row {item?.row} Column {item?.column}, sudah terdaftar didatabase !
+                  dibagian Column {item?.row} Row {item?.column}, sudah terdaftar didatabase !
                 </Typography>
               </Box>
             );
@@ -119,7 +119,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
                   >
                     {item?.username}
                   </span>{' '}
-                  dibagian Row {item?.row} Column {item?.column}, Harus unique/berbeda!
+                  dibagian Column {item?.row} Row {item?.column}, Harus unique/berbeda!
                 </Typography>
               </Box>
             );
@@ -137,7 +137,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
                   >
                     {item?.kode_jurusan}
                   </span>{' '}
-                  dibagian Row {item?.row} Column {item?.column}, tidak valid!
+                  dibagian Column {item?.row} Row {item?.column}, tidak valid!
                 </Typography>
               </Box>
             );

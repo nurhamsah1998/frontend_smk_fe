@@ -231,57 +231,100 @@ function ModalSuccessPayment({ open, handleClose, data }) {
       open={Boolean(open)}
       handleClose={handleClose}
     >
-      <p style={{ textAlign: 'center', fontSize: '24px', fontWeight: 700, margin: 0 }}>INVOICE PEMBAYARAN</p>
-      <p style={{ textAlign: 'center', fontSize: '16px', fontWeight: 500, margin: 0 }}>SMK PGRI KRAS</p>
-      <p
-        style={{
-          textAlign: 'center',
-          fontSize: '16px',
-          fontWeight: 500,
-          margin: 0,
-          marginTop: '-5px',
-          marginBottom: '20px',
-          borderBottom: 'dashed 4px #ccc',
-          paddingBottom: '20px',
-        }}
-      >
-        Jl. Raya Desa Kras Kec.Kras Kab.Kediri
-      </p>
-      <div style={{ display: 'flex', gap: '5px' }}>
-        <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px' }}>Nama</p>
-        <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, textTransform: 'capitalize' }}>: {data?.nama}</p>
-      </div>
-      <div style={{ display: 'flex', gap: '5px' }}>
-        <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px' }}>Kelas</p>
-        <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0 }}>: {data?.kelas}</p>
-      </div>
-      <div style={{ display: 'flex', gap: '5px' }}>
-        <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px' }}>No. INVOICE</p>
-        <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0 }}>: {data?.invoice}</p>
-      </div>
-      <div style={{ marginTop: '20px' }}>
-        <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px', fontWeight: 700 }}>
-          DETAIL PEMBAYARAN :{' '}
+      <div>
+        <p style={{ textAlign: 'center', fontSize: '17px', marginBottom: '-20px', fontWeight: 500, margin: 0 }}>
+          SMK PGRI KRAS
+        </p>
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: '17px',
+            fontWeight: 500,
+            margin: 0,
+          }}
+        >
+          Jl. Raya Desa Kras Kec.Kras Kab.Kediri
+        </p>
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: '19px',
+            fontWeight: 700,
+            margin: 0,
+            marginTop: '-5px',
+            borderBottom: 'dashed 4px #ccc',
+            marginBottom: '10px',
+            paddingBottom: '10px',
+          }}
+        >
+          BUKTI PEMBAYARAN
         </p>
         <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'baseline',
-            gap: '5px',
+            alignItems: 'flex-start',
+            flexWrap: 'wrap',
           }}
         >
-          <p style={{ whiteSpace: 'nowrap', margin: 0, fontSize: '14px' }}>{data?.kode_pembayaran}</p>
-          <div style={{ borderBottom: 'dotted 2px #ccc', width: '100%' }} />
-          <p style={{ whiteSpace: 'nowrap', margin: 0, fontFamily: 'monospace' }}>
-            {FormatCurrency(data?.uang_diterima)}
-          </p>
+          <div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>Nama</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, textTransform: 'capitalize' }}>
+                : {data?.nama}
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>Kelas</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0 }}>
+                : {data?.kelas} {data?.jurusan} {data?.sub_kelas}
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>Waktu</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0 }}>
+                : {moment(data?.createdAt).format('DD MMMM YYYY H:mm')}
+              </p>
+            </div>
+          </div>
+          <div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>Kode siswa</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0 }}>: {data?.kode_tagihan}</p>
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>No. INVOICE</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0 }}>: {data?.invoice}</p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div style={{ marginTop: '20px' }}>
-        <p style={{ whiteSpace: 'nowrap', fontSize: '14px', margin: 0, width: '95px', fontWeight: 700 }}>NOTE : </p>
-        <div>
-          <p style={{ margin: 0, fontSize: '14px', maxWidth: '400px' }}>{data?.note}</p>
+
+        <div style={{ marginTop: '10px' }}>
+          <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px', fontWeight: 700 }}>
+            DETAIL PEMBAYARAN :{' '}
+          </p>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'baseline',
+              gap: '5px',
+            }}
+          >
+            <p style={{ whiteSpace: 'nowrap', margin: 0, fontSize: '15px' }}>{data?.kode_pembayaran}</p>
+            <div style={{ borderBottom: 'dotted 2px #ccc', width: '100%' }} />
+            <p style={{ whiteSpace: 'nowrap', margin: 0, fontFamily: 'monospace' }}>
+              {FormatCurrency(data?.uang_diterima)}
+            </p>
+          </div>
+        </div>
+        <div style={{ marginTop: '10px' }}>
+          <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '95px', fontWeight: 700 }}>
+            Catatan :{' '}
+          </p>
+          <div>
+            <p style={{ margin: 0, fontSize: '15px' }}>{data?.note}</p>
+          </div>
         </div>
       </div>
       <div

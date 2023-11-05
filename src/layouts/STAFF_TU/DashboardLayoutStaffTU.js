@@ -52,11 +52,19 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
       {isError && (
         <Box sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Box sx={{ px: 3 }}>
-            <Typography variant="h5" color={grey[700]}>
-              Internal server error
+            <Typography variant="h4" textTransform="uppercase" color={grey[700]}>
+              saat ini server mengalami kegagalan saat memproses data
             </Typography>
-            <Typography color={grey[600]}>saat ini server mengalami kegagal saat memproses data</Typography>
-            <Button sx={{ mt: 2 }} onClick={() => window.location.reload()} variant="contained">
+
+            <Box mt={2}>
+              <strong>Internal server error :</strong>
+              <ul style={{ marginLeft: '20px' }}>
+                <li>Periksa jaringan anda</li>
+                <li>Pastikan alamat URL yang anda tuju sudah benar</li>
+                <li>hubungi developer jika masalah belum terselesaikan</li>
+              </ul>
+            </Box>
+            <Button sx={{ mt: 3 }} onClick={() => window.location.reload()} variant="contained">
               Muat ulang
             </Button>
           </Box>
