@@ -7,7 +7,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import SaveIcon from '@mui/icons-material/Save';
 import InfoIcon from '@mui/icons-material/Info';
-import { grey, red } from '@mui/material/colors';
+import { red } from '@mui/material/colors';
 
 import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
@@ -58,8 +58,10 @@ export default function TagihanStaff() {
   });
 
   const [value, setValue] = React.useState(0);
+  const [loadingCurrentPage, setLoadingCurrentPage] = React.useState(true);
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    window.localStorage.setItem('current_tab_tagihan', newValue);
   };
   const dataTextField = itemsNoPagination?.map((x) => {
     delete x?.updatedAt;
@@ -74,6 +76,27 @@ export default function TagihanStaff() {
   const handleAddTahunTagihan = () => {
     createMutation.mutate({ date: new Date().getFullYear() });
   };
+  React.useEffect(() => {
+    if (Boolean(window.localStorage.getItem('current_page_tagihan'))) {
+      setTimeout(() => {
+        setLoadingCurrentPage(false);
+        setPage(Number(window.localStorage.getItem('current_page_tagihan')));
+      }, 500);
+    }
+  }, []);
+  React.useEffect(() => {
+    if (Boolean(window.localStorage.getItem('current_tab_tagihan'))) {
+      setValue(Number(window.localStorage.getItem('current_tab_tagihan')));
+    }
+  }, [page]);
+  React.useEffect(() => {
+    if (
+      !Boolean(window.localStorage.getItem('current_tab_tagihan')) &&
+      !Boolean(window.localStorage.getItem('current_tab_tagihan'))
+    ) {
+      setLoadingCurrentPage(false);
+    }
+  }, []);
   return (
     <Box>
       {isLoading ? (
@@ -103,18 +126,19 @@ export default function TagihanStaff() {
             <Box sx={{ display: 'flex', gap: 2 }}>
               <IconButton
                 disabled={page === 1}
-                onClick={() =>
+                onClick={() => {
+                  window.localStorage.setItem('current_page_tagihan', page - 1);
                   setPage((prev) => {
                     return prev - 1;
-                  })
-                }
+                  });
+                }}
               >
                 <NavigateBeforeIcon />
               </IconButton>
               <Tabs
                 variant="scrollable"
                 scrollButtons="auto"
-                value={value}
+                value={Number(window.localStorage.getItem('current_tab_tagihan')) || value}
                 onChange={handleChange}
                 aria-label="basic tabs example"
               >
@@ -124,20 +148,28 @@ export default function TagihanStaff() {
               </Tabs>
               <IconButton
                 disabled={totalPage === page}
-                onClick={() =>
+                onClick={() => {
+                  window.localStorage.setItem('current_tab_tagihan', 0);
+                  window.localStorage.setItem('current_page_tagihan', page + 1);
                   setPage((prev) => {
                     return prev + 1;
-                  })
-                }
+                  });
+                }}
               >
                 <NavigateNextIcon />
               </IconButton>
             </Box>
             <Box sx={{ mt: 2, display: 'flex', gap: 1, alignItems: 'center' }}>
-              <Button color="warning" variant="contained" startIcon={<AddIcon />} onClick={handleAddTahunTagihan}>
+              <Button
+                color="warning"
+                variant="contained"
+                startIcon={<AddIcon />}
+                disabled={loadingCurrentPage}
+                onClick={handleAddTahunTagihan}
+              >
                 Tambah tahun ajaran
               </Button>
-              <Button startIcon={<SaveIcon />} variant="contained" onClick={handleSave}>
+              <Button startIcon={<SaveIcon />} variant="contained" disabled={loadingCurrentPage} onClick={handleSave}>
                 Simpan perubahan
               </Button>
             </Box>
@@ -236,6 +268,7 @@ export default function TagihanStaff() {
                                 {item[0].replace(/_/g, ' ')}
                               </FormHelperText>
                               <TextFieldNumberFormat
+                                disabled={loadingCurrentPage}
                                 onChange={(i) => {
                                   setFieldValue(item[0], formatNumberChange(i?.target?.value));
                                 }}

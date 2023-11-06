@@ -335,9 +335,6 @@ function ModalSuccessPayment({ open, handleClose, data }) {
           gap: '10px',
         }}
       >
-        {/* <Button onClick={handleDownloadPdf} variant="contained" color="warning">
-          Download PDF
-        </Button> */}
         <Button onClick={HandlePrint} variant="outlined" color="success">
           Print Invoice
         </Button>

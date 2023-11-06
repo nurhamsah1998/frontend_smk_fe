@@ -5,6 +5,8 @@ import { red } from '@mui/material/colors';
 function BannedPage() {
   const handleLogOut = () => {
     window.localStorage.removeItem('accessToken');
+    window.localStorage.removeItem('current_page_tagihan');
+    window.localStorage.removeItem('current_tab_tagihan');
     window.location.reload();
   };
   return (

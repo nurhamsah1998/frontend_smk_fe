@@ -13,6 +13,7 @@ function useMutationPatch({
   },
   isBulk = false,
   successMessage,
+  disabledAfterMutation = false,
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const client = useQueryClient();
@@ -30,11 +31,13 @@ function useMutationPatch({
           }
         )
         .then((res) => {
+          if (disabledAfterMutation) return;
           enqueueSnackbar(successMessage || res?.data?.msg, { variant: 'success' });
           client.invalidateQueries([module]);
           next(res);
         })
         .catch((error) => {
+          if (disabledAfterMutation) return;
           console.log(error, 'ini');
           enqueueSnackbar(error?.response?.data?.msg || error?.response?.data || 'Internal server error !', {
             variant: 'error',

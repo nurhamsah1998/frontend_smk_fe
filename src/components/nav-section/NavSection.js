@@ -28,6 +28,8 @@ export default function NavSection({ data = [], ...other }) {
       fullWidth: false,
       do: () => {
         window.localStorage.removeItem('accessToken');
+        window.localStorage.removeItem('current_page_tagihan');
+        window.localStorage.removeItem('current_tab_tagihan');
         navigate('/');
       },
       isCloseAfterSubmit: true,
