@@ -13,14 +13,13 @@ function AppStaffTU() {
   const { items, isLoading } = useFetch({
     module: 'dashboard-report',
   });
-  const majorSummary = React.useMemo(
-    () =>
-      Boolean(items?.major_summary)
-        ? items?.major_summary?.map((item) => ({ label: item?.kode_jurusan, value: item?.total }))
-        : [],
-    [items?.major_summary]
-  );
-
+  // const majorSummary = React.useMemo(
+  //   () =>
+  //     Boolean(items?.major_summary)
+  //       ? items?.major_summary?.map((item) => ({ label: item?.kode_jurusan, value: item?.total }))
+  //       : [],
+  //   [items?.major_summary]
+  // );
   return (
     <Box>
       <Grid container spacing={2}>
@@ -44,13 +43,13 @@ function AppStaffTU() {
             color="error"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={6}>
+        {/* <Grid item xs={12} sm={6} md={6}>
           <AppCurrentVisits
             title="Ringkasan minat jurusan siswa"
             chartData={majorSummary}
             chartColors={[theme.palette.info.main, theme.palette.error.main, theme.palette.warning.main]}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );
