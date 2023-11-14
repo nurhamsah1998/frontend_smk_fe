@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Paper, CircularProgress, Divider, FormHelperText, Grid, Typography } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { blue } from '@mui/material/colors';
 import { useReactToPrint } from 'react-to-print';

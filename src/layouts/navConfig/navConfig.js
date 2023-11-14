@@ -6,6 +6,7 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHorizontalCircle';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import CampaignIcon from '@mui/icons-material/Campaign';
 
 import SvgColor from '../../components/svg-color';
 
@@ -38,6 +39,11 @@ export const navConfigTU = [
     title: 'Transaksi',
     path: '/staff-tu/laporan-transaksi',
     icon: <SwapHorizontalCircleIcon />,
+  },
+  {
+    title: 'Pengumuman',
+    path: '/staff-tu/pengumuman',
+    icon: <CampaignIcon />,
   },
   {
     title: 'Keluar',

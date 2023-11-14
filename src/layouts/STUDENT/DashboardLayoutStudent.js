@@ -92,6 +92,7 @@ export default function DashboardLayoutStudent() {
   const { itemsNoPagination, isLoading, isError } = useFetch({
     module: 'siswa-profile',
   });
+  console.log(itemsNoPagination);
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
     if (!token) {

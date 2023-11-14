@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { Dialog } from './useContextHook';
+import { apiUrl } from './api';
 
 function useDelete({ module, isCloseAfterConfirmDelete }) {
   const { setDialog } = React.useContext(Dialog);
@@ -12,7 +13,7 @@ function useDelete({ module, isCloseAfterConfirmDelete }) {
     [module],
     (values) => {
       axios
-        .delete(`http://127.0.0.1:5000/${module}/${values}`)
+        .delete(`${apiUrl}/${module}/${values}`)
         .then((res) => {
           if (isCloseAfterConfirmDelete) {
             enqueueSnackbar(res?.data?.msg, { variant: 'success' });

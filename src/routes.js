@@ -5,7 +5,6 @@ import SimpleLayout from './layouts/simple';
 import LoginStudentPage from './pages/AuthPage/siswa/Login/LoginStudentPage';
 import Page404 from './pages/Page404';
 import LoginStaff from './pages/AuthPage/staff/Login/LoginStaff';
-import RegisterStudentPage from './pages/AuthPage/siswa/Register/RegisterStudentPage';
 import AppSiswa from './pages/SISWA/AppSiswa';
 import DashboardLayoutStudent from './layouts/STUDENT/DashboardLayoutStudent';
 import RegisterStaffPage from './pages/AuthPage/staff/Register/RegisterStaffPage';
@@ -23,6 +22,7 @@ import LogActivity from './pages/DEV/Log/LogActivity';
 import DashboardDev from './pages/DEV/Dashboard/Dashboard';
 import Brand from './pages/Anonim/Brand';
 import Account from './pages/DEV/Account/Account';
+import Campaign from './pages/STAFF_TU/Campaign/Campaign';
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +57,7 @@ export default function Router() {
           ],
         },
         { path: 'laporan-transaksi', element: <ReportTransaksi /> },
+        { path: 'pengumuman', element: <Campaign /> },
       ],
     },
     {

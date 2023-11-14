@@ -269,19 +269,19 @@ function ModalSuccessPayment({ open, handleClose, data }) {
         >
           <div>
             <div style={{ display: 'flex', gap: '5px' }}>
-              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>Nama</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '85px' }}>Nama</p>
               <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, textTransform: 'capitalize' }}>
                 : {data?.nama}
               </p>
             </div>
             <div style={{ display: 'flex', gap: '5px' }}>
-              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>Kelas</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '85px' }}>Kelas</p>
               <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0 }}>
                 : {data?.kelas} {data?.jurusan} {data?.sub_kelas}
               </p>
             </div>
             <div style={{ display: 'flex', gap: '5px' }}>
-              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>Waktu</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '85px' }}>Waktu</p>
               <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0 }}>
                 : {moment(data?.createdAt).format('DD MMMM YYYY H:mm')}
               </p>
@@ -289,11 +289,11 @@ function ModalSuccessPayment({ open, handleClose, data }) {
           </div>
           <div>
             <div style={{ display: 'flex', gap: '5px' }}>
-              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>Kode siswa</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '85px' }}>Kode siswa</p>
               <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0 }}>: {data?.kode_tagihan}</p>
             </div>
             <div style={{ display: 'flex', gap: '5px' }}>
-              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '75px' }}>No. INVOICE</p>
+              <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0, width: '85px' }}>No. INVOICE</p>
               <p style={{ whiteSpace: 'nowrap', fontSize: '15px', margin: 0 }}>: {data?.invoice}</p>
             </div>
           </div>

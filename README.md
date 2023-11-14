@@ -38,3 +38,10 @@ Distributed under the MIT License. See [LICENSE](https://github.com/minimal-ui-k
 ## Contact us
 
 Email Us: support@minimals.cc
+
+## Terimakasih kepada :
+
+Minimal [(Free version)](https://minimal-kit-react.vercel.app/)
+
+lihat file package.json
+(D:\KERJA\frontend_smk_fe\package.json)
