@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, useMemo } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -88,11 +88,79 @@ const ComponentAccountValidationStudent = memo(({ itemsNoPagination, setOpen, op
 
 export default function DashboardLayoutStudent() {
   const [open, setOpen] = useState(false);
+
   const navigate = useNavigate();
   const { itemsNoPagination, isLoading, isError } = useFetch({
     module: 'siswa-profile',
   });
-  console.log(itemsNoPagination);
+  const {
+    itemsNoPagination: items,
+    refetch: refetchCampaign,
+    isLoading: isLoadingCampaign,
+  } = useFetch({
+    module: `campaign-me?angkatan=${itemsNoPagination?.angkatan ? itemsNoPagination?.angkatan : ''}`,
+    isCustom: true,
+    enabled: Boolean(itemsNoPagination?.id),
+  });
+  const itemRebuild = (item = []) => {
+    const result = [];
+    for (let index = 0; index < item.length; index += 1) {
+      if (
+        item[index]?.jurusan_id === itemsNoPagination?.jurusanId &&
+        item[index]?.kelas === itemsNoPagination?.kelas &&
+        item[index]?.sub_kelas === itemsNoPagination?.sub_kelas
+      ) {
+        result.push(item[index]);
+      }
+      if (
+        item[index]?.jurusan_id === null &&
+        item[index]?.kelas === itemsNoPagination?.kelas &&
+        item[index]?.sub_kelas === itemsNoPagination?.sub_kelas
+      ) {
+        result.push(item[index]);
+      }
+      if (
+        item[index]?.jurusan_id === itemsNoPagination?.jurusanId &&
+        item[index]?.kelas === '' &&
+        item[index]?.sub_kelas === itemsNoPagination?.sub_kelas
+      ) {
+        result.push(item[index]);
+      }
+      if (
+        item[index]?.jurusan_id === itemsNoPagination?.jurusanId &&
+        item[index]?.kelas === itemsNoPagination?.kelas &&
+        item[index]?.sub_kelas === ''
+      ) {
+        result.push(item[index]);
+      }
+      if (
+        item[index]?.jurusan_id === null &&
+        item[index]?.kelas === itemsNoPagination?.kelas &&
+        item[index]?.sub_kelas === ''
+      ) {
+        result.push(item[index]);
+      }
+      if (
+        item[index]?.jurusan_id === itemsNoPagination?.jurusanId &&
+        item[index]?.kelas === '' &&
+        item[index]?.sub_kelas === ''
+      ) {
+        result.push(item[index]);
+      }
+      if (
+        item[index]?.jurusan_id === null &&
+        item[index]?.kelas === '' &&
+        item[index]?.sub_kelas === itemsNoPagination?.sub_kelas
+      ) {
+        result.push(item[index]);
+      }
+      if (item[index]?.jurusan_id === null && item[index]?.kelas === '' && item[index]?.sub_kelas === '') {
+        result.push(item[index]);
+      }
+    }
+    return result;
+  };
+  const campaignList = useMemo(() => itemRebuild(items?.data), [items?.data]);
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
     if (!token) {
@@ -100,7 +168,7 @@ export default function DashboardLayoutStudent() {
     }
   }, []);
   return (
-    <PROFILE.Provider value={{ itemsNoPagination, isLoading }}>
+    <PROFILE.Provider value={{ itemsNoPagination, isLoading, campaignList, refetchCampaign, isLoadingCampaign }}>
       <>
         {isLoading ? (
           <LoadingPageReload />

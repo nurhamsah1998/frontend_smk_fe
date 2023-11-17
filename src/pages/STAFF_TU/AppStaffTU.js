@@ -1,55 +1,99 @@
 import React from 'react';
-import { Box, Grid } from '@mui/material';
-import SchoolIcon from '@mui/icons-material/School';
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import { useTheme } from '@mui/material/styles';
+import { Box, Grid, Typography } from '@mui/material';
+import TodayIcon from '@mui/icons-material/Today';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import moment from 'moment';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
-import { AppCurrentVisits, AppWidgetSummary } from '../../sections/@dashboard/app';
+import { AppWidgetSummary } from '../../sections/@dashboard/app';
 import useFetch from '../../hooks/useFetch';
 import { FormatCurrency } from '../../components/FormatCurrency';
 
 function AppStaffTU() {
-  const theme = useTheme();
   const { items, isLoading } = useFetch({
     module: 'dashboard-report',
   });
-  // const majorSummary = React.useMemo(
-  //   () =>
-  //     Boolean(items?.major_summary)
-  //       ? items?.major_summary?.map((item) => ({ label: item?.kode_jurusan, value: item?.total }))
-  //       : [],
-  //   [items?.major_summary]
-  // );
+  console.log(items);
   return (
     <Box>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={6}>
           <AppWidgetSummary
             color="secondary"
-            icon={<ReceiptIcon />}
+            icon={<TodayIcon />}
             title={
-              Boolean(items?.today_profit?.total_student === 0)
-                ? `Belum ada transaksi masuk`
-                : `Transaksi hari ini dari ${isLoading ? 0 : items?.today_profit?.total_student} siswa`
+              <>
+                <Box>
+                  {Boolean(items?.profit?.total_student_daily === 0)
+                    ? `Belum ada transaksi masuk dihari ini`
+                    : `Transaksi hari ini dari ${isLoading ? 0 : items?.profit?.total_student_daily} siswa`}
+                </Box>
+                <Typography sx={{ fontSize: '12px' }}>{moment().format('DD MMMM YYYY')}</Typography>
+              </>
             }
-            total={FormatCurrency(isLoading ? 0 : items?.today_profit?.amount)}
+            total={FormatCurrency(isLoading ? 0 : items?.profit?.amount_daily)}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6}>
           <AppWidgetSummary
-            icon={<SchoolIcon />}
-            title="Total siswa"
-            total={isLoading ? 0 : items?.total_student}
             color="error"
+            icon={<DateRangeIcon />}
+            title={
+              <>
+                <Box>
+                  {Boolean(items?.profit?.total_student_monthly === 0)
+                    ? `Belum ada transaksi masuk dibulan ini`
+                    : `Transaksi bulan ini dari ${isLoading ? 0 : items?.profit?.total_student_monthly} siswa`}
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'center' }}>
+                  <Typography sx={{ fontSize: '12px' }}>{moment().startOf('month').format('DD MMMM YYYY')}</Typography>
+                  <Typography sx={{ fontSize: '12px' }}>-</Typography>
+                  <Typography sx={{ fontSize: '12px' }}>{moment().endOf('month').format('DD MMMM YYYY')}</Typography>
+                </Box>
+              </>
+            }
+            total={FormatCurrency(isLoading ? 0 : items?.profit?.amount_monthly)}
           />
         </Grid>
-        {/* <Grid item xs={12} sm={6} md={6}>
-          <AppCurrentVisits
-            title="Ringkasan minat jurusan siswa"
-            chartData={majorSummary}
-            chartColors={[theme.palette.info.main, theme.palette.error.main, theme.palette.warning.main]}
+        <Grid item xs={12} sm={6} md={6}>
+          <AppWidgetSummary
+            color="primary"
+            icon={<CalendarMonthIcon />}
+            title={
+              <>
+                <Box>
+                  {Boolean(items?.profit?.total_student_annual === 0)
+                    ? `Belum ada transaksi masuk ditahun ini`
+                    : `Transaksi tahun ini dari ${isLoading ? 0 : items?.profit?.total_student_annual} siswa`}
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'center' }}>
+                  <Typography sx={{ fontSize: '12px' }}>{moment().startOf('year').format('DD MMMM YYYY')}</Typography>
+                  <Typography sx={{ fontSize: '12px' }}>-</Typography>
+                  <Typography sx={{ fontSize: '12px' }}>{moment().endOf('year').format('DD MMMM YYYY')}</Typography>
+                </Box>
+              </>
+            }
+            total={FormatCurrency(isLoading ? 0 : items?.profit?.amount_annual)}
           />
-        </Grid> */}
+        </Grid>
+        <Grid item xs={12} sm={6} md={6}>
+          <AppWidgetSummary
+            color="info"
+            icon={<ReceiptLongIcon />}
+            title={
+              <>
+                <Box>
+                  {Boolean(items?.profit?.total_student_annual === 0)
+                    ? `Tidak ada tagihan dibulan ini`
+                    : `Total tagihan tahun ini`}
+                </Box>
+                <Typography sx={{ fontSize: '12px' }}>{moment().format('YYYY')}</Typography>
+              </>
+            }
+            total={FormatCurrency(isLoading ? 0 : items?.bill?.total_bill_annual)}
+          />
+        </Grid>
       </Grid>
     </Box>
   );

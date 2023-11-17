@@ -1,20 +1,28 @@
-import { Box, Button, Skeleton, Typography } from '@mui/material';
+import { Box, Button, Link, Skeleton, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import { grey, red } from '@mui/material/colors';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import moment from 'moment';
 
 import { themeAppColors } from '../../../theme/themeAppColor';
 import MutationCampaign from './MutationCampaign';
 import useFetch from '../../../hooks/useFetch';
 import useMutationDelete from '../../../hooks/useMutationDelete';
 import { Dialog } from '../../../hooks/useContextHook';
+import PreviewResponCampaign from './PreviewResponCampaign';
 
 function Campaign() {
   const { setDialog } = React.useContext(Dialog);
   const [openModal, setOpenModal] = React.useState(false);
+  const [previewResponCampaign, setPreviewResponCampaign] = React.useState({ isOpen: false, data: {} });
   const [dataEdit, setDataEdit] = React.useState({});
-  const { items, isLoading } = useFetch({
+  const {
+    items,
+    isLoading,
+    refetch: refetchCampaign,
+  } = useFetch({
     module: 'campaign',
     isCustom: true,
   });
@@ -33,6 +41,7 @@ function Campaign() {
       isCloseAfterSubmit: true,
     }));
   };
+
   return (
     <Box>
       <MutationCampaign
@@ -40,6 +49,12 @@ function Campaign() {
         dataEdit={dataEdit}
         openModalCreate={openModal}
         setOpenModalCreate={setOpenModal}
+      />
+      <PreviewResponCampaign
+        refetchCampaign={refetchCampaign}
+        setDialog={setDialog}
+        open={previewResponCampaign}
+        setOpen={setPreviewResponCampaign}
       />
       <Box>
         <Button onClick={() => setOpenModal(true)} variant="contained">
@@ -83,48 +98,72 @@ function Campaign() {
                     <Typography textTransform="capitalize" variant="h6">
                       {item?.title}
                     </Typography>
-                    <Typography sx={{ fontSize: 14, textTransform: 'uppercase' }}>{item?.status}</Typography>
+                    <Typography sx={{ fontSize: 14, textTransform: 'uppercase', fontWeight: 700 }}>
+                      {item?.status}
+                    </Typography>
                   </Box>
-                  <Box display="flex" gap={3}>
+                  <Box display="flex" alignItems="center" gap={1}>
                     <Typography
                       fontSize={12}
                     >{`${item?.kelas} ${item?.jurusan?.kode_jurusan} ${item?.sub_kelas} / ${item?.angkatan}`}</Typography>
+                    {item?.is_response && <Box sx={{ width: '1px', bgcolor: grey[600], height: '12px' }} />}
+                    {item?.is_response && (
+                      <Typography fontSize={12}>
+                        {item?.response_campaigns?.length === 0
+                          ? 'tidak ada yang merespon'
+                          : `${item?.response_campaigns?.length} siswa merespon`}
+                      </Typography>
+                    )}
                   </Box>
                 </Box>
                 <Box>
-                  <Typography fontSize={13} mt={1}>
-                    {item?.text}
+                  <Typography fontStyle="italic" fontSize={13} mt={1}>
+                    "{item?.text}""
                   </Typography>
+                  {item?.is_response && (
+                    <Link
+                      onClick={() => setPreviewResponCampaign({ isOpen: true, data: item })}
+                      fontSize={12}
+                      sx={{ cursor: 'pointer', color: item?.status === 'umum' ? themeAppColors.dark : red[800] }}
+                    >
+                      click disini untuk melihat respon siswa
+                    </Link>
+                  )}
                 </Box>
               </Box>
               <Box
                 sx={{
                   display: 'flex',
                   gap: 1,
+                  mt: 2,
                 }}
               >
-                <Button
-                  disabled={mutationDelete.isLoading}
-                  onClick={() => handleDelete(item)}
-                  size="small"
-                  sx={{ minWidth: 0 }}
-                  variant="contained"
-                  color="error"
-                >
-                  <DeleteIcon />
-                </Button>
-                <Button
-                  onClick={() => {
-                    setDataEdit(item);
-                    setOpenModal(true);
-                  }}
-                  color="info"
-                  size="small"
-                  sx={{ minWidth: 0 }}
-                  variant="contained"
-                >
-                  <ModeEditOutlineIcon />
-                </Button>
+                <Tooltip title="Hapus">
+                  <Button
+                    disabled={mutationDelete.isLoading}
+                    onClick={() => handleDelete(item)}
+                    size="small"
+                    sx={{ minWidth: 0, minHeight: 0, p: 0 }}
+                    variant="contained"
+                    color="error"
+                  >
+                    <DeleteIcon sx={{ width: 15, height: 15, m: '5px' }} />
+                  </Button>
+                </Tooltip>
+                <Tooltip title="Edit">
+                  <Button
+                    onClick={() => {
+                      setDataEdit(item);
+                      setOpenModal(true);
+                    }}
+                    color="info"
+                    size="small"
+                    sx={{ minWidth: 0, minHeight: 0, p: 0 }}
+                    variant="contained"
+                  >
+                    <ModeEditOutlineIcon sx={{ width: 15, height: 15, m: '5px' }} />
+                  </Button>
+                </Tooltip>
               </Box>
             </Box>
           ))

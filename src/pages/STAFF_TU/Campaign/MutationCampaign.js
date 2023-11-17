@@ -39,7 +39,6 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
       }, 100);
     },
   });
-
   return (
     <div>
       <ScreenDialog
@@ -66,16 +65,10 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
             kelas: dataEdit?.kelas || '',
             jurusan_id: dataEdit?.jurusan || '',
             sub_kelas: dataEdit?.sub_kelas || '',
-            is_response: dataEdit?.sub_kelas || '',
+            is_response: !dataEdit?.id ? '' : dataEdit?.is_response ? '1' : '0',
           }}
           onSubmit={(values) => {
-            if (
-              isEmpty(values?.title) ||
-              isEmpty(values?.text) ||
-              isEmpty(values?.status) ||
-              values?.angkatan === '' ||
-              values?.jurusan_id === ''
-            ) {
+            if (isEmpty(values?.title) || isEmpty(values?.text) || isEmpty(values?.status) || values?.angkatan === '') {
               enqueueSnackbar('Judul, Text, Angkatan, dan Status wajib diisi !!!', {
                 variant: 'error',
               });
@@ -91,6 +84,7 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
             } else {
               mutationPost.mutate({
                 ...values,
+                is_response: Number(values?.is_response),
                 jurusan_id: values?.jurusan_id?.id,
                 angkatan: String(values?.angkatan),
               });
@@ -127,6 +121,9 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
                       id="outlined-multiline-static"
                       multiline
                       rows={6}
+                      inputProps={{
+                        maxLength: 800,
+                      }}
                       {...getFieldProps('text')}
                       label="Text"
                     />
@@ -135,7 +132,7 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
                         textAlign: 'right',
                       }}
                     >
-                      {values?.text?.length} / 300
+                      {values?.text?.length} / 800
                     </FormHelperText>
                   </Box>
                   <Box>
@@ -193,8 +190,8 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
                       {...getFieldProps('is_response')}
                       label="Merespon"
                     >
-                      <MenuItem value={'true'}>Siswa dapat merespon pengumuman ini</MenuItem>
-                      <MenuItem value={'false'}>Siswa tidak dapat merespon pengumuman ini</MenuItem>
+                      <MenuItem value={'1'}>Siswa dapat merespon pengumuman ini</MenuItem>
+                      <MenuItem value={'0'}>Siswa tidak dapat merespon pengumuman ini</MenuItem>
                     </TextField>
                   </Box>
                   <Box>
