@@ -14,7 +14,6 @@ function AppStaffTU() {
   const { items, isLoading } = useFetch({
     module: 'dashboard-report',
   });
-  console.log(items);
   return (
     <Box>
       <Grid container spacing={2}>

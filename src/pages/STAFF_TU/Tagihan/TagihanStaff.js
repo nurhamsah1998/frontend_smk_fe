@@ -15,6 +15,7 @@ import { Dialog } from '../../../hooks/useContextHook';
 import formatNumberChange from '../../../components/formatNumberChange';
 import TextFieldNumberFormat from '../../../components/TextFieldNumberFormat';
 import useMutationPost from '../../../hooks/useMutationPost';
+import { FormatCurrency } from '../../../components/FormatCurrency';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -69,6 +70,16 @@ export default function TagihanStaff() {
     return Object.entries(x);
   });
   const memoix = React.useMemo(() => dataTextField, [itemsNoPagination]);
+  const totalBills = () => {
+    const tagihan = itemsNoPagination?.[value];
+    delete tagihan?.id;
+    delete tagihan?.tahun_angkatan;
+    delete tagihan?.updatedAt;
+    delete tagihan?.createdAt;
+    const result = Object.values(tagihan || {})?.reduce((a, b) => a + b, 0);
+    return result;
+  };
+  const totalBill = React.useMemo(() => totalBills(), [value]);
   const formRef = React.useRef();
   const handleSave = () => {
     formRef.current?.handleSubmit();
@@ -142,9 +153,10 @@ export default function TagihanStaff() {
                 onChange={handleChange}
                 aria-label="basic tabs example"
               >
-                {itemsNoPagination?.map((item, index) => (
-                  <Tab key={index} label={item?.tahun_angkatan} {...a11yProps(index)} />
-                ))}
+                {itemsNoPagination?.map((item, index) => {
+                  console.log(item);
+                  return <Tab key={index} label={item?.tahun_angkatan} {...a11yProps(index)} />;
+                })}
               </Tabs>
               <IconButton
                 disabled={totalPage === page}
@@ -180,8 +192,11 @@ export default function TagihanStaff() {
                 terlebih dahulu !
               </FormHelperText>
             </Box>
+            <Box>
+              <Typography sx={{ fontSize: '12px' }}>Total tagihan : {FormatCurrency(totalBill)}</Typography>
+            </Box>
           </Paper>
-          <Box sx={{ mt: { xs: '100px', sm: '100px', md: '100px', lg: '100px' } }}>
+          <Box sx={{ mt: { xs: '140px', sm: '140px', md: '140px', lg: '120px' } }}>
             <Formik
               initialValues={itemsNoPagination[value]}
               innerRef={formRef}
