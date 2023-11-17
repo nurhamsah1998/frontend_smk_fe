@@ -70,16 +70,15 @@ export default function TagihanStaff() {
     return Object.entries(x);
   });
   const memoix = React.useMemo(() => dataTextField, [itemsNoPagination]);
-  const totalBills = () => {
-    const tagihan = itemsNoPagination?.[value];
-    delete tagihan?.id;
-    delete tagihan?.tahun_angkatan;
-    delete tagihan?.updatedAt;
-    delete tagihan?.createdAt;
-    const result = Object.values(tagihan || {})?.reduce((a, b) => a + b, 0);
+  const totalBill = React.useMemo(() => {
+    const bill = { ...itemsNoPagination?.[value] };
+    delete bill?.createdAt;
+    delete bill?.id;
+    delete bill?.tahun_angkatan;
+    delete bill?.updatedAt;
+    const result = Object.values(bill || {})?.reduce((a, b) => a + b, 0);
     return result;
-  };
-  const totalBill = React.useMemo(() => totalBills(), [value]);
+  }, [value, mutation, createMutation]);
   const formRef = React.useRef();
   const handleSave = () => {
     formRef.current?.handleSubmit();
@@ -102,7 +101,7 @@ export default function TagihanStaff() {
   }, [page]);
   React.useEffect(() => {
     if (
-      !Boolean(window.localStorage.getItem('current_tab_tagihan')) &&
+      !Boolean(window.localStorage.getItem('current_page_tagihan')) ||
       !Boolean(window.localStorage.getItem('current_tab_tagihan'))
     ) {
       setLoadingCurrentPage(false);
@@ -153,10 +152,9 @@ export default function TagihanStaff() {
                 onChange={handleChange}
                 aria-label="basic tabs example"
               >
-                {itemsNoPagination?.map((item, index) => {
-                  console.log(item);
-                  return <Tab key={index} label={item?.tahun_angkatan} {...a11yProps(index)} />;
-                })}
+                {itemsNoPagination?.map((item, index) => (
+                  <Tab key={index} label={item?.tahun_angkatan} {...a11yProps(index)} />
+                ))}
               </Tabs>
               <IconButton
                 disabled={totalPage === page}

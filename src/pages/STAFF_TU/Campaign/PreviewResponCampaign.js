@@ -14,7 +14,7 @@ export default function PreviewResponCampaign({ open, setOpen, setDialog, refetc
   const { items, refetch, isLoading } = useFetch({
     module: `response-campaign?campaign_id=${open?.data?.id ? open?.data?.id : ''}`,
     isCustom: true,
-    enabled: false,
+    enabled: Boolean(open?.data?.id),
   });
   const mutationDelete = useMutationDelete({
     module: 'response-campaign',

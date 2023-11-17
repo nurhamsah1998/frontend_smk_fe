@@ -62,6 +62,7 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
                 <li>Periksa jaringan anda</li>
                 <li>Pastikan alamat URL yang anda tuju sudah benar</li>
                 <li>hubungi developer jika masalah belum terselesaikan</li>
+                <li>server kemungkinan down</li>
               </ul>
             </Box>
             <Button sx={{ mt: 3 }} onClick={() => window.location.reload()} variant="contained">
@@ -85,7 +86,7 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
           tag="silahkan hubungi developer"
         />
       )}
-      {itemsNoPagination?.role === 'ADMINISTRASI' && (
+      {itemsNoPagination?.role === 'ADMINISTRASI' && !isError && (
         <StyledRoot>
           <Header onOpenNav={() => setOpen(true)} />
           <Nav openNav={open} navConfig={navConfigTU} onCloseNav={() => setOpen(false)} />

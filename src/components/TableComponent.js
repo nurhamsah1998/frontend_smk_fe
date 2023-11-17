@@ -161,6 +161,7 @@ function TableComponen({
                     key={bodyIndex}
                     sx={{
                       height: '40px',
+                      bgcolor: bodyIndex % 2 ? '#a1a1a11f' : '#fff',
                     }}
                   >
                     {tableHead?.map((head, headIndex) => {
@@ -229,7 +230,14 @@ function TableComponen({
                       const isDate = head?.isDate ? moment(body[head.id]).format('DD MMM YYYY H:mm') : isCurrency;
 
                       return (
-                        <TableCell sx={{ px: 2, py: 0, textTransform: 'capitalize' }} key={headIndex}>
+                        <TableCell
+                          sx={{
+                            px: 2,
+                            py: 0,
+                            textTransform: 'capitalize',
+                          }}
+                          key={headIndex}
+                        >
                           {isDate || '-'}
                         </TableCell>
                       );
