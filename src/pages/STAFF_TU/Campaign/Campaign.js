@@ -1,4 +1,4 @@
-import { Box, Button, Link, Skeleton, Tooltip, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Link, Skeleton, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
@@ -63,8 +63,17 @@ function Campaign() {
       </Box>
       <Box display="grid" gap={2} mt={3}>
         {isLoading ? (
-          <Box>
-            <Skeleton height={170} />
+          <Box
+            sx={{
+              justifyContent: 'center',
+              py: 3,
+              alignItems: 'center',
+              display: 'flex',
+              gap: 2,
+              mt: 10,
+            }}
+          >
+            <CircularProgress /> <span>Memuat</span>
           </Box>
         ) : items?.length === 0 ? (
           <Box sx={{ textAlign: 'center', mt: 3, display: 'grid' }}>

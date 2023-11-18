@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import { TextField, Box, MenuItem, FormHelperText } from '@mui/material';
+import { TextField, Box, MenuItem, FormHelperText, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import useMutationPost from '../../../hooks/useMutationPost';
 import ScreenDialog from '../../../components/ScreenDialog';
@@ -10,6 +10,7 @@ import useMutationPatch from '../../../hooks/useMutationPatch';
 
 function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDataEdit }) {
   const formRef = React.useRef();
+  const [openModalInfo, setOpenModalInfo] = React.useState(false);
   const angkatan = () => {
     const result = [];
     const date = new Date();
@@ -42,6 +43,45 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
   return (
     <div>
       <ScreenDialog
+        labelClose="Tutup"
+        isLoading={mutationPost.isLoading}
+        handleClose={() => {
+          setOpenModalInfo(false);
+        }}
+        title="Informasi tentang pembuatan pengumuman"
+        open={openModalInfo}
+      >
+        <Box>
+          <Typography fontSize={14}>
+            Fitur ini anda dapat membuat pengumuman untuk siswa secara spesifik, mulai dari tahun angkatan, jurusan,
+            kelas dan sub kelas. Ketika anda membuat pengumuman, anda bisa membuatnya menjadi{' '}
+            <strong>BISA DIRESPON</strong> ataupun <strong>TIDAK BISA DIRESPON</strong> oleh siswa. Form pembuatan
+            pengumuman yang wajib diisi :
+          </Typography>
+          <ul style={{ fontSize: '14px', padding: '10px 24px' }}>
+            <li>
+              <strong>JUDUL</strong>
+            </li>
+            <li>
+              <strong>TEXT ( isi pengumuman )</strong>
+            </li>
+            <li>
+              <strong>STATUS</strong>
+            </li>
+            <li>
+              <strong>TAHUN ANGKATAN SISWA</strong>
+            </li>
+          </ul>
+          <Typography fontSize={14}>
+            Anda juga bisa melihat dan menghapus respon siswa disetiap pengumuman. Setiap siswa hanya bisa merespon
+            sekali saja disetiap pengumuman dan tidak bisa mengedit maupun menghapus responnya.{' '}
+            <strong>Setiap user admin hanya bisa membuat 5 pengumuman saja</strong>
+          </Typography>
+        </Box>
+      </ScreenDialog>
+      <ScreenDialog
+        labelTopBtn="info"
+        handleTopBtn={() => setOpenModalInfo(true)}
         labelClose="Batal"
         isLoading={mutationPost.isLoading}
         handleClose={() => {

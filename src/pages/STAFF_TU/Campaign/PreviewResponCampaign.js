@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, Skeleton, Tooltip, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Skeleton, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
 import { grey } from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -45,8 +45,16 @@ export default function PreviewResponCampaign({ open, setOpen, setDialog, refetc
       <ScreenDialog labelClose="tutup" handleClose={handleClose} title="Respon Siswa" open={open?.isOpen}>
         <Box display="grid" gap={1}>
           {isLoading ? (
-            <Box>
-              <Skeleton height={170} />
+            <Box
+              sx={{
+                justifyContent: 'center',
+                py: 3,
+                alignItems: 'center',
+                display: 'flex',
+                gap: 2,
+              }}
+            >
+              <CircularProgress /> <span>Memuat</span>
             </Box>
           ) : items?.length === 0 ? (
             <Box sx={{ textAlign: 'center', mt: 3, display: 'grid' }}>

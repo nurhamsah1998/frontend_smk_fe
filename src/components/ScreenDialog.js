@@ -72,7 +72,7 @@ export default function ScreenDialog({
               variant="contained"
               color="secondary"
             >
-              Edit
+              {labelTopBtn}
             </Button>
           )}
         </Box>

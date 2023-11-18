@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Box, Button, FormHelperText, Menu, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { debounce } from 'lodash';
@@ -7,10 +7,7 @@ import { jsPDF as JSPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import axios from 'axios';
 import moment from 'moment';
-import { uid } from 'uid';
-import DatePicker from 'react-datepicker';
 import { purple } from '@mui/material/colors';
-import 'react-datepicker/dist/react-datepicker.css';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Helmet } from 'react-helmet-async';
 
@@ -21,7 +18,6 @@ import { LabelField } from '../../../components/Commons';
 /// https://stackoverflow.com/a/45526690/18038473
 import { apiUrl } from '../../../hooks/api';
 import { FormatCurrency } from '../../../components/FormatCurrency';
-import { PROFILE } from '../../../hooks/useHelperContext';
 import ScreenDialog from '../../../components/ScreenDialog';
 import { KopPdf } from '../../Laporan/transaksi/ReportTransaksi';
 import CustomDatePicker from '../../../components/CustomDatePicker';
@@ -37,7 +33,6 @@ export const ClearFilter = ({ handleClear }) => {
   );
 };
 function Pembayaran() {
-  const { itemsNoPagination } = React.useContext(PROFILE);
   const navigate = useNavigate();
   const location = useLocation();
   const [bill, setBill] = useState('');
@@ -105,10 +100,6 @@ function Pembayaran() {
     {
       id: 'nama',
       label: 'Nama siswa',
-    },
-    {
-      id: 'gender',
-      label: 'Gender',
     },
     {
       id: 'kelas_student',
