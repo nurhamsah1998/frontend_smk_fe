@@ -181,8 +181,9 @@ function Pembayaran() {
   }, [items]);
   const nomorRef = useRef({ value: '' });
   const pdfSuratTagihan = (doc, data) => {
-    const img = new Image();
-    img.src = '/assets/logo_pgri.png';
+    const stampel = new Image();
+    stampel.src = '/assets/stampel.png';
+
     autoTable(doc, {
       html: '#my-table',
       margin: { top: 70 },
@@ -266,6 +267,7 @@ function Pembayaran() {
       align: 'left',
     });
     doc.setFont('', '', '');
+    doc.addImage(stampel, 'jpg', doc.internal.pageSize.width - 135 / 2, doc.internal.pageSize.height / 2 + 69, 38, 38);
     doc.text(
       `Kras, ${moment().format('Do MMMM YYYY')}`,
       doc.internal.pageSize.width - 90 / 2,

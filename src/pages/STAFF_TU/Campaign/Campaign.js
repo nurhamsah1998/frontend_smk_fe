@@ -103,9 +103,13 @@ function Campaign() {
                     </Typography>
                   </Box>
                   <Box display="flex" alignItems="center" gap={1}>
-                    <Typography
-                      fontSize={12}
-                    >{`${item?.kelas} ${item?.jurusan?.kode_jurusan} ${item?.sub_kelas} / ${item?.angkatan}`}</Typography>
+                    <Typography fontSize={12}>{`${item?.kelas || ''} ${item?.jurusan?.kode_jurusan || ''} ${
+                      item?.sub_kelas || ''
+                    } ${
+                      !Boolean(item?.kelas) && !Boolean(item?.jurusan?.kode_jurusan) && !Boolean(item?.sub_kelas)
+                        ? ''
+                        : '/'
+                    } ${item?.angkatan}`}</Typography>
                     {item?.is_response && <Box sx={{ width: '1px', bgcolor: grey[600], height: '12px' }} />}
                     {item?.is_response && (
                       <Typography fontSize={12}>
