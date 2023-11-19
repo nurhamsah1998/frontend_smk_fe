@@ -533,7 +533,7 @@ function Pembayaran() {
                       setSearch('');
                       setInputView('');
                     }}
-                    title="Masukan nama siswa / kode siswa"
+                    title="Masukan nama siswa / Kode siswa / Username / Nama ayah / Nama ibu"
                   />
                   <TextField
                     value={inputView}

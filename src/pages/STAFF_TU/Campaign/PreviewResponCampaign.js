@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Box, Button, CircularProgress, Skeleton, Tooltip, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
-import { grey } from '@mui/material/colors';
+import InfoIcon from '@mui/icons-material/Info';
+import { grey, green, red, orange, blue } from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ScreenDialog from '../../../components/ScreenDialog';
 import useFetch from '../../../hooks/useFetch';
@@ -16,6 +17,49 @@ export default function PreviewResponCampaign({ open, setOpen, setDialog, refetc
     isCustom: true,
     enabled: Boolean(open?.data?.id),
   });
+  const billStatus = [
+    {
+      name: 'deposit',
+      title: 'DEPOSIT',
+      color: orange[700],
+      bgcolor: orange[100],
+    },
+    {
+      name: 'not_paid_yet',
+      title: 'BELUM ADA TAGIHAN',
+      color: grey[700],
+      bgcolor: grey[300],
+    },
+    {
+      name: 'paid',
+      title: 'LUNAS',
+      color: green[700],
+      bgcolor: green[100],
+    },
+    {
+      name: 'not_paid',
+      title: 'BELUM LUNAS',
+      color: red[700],
+      bgcolor: red[100],
+    },
+  ];
+  const itemsRebuild = React.useMemo(() => {
+    return items?.map((i) => ({
+      ...i,
+      siswa: {
+        ...i?.siswa,
+        status_bill:
+          i?.siswa?.current_bill < 0
+            ? 'deposit'
+            : i?.siswa?.current_bill > 0
+            ? 'not_paid'
+            : i?.siswa?.status_bill?.includes('not_paid_yet')
+            ? 'not_paid_yet'
+            : 'paid',
+      },
+    }));
+  }, [items]);
+
   const mutationDelete = useMutationDelete({
     module: 'response-campaign',
     next: () => {
@@ -56,7 +100,7 @@ export default function PreviewResponCampaign({ open, setOpen, setDialog, refetc
             >
               <CircularProgress /> <span>Memuat</span>
             </Box>
-          ) : items?.length === 0 ? (
+          ) : itemsRebuild?.length === 0 ? (
             <Box sx={{ textAlign: 'center', mt: 3, display: 'grid' }}>
               <Typography variant="h6" color={grey[600]}>
                 Tidak ada respon
@@ -66,7 +110,8 @@ export default function PreviewResponCampaign({ open, setOpen, setDialog, refetc
               </Typography>
             </Box>
           ) : (
-            items?.map((item, index) => {
+            itemsRebuild?.map((item, index) => {
+              const statusBillStudent = billStatus?.find((status) => status?.name === item?.siswa?.status_bill);
               return (
                 <Box
                   sx={{
@@ -109,9 +154,34 @@ export default function PreviewResponCampaign({ open, setOpen, setDialog, refetc
                         <Typography
                           fontSize={13}
                         >{`${item?.siswa?.kelas} ${item?.siswa?.jurusan?.kode_jurusan} ${item?.siswa?.sub_kelas}`}</Typography>
+                        <Box>
+                          <Tooltip
+                            title={
+                              <Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                  <Typography fontSize="12px">Status pembayaran : </Typography>
+                                  <Box
+                                    sx={{
+                                      bgcolor: statusBillStudent?.bgcolor,
+                                      color: statusBillStudent?.color,
+                                      px: 1.5,
+                                      borderRadius: '9px',
+                                      width: 'fit-content',
+                                    }}
+                                  >
+                                    <Typography fontSize="12px">{statusBillStudent?.title}</Typography>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            }
+                          >
+                            <InfoIcon sx={{ width: 16, color: blue[500], pt: '5px' }} />
+                          </Tooltip>
+                        </Box>
                       </Box>
                       <Typography fontSize={12}>{moment(item?.createdAt).format('DD MMM YYYY H:mm')}</Typography>
                     </Box>
+
                     <Box>
                       <Typography fontSize={13} mt={1} fontStyle="italic">
                         "{item?.text}"

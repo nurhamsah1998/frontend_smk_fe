@@ -348,7 +348,7 @@ function Pendaftar() {
           >
             <Box width="100%">
               <LabelField
-                title="Cari siswa / Kode siswa / Username"
+                title="Masukan nama siswa / Kode siswa / Username / Nama ayah / Nama ibu"
                 onClickClearIcon={() => {
                   setSearch('');
                   setInputView('');

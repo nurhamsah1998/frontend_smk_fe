@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import React from 'react';
+import { Box, Stack, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import { grey } from '@mui/material/colors';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // components
@@ -11,6 +14,7 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import { themeAppColors } from '../../../theme/themeAppColor';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +46,12 @@ Header.propTypes = {
   onOpenNav: PropTypes.func,
 };
 
-export default function Header({ onOpenNav }) {
+export default function Header({ onOpenNav, navConfigTU }) {
+  const location = useLocation();
+  const currentPage = React.useMemo(
+    () => navConfigTU?.find((item) => item?.path === location?.pathname),
+    [location?.pathname]
+  );
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -56,10 +65,9 @@ export default function Header({ onOpenNav }) {
         >
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
-        {/* 
-        <Searchbar /> */}
-        <Box sx={{ flexGrow: 1 }} />
 
+        {/* <Searchbar /> */}
+        <Box sx={{ flexGrow: 1 }} />
         <Stack
           direction="row"
           alignItems="center"
@@ -68,6 +76,11 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
+          <Box sx={{ position: 'absolute', left: { xs: 70, sm: 70, md: 290, lg: 10 } }}>
+            <Typography sx={{ color: themeAppColors.dark }} variant="h4">
+              {currentPage?.title || 'Detail Pembayaran'}
+            </Typography>
+          </Box>
           {/* <LanguagePopover />
           <NotificationsPopover /> */}
           <AccountPopover />
