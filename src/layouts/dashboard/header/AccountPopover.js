@@ -4,8 +4,6 @@ import { alpha } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
 import jwtDecode from 'jwt-decode';
-// mocks_
-import account from '../../../_mock/account';
 import { Dialog } from '../../../hooks/useContextHook';
 import { PROFILE } from '../../../hooks/useHelperContext';
 
@@ -77,7 +75,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={''} alt="photoURL" />
       </IconButton>
 
       <Popover

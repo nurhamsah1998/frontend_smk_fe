@@ -7,7 +7,7 @@ import { Container, Typography, Button, Box } from '@mui/material';
 import useResponsive from '../../../../hooks/useResponsive';
 // components
 // sections
-import { LoginForm } from '../../../../sections/auth/login';
+import LoginForm from './LoginForm';
 import { SideAuthBox } from '../../siswa/Login/LoginStudentPage';
 
 // ----------------------------------------------------------------------

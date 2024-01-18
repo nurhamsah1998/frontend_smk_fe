@@ -3,8 +3,6 @@ import { useState, useContext } from 'react';
 import { alpha } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
-// mocks_
-import account from '../../../_mock/account';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import { Dialog } from '../../../hooks/useContextHook';
 
@@ -73,7 +71,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={''} alt="photoURL" />
       </IconButton>
 
       <Popover

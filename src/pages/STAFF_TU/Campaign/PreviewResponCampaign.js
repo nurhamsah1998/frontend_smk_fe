@@ -179,7 +179,9 @@ export default function PreviewResponCampaign({ open, setOpen, setDialog, refetc
                           </Tooltip>
                         </Box>
                       </Box>
-                      <Typography fontSize={12}>{moment(item?.createdAt).format('DD MMM YYYY H:mm')}</Typography>
+                      <Typography mt={-1} fontSize={12}>
+                        {moment(item?.createdAt).format('DD MMM YYYY H:mm')}
+                      </Typography>
                     </Box>
 
                     <Box>
