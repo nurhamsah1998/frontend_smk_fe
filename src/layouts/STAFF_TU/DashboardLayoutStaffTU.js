@@ -47,6 +47,15 @@ const Main = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen, open, isError }) => {
+  const handleLogOut = () => {
+    window.localStorage.removeItem('accessToken');
+    window.localStorage.removeItem('current_page_tagihan');
+    window.localStorage.removeItem('current_tab_tagihan');
+    navigate('/');
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  };
   return (
     <>
       {isError && (
@@ -61,8 +70,8 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
               <ul style={{ marginLeft: '20px' }}>
                 <li>Periksa jaringan anda</li>
                 <li>Pastikan alamat URL yang anda tuju sudah benar</li>
-                <li>hubungi developer jika masalah belum terselesaikan</li>
                 <li>server kemungkinan down</li>
+                <li>hubungi developer jika masalah belum terselesaikan</li>
               </ul>
             </Box>
             <Button sx={{ mt: 3 }} onClick={() => window.location.reload()} variant="contained">
@@ -94,6 +103,32 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
             <Outlet />
           </Main>
         </StyledRoot>
+      )}
+      {itemsNoPagination?.role === 'DEV' && !isError && (
+        <Box sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ px: 3 }}>
+            <Typography variant="h4" textTransform="uppercase" color={grey[700]}>
+              Ups! Anda Tidak Bisa Mengakses!
+            </Typography>
+
+            <Box mt={2}>
+              <strong>Penyebab kemungkinan :</strong>
+              <ul style={{ marginLeft: '20px' }}>
+                <li>Ada perubahan data di database</li>
+              </ul>
+            </Box>
+            <Box mt={2}>
+              <strong>Solusi :</strong>
+              <ul style={{ marginLeft: '20px' }}>
+                <li>Cobalah untuk Log Out lalu Login lagi</li>
+                <li>hubungi developer jika masalah belum terselesaikan</li>
+              </ul>
+            </Box>
+            <Button sx={{ mt: 3 }} onClick={handleLogOut} variant="contained">
+              Log Out
+            </Button>
+          </Box>
+        </Box>
       )}
     </>
   );

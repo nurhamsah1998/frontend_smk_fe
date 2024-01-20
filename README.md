@@ -42,6 +42,7 @@ Email Us: support@minimals.cc
 ## Terimakasih kepada :
 
 Minimal [(Free version)](https://minimal-kit-react.vercel.app/)
+Formik (https://formik.org/)
 
-lihat file package.json
+lihat lainnya fi file package.json
 (D:\KERJA\frontend_smk_fe\package.json)
