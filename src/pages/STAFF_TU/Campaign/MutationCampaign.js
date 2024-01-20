@@ -71,6 +71,9 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
             <li>
               <strong>TAHUN ANGKATAN SISWA</strong>
             </li>
+            <li>
+              Note : <strong>By Default Pengumuman Tidak Bisa Direspon</strong>
+            </li>
           </ul>
           <Typography fontSize={14}>
             Anda juga bisa melihat dan menghapus respon siswa disetiap pengumuman. Setiap siswa hanya bisa merespon
@@ -105,7 +108,7 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
             kelas: dataEdit?.kelas || '',
             jurusan_id: dataEdit?.jurusan || '',
             sub_kelas: dataEdit?.sub_kelas || '',
-            is_response: !dataEdit?.id ? '' : dataEdit?.is_response ? '1' : '0',
+            is_response: !dataEdit?.id ? '0' : dataEdit?.is_response ? '1' : '0',
           }}
           onSubmit={(values) => {
             if (isEmpty(values?.title) || isEmpty(values?.text) || isEmpty(values?.status) || values?.angkatan === '') {

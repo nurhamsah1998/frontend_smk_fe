@@ -205,7 +205,7 @@ export default function TagihanStaff() {
                   labelClose: 'Batal',
                   labelSubmit: 'Simpan',
                   content:
-                    'Jumlah tagihan yang dirubah, nantinya akan disinkronisasikan dengan riwayat pembayaran siswa yang mana jika ada uang sisa dari hasil perubahan ini, maka hasil sisa tersebut akan muncul ditampilan siswa.',
+                    'Jumlah tagihan yang dirubah, nantinya akan disinkronisasikan dengan riwayat pembayaran siswa yang mana jika ada uang sisa dari hasil perubahan ini, maka hasil sisa tersebut akan muncul ditampilan siswa. Begitupun dengan siswa yang lunas pembayarannya, akan muncul kekurangannya berapa jika ada penambahan jumlah tagihan. User ADMIN lainnya juga bisa merubah tagihan ini, jadi pastikan perubahan yang terjadi sudah sesuai dan saling konfirmasi antar ADMIN lainnya.',
                   do: () => {
                     const totalAmountRaw = Object.values(values || {});
                     const totalPreviousAmountRaw = Object.values(itemsNoPagination[value] || {});
