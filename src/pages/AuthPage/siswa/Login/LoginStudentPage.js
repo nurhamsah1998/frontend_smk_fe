@@ -45,9 +45,19 @@ export const SideAuthBox = () => {
       <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5, color: '#fff', zIndex: 1 }}>
         Aplikasi Management Sekolah - SMK PGRI KRAS
       </Typography>
-      <Typography sx={{ position: 'absolute', bottom: 20, color: '#fff', right: 10, fontSize: '12px', zIndex: 1 }}>
-        ©️ Copyright 2023 | SMK PGRI KRAS
-      </Typography>
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 20,
+          right: 10,
+          left: 10,
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>version 1.0.0</Typography>
+        <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>©️ Copyright 2023 | SMK PGRI KRAS</Typography>
+      </Box>
       <Box
         sx={{
           position: 'absolute',
