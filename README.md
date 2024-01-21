@@ -46,3 +46,6 @@ Formik (https://formik.org/)
 
 lihat lainnya fi file package.json
 (D:\KERJA\frontend_smk_fe\package.json)
+
+
+DILARANG MENYALIN, MENG-COPY, MEMODIFIKASI, FORK SEMUA SALINAN KODE INI TANPA IZIN TERTULIS MAUPUN LISAN KEPADA OWNER REPOSITORY INI (NURHAMSAH)
