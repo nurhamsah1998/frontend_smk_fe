@@ -71,7 +71,7 @@ function Pendaftar() {
     module: `siswa`,
     params: `&angkatan=${
       Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
-    }&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}`,
+    }&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}&type=daftar_siswa`,
     enabled: true,
   });
   const { data } = useFetch({

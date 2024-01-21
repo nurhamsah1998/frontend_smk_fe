@@ -51,6 +51,9 @@ export default function AccountPopover() {
         window.localStorage.removeItem('current_page_tagihan');
         window.localStorage.removeItem('current_tab_tagihan');
         navigate('/');
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       },
       isCloseAfterSubmit: true,
     }));

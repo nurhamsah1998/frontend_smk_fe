@@ -97,7 +97,7 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
       )}
       {itemsNoPagination?.role === 'ADMINISTRASI' && !isError && (
         <StyledRoot>
-          <Header navConfigTU={navConfigTU} onOpenNav={() => setOpen(true)} />
+          <Header navConfigMenu={navConfigTU} onOpenNav={() => setOpen(true)} />
           <Nav openNav={open} navConfig={navConfigTU} onCloseNav={() => setOpen(false)} />
           <Main>
             <Outlet />

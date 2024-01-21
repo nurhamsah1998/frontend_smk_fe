@@ -1,3 +1,6 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-extra-boolean-cast */
+/* eslint-disable arrow-body-style */
 import React, { useMemo, useRef, useState } from 'react';
 import { Box, Button, FormHelperText, Menu, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
@@ -10,6 +13,7 @@ import moment from 'moment';
 import { purple } from '@mui/material/colors';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Helmet } from 'react-helmet-async';
+import { useSnackbar } from 'notistack';
 
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
@@ -22,6 +26,7 @@ import ScreenDialog from '../../../components/ScreenDialog';
 import { KopPdf } from '../../Laporan/transaksi/ReportTransaksi';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
+import { PROFILE } from '../../../hooks/useHelperContext';
 
 export const ClearFilter = ({ handleClear }) => {
   return (
@@ -33,6 +38,7 @@ export const ClearFilter = ({ handleClear }) => {
   );
 };
 function Pembayaran() {
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const location = useLocation();
   const [bill, setBill] = useState('');
@@ -45,12 +51,15 @@ function Pembayaran() {
   const [jurusanId, setJurusanId] = React.useState('');
   const [startUjian, setStartUjian] = React.useState('');
   const [expiredDate, setExpiredDate] = React.useState('');
+  const { itemsNoPagination, isLoading: isLoadingProfile } = React.useContext(PROFILE);
+  const permissions = Boolean(itemsNoPagination?.id) ? JSON.parse(itemsNoPagination?.permissions) : [];
+  const disabledPrintBill = !Boolean(permissions?.find((item) => item === 'student_bill_letter'));
   const { items, totalPage, setPage, search, totalData, totalRows, setSearch, page, isLoading, setLimit, limit } =
     useFetch({
       module: `siswa`,
       params: `&current_bill=${bill}&angkatan=${
         Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
-      }&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}`,
+      }&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}&type=pembayaran`,
     });
   const { data } = useFetch({
     module: 'jurusan',
@@ -298,6 +307,10 @@ function Pembayaran() {
     });
   };
   const handlePrintTagihan = (i) => {
+    if (disabledPrintBill)
+      return enqueueSnackbar('Akses Ditolak, Anda tidak memiliki akses!', {
+        variant: 'error',
+      });
     const doc = new JSPDF({
       orientation: 'p',
       unit: 'mm',
@@ -424,6 +437,10 @@ function Pembayaran() {
     setAngkatan({ tahun_angkatan: String(event?.tahun_angkatan) });
   };
   const handlePrintMassalTagihan = () => {
+    if (disabledPrintBill)
+      return enqueueSnackbar('Akses Ditolak, Anda tidak memiliki akses!', {
+        variant: 'error',
+      });
     const doc = new JSPDF({
       orientation: 'p',
       unit: 'mm',
@@ -437,7 +454,13 @@ function Pembayaran() {
     }
     window.open(URL.createObjectURL(doc.output('blob')));
   };
-
+  const handlePrint = (i) => {
+    if (disabledPrintBill)
+      return enqueueSnackbar('Akses Ditolak, Anda tidak memiliki akses!', {
+        variant: 'error',
+      });
+    setOpenModalInputDate(() => ({ isBulk: false, openModal: true, data: i }));
+  };
   return (
     <Box>
       <Helmet>
@@ -513,15 +536,19 @@ function Pembayaran() {
                 <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
               </Menu>
             </Box>
-            {Boolean(bill === 'not_paid') && Boolean(jurusan) && Boolean(kelas) && Boolean(itemsRebuild?.length !== 0) && (
-              <Button
-                onClick={() => setOpenModalInputDate((prev) => ({ isBulk: true, openModal: true }))}
-                color="warning"
-                variant="contained"
-              >
-                Print Tagihan Massal
-              </Button>
-            )}
+            {Boolean(bill === 'not_paid') &&
+              Boolean(jurusan) &&
+              Boolean(kelas) &&
+              Boolean(itemsRebuild?.length !== 0) &&
+              !disabledPrintBill && (
+                <Button
+                  onClick={() => setOpenModalInputDate(() => ({ isBulk: true, openModal: true }))}
+                  color="warning"
+                  variant="contained"
+                >
+                  Print Tagihan Massal
+                </Button>
+              )}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Box sx={{ display: 'grid', gap: 1 }}>
@@ -725,7 +752,7 @@ function Pembayaran() {
             }}
             page={page}
             handleSeeBill={handleSeeBill}
-            handlePrint={(i) => setOpenModalInputDate((prev) => ({ isBulk: false, openModal: true, data: i }))}
+            handlePrint={disabledPrintBill ? null : handlePrint}
             tooltipHandlePrint="Print Surat Tagihan"
             emptyTag="( sepertinya tidak ada siswa )"
             tableBody={itemsRebuild}

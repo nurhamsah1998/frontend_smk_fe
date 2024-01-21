@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
@@ -36,6 +36,22 @@ Nav.propTypes = {
 export default function Nav({ openNav, onCloseNav, navConfig }) {
   const { pathname } = useLocation();
   const { itemsNoPagination, isLoading } = useContext(PROFILE);
+  // eslint-disable-next-line no-extra-boolean-cast
+  const permissionsUser = Boolean(itemsNoPagination?.id) ? JSON.parse(itemsNoPagination?.permissions) : [];
+  const permissionsSlicing = useMemo(() => {
+    // eslint-disable-next-line no-unused-vars, prefer-const
+    let cloneNav = [...navConfig];
+    // eslint-disable-next-line no-unreachable-loop
+    for (let index = 0; index < cloneNav.length; index += 1) {
+      for (let Pindex = 0; Pindex < permissionsUser.length; Pindex += 1) {
+        if (permissionsUser[Pindex] === cloneNav[index].name) {
+          cloneNav[index].permission = true;
+        }
+      }
+    }
+    return cloneNav?.filter((item) => item.permission);
+  }, [itemsNoPagination?.permissions]);
+
   const isDesktop = useResponsive('up', 'md');
 
   useEffect(() => {
@@ -74,7 +90,7 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
         </Link>
       </Box>
 
-      <NavSection data={navConfig} />
+      <NavSection data={permissionsSlicing} />
 
       <Box sx={{ flexGrow: 1 }} />
 

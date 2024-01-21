@@ -67,7 +67,7 @@ export default function DashboardLayoutDEV() {
     <>
       <PROFILE.Provider value={{ itemsNoPagination, isLoading }}>
         <StyledRoot>
-          <Header onOpenNav={() => setOpen(true)} />
+          <Header navConfigMenu={navConfigDEV} onOpenNav={() => setOpen(true)} />
           <Nav openNav={open} navConfig={navConfigDEV} onCloseNav={() => setOpen(false)} />
           <Main>
             <Outlet />

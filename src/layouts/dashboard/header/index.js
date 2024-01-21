@@ -46,10 +46,10 @@ Header.propTypes = {
   onOpenNav: PropTypes.func,
 };
 
-export default function Header({ onOpenNav, navConfigTU }) {
+export default function Header({ onOpenNav, navConfigMenu }) {
   const location = useLocation();
   const currentPage = React.useMemo(
-    () => navConfigTU?.find((item) => item?.path === location?.pathname),
+    () => navConfigMenu?.find((item) => item?.path === location?.pathname),
     [location?.pathname]
   );
   return (
