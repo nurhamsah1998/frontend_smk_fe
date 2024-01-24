@@ -158,8 +158,7 @@ function Pembayaran() {
     return items
       ?.map((item) => ({
         nama: item?.nama,
-        gender: item?.gender,
-        kelas: `${item?.kelas} ${item?.['jurusan.kode_jurusan']} ${item?.sub_kelas}`,
+        kelas_student: `${item?.kelas} ${item?.['jurusan.kode_jurusan']} ${item?.sub_kelas}`,
         angkatan: item?.angkatan,
         status_bill:
           item?.current_bill < 0
@@ -178,7 +177,7 @@ function Pembayaran() {
       ?.map((item) => {
         return Object.values(item);
       });
-  }, [items]);
+  }, [items, jurusan, kelas, subKelas, bill, search, limitView, jurusanId, angkatan]);
   const nomorRef = useRef({ value: '' });
   const pdfSuratTagihan = (doc, data) => {
     const stampel = new Image();
