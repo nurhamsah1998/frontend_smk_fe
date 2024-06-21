@@ -1,10 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 import { apiUrl } from './api';
 
-function useFetchById({ module, enabled = true, idCode = false }) {
-  const location = useLocation();
+function useFetchById({ module, idCode = false }) {
   const token = window.localStorage.getItem('accessToken');
   const query = useQuery(
     [module, idCode],

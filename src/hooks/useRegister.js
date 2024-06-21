@@ -3,12 +3,7 @@ import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { apiUrl } from './api';
 
-function useRegister({
-  module,
-  next = () => {
-    return false;
-  },
-}) {
+function useRegister({ module, next = () => false }) {
   const { enqueueSnackbar } = useSnackbar();
   const client = useQueryClient();
   const register = useMutation(

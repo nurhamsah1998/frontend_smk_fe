@@ -5,12 +5,8 @@ import { apiUrl } from './api';
 
 function useMutationPatch({
   module,
-  next = () => {
-    return false;
-  },
-  fail = () => {
-    return false;
-  },
+  next = () => false,
+  fail = () => false,
   isBulk = false,
   successMessage,
   disabledAfterMutation = false,

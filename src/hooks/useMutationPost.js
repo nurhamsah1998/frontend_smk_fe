@@ -3,12 +3,7 @@ import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { apiUrl } from './api';
 
-function useMutationPost({
-  module,
-  next = () => {
-    return false;
-  },
-}) {
+function useMutationPost({ module, next = () => false }) {
   const { enqueueSnackbar } = useSnackbar();
   const client = useQueryClient();
   const mutationPost = useMutation(

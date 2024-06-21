@@ -5,13 +5,8 @@ import { apiUrl } from './api';
 
 function useMutationDelete({
   module,
-  next = () => {
-    return false;
-  },
-  fail = () => {
-    return false;
-  },
-  isBulk = false,
+  next = () => false,
+  fail = () => false,
   successMessage,
   disabledAfterMutation = false,
 }) {
