@@ -138,15 +138,15 @@ export default function Nav({ openNav, onCloseNav }) {
         handleClose={() => navigate(-1)}
         labelClose="tutup"
       >
-        <ListItemText primary="Nama" secondary={itemsNoPagination?.nama} />
-        <ListItemText primary="Username" secondary={itemsNoPagination?.username} />
-        <ListItemText primary="Jurusan" secondary={itemsNoPagination?.jurusan?.nama} />
-        <ListItemText primary="Kelas" secondary={itemsNoPagination?.kelas} />
-        <ListItemText primary="Sub kelas" secondary={itemsNoPagination?.sub_kelas} />
-        <ListItemText primary="Angkatan" secondary={itemsNoPagination?.angkatan} />
-        <ListItemText primary="Kode siswa" secondary={itemsNoPagination?.kode_siswa} />
-        <ListItemText primary="Nama ayah" secondary={itemsNoPagination?.nama_ayah} />
-        <ListItemText primary="Nama ibu" secondary={itemsNoPagination?.nama_ibu} />
+        <ListItemText primary="Nama" secondary={itemsNoPagination?.nama || '-'} />
+        <ListItemText primary="Username" secondary={itemsNoPagination?.username || '-'} />
+        <ListItemText primary="Jurusan" secondary={itemsNoPagination?.jurusan?.nama || '-'} />
+        <ListItemText primary="Kelas" secondary={itemsNoPagination?.kelas || '-'} />
+        <ListItemText primary="Sub kelas" secondary={itemsNoPagination?.sub_kelas || '-'} />
+        <ListItemText primary="Angkatan" secondary={itemsNoPagination?.angkatan || '-'} />
+        <ListItemText primary="Kode siswa" secondary={itemsNoPagination?.kode_siswa || '-'} />
+        <ListItemText primary="Nama ayah" secondary={itemsNoPagination?.nama_ayah || '-'} />
+        <ListItemText primary="Nama ibu" secondary={itemsNoPagination?.nama_ibu || '-'} />
       </ScreenDialog>
     </Box>
   );
