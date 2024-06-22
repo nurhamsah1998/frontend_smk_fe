@@ -1,17 +1,14 @@
-import { Box, Button, CircularProgress, Link, Skeleton, Tooltip, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Link, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import { grey, red } from '@mui/material/colors';
-import CampaignIcon from '@mui/icons-material/Campaign';
-import moment from 'moment';
-
 import { themeAppColors } from '../../../theme/themeAppColor';
 import MutationCampaign from './MutationCampaign';
-import useFetch from '../../../hooks/useFetch';
 import useMutationDelete from '../../../hooks/useMutationDelete';
 import { Dialog } from '../../../hooks/useContextHook';
 import PreviewResponCampaign from './PreviewResponCampaign';
+import useQueryFetch from '../../../hooks/useQueryFetch';
 
 function Campaign() {
   const { setDialog } = React.useContext(Dialog);
@@ -22,9 +19,9 @@ function Campaign() {
     items,
     isLoading,
     refetch: refetchCampaign,
-  } = useFetch({
+  } = useQueryFetch({
     module: 'campaign',
-    isCustom: true,
+    invalidateKey: 'campaign',
   });
   const mutationDelete = useMutationDelete({
     module: 'campaign',
@@ -56,11 +53,14 @@ function Campaign() {
         open={previewResponCampaign}
         setOpen={setPreviewResponCampaign}
       />
-      <Box>
-        <Button onClick={() => setOpenModal(true)} variant="contained">
-          Buat pengumuman
-        </Button>
-      </Box>
+      {!isLoading && (
+        <Box>
+          <Button onClick={() => setOpenModal(true)} variant="contained">
+            Buat pengumuman
+          </Button>
+        </Box>
+      )}
+
       <Box display="grid" gap={2} mt={3}>
         {isLoading ? (
           <Box

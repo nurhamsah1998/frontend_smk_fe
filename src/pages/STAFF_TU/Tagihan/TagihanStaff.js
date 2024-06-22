@@ -8,14 +8,13 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import SaveIcon from '@mui/icons-material/Save';
 import InfoIcon from '@mui/icons-material/Info';
 import { red } from '@mui/material/colors';
-
-import useFetch from '../../../hooks/useFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
 import { Dialog } from '../../../hooks/useContextHook';
 import formatNumberChange from '../../../components/formatNumberChange';
 import TextFieldNumberFormat from '../../../components/TextFieldNumberFormat';
 import useMutationPost from '../../../hooks/useMutationPost';
 import { FormatCurrency } from '../../../components/FormatCurrency';
+import useQueryFetch from '../../../hooks/useQueryFetch';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,8 +45,9 @@ function a11yProps(index) {
 }
 export default function TagihanStaff() {
   const { setDialog } = React.useContext(Dialog);
-  const { data, isLoading, setPage, page, totalPage } = useFetch({
+  const { data, isLoading, setPage, page, totalPage } = useQueryFetch({
     module: `tagihan-permanent`,
+    invalidateKey: 'tagihan-permanent',
     initialLimit: 6,
   });
   const itemsNoPagination = React.useMemo(() => data?.data?.data, [data, page]);

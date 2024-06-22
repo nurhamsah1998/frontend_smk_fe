@@ -136,7 +136,7 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
 
 export default function DashboardLayoutStaff() {
   const [open, setOpen] = useState(false);
-  const { itemsNoPagination, isLoading, isFetched, isError } = useFetch({
+  const { itemsNoPagination, isLoading, isError } = useFetch({
     module: 'staff-profile',
   });
   const navigate = useNavigate();

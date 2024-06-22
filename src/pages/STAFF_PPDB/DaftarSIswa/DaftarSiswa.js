@@ -72,6 +72,7 @@ function Pendaftar() {
     invalidateKey: 'siswa',
     query: {
       jurusanId,
+      type: 'daftar_siswa',
       kelas,
       status,
       sub_kelas: subKelas,
