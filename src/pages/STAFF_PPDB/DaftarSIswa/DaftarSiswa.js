@@ -1,13 +1,14 @@
 import { Box, Button, Menu, MenuItem, Select, Typography, TextField, ListItemText } from '@mui/material';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { debounce } from 'lodash';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { blue, orange, red } from '@mui/material/colors';
+import { blue, orange } from '@mui/material/colors';
 import AddIcon from '@mui/icons-material/Add';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
+
 import InfoIcon from '@mui/icons-material/Info';
-import useFetch from '../../../hooks/useFetch';
+import useQueryFetch from '../../../hooks/useQueryFetch';
 import useMutationPatch from '../../../hooks/useMutationPatch';
 import TableComponen from '../../../components/TableComponent';
 import Create from './Create';
@@ -49,35 +50,40 @@ function Pendaftar() {
   const [angkatan, setAngkatan] = React.useState('');
   const [jurusan, setJurusan] = React.useState('');
   const [jurusanId, setJurusanId] = React.useState('');
-  const [inputView, setInputView] = React.useState('');
-  const [limitView, setLimitView] = React.useState('40');
+  const searchInputRef = useRef();
+  const limitInputRef = useRef();
   const [listSiswaKelasManagement, setListSiswaKelasManagement] = React.useState([]);
   const [modal, setModal] = React.useState({ type: '', message: [], title: '', open: false });
-
   const {
     items,
-    totalPage,
-    setPage,
-    setSearch,
-    page,
-    setLimit,
-    limit,
     refetch,
-    search,
-    totalRows,
-    totalData,
+    setPage,
+    setLimit,
+    setSearch,
     isLoading,
-  } = useFetch({
-    module: `siswa`,
-    params: `&angkatan=${
-      Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
-    }&jurusanId=${jurusanId}&kelas=${kelas}&status=${status}&sub_kelas=${subKelas}&type=daftar_siswa`,
-    enabled: true,
+    totalData,
+    totalPage,
+    totalRows,
+    limit,
+    page,
+    search,
+  } = useQueryFetch({
+    module: 'siswa',
+    invalidateKey: 'siswa',
+    query: {
+      jurusanId,
+      kelas,
+      status,
+      sub_kelas: subKelas,
+      angkatan: angkatan?.tahun_angkatan,
+    },
   });
-  const { data } = useFetch({
+  const { data } = useQueryFetch({
     module: 'jurusan',
+    invalidateKey: 'jurusan',
   });
-  const { mutationPatch, isIdle } = useMutationPatch({
+
+  const { mutationPatch } = useMutationPatch({
     module: 'siswa',
   });
   const { mutationPatch: mutationChangeStatus } = useMutationPatch({
@@ -98,13 +104,15 @@ function Pendaftar() {
     },
   });
 
-  const itemsRebuild = React.useMemo(() => {
-    return items?.map((i) => ({
-      ...i,
-      indicator: i?.status?.includes('accepted'),
-      kelas_rebuild: `${i?.kelas} ${i?.['jurusan.kode_jurusan']} ${i?.sub_kelas}`,
-    }));
-  }, [items]);
+  const itemsRebuild = React.useMemo(
+    () =>
+      items?.map((i) => ({
+        ...i,
+        indicator: i?.status?.includes('accepted'),
+        kelas_rebuild: `${i?.kelas} ${i?.['jurusan.kode_jurusan']} ${i?.sub_kelas}`,
+      })),
+    [items]
+  );
   const handleChange = (event) => {
     setPage(1);
     setKelas(event.target.value);
@@ -113,7 +121,7 @@ function Pendaftar() {
     setPage(1);
     setSubKelasKelas(event.target.value);
   };
-  const handleChangesJurusan = (event, value) => {
+  const handleChangesJurusan = (event) => {
     setPage(1);
     setJurusan(String(event.target.value));
   };
@@ -202,14 +210,6 @@ function Pendaftar() {
       setModal({ open: false, message: [], title: '', type: '' });
     }
   };
-  const handleChangeDebounce = debounce((i) => {
-    setSearch(i);
-  }, 500);
-  const handleChangeDebounceLimit = debounce((i) => {
-    setLimit(i);
-  }, 500);
-  const inputChange = React.useMemo(() => handleChangeDebounce, []);
-  const inputChangeLimit = React.useMemo(() => handleChangeDebounceLimit, []);
   return (
     <Box>
       <KenaikanKelas
@@ -238,20 +238,18 @@ function Pendaftar() {
         handleClose={handleCLoseModal}
         title={modal.title}
       >
-        {modal?.message?.map((item, index) => {
-          return (
-            <Box key={index}>
-              <ListItemText
-                primary={
-                  <Typography textTransform="capitalize" variant="h5">
-                    {item?.nama}
-                  </Typography>
-                }
-                secondary={item?.kode_siswa}
-              />
-            </Box>
-          );
-        })}
+        {modal?.message?.map((item, index) => (
+          <Box key={index}>
+            <ListItemText
+              primary={
+                <Typography textTransform="capitalize" variant="h5">
+                  {item?.nama}
+                </Typography>
+              }
+              secondary={item?.kode_siswa}
+            />
+          </Box>
+        ))}
       </ScreenDialog>
       <CreateImport
         refetch={refetch}
@@ -351,17 +349,16 @@ function Pendaftar() {
                 title="Masukan nama siswa / Kode siswa / Username / Nama ayah / Nama ibu"
                 onClickClearIcon={() => {
                   setSearch('');
-                  setInputView('');
+                  searchInputRef.current.value = '';
                 }}
                 clearIcon={Boolean(search)}
               />
               <TextField
+                inputRef={searchInputRef}
                 fullWidth
-                value={inputView}
-                onChange={(i) => {
-                  inputChange(i.target.value);
-                  setInputView(i.target.value);
-                }}
+                onChange={debounce((i) => {
+                  setSearch(i.target.value);
+                }, 500)}
                 size="small"
               />
             </Box>
@@ -404,7 +401,7 @@ function Pendaftar() {
                   setJurusan('');
                   setJurusanId('');
                   setSearch('');
-                  setInputView('');
+                  searchInputRef.current.value = '';
                   setKelas('');
                   setSubKelasKelas('');
                   setAngkatan('');
@@ -502,23 +499,22 @@ function Pendaftar() {
                 title="/Page"
                 onClickClearIcon={() => {
                   setLimit(40);
-                  setLimitView('');
+                  limitInputRef.current.value = '';
                 }}
                 clearIcon={Boolean(limit !== 40)}
               />
               <TextField
-                inputProps={{
+                InputProps={{
                   min: 1,
                   max: 100,
                 }}
                 size="small"
                 type="number"
                 placeholder="40"
-                value={limitView || ''}
-                onChange={(i) => {
-                  inputChangeLimit(i.target.value);
-                  setLimitView(i.target.value);
-                }}
+                inputRef={limitInputRef}
+                onChange={debounce((i) => {
+                  setLimit(i.target.value);
+                }, 500)}
                 sx={{
                   width: '100px',
                 }}

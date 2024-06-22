@@ -3,14 +3,16 @@ import { Box, TextField, Typography, Select, MenuItem } from '@mui/material';
 import { Form, Formik } from 'formik';
 
 import ScreenDialog from '../../../../components/ScreenDialog';
-import useFetch from '../../../../hooks/useFetch';
+import useQueryFetch from '../../../../hooks/useQueryFetch';
 import useMutationPatch from '../../../../hooks/useMutationPatch';
 
 function StudentDetail({ openModal, itemStudent, setModalDetailStudent }) {
   const inputRef = React.useRef();
   const [edit, setEdit] = React.useState(true);
-  const { data } = useFetch({
+  const { data } = useQueryFetch({
     module: 'jurusan',
+    invalidateKey: 'jurusan',
+    enabled: Boolean(openModal),
   });
   const mutation = useMutationPatch({
     module: `siswa`,

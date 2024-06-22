@@ -22,20 +22,7 @@ function Account() {
     user_id: '',
     user_name: '',
   });
-  const {
-    items,
-    totalPage,
-    setPage,
-    setSearch,
-    page,
-    setLimit,
-    limit,
-    refetch,
-    search,
-    totalRows,
-    totalData,
-    isLoading,
-  } = useFetch({
+  const { items, totalPage, setPage, setSearch, page, search, totalRows, totalData, isLoading } = useFetch({
     module: `staff`,
     enabled: true,
   });

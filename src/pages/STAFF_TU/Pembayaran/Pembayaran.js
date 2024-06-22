@@ -14,8 +14,6 @@ import { purple } from '@mui/material/colors';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Helmet } from 'react-helmet-async';
 import { useSnackbar } from 'notistack';
-
-import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import { LabelField } from '../../../components/Commons';
 
@@ -27,6 +25,7 @@ import { KopPdf } from '../../Laporan/transaksi/ReportTransaksi';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 import { PROFILE } from '../../../hooks/useHelperContext';
+import useQueryFetch from '../../../hooks/useQueryFetch';
 
 export const ClearFilter = ({ handleClear }) => {
   return (
@@ -42,7 +41,8 @@ function Pembayaran() {
   const navigate = useNavigate();
   const location = useLocation();
   const [bill, setBill] = useState('');
-  const [inputView, setInputView] = useState('');
+  const searchInputRef = useRef();
+  const limitInputRef = useRef();
   const [kelas, setKelas] = useState('');
   const [angkatan, setAngkatan] = React.useState('');
   const [subKelas, setSubKelasKelas] = React.useState('');
@@ -51,18 +51,25 @@ function Pembayaran() {
   const [jurusanId, setJurusanId] = React.useState('');
   const [startUjian, setStartUjian] = React.useState('');
   const [expiredDate, setExpiredDate] = React.useState('');
-  const { itemsNoPagination, isLoading: isLoadingProfile } = React.useContext(PROFILE);
+  const { itemsNoPagination } = React.useContext(PROFILE);
   const permissions = Boolean(itemsNoPagination?.id) ? JSON.parse(itemsNoPagination?.permissions) : [];
   const disabledPrintBill = !Boolean(permissions?.find((item) => item === 'student_bill_letter'));
   const { items, totalPage, setPage, search, totalData, totalRows, setSearch, page, isLoading, setLimit, limit } =
-    useFetch({
-      module: `siswa`,
-      params: `&current_bill=${bill}&angkatan=${
-        Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
-      }&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}&type=pembayaran`,
+    useQueryFetch({
+      module: 'siswa',
+      invalidateKey: 'siswa',
+      query: {
+        current_bill: bill,
+        type: 'pembayaran',
+        jurusanId,
+        kelas,
+        sub_kelas: subKelas,
+        angkatan: angkatan?.tahun_angkatan,
+      },
     });
-  const { data } = useFetch({
+  const { data } = useQueryFetch({
     module: 'jurusan',
+    invalidateKey: 'jurusan',
   });
   const billStatus = [
     {
@@ -177,7 +184,7 @@ function Pembayaran() {
       ?.map((item) => {
         return Object.values(item);
       });
-  }, [items, jurusan, kelas, subKelas, bill, search, limitView, jurusanId, angkatan]);
+  }, [items, jurusan, kelas, subKelas, bill, search, limitInputRef.current?.value, jurusanId, angkatan]);
   const nomorRef = useRef({ value: '' });
   const pdfSuratTagihan = (doc, data) => {
     const stampel = new Image();
@@ -322,15 +329,6 @@ function Pembayaran() {
     setPage(1);
     setBill(i.target.value);
   };
-
-  const handleChangeDebounce = debounce((i) => {
-    setSearch(i);
-  }, 500);
-  const handleChangeDebounceLimit = debounce((i) => {
-    setLimit(i);
-  }, 500);
-  const inputChange = useMemo(() => handleChangeDebounce, []);
-  const inputChangeLimit = useMemo(() => handleChangeDebounceLimit, []);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openModalInputDate, setOpenModalInputDate] = React.useState({ isBulk: false, openModal: false, data });
   const open = Boolean(anchorEl);
@@ -557,18 +555,17 @@ function Pembayaran() {
                     clearIcon={Boolean(search)}
                     onClickClearIcon={() => {
                       setSearch('');
-                      setInputView('');
+                      searchInputRef.current.value = '';
                     }}
                     title="Masukan nama siswa / Kode siswa / Username / Nama ayah / Nama ibu"
                   />
                   <TextField
-                    value={inputView}
-                    onChange={(i) => {
-                      inputChange(i.target.value);
-                      setInputView(i.target.value);
-                    }}
-                    size="small"
+                    inputRef={searchInputRef}
                     fullWidth
+                    onChange={debounce((i) => {
+                      setSearch(i.target.value);
+                    }, 500)}
+                    size="small"
                   />
                 </Box>
                 <Box>
@@ -608,7 +605,7 @@ function Pembayaran() {
                       setJurusanId('');
                       setJurusan('');
                       setSearch('');
-                      setInputView('');
+                      searchInputRef.current.value = '';
                       setKelas('');
                       setSubKelasKelas('');
                       setBill('');
@@ -714,23 +711,22 @@ function Pembayaran() {
                     title="/Page"
                     onClickClearIcon={() => {
                       setLimit(40);
-                      setLimitView('');
+                      limitInputRef.current.value = '';
                     }}
                     clearIcon={Boolean(limit !== 40)}
                   />
                   <TextField
-                    inputProps={{
+                    InputProps={{
                       min: 1,
                       max: 100,
                     }}
                     size="small"
                     type="number"
                     placeholder="40"
-                    value={limitView || ''}
-                    onChange={(i) => {
-                      inputChangeLimit(i.target.value);
-                      setLimitView(i.target.value);
-                    }}
+                    inputRef={limitInputRef}
+                    onChange={debounce((i) => {
+                      setLimit(i.target.value);
+                    }, 500)}
                     sx={{
                       width: '100px',
                     }}

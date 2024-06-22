@@ -1,5 +1,5 @@
 import { Box, MenuItem, Select, TextField, Menu, Button } from '@mui/material';
-import React from 'react';
+import React, { useRef } from 'react';
 import { debounce } from 'lodash';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
@@ -16,6 +16,7 @@ import { PROFILE } from '../../../hooks/useHelperContext';
 import { FormatCurrency } from '../../../components/FormatCurrency';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import { ClearFilter } from '../../STAFF_TU/Pembayaran/Pembayaran';
+import useQueryFetch from '../../../hooks/useQueryFetch';
 
 export const KopPdf = (doc) => {
   const img = new Image();
@@ -46,25 +47,29 @@ export const KopPdf = (doc) => {
   doc.line(10, 51, 201, 51, 'FD');
 };
 function ReportTransaksi() {
-  const { itemsNoPagination } = React.useContext(PROFILE);
-  const [limitView, setLimitView] = React.useState('40');
   const [startDate, setStartDate] = React.useState(null);
   const [kelas, setKelas] = React.useState('');
   const [filterTanggal, setFilterTanggal] = React.useState('');
   const [filteraTanggalOption, setFilteraTanggalOption] = React.useState({ start: null, end: null });
   const [subKelas, setSubKelasKelas] = React.useState('');
   const [jurusan, setJurusan] = React.useState('');
-  // const [jurusanFullName, setJurusanFullName] = React.useState('');
+  const limitInputRef = useRef();
   const [typeFile, setTypeFile] = React.useState('');
   const [endDate, setEndDate] = React.useState(null);
-  const { data } = useFetch({
+  const { data } = useQueryFetch({
     module: 'jurusan',
+    invalidateKey: 'jurusan',
   });
-  const { items, totalData, totalPage, totalRows, setPage, page, isLoading, setLimit, limit } = useFetch({
+  const { items, totalData, totalPage, totalRows, setPage, page, isLoading, setLimit, limit } = useQueryFetch({
     module: 'get-all-invoice',
-    params: `&startDate=${startDate || filteraTanggalOption.start}&endDate=${
-      endDate || filteraTanggalOption.end
-    }&kelas=${kelas}&jurusan=${jurusan}&sub_kelas=${subKelas}`,
+    invalidateKey: 'get-all-invoice',
+    query: {
+      startDate: startDate || filteraTanggalOption.start,
+      endDate: endDate || filteraTanggalOption.end,
+      kelas,
+      jurusan,
+      sub_kelas: subKelas,
+    },
   });
   const tableHead = [
     {
@@ -448,7 +453,7 @@ function ReportTransaksi() {
                 title="/Page"
                 onClickClearIcon={() => {
                   setLimit(40);
-                  setLimitView('');
+                  limitInputRef.current.value = '';
                 }}
                 clearIcon={Boolean(limit !== 40)}
               />
@@ -460,11 +465,10 @@ function ReportTransaksi() {
                 size="small"
                 type="number"
                 placeholder="40"
-                value={limitView || ''}
-                onChange={(i) => {
-                  inputChangeLimit(i.target.value);
-                  setLimitView(i.target.value);
-                }}
+                inputRef={limitInputRef}
+                onChange={debounce((i) => {
+                  setLimit(i.target.value);
+                }, 500)}
                 sx={{
                   width: '100px',
                 }}
