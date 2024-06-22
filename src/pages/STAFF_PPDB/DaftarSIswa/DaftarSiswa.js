@@ -273,7 +273,12 @@ function Pendaftar() {
           }}
         >
           <Box>
-            <Button startIcon={<AddIcon />} variant="contained" onClick={() => setOpenModalCreate(true)}>
+            <Button
+              startIcon={<AddIcon />}
+              disabled={isLoading}
+              variant="contained"
+              onClick={() => setOpenModalCreate(true)}
+            >
               Tambah
             </Button>
           </Box>
@@ -282,6 +287,7 @@ function Pendaftar() {
               startIcon={<ImportExportIcon />}
               variant="contained"
               color="warning"
+              disabled={isLoading}
               onClick={() => setOpenModalCreateImport(true)}
             >
               Import
