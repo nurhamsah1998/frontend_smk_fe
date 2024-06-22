@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import { Box, Autocomplete, TextField, Button } from '@mui/material';
+import { Box, Autocomplete, TextField, Button, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import PaymentsIcon from '@mui/icons-material/Payments';
@@ -14,6 +14,7 @@ import ModalSuccessPayment from './ModalSuccessPayment';
 function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
   const formRef = React.useRef();
   const [openModalSuccess, setOpenModalSuccess] = React.useState(false);
+  const [isLoading, setIsloading] = React.useState(false);
   const [dataAfterSuccess, setDataAfterSuccess] = React.useState({});
   const mutationPatch = useMutationPatch({
     module: 'siswa',
@@ -21,6 +22,7 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
       formRef.current?.resetForm();
       refetchInvoice();
       setOpenModalSuccess(true);
+      setIsloading(false);
     },
     successMessage: 'Transaksi berhasil',
   });
@@ -58,6 +60,7 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
           petugas: '',
         }}
         onSubmit={async (values) => {
+          setIsloading(true);
           const body = {
             ...values,
             tahun_angkatan: data?.student?.angkatan,
@@ -68,32 +71,36 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
             sub_kelas: data?.student?.sub_kelas,
             kelas: data?.student?.kelas,
           };
-          axios
-            .post(
-              `${apiUrl}invoice`,
-              { ...body },
-              {
-                headers: {
-                  Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
-                },
-              }
-            )
-            .then((res) => {
-              setDataAfterSuccess(res?.data?.data);
-              const statusBill = data?.student?.current_bill - values?.uang_diterima;
-              mutationPatch.mutate({
-                id: data?.student?.id,
-                current_bill: data?.student?.current_bill - values?.uang_diterima,
-                total_payment: Number(totalBillPaymentHistory) + Number(values?.uang_diterima),
-                status_bill: statusBill === 0 ? 'paid' : statusBill < 0 ? 'deposit' : 'not_paid',
+          try {
+            await axios
+              .post(
+                `${apiUrl}invoice`,
+                { ...body },
+                {
+                  headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
+                  },
+                }
+              )
+              .then((res) => {
+                setDataAfterSuccess(res?.data?.data);
+                const statusBill = data?.student?.current_bill - values?.uang_diterima;
+                mutationPatch.mutate({
+                  id: data?.student?.id,
+                  current_bill: data?.student?.current_bill - values?.uang_diterima,
+                  total_payment: Number(totalBillPaymentHistory) + Number(values?.uang_diterima),
+                  status_bill: statusBill === 0 ? 'paid' : statusBill < 0 ? 'deposit' : 'not_paid',
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                enqueueSnackbar(error?.response?.data?.msg || error?.response?.data || 'Internal server error !', {
+                  variant: 'error',
+                });
               });
-            })
-            .catch((error) => {
-              console.log(error);
-              enqueueSnackbar(error?.response?.data?.msg || error?.response?.data || 'Internal server error !', {
-                variant: 'error',
-              });
-            });
+          } catch (error) {
+            setIsloading(false);
+          }
         }}
         enableReinitialize
       >
@@ -124,12 +131,10 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
               </Box>
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
-                  disabled={
-                    values?.uang_diterima <= 1000 || !Boolean(values?.kode_pembayaran) || mutationPatch.isLoading
-                  }
+                  disabled={values?.uang_diterima <= 1000 || !Boolean(values?.kode_pembayaran) || isLoading}
                   type="submit"
                   variant="contained"
-                  startIcon={<PaymentsIcon />}
+                  startIcon={isLoading ? <CircularProgress size={20} /> : <PaymentsIcon />}
                 >
                   Bayar
                 </Button>

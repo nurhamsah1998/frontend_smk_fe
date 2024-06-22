@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { useReactToPrint } from 'react-to-print';
 import moment from 'moment';
 import 'moment/locale/id';
 import { jsPDF as JSPDF } from 'jspdf';
+import PrintIcon from '@mui/icons-material/Print';
 
 import ScreenDialog from '../../../../components/ScreenDialog';
 import { FormatCurrency } from '../../../../components/FormatCurrency';
@@ -140,6 +141,7 @@ export const PrintTemplateInvoice = ({ data, printRef, width = '100%' }) => {
 };
 function ModalSuccessPayment({ open, handleClose, data }) {
   const printRef = React.useRef();
+  const [isLoading, setIsloading] = React.useState(false);
   const print = useReactToPrint({
     content: () => printRef.current,
   });
@@ -217,8 +219,10 @@ function ModalSuccessPayment({ open, handleClose, data }) {
     doc.save(
       `invoice_pembayaran_siswa_${data?.nama}-${data?.kelas}-${data?.jurusan}-${data?.sub_kelas}-${data?.tahun_angkatan}.pdf`
     );
+    setIsloading(false);
   };
   const HandlePrint = () => {
+    setIsloading(true);
     print();
     handleDownloadPdf();
   };
@@ -335,7 +339,13 @@ function ModalSuccessPayment({ open, handleClose, data }) {
           gap: '10px',
         }}
       >
-        <Button onClick={HandlePrint} variant="outlined" color="success">
+        <Button
+          onClick={HandlePrint}
+          startIcon={isLoading ? <CircularProgress size={20} /> : <PrintIcon />}
+          disabled={isLoading}
+          variant="outlined"
+          color="success"
+        >
           Print Invoice
         </Button>
       </div>

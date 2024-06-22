@@ -173,13 +173,18 @@ export default function TagihanStaff() {
               <Button
                 color="warning"
                 variant="contained"
-                startIcon={<AddIcon />}
-                disabled={loadingCurrentPage}
+                startIcon={mutation.isLoading ? <CircularProgress size={20} /> : <SaveIcon />}
+                disabled={loadingCurrentPage || mutation.isLoading || createMutation.isLoading}
                 onClick={handleAddTahunTagihan}
               >
                 Tambah tahun ajaran
               </Button>
-              <Button startIcon={<SaveIcon />} variant="contained" disabled={loadingCurrentPage} onClick={handleSave}>
+              <Button
+                startIcon={mutation.isLoading ? <CircularProgress size={20} /> : <SaveIcon />}
+                variant="contained"
+                disabled={loadingCurrentPage || mutation.isLoading || createMutation.isLoading}
+                onClick={handleSave}
+              >
                 Simpan perubahan
               </Button>
             </Box>
@@ -281,7 +286,7 @@ export default function TagihanStaff() {
                                 {item[0].replace(/_/g, ' ')}
                               </FormHelperText>
                               <TextFieldNumberFormat
-                                disabled={loadingCurrentPage}
+                                disabled={loadingCurrentPage || mutation.isLoading || createMutation.isLoading}
                                 onChange={(i) => {
                                   setFieldValue(item[0], formatNumberChange(i?.target?.value));
                                 }}

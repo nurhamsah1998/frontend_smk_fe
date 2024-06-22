@@ -8,8 +8,8 @@ function useMutationPost({ module, next = () => false }) {
   const client = useQueryClient();
   const mutationPost = useMutation(
     [module],
-    (values) => {
-      axios
+    async (values) => {
+      await axios
         .post(
           `${apiUrl}${module}`,
           { ...values },
