@@ -486,7 +486,7 @@ function ReportTransaksi() {
         page={page}
         tableBody={itemsRebuild}
         tableHead={tableHead}
-        emptyTag="( sepertinya belum ada transaksi )"
+        emptyTag="( sepertinya belum ada transaksi di hari ini )"
         totalRows={Boolean(endDate) || Boolean(kelas) || Boolean(subKelas) || Boolean(jurusan) ? totalRows : null}
         totalData={totalData}
         isLoading={isLoading}

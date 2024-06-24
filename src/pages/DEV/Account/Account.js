@@ -6,13 +6,12 @@ import React from 'react';
 import moment from 'moment';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { blue, green, grey, red } from '@mui/material/colors';
-
-import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import { LabelField } from '../../../components/Commons';
 import useMutationPatch from '../../../hooks/useMutationPatch';
 import ScreenDialog from '../../../components/ScreenDialog';
 import { themeAppColors } from '../../../theme/themeAppColor';
+import useQueryFetch from '../../../hooks/useQueryFetch';
 
 function Account() {
   const [inputView, setInputView] = React.useState('');
@@ -22,9 +21,9 @@ function Account() {
     user_id: '',
     user_name: '',
   });
-  const { items, totalPage, setPage, setSearch, page, search, totalRows, totalData, isLoading } = useFetch({
+  const { items, totalPage, setPage, setSearch, page, search, totalRows, totalData, isLoading } = useQueryFetch({
     module: `staff`,
-    enabled: true,
+    invalidateKey: 'staff',
   });
   const permissions = [
     {
