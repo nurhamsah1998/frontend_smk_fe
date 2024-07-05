@@ -355,6 +355,7 @@ function Pendaftar() {
               <LabelField
                 title="Masukan nama siswa / Kode siswa / Username / Nama ayah / Nama ibu"
                 onClickClearIcon={() => {
+                  setPage(1);
                   setSearch('');
                   searchInputRef.current.value = '';
                 }}
@@ -364,6 +365,7 @@ function Pendaftar() {
                 inputRef={searchInputRef}
                 fullWidth
                 onChange={debounce((i) => {
+                  setPage(1);
                   setSearch(i.target.value);
                 }, 500)}
                 size="small"

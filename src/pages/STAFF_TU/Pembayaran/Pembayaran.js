@@ -554,6 +554,7 @@ function Pembayaran() {
                   <LabelField
                     clearIcon={Boolean(search)}
                     onClickClearIcon={() => {
+                      setPage(1);
                       setSearch('');
                       searchInputRef.current.value = '';
                     }}
@@ -563,6 +564,7 @@ function Pembayaran() {
                     inputRef={searchInputRef}
                     fullWidth
                     onChange={debounce((i) => {
+                      setPage(1);
                       setSearch(i.target.value);
                     }, 500)}
                     size="small"
