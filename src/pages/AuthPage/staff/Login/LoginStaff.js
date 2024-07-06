@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { Container, Typography, Button, Box } from '@mui/material';
+import { Container, Typography, Box } from '@mui/material';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
 // components
@@ -41,11 +41,6 @@ export default function LoginStaff() {
 
       <StyledRoot>
         {mdUp && <SideAuthBox />}
-        <Box sx={{ position: 'fixed', top: 10, right: 10 }}>
-          <Button onClick={() => navigate('/siswa-login')} variant="outlined">
-            Siswa
-          </Button>
-        </Box>
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" sx={{ mb: 2 }}>

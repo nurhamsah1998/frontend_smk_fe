@@ -1,9 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
 
-import { Container, Typography, Button, Box } from '@mui/material';
+import { Container, Typography, Box } from '@mui/material';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
 import FormLogin from './FormLogin';
@@ -39,51 +38,40 @@ const StyledContent = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-export const SideAuthBox = () => {
-  return (
-    <StyledSection>
-      <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5, color: '#fff', zIndex: 1 }}>
-        Aplikasi Management Sekolah - SMK PGRI KRAS
-      </Typography>
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 20,
-          right: 10,
-          left: 10,
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>version 1.0.0</Typography>
-        <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>©️ Copyright 2023 | SMK PGRI KRAS</Typography>
-      </Box>
-      <Box
-        sx={{
-          position: 'absolute',
-          width: '70%',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          opacity: '0.2',
-        }}
-      >
-        <img alt="pgri" src="/assets/logo_pgri.png" />
-      </Box>
-    </StyledSection>
-  );
-};
+export const SideAuthBox = () => (
+  <StyledSection>
+    <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5, color: '#fff', zIndex: 1 }}>
+      Aplikasi Management Sekolah - SMK PGRI KRAS
+    </Typography>
+    <Box
+      sx={{
+        position: 'absolute',
+        bottom: 20,
+        right: 10,
+        left: 10,
+        display: 'flex',
+        justifyContent: 'space-between',
+      }}
+    >
+      <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>version 1.0.0</Typography>
+      <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>©️ Copyright 2023 | SMK PGRI KRAS</Typography>
+    </Box>
+    <Box
+      sx={{
+        position: 'absolute',
+        width: '70%',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        opacity: '0.2',
+      }}
+    >
+      <img alt="pgri" src="/assets/logo_pgri.png" />
+    </Box>
+  </StyledSection>
+);
 export default function LoginStudentPage() {
   const mdUp = useResponsive('up', 'md');
-  const navigate = useNavigate();
-  // const { items } = useFetch({
-  //   module: 'tagihan',
-  // });
-  // console.log(items.map((i) => ({ ...i, periode: JSON.parse(i.periode) })));
-  // const { items } = useFetch({
-  //   module: 'siswa',
-  // });
-  // console.log(items);
   return (
     <>
       <Helmet>
@@ -92,30 +80,12 @@ export default function LoginStudentPage() {
 
       <StyledRoot>
         {mdUp && <SideAuthBox />}
-        <Box sx={{ position: 'fixed', top: 10, right: 10 }}>
-          <Button onClick={() => navigate('/staff-login')} variant="outlined">
-            Staff
-          </Button>
-        </Box>
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" sx={{ mb: 2 }}>
               Login
             </Typography>
             <FormLogin />
-            {/* <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography variant="subtitle2">Belum punya akun ?</Typography>
-              <Typography
-                onClick={() => navigate('/siswa-register')}
-                component="span"
-                sx={{ cursor: 'pointer' }}
-                fontWeight={700}
-                color="#2065D1"
-                variant="subtitle2"
-              >
-                Daftar
-              </Typography>
-            </Box> */}
           </StyledContent>
         </Container>
       </StyledRoot>

@@ -10,9 +10,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 
 import { LabelField } from '../../../components/Commons';
 import TableComponen from '../../../components/TableComponent';
-import useFetch from '../../../hooks/useFetch';
 import { apiUrl } from '../../../hooks/api';
-import { PROFILE } from '../../../hooks/useHelperContext';
 import { FormatCurrency } from '../../../components/FormatCurrency';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import { ClearFilter } from '../../STAFF_TU/Pembayaran/Pembayaran';
@@ -49,8 +47,11 @@ export const KopPdf = (doc) => {
 function ReportTransaksi() {
   const [startDate, setStartDate] = React.useState(null);
   const [kelas, setKelas] = React.useState('');
-  const [filterTanggal, setFilterTanggal] = React.useState('');
-  const [filteraTanggalOption, setFilteraTanggalOption] = React.useState({ start: null, end: null });
+  const [filterTanggal, setFilterTanggal] = React.useState('day');
+  const [filteraTanggalOption, setFilteraTanggalOption] = React.useState({
+    start: moment().startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    end: moment().endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+  });
   const [subKelas, setSubKelasKelas] = React.useState('');
   const [jurusan, setJurusan] = React.useState('');
   const limitInputRef = useRef();
@@ -105,10 +106,6 @@ function ReportTransaksi() {
       createdAt: moment(i?.createdAt).format('Do MMM YYYY H:mm'),
     }));
   }, [items]);
-  const handleChangeDebounceLimit = debounce((i) => {
-    setLimit(i);
-  }, 500);
-  const inputChangeLimit = React.useMemo(() => handleChangeDebounceLimit, []);
   const handleChangesJurusan = (event, value) => {
     setPage(1);
     setJurusan(String(event.target.value));
@@ -452,6 +449,7 @@ function ReportTransaksi() {
               <LabelField
                 title="/Page"
                 onClickClearIcon={() => {
+                  setPage(1);
                   setLimit(40);
                   limitInputRef.current.value = '';
                 }}
@@ -467,6 +465,7 @@ function ReportTransaksi() {
                 placeholder="40"
                 inputRef={limitInputRef}
                 onChange={debounce((i) => {
+                  setPage(1);
                   setLimit(i.target.value);
                 }, 500)}
                 sx={{

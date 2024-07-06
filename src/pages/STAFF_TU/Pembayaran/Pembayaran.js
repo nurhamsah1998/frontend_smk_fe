@@ -712,6 +712,7 @@ function Pembayaran() {
                   <LabelField
                     title="/Page"
                     onClickClearIcon={() => {
+                      setPage(1);
                       setLimit(40);
                       limitInputRef.current.value = '';
                     }}
@@ -727,6 +728,7 @@ function Pembayaran() {
                     placeholder="40"
                     inputRef={limitInputRef}
                     onChange={debounce((i) => {
+                      setPage(1);
                       setLimit(i.target.value);
                     }, 500)}
                     sx={{
