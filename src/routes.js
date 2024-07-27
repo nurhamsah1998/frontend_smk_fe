@@ -16,7 +16,8 @@ import TagihanStaff from './pages/STAFF_TU/Tagihan/TagihanStaff';
 import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
 import DaftarSiswa from './pages/STAFF_PPDB/DaftarSIswa/DaftarSiswa';
 import DetailTagihan from './pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan';
-import ReportTransaksi from './pages/Laporan/transaksi/ReportTransaksi';
+import ReportTransaksiMasuk from './pages/STAFF_TU/Laporan/transaksi_masuk/ReportTransaksi';
+import ReportTransaksiKeluar from './pages/STAFF_TU/Laporan/transaksi_keluar/ReportTransaksi';
 import DashboardLayoutDEV from './layouts/DEV/DashboardLayoutDEV';
 import LogActivity from './pages/DEV/Log/LogActivity';
 import DashboardDev from './pages/DEV/Dashboard/Dashboard';
@@ -56,7 +57,8 @@ export default function Router() {
             },
           ],
         },
-        { path: 'laporan-transaksi', element: <ReportTransaksi /> },
+        { path: 'laporan-transaksi-masuk', element: <ReportTransaksiMasuk /> },
+        { path: 'laporan-transaksi-keluar', element: <ReportTransaksiKeluar /> },
         { path: 'pengumuman', element: <Campaign /> },
       ],
     },

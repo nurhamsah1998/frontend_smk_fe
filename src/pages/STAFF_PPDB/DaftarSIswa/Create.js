@@ -90,86 +90,78 @@ function Create({ openModalCreate, setOpenModalCreate }) {
           }}
           enableReinitialize
         >
-          {({ values, getFieldProps, setFieldValue }) => {
-            return (
-              <Form>
-                <Box display="grid" gap={2}>
-                  <TextField size="small" fullWidth name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
-                  <TextField size="small" fullWidth name="username" {...getFieldProps('username')} label="Username" />
+          {({ values, getFieldProps, setFieldValue }) => (
+            <Form>
+              <Box display="grid" gap={2}>
+                <TextField size="small" fullWidth name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
+                <TextField size="small" fullWidth name="username" {...getFieldProps('username')} label="Username" />
+                <TextField
+                  size="small"
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  {...getFieldProps('password')}
+                  type={showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <Box>
+                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
                   <TextField
-                    size="small"
                     fullWidth
-                    name="password"
-                    label="Password"
-                    {...getFieldProps('password')}
-                    type={showPassword ? 'text' : 'password'}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                            <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
+                    size="small"
+                    select
+                    onChange={(event) => {
+                      setFieldValue('angkatan', event.target.value);
                     }}
-                  />
-                  <Box>
-                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
-                    <TextField
-                      fullWidth
-                      size="small"
-                      select
-                      onChange={(event) => {
-                        setFieldValue('angkatan', event.target.value);
-                      }}
-                      value={values.angkatan}
-                      label="Angkatan"
-                    >
-                      {angkatan()?.map((item, index) => (
-                        <MenuItem key={index} value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Box>
-                  <AutoCompleteAsync
-                    size="small"
-                    value={values.jurusanId || {}}
-                    module="jurusan"
-                    label="Pilih jurusan"
-                    onChange={(x, y) => {
-                      setFieldValue('jurusanId', y);
-                    }}
-                  />
-                  <Box>
-                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
-                    <TextField fullWidth size="small" select onChange={handleChange} value={gender} label="Gender">
-                      <MenuItem value={'L'}>Laki - Laki</MenuItem>
-                      <MenuItem value={'P'}>Perempuan</MenuItem>
-                    </TextField>
-                  </Box>
-                  <TextField
-                    size="small"
-                    fullWidth
-                    name="nama_ayah"
-                    {...getFieldProps('nama_ayah')}
-                    label="Nama Ayah"
-                  />
-                  <TextField size="small" fullWidth name="nama_ibu" {...getFieldProps('nama_ibu')} label="Nama Ibu" />
-                  <TextField size="small" fullWidth name="alamat" {...getFieldProps('alamat')} label="Alamat" />
-
-                  <TextField
-                    size="small"
-                    fullWidth
-                    name="noHP"
-                    {...getFieldProps('noHP')}
-                    type="number"
-                    label="Nomor Telpon/Wa"
-                  />
+                    value={values.angkatan}
+                    label="Angkatan"
+                  >
+                    {angkatan()?.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </Box>
-              </Form>
-            );
-          }}
+                <AutoCompleteAsync
+                  size="small"
+                  value={values.jurusanId || {}}
+                  module="jurusan"
+                  label="Pilih jurusan"
+                  onChange={(x, y) => {
+                    setFieldValue('jurusanId', y);
+                  }}
+                />
+                <Box>
+                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  <TextField fullWidth size="small" select onChange={handleChange} value={gender} label="Gender">
+                    <MenuItem value={'L'}>Laki - Laki</MenuItem>
+                    <MenuItem value={'P'}>Perempuan</MenuItem>
+                  </TextField>
+                </Box>
+                <TextField size="small" fullWidth name="nama_ayah" {...getFieldProps('nama_ayah')} label="Nama Ayah" />
+                <TextField size="small" fullWidth name="nama_ibu" {...getFieldProps('nama_ibu')} label="Nama Ibu" />
+                <TextField size="small" fullWidth name="alamat" {...getFieldProps('alamat')} label="Alamat" />
+
+                <TextField
+                  size="small"
+                  fullWidth
+                  name="noHP"
+                  {...getFieldProps('noHP')}
+                  type="number"
+                  label="Nomor Telpon/Wa"
+                />
+              </Box>
+            </Form>
+          )}
         </Formik>
       </ScreenDialog>
     </div>

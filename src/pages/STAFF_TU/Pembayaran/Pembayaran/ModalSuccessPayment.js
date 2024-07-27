@@ -8,7 +8,7 @@ import PrintIcon from '@mui/icons-material/Print';
 
 import ScreenDialog from '../../../../components/ScreenDialog';
 import { FormatCurrency } from '../../../../components/FormatCurrency';
-import { KopPdf } from '../../../Laporan/transaksi/ReportTransaksi';
+import { KopPdf } from '../../Laporan/transaksi_masuk/ReportTransaksi';
 
 export const PrintTemplateInvoice = ({ data, printRef, width = '100%' }) => {
   return (

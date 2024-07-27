@@ -3,10 +3,11 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import PaymentIcon from '@mui/icons-material/Payment';
-import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHorizontalCircle';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
 
 import SvgColor from '../../components/svg-color';
 
@@ -43,12 +44,20 @@ export const navConfigTU = [
     permission: false,
     name: 'pembayaran',
   },
+
   {
-    title: 'Transaksi',
-    path: '/staff-tu/laporan-transaksi',
-    icon: <SwapHorizontalCircleIcon />,
+    title: 'Transaksi Masuk',
+    path: '/staff-tu/laporan-transaksi-masuk',
+    icon: <FastRewindIcon />,
     permission: false,
-    name: 'laporan_transaksi',
+    name: 'laporan_transaksi_masuk',
+  },
+  {
+    title: 'Transaksi Keluar',
+    path: '/staff-tu/laporan-transaksi-keluar',
+    icon: <FastForwardIcon />,
+    permission: false,
+    name: 'laporan_transaksi_keluar',
   },
   {
     title: 'Pengumuman',

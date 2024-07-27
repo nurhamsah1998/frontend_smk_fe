@@ -74,7 +74,7 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
           try {
             await axios
               .post(
-                `${apiUrl}invoice`,
+                `${apiUrl}invoice-in`,
                 { ...body },
                 {
                   headers: {
@@ -97,6 +97,7 @@ function FormPembayaran({ data, refetchInvoice, totalBillPaymentHistory }) {
                 enqueueSnackbar(error?.response?.data?.msg || error?.response?.data || 'Internal server error !', {
                   variant: 'error',
                 });
+                setIsloading(false);
               });
           } catch (error) {
             setIsloading(false);

@@ -31,7 +31,6 @@ function useQueryFetch({ invalidateKey, module, enabled = true, query, initialLi
     enabled: Boolean(enabled),
     networkMode: 'always',
     onError: (error) => {
-      console.log(error, '<---- ERROR');
       if (error?.response?.status === 403) {
         enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
         window.localStorage.clear();

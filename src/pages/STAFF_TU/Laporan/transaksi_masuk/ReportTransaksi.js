@@ -7,14 +7,13 @@ import { jsPDF as JSPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import moment from 'moment';
 import DownloadIcon from '@mui/icons-material/Download';
-
-import { LabelField } from '../../../components/Commons';
-import TableComponen from '../../../components/TableComponent';
-import { apiUrl } from '../../../hooks/api';
-import { FormatCurrency } from '../../../components/FormatCurrency';
-import CustomDatePicker from '../../../components/CustomDatePicker';
-import { ClearFilter } from '../../STAFF_TU/Pembayaran/Pembayaran';
-import useQueryFetch from '../../../hooks/useQueryFetch';
+import useQueryFetch from '../../../../hooks/useQueryFetch';
+import { LabelField } from '../../../../components/Commons';
+import { apiUrl } from '../../../../hooks/api';
+import { ClearFilter } from '../../Pembayaran/Pembayaran';
+import CustomDatePicker from '../../../../components/CustomDatePicker';
+import TableComponen from '../../../../components/TableComponent';
+import { FormatCurrency } from '../../../../components/FormatCurrency';
 
 export const KopPdf = (doc) => {
   const img = new Image();
@@ -62,8 +61,8 @@ function ReportTransaksi() {
     invalidateKey: 'jurusan',
   });
   const { items, totalData, totalPage, totalRows, setPage, page, isLoading, setLimit, limit } = useQueryFetch({
-    module: 'get-all-invoice',
-    invalidateKey: 'get-all-invoice',
+    module: 'get-all-invoice-in',
+    invalidateKey: 'get-all-invoice-in',
     query: {
       startDate: startDate || filteraTanggalOption.start,
       endDate: endDate || filteraTanggalOption.end,
@@ -142,7 +141,7 @@ function ReportTransaksi() {
     if (event === 'xlsx') {
       await axios
         .get(
-          `${apiUrl}download/report-transaction?page=${page}&limit=${limit || 10}&startDate=${
+          `${apiUrl}download/report-transaction-in?page=${page}&limit=${limit || 10}&startDate=${
             startDate || filteraTanggalOption.start
           }&endDate=${
             endDate || filteraTanggalOption.end

@@ -21,7 +21,7 @@ import { LabelField } from '../../../components/Commons';
 import { apiUrl } from '../../../hooks/api';
 import { FormatCurrency } from '../../../components/FormatCurrency';
 import ScreenDialog from '../../../components/ScreenDialog';
-import { KopPdf } from '../../Laporan/transaksi/ReportTransaksi';
+import { KopPdf } from '../Laporan/transaksi_masuk/ReportTransaksi';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 import { PROFILE } from '../../../hooks/useHelperContext';
@@ -701,7 +701,7 @@ function Pembayaran() {
                     size="small"
                     keyAttribute="tahun_angkatan"
                     paginateData
-                    initialLimit={5}
+                    initialLimit={3}
                     value={angkatan || {}}
                     module="tahun-angkatan"
                     type="number"

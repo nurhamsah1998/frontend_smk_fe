@@ -1,10 +1,11 @@
 import React from 'react';
-import { Box, CircularProgress, Grid, Skeleton, Typography } from '@mui/material';
+import { Box, Card, Grid, Skeleton, Typography } from '@mui/material';
 import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import moment from 'moment';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import { purple } from '@mui/material/colors';
 
 import { AppWidgetSummary } from '../../sections/@dashboard/app';
 import useFetch from '../../hooks/useFetch';
@@ -14,6 +15,10 @@ function AppStaffTU() {
   const { items, isLoading } = useFetch({
     module: 'dashboard-report',
   });
+  const getYear = moment().format('YYYY');
+  const firstGrade = Number(getYear);
+  const secondGrade = Number(getYear) - 1;
+  const thirhGrade = Number(getYear) - 2;
   return (
     <Box>
       <Grid container spacing={2}>
@@ -121,35 +126,52 @@ function AppStaffTU() {
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6}>
-          <AppWidgetSummary
-            color="info"
-            icon={<ReceiptLongIcon />}
-            title={
-              isLoading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Skeleton height={30} width="80%" />
-                </Box>
-              ) : (
-                <>
-                  <Box>
-                    {Boolean(items?.profit?.total_student_annual === 0)
-                      ? `Tidak ada tagihan dibulan ini`
-                      : `Total tagihan tahun ini`}
-                  </Box>
-                  <Typography sx={{ fontSize: '12px' }}>{moment().format('YYYY')}</Typography>
-                </>
-              )
-            }
-            total={
-              isLoading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Skeleton height={30} width="80%" />
-                </Box>
-              ) : (
-                FormatCurrency(items?.bill?.total_bill_annual)
-              )
-            }
-          />
+          <Card sx={{ height: '100%', display: 'flex', bgcolor: purple[100], alignItems: 'center', gap: 3 }}>
+            <Box
+              sx={{
+                height: '100%',
+                px: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                gap: 2,
+              }}
+            >
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Typography variant="caption" sx={{ color: purple[800] }}>
+                  Total tagihan tiap siswa kelas 10 :{' '}
+                </Typography>
+                <Typography variant="h6" sx={{ color: purple[800], mt: -0.3 }}>
+                  {FormatCurrency(items?.total_bill?.[firstGrade])}
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Typography variant="caption" sx={{ color: purple[800] }}>
+                  Total tagihan tiap siswa kelas 11 :{' '}
+                </Typography>
+                <Typography variant="h6" sx={{ color: purple[800], mt: -0.3 }}>
+                  {FormatCurrency(items?.total_bill?.[secondGrade])}
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Typography variant="caption" sx={{ color: purple[800] }}>
+                  Total tagihan tiap siswa kelas 12 :{' '}
+                </Typography>
+                <Typography variant="h6" sx={{ color: purple[800], mt: -0.3 }}>
+                  {FormatCurrency(items?.total_bill?.[thirhGrade])}
+                </Typography>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                bgcolor: purple[200],
+                p: 3,
+                borderRadius: '100%',
+              }}
+            >
+              <ReceiptLongIcon sx={{ fontSize: 40, color: purple[800] }} />
+            </Box>
+          </Card>
         </Grid>
       </Grid>
     </Box>

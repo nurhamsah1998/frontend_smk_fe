@@ -45,16 +45,28 @@ function Account() {
       name: 'pembayaran',
     },
     {
-      title: 'Transaksi',
+      title: 'Transaksi Masuk',
       permission: false,
       desc: 'Hak Admin untuk melakukan transaksi siswa. fitur ini hanya bisa digunakan dengan mengaktifkan akses "Pembayaran" terlebih dahulu.',
-      name: 'transaksi',
+      name: 'transaksi_masuk',
     },
     {
-      title: 'Laporan Transaksi',
+      title: 'Transaksi Keluar',
       permission: false,
-      desc: 'Hak Admin untuk mengakses "Laporan Transaksi" dan juga download laporan.',
-      name: 'laporan_transaksi',
+      desc: 'Hak Admin untuk melakukan transaksi keluar. fitur ini hanya bisa digunakan dengan mengaktifkan akses "Pembayaran" terlebih dahulu.',
+      name: 'transaksi_keluar',
+    },
+    {
+      title: 'Laporan Transaksi Masuk',
+      permission: false,
+      desc: 'Hak Admin untuk mengakses "Laporan Transaksi Masuk" dan juga download laporan.',
+      name: 'laporan_transaksi_masuk',
+    },
+    {
+      title: 'Laporan Transaksi Keluar',
+      permission: false,
+      desc: 'Hak Admin untuk mengakses "Laporan Transaksi Keluar" dan juga download laporan.',
+      name: 'laporan_transaksi_keluar',
     },
     {
       title: 'Surat Tagihan Siswa',
