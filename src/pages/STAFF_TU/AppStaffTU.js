@@ -4,7 +4,6 @@ import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import moment from 'moment';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { purple } from '@mui/material/colors';
 
 import { AppWidgetSummary } from '../../sections/@dashboard/app';
@@ -142,7 +141,13 @@ function AppStaffTU() {
                   Total tagihan tiap siswa kelas 10 :{' '}
                 </Typography>
                 <Typography variant="h6" sx={{ color: purple[800], mt: -0.3 }}>
-                  {FormatCurrency(items?.total_bill?.[firstGrade])}
+                  {isLoading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton height={30} width="80%" />
+                    </Box>
+                  ) : (
+                    FormatCurrency(items?.total_bill?.[firstGrade])
+                  )}
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -150,7 +155,13 @@ function AppStaffTU() {
                   Total tagihan tiap siswa kelas 11 :{' '}
                 </Typography>
                 <Typography variant="h6" sx={{ color: purple[800], mt: -0.3 }}>
-                  {FormatCurrency(items?.total_bill?.[secondGrade])}
+                  {isLoading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton height={30} width="80%" />
+                    </Box>
+                  ) : (
+                    FormatCurrency(items?.total_bill?.[secondGrade])
+                  )}
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -158,18 +169,15 @@ function AppStaffTU() {
                   Total tagihan tiap siswa kelas 12 :{' '}
                 </Typography>
                 <Typography variant="h6" sx={{ color: purple[800], mt: -0.3 }}>
-                  {FormatCurrency(items?.total_bill?.[thirhGrade])}
+                  {isLoading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton height={30} width="80%" />
+                    </Box>
+                  ) : (
+                    FormatCurrency(items?.total_bill?.[thirhGrade])
+                  )}
                 </Typography>
               </Box>
-            </Box>
-            <Box
-              sx={{
-                bgcolor: purple[200],
-                p: 3,
-                borderRadius: '100%',
-              }}
-            >
-              <ReceiptLongIcon sx={{ fontSize: 40, color: purple[800] }} />
             </Box>
           </Card>
         </Grid>

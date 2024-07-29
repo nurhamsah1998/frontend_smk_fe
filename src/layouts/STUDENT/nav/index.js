@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
@@ -14,8 +14,11 @@ import {
   Toolbar,
   LinearProgress,
   ListItemText,
+  TextField,
 } from '@mui/material';
 // hooks
+import { useQueryClient } from '@tanstack/react-query';
+import { useSnackbar } from 'notistack';
 import useResponsive from '../../../hooks/useResponsive';
 // components
 import Scrollbar from '../../../components/scrollbar';
@@ -24,6 +27,7 @@ import NavSection from '../../../components/nav-section';
 import ScreenDialog from '../../../components/ScreenDialog';
 //
 import navConfig from './config';
+import useMutationPatch from '../../../hooks/useMutationPatch';
 
 // ----------------------------------------------------------------------
 
@@ -46,10 +50,29 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname, search } = useLocation();
+  const [edit, setEdit] = useState(false);
+  const [value, setValue] = useState('');
   const navigate = useNavigate();
+  const client = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
   const { itemsNoPagination, isLoading } = useContext(PROFILE);
   const isDesktop = useResponsive('up', 'md');
-
+  const mutation = useMutationPatch({
+    module: 'siswa',
+    next: () => {
+      client.invalidateQueries(['siswa-profile']);
+      setEdit(false);
+    },
+  });
+  const handleSave = () => {
+    if (value.length <= 5 || value.length >= 12) {
+      enqueueSnackbar('Nomor telepon tidak valid (min 5 karakter, max 12 karakter)', {
+        variant: 'error',
+      });
+      return;
+    }
+    mutation.mutate({ id: itemsNoPagination?.id, noHP: value });
+  };
   useEffect(() => {
     if (openNav) {
       onCloseNav();
@@ -140,10 +163,38 @@ export default function Nav({ openNav, onCloseNav }) {
       >
         <ListItemText primary="Nama" secondary={itemsNoPagination?.nama || '-'} />
         <ListItemText primary="Username" secondary={itemsNoPagination?.username || '-'} />
-        <ListItemText primary="Jurusan" secondary={itemsNoPagination?.jurusan?.nama || '-'} />
-        <ListItemText primary="Kelas" secondary={itemsNoPagination?.kelas || '-'} />
-        <ListItemText primary="Sub kelas" secondary={itemsNoPagination?.sub_kelas || '-'} />
+        <ListItemText
+          primary="Kelas"
+          secondary={
+            `${itemsNoPagination?.kelas} ${itemsNoPagination?.jurusan?.nama} ${itemsNoPagination?.sub_kelas}` || '-'
+          }
+        />
         <ListItemText primary="Angkatan" secondary={itemsNoPagination?.angkatan || '-'} />
+        <Box>
+          {edit ? (
+            <Box>
+              <Typography>No Hp</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <TextField
+                  placeholder="contoh: 81213221343 "
+                  defaultValue={itemsNoPagination?.noHP || ''}
+                  onChange={(i) => setValue(i.target.value)}
+                  size="small"
+                />
+                <Button disabled={mutation.isLoading} color="success" onClick={handleSave} variant="contained">
+                  Save
+                </Button>
+              </Box>
+            </Box>
+          ) : (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <ListItemText primary="No Hp" secondary={`${itemsNoPagination?.noHP}` || '-'} />
+              <Button onClick={() => setEdit(true)} variant="contained">
+                Edit
+              </Button>
+            </Box>
+          )}
+        </Box>
         <ListItemText primary="Kode siswa" secondary={itemsNoPagination?.kode_siswa || '-'} />
         <ListItemText primary="Nama ayah" secondary={itemsNoPagination?.nama_ayah || '-'} />
         <ListItemText primary="Nama ibu" secondary={itemsNoPagination?.nama_ibu || '-'} />
