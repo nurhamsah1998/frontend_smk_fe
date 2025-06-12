@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useState, useEffect, Suspense } from 'react';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import jwtDecode from 'jwt-decode';
 //
+// eslint-disable-next-line import/no-unresolved
+import SuspenseLoading from 'src/components/SuspenseLoading';
 import { PROFILE } from '../../hooks/useHelperContext';
 import useFetch from '../../hooks/useFetch';
 import Header from '../dashboard/header';
@@ -49,7 +51,7 @@ export default function DashboardLayoutDEV() {
   });
   const navigate = useNavigate();
   const token = window.localStorage.getItem('accessToken');
-  const localToken = jwtDecode(token || '');
+  const localToken = token ? jwtDecode(token || {}) : {};
   useEffect(() => {
     if (!token) {
       navigate('/staff-login');
@@ -62,7 +64,7 @@ export default function DashboardLayoutDEV() {
       navigate('/loading');
     }
   }, []);
-
+  if (!token) return <Navigate to="/staff-login" replace />;
   return (
     <>
       <PROFILE.Provider value={{ itemsNoPagination, isLoading }}>
@@ -70,7 +72,9 @@ export default function DashboardLayoutDEV() {
           <Header navConfigMenu={navConfigDEV} onOpenNav={() => setOpen(true)} />
           <Nav openNav={open} navConfig={navConfigDEV} onCloseNav={() => setOpen(false)} />
           <Main>
-            <Outlet />
+            <Suspense fallback={<SuspenseLoading />}>
+              <Outlet />
+            </Suspense>
           </Main>
         </StyledRoot>
       </PROFILE.Provider>

@@ -1,6 +1,6 @@
 import { Box, Button, Menu, MenuItem, Select, Typography, TextField, ListItemText } from '@mui/material';
 
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { debounce } from 'lodash';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { blue, orange } from '@mui/material/colors';
@@ -193,9 +193,9 @@ function Pendaftar() {
   const handleBulkChangeStatus = async (selectedStatus) => {
     mutationChangeStatus.mutate({ status: selectedStatus, users: items });
   };
-  const handleCustomOnClickRow = (i) => {
+  const handleCustomOnClickRow = useCallback((i) => {
     setModalDetailStudent({ isOpen: true, data: i });
-  };
+  }, []);
   const handleCLoseModal = () => {
     if (modal.type?.includes('error')) {
       handleCloseChild();

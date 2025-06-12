@@ -1,29 +1,31 @@
 import { Navigate, useRoutes } from 'react-router-dom';
+import { lazy } from 'react';
 // layouts
-import SimpleLayout from './layouts/simple';
 //
+import SimpleLayout from './layouts/simple';
+import DashboardLayoutDEV from './layouts/DEV/DashboardLayoutDEV';
+import DashboardLayoutStaff from './layouts/STAFF_TU/DashboardLayoutStaffTU';
+import DashboardLayoutStudent from './layouts/STUDENT/DashboardLayoutStudent';
 import LoginStudentPage from './pages/AuthPage/siswa/Login/LoginStudentPage';
 import Page404 from './pages/Page404';
 import LoginStaff from './pages/AuthPage/staff/Login/LoginStaff';
-import AppSiswa from './pages/SISWA/AppSiswa';
-import DashboardLayoutStudent from './layouts/STUDENT/DashboardLayoutStudent';
-import RegisterStaffPage from './pages/AuthPage/staff/Register/RegisterStaffPage';
-import DashboardLayoutStaff from './layouts/STAFF_TU/DashboardLayoutStaffTU';
-import AppStaffTU from './pages/STAFF_TU/AppStaffTU';
-import RouterPath from './RouterPath';
-import TagihanSiswa from './pages/SISWA/Tagihan/Tagihan';
-import TagihanStaff from './pages/STAFF_TU/Tagihan/TagihanStaff';
-import Pembayaran from './pages/STAFF_TU/Pembayaran/Pembayaran';
-import DaftarSiswa from './pages/STAFF_PPDB/DaftarSIswa/DaftarSiswa';
-import DetailTagihan from './pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan';
-import ReportTransaksiMasuk from './pages/STAFF_TU/Laporan/transaksi_masuk/ReportTransaksi';
-import ReportTransaksiKeluar from './pages/STAFF_TU/Laporan/transaksi_keluar/ReportTransaksi';
-import DashboardLayoutDEV from './layouts/DEV/DashboardLayoutDEV';
-import LogActivity from './pages/DEV/Log/LogActivity';
-import DashboardDev from './pages/DEV/Dashboard/Dashboard';
 import Brand from './pages/Anonim/Brand';
-import Account from './pages/DEV/Account/Account';
-import Campaign from './pages/STAFF_TU/Campaign/Campaign';
+import RegisterStaffPage from './pages/AuthPage/staff/Register/RegisterStaffPage';
+import RouterPath from './RouterPath';
+///
+const AppSiswa = lazy(() => import('./pages/SISWA/AppSiswa'));
+const AppStaffTU = lazy(() => import('./pages/STAFF_TU/AppStaffTU'));
+const TagihanSiswa = lazy(() => import('./pages/SISWA/Tagihan/Tagihan'));
+const TagihanStaff = lazy(() => import('./pages/STAFF_TU/Tagihan/TagihanStaff'));
+const Pembayaran = lazy(() => import('./pages/STAFF_TU/Pembayaran/Pembayaran'));
+const DaftarSiswa = lazy(() => import('./pages/STAFF_PPDB/DaftarSIswa/DaftarSiswa'));
+const DetailTagihan = lazy(() => import('./pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan'));
+const ReportTransaksiMasuk = lazy(() => import('./pages/STAFF_TU/Laporan/transaksi_masuk/ReportTransaksi'));
+const ReportTransaksiKeluar = lazy(() => import('./pages/STAFF_TU/Laporan/transaksi_keluar/ReportTransaksi'));
+const LogActivity = lazy(() => import('./pages/DEV/Log/LogActivity'));
+const DashboardDev = lazy(() => import('./pages/DEV/Dashboard/Dashboard'));
+const Account = lazy(() => import('./pages/DEV/Account/Account'));
+const Campaign = lazy(() => import('./pages/STAFF_TU/Campaign/Campaign'));
 
 // ----------------------------------------------------------------------
 

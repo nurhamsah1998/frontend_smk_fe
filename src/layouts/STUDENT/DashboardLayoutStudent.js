@@ -1,10 +1,12 @@
-import { useState, useEffect, memo, useMemo } from 'react';
+import { useState, useEffect, memo, useMemo, Suspense } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Typography, Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
 //
+// eslint-disable-next-line import/no-unresolved
+import SuspenseLoading from 'src/components/SuspenseLoading';
 import Header from './header';
 import Nav from './nav';
 import useFetch from '../../hooks/useFetch';
@@ -77,7 +79,9 @@ const ComponentAccountValidationStudent = memo(({ itemsNoPagination, setOpen, op
         <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
         <Main>
-          <Outlet />
+          <Suspense fallback={<SuspenseLoading />}>
+            <Outlet />
+          </Suspense>
         </Main>
       </StyledRoot>
     )}

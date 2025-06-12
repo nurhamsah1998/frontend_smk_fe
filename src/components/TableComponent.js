@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable arrow-body-style */
+import React, { memo, useMemo } from 'react';
 import {
   Box,
   Table,
@@ -22,6 +23,7 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import { grey, green, red, blue, orange, cyan, purple } from '@mui/material/colors';
 import { FormatCurrency } from './FormatCurrency';
 import { themeAppColors } from '../theme/themeAppColor';
+import TableRowDate from './TableRowDate';
 
 function TableComponen({
   tableHead,
@@ -157,176 +159,31 @@ function TableComponen({
                 </TableRow>
               ) : (
                 tableBody?.map((body, bodyIndex) => (
-                  <TableRow
+                  <Row
                     key={bodyIndex}
-                    sx={{
-                      height: '40px',
-                      bgcolor: bodyIndex % 2 ? '#a1a1a11f' : '#fff',
-                    }}
-                  >
-                    {tableHead?.map((head, headIndex) => {
-                      const Status = (params) => {
-                        const isVariantStatusColor = head?.variantStatusColor?.find((i) => i?.value === params);
-                        const colorVariant = [
-                          {
-                            variant: 'success',
-                            color: green[700],
-                            bgcolor: green[100],
-                          },
-                          {
-                            variant: 'error',
-                            color: red[700],
-                            bgcolor: red[100],
-                          },
-                          {
-                            variant: 'warning',
-                            color: orange[700],
-                            bgcolor: orange[100],
-                          },
-                          {
-                            variant: 'grey',
-                            color: grey[700],
-                            bgcolor: grey[300],
-                          },
-                          {
-                            variant: 'blue',
-                            color: blue[700],
-                            bgcolor: blue[200],
-                          },
-                        ].find((i) => i?.variant === isVariantStatusColor?.variant);
-                        if (isVariantStatusColor) {
-                          return (
-                            <Box
-                              sx={{
-                                bgcolor: colorVariant?.bgcolor,
-                                color: colorVariant?.color,
-                                width: '100%',
-                                px: 1.5,
-                                borderRadius: '9px',
-                                textAlign: 'center',
-                              }}
-                            >
-                              <Typography fontSize="14px">{isVariantStatusColor?.label}</Typography>
-                            </Box>
-                          );
-                        }
-                        return false;
-                      };
-                      const isIndicator = head?.variantStatusColor ? Status(body[head.id]) : body[head.id];
-                      const isCurrency = head?.isCurrency ? (
-                        /// https://stackoverflow.com/a/4652112/18038473
-                        <>
-                          {body[head?.id] < 0 ? (
-                            <Typography fontSize="14px" color={green[400]}>
-                              +{FormatCurrency(Math.abs(body[head.id]))}
-                            </Typography>
-                          ) : (
-                            FormatCurrency(body[head.id])
-                          )}
-                        </>
-                      ) : (
-                        isIndicator
-                      );
-                      const isDate = head?.isDate ? moment(body[head.id]).format('DD MMM YYYY H:mm') : isCurrency;
-
-                      return (
-                        <TableCell
-                          sx={{
-                            px: 2,
-                            py: 0,
-                            textTransform: 'capitalize',
-                          }}
-                          key={headIndex}
-                        >
-                          {isDate || '-'}
-                        </TableCell>
-                      );
-                    })}
-                    <TableCell sx={{ py: 0 }}>
-                      <Box sx={{ display: 'flex' }}>
-                        {handleSeeBill ? (
-                          <Tooltip arrow title="Detail Pembayaran">
-                            <IconButton
-                              size="small"
-                              onClick={() => {
-                                handleSeeBill(body);
-                                setAnchorEl(null);
-                              }}
-                            >
-                              <RequestQuoteIcon color="primary" />
-                            </IconButton>
-                          </Tooltip>
-                        ) : null}
-                        {handleCustomOnClickRow ? (
-                          <Tooltip arrow title={tooltipCustom}>
-                            <IconButton onClick={() => handleCustomOnClickRow(body)}>{customIcon}</IconButton>
-                          </Tooltip>
-                        ) : null}
-                        {handlePrint && !Boolean(body?.status_bill !== 'not_paid') ? (
-                          <Tooltip arrow title={tooltipHandlePrint}>
-                            <IconButton onClick={() => handlePrint(body)}>{customIconSecondary}</IconButton>
-                          </Tooltip>
-                        ) : null}
-                        {Boolean(handleAccount) && (
-                          <Box>
-                            <IconButton onClick={(event) => handleClickAccount(event, body, bodyIndex)}>
-                              <Tooltip arrow title={'Status akun'}>
-                                <AccountBoxIcon sx={{ color: red[500] }} />
-                              </Tooltip>
-                            </IconButton>
-
-                            <Menu
-                              id="basic-menu"
-                              anchorEl={anchorEl?.[`set_anchorEl_${bodyIndex}`]}
-                              sx={{
-                                '& .css-6hp17o-MuiList-root-MuiMenu-list': {
-                                  boxShadow:
-                                    '0px 5px 5px -3px rgb(145 158 171 / 0%), 0px 8px 10px 1px rgb(145 158 171 / 0%), 0px 3px 14px 2px rgb(145 158 171 / 5%)',
-                                },
-                              }}
-                              open={Boolean(anchorEl?.[`set_anchorEl_${bodyIndex}`])}
-                              onClose={() => handleClose(bodyIndex)}
-                            >
-                              <MenuItem
-                                disabled={disabledLock}
-                                onClick={() => {
-                                  handleLockAccount(selectedData);
-                                  setAnchorEl(null);
-                                }}
-                              >
-                                Kunci akun
-                              </MenuItem>
-                              <MenuItem
-                                disabled={disabledBlokir}
-                                onClick={() => {
-                                  handleBlockAccount(selectedData);
-                                  setAnchorEl(null);
-                                }}
-                              >
-                                Blokir akun
-                              </MenuItem>
-                              <MenuItem
-                                onClick={() => {
-                                  handleAcceptAccount(selectedData);
-                                  setAnchorEl(null);
-                                }}
-                              >
-                                Terima akun
-                              </MenuItem>
-                              <MenuItem
-                                onClick={() => {
-                                  handleHoldAccount(selectedData);
-                                  setAnchorEl(null);
-                                }}
-                              >
-                                Tahan akun
-                              </MenuItem>
-                            </Menu>
-                          </Box>
-                        )}
-                      </Box>
-                    </TableCell>
-                  </TableRow>
+                    tableHead={tableHead}
+                    bodyIndex={bodyIndex}
+                    body={body}
+                    handleSeeBill={handleSeeBill}
+                    setAnchorEl={setAnchorEl}
+                    handleCustomOnClickRow={handleCustomOnClickRow}
+                    tooltipCustom={tooltipCustom}
+                    customIcon={customIcon}
+                    handlePrint={handlePrint}
+                    tooltipHandlePrint={tooltipHandlePrint}
+                    customIconSecondary={customIconSecondary}
+                    handleAccount={handleAccount}
+                    handleClickAccount={handleClickAccount}
+                    anchorEl={anchorEl}
+                    handleClose={handleClose}
+                    disabledLock={disabledLock}
+                    handleLockAccount={handleLockAccount}
+                    selectedData={selectedData}
+                    disabledBlokir={disabledBlokir}
+                    handleBlockAccount={handleBlockAccount}
+                    handleAcceptAccount={handleAcceptAccount}
+                    handleHoldAccount={handleHoldAccount}
+                  />
                 ))
               )}
               {isTotal ? (
@@ -387,5 +244,128 @@ function TableComponen({
     </Box>
   );
 }
+const Row = memo(
+  ({
+    tableHead,
+    bodyIndex,
+    body,
+    handleSeeBill,
+    setAnchorEl,
+    handleCustomOnClickRow,
+    tooltipCustom,
+    customIcon,
+    handlePrint,
+    tooltipHandlePrint,
+    customIconSecondary,
+    handleAccount,
+    handleClickAccount,
+    anchorEl,
+    handleClose,
+    disabledLock,
+    handleLockAccount,
+    selectedData,
+    disabledBlokir,
+    handleBlockAccount,
+    handleAcceptAccount,
+    handleHoldAccount,
+  }) => {
+    const itemRebuildMemo = useMemo(() => tableHead, []);
+    return (
+      <TableRow
+        sx={{
+          height: '40px',
+          bgcolor: bodyIndex % 2 ? '#a1a1a11f' : '#fff',
+        }}
+      >
+        {itemRebuildMemo?.map((head, headIndex) => (
+          <TableRowDate key={headIndex} head={head} body={body} />
+        ))}
+        <TableCell sx={{ py: 0 }}>
+          <Box sx={{ display: 'flex' }}>
+            {handleSeeBill ? (
+              <Tooltip arrow title="Detail Pembayaran">
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    handleSeeBill(body);
+                    setAnchorEl(null);
+                  }}
+                >
+                  <RequestQuoteIcon color="primary" />
+                </IconButton>
+              </Tooltip>
+            ) : null}
+            {handleCustomOnClickRow ? (
+              <Tooltip arrow title={tooltipCustom}>
+                <IconButton onClick={() => handleCustomOnClickRow(body)}>{customIcon}</IconButton>
+              </Tooltip>
+            ) : null}
+            {handlePrint && !Boolean(body?.status_bill !== 'not_paid') ? (
+              <Tooltip arrow title={tooltipHandlePrint}>
+                <IconButton onClick={() => handlePrint(body)}>{customIconSecondary}</IconButton>
+              </Tooltip>
+            ) : null}
+            {Boolean(handleAccount) && (
+              <Box>
+                <IconButton onClick={(event) => handleClickAccount(event, body, bodyIndex)}>
+                  <Tooltip arrow title={'Status akun'}>
+                    <AccountBoxIcon sx={{ color: red[500] }} />
+                  </Tooltip>
+                </IconButton>
 
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl?.[`set_anchorEl_${bodyIndex}`]}
+                  sx={{
+                    '& .css-6hp17o-MuiList-root-MuiMenu-list': {
+                      boxShadow:
+                        '0px 5px 5px -3px rgb(145 158 171 / 0%), 0px 8px 10px 1px rgb(145 158 171 / 0%), 0px 3px 14px 2px rgb(145 158 171 / 5%)',
+                    },
+                  }}
+                  open={Boolean(anchorEl?.[`set_anchorEl_${bodyIndex}`])}
+                  onClose={() => handleClose(bodyIndex)}
+                >
+                  <MenuItem
+                    disabled={disabledLock}
+                    onClick={() => {
+                      handleLockAccount(selectedData);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    Kunci akun
+                  </MenuItem>
+                  <MenuItem
+                    disabled={disabledBlokir}
+                    onClick={() => {
+                      handleBlockAccount(selectedData);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    Blokir akun
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleAcceptAccount(selectedData);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    Terima akun
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleHoldAccount(selectedData);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    Tahan akun
+                  </MenuItem>
+                </Menu>
+              </Box>
+            )}
+          </Box>
+        </TableCell>
+      </TableRow>
+    );
+  }
+);
 export default TableComponen;

@@ -1,10 +1,13 @@
-import { useState, useEffect, memo } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useState, useEffect, memo, Suspense } from 'react';
+
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Typography, Box, Button } from '@mui/material';
 import jwtDecode from 'jwt-decode';
 import { grey } from '@mui/material/colors';
+// eslint-disable-next-line import/no-unresolved
+import SuspenseLoading from 'src/components/SuspenseLoading';
 //
 import { PROFILE } from '../../hooks/useHelperContext';
 import useFetch from '../../hooks/useFetch';
@@ -100,7 +103,9 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
           <Header navConfigMenu={navConfigTU} onOpenNav={() => setOpen(true)} />
           <Nav openNav={open} navConfig={navConfigTU} onCloseNav={() => setOpen(false)} />
           <Main>
-            <Outlet />
+            <Suspense fallback={<SuspenseLoading />}>
+              <Outlet />
+            </Suspense>
           </Main>
         </StyledRoot>
       )}
@@ -141,12 +146,7 @@ export default function DashboardLayoutStaff() {
   });
   const navigate = useNavigate();
   const token = window.localStorage.getItem('accessToken');
-  const localToken = jwtDecode(token || {});
-  useEffect(() => {
-    if (!token) {
-      navigate('/staff-login');
-    }
-  }, []);
+  const localToken = token ? jwtDecode(token || {}) : {};
   useEffect(() => {
     if (localToken?.roleStaff === 'ADMINISTRASI') {
       console.log('');
@@ -154,7 +154,7 @@ export default function DashboardLayoutStaff() {
       navigate('/loading');
     }
   }, []);
-
+  if (!token) return <Navigate to="/staff-login" replace />;
   return (
     <>
       <PROFILE.Provider value={{ itemsNoPagination, isLoading }}>

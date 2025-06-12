@@ -35,6 +35,7 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav, navConfig }) {
   const { pathname } = useLocation();
+
   const { itemsNoPagination, isLoading } = useContext(PROFILE);
   // eslint-disable-next-line no-extra-boolean-cast
   const permissionsUser = Boolean(itemsNoPagination?.id)
