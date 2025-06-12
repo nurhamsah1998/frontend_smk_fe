@@ -141,7 +141,7 @@ function Account() {
     // eslint-disable-next-line prefer-const
     let clonePermissions = [...permissions];
     // eslint-disable-next-line prefer-const
-    let permissionsUser = JSON.parse(i?.permissions);
+    let permissionsUser = typeof i?.permissions === 'string' ? JSON.parse(i?.permissions) : i?.permissions;
     for (let index = 0; index < clonePermissions.length; index += 1) {
       for (let Pindex = 0; Pindex < permissionsUser.length; Pindex += 1) {
         if (clonePermissions[index].name === permissionsUser[Pindex]) clonePermissions[index].permission = true;

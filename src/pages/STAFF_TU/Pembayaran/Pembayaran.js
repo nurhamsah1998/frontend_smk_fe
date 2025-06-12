@@ -52,7 +52,11 @@ function Pembayaran() {
   const [startUjian, setStartUjian] = React.useState('');
   const [expiredDate, setExpiredDate] = React.useState('');
   const { itemsNoPagination } = React.useContext(PROFILE);
-  const permissions = Boolean(itemsNoPagination?.id) ? JSON.parse(itemsNoPagination?.permissions) : [];
+  const permissions = Boolean(itemsNoPagination?.id)
+    ? typeof itemsNoPagination?.permissions === 'string'
+      ? JSON.parse(itemsNoPagination?.permissions)
+      : itemsNoPagination?.permissions
+    : [];
   const disabledPrintBill = !Boolean(permissions?.find((item) => item === 'student_bill_letter'));
   const { items, totalPage, setPage, search, totalData, totalRows, setSearch, page, isLoading, setLimit, limit } =
     useQueryFetch({

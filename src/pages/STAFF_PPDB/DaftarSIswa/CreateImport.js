@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { cyan, purple, red } from '@mui/material/colors';
@@ -14,7 +15,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
   const [files, setFiles] = React.useState({});
   const token = window.localStorage.getItem('accessToken');
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState({ open: false, message: [], title: '', type: '' });
+  const [error, setError] = React.useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const handleImport = async () => {
     setLoading(true);
@@ -30,16 +31,12 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
       .then((res) => {
         setFiles({});
         enqueueSnackbar('Import berhasil', { variant: 'success' });
+        setError([]);
         refetch();
       })
       .catch((error) => {
         console.log(error);
-        setError({
-          open: true,
-          message: error?.response?.data?.message || error?.response?.data || 'Internal server error !',
-          type: error?.response?.data?.code,
-          title: 'Gagal upload file',
-        });
+        setError(error?.response?.data?.message || []);
       })
       .finally(() => {
         setLoading(false);
@@ -55,93 +52,21 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
     <div>
       <ScreenDialog
         type="error"
-        open={error.open}
+        open={Boolean(error?.length)}
         labelClose="Tutup"
         handleClose={() => {
-          setError({ open: false, message: [], title: '', type: '' });
+          setError([]);
           setFiles({});
         }}
-        title={error.title}
+        title="Upload dibatalkan"
       >
-        {error.type === 'error_validation' &&
-          error?.message?.map((item, index) => {
-            return (
-              <Box key={index}>
-                <Typography color={red[500]}>
-                  Column {item?.row} Row {item?.column}, tidak boleh kosong!
-                </Typography>
-              </Box>
-            );
-          })}
-        {error.type?.includes('error_validation_no_data') && (
-          <Box>
-            <Typography color={red[500]}>{error?.message}</Typography>
-          </Box>
-        )}
-        {error.type?.includes('server') && (
-          <Box>
-            <Typography color={red[500]}>{error?.message}</Typography>
-          </Box>
-        )}
-        {error.message?.includes('Forbidden') && (
-          <Box>
-            <Typography color={red[500]}>Token issue FORBIDDEN !!</Typography>
-          </Box>
-        )}
-        {error.type?.includes('error_inject_username') &&
-          error?.message?.map((item, index) => {
-            return (
-              <Box key={index}>
-                <Typography color={red[500]}>
-                  Username{' '}
-                  <span
-                    style={{
-                      color: '#000',
-                    }}
-                  >
-                    {item?.username}
-                  </span>{' '}
-                  dibagian Column {item?.row} Row {item?.column}, sudah terdaftar di database !
-                </Typography>
-              </Box>
-            );
-          })}
-        {error.type?.includes('error_inject_username_unique') &&
-          error?.message?.map((item, index) => {
-            return (
-              <Box key={index}>
-                <Typography color={red[500]}>
-                  Username{' '}
-                  <span
-                    style={{
-                      color: '#000',
-                    }}
-                  >
-                    {item?.username}
-                  </span>{' '}
-                  dibagian Column {item?.row} Row {item?.column}, Harus unique/berbeda!
-                </Typography>
-              </Box>
-            );
-          })}
-        {error.type?.includes('error_inject_jurusan') &&
-          error?.message?.map((item, index) => {
-            return (
-              <Box key={index}>
-                <Typography color={red[500]}>
-                  Jurusan{' '}
-                  <span
-                    style={{
-                      color: '#000',
-                    }}
-                  >
-                    {item?.kode_jurusan}
-                  </span>{' '}
-                  dibagian Column {item?.row} Row {item?.column}, tidak valid!
-                </Typography>
-              </Box>
-            );
-          })}
+        {error?.map((item, index) => {
+          return (
+            <Box key={index}>
+              <Typography color={red[500]}>{item}</Typography>
+            </Box>
+          );
+        })}
       </ScreenDialog>
       <ScreenDialog
         labelClose="Batal"

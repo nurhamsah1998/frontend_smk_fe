@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { useEffect, useContext, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
-import { styled, alpha } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack, Toolbar, LinearProgress } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Box, Link, Drawer, Typography, Avatar, Toolbar, LinearProgress } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // components
@@ -37,7 +37,11 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
   const { pathname } = useLocation();
   const { itemsNoPagination, isLoading } = useContext(PROFILE);
   // eslint-disable-next-line no-extra-boolean-cast
-  const permissionsUser = Boolean(itemsNoPagination?.id) ? JSON.parse(itemsNoPagination?.permissions) : [];
+  const permissionsUser = Boolean(itemsNoPagination?.id)
+    ? typeof itemsNoPagination?.permissions === 'string'
+      ? JSON.parse(itemsNoPagination?.permissions)
+      : itemsNoPagination?.permissions
+    : [];
   const permissionsSlicing = useMemo(() => {
     // eslint-disable-next-line no-unused-vars, prefer-const
     let cloneNav = [...navConfig];
