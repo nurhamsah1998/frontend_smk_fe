@@ -1,6 +1,6 @@
 import React from 'react';
 import { Autocomplete, TextField, Box, CircularProgress } from '@mui/material';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import useFetch from '../../hooks/useFetch';
 
 function AutoCompleteAsync({

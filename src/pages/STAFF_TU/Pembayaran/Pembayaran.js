@@ -4,7 +4,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Box, Button, FormHelperText, Menu, MenuItem, Select, TextField } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import { jsPDF as JSPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -26,6 +26,7 @@ import CustomDatePicker from '../../../components/CustomDatePicker';
 import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import useQueryFetch from '../../../hooks/useQueryFetch';
+import ContainerCard from '../../../components/ContainerCard';
 
 export const ClearFilter = ({ handleClear }) => {
   return (
@@ -463,315 +464,317 @@ function Pembayaran() {
     setOpenModalInputDate(() => ({ isBulk: false, openModal: true, data: i }));
   };
   return (
-    <Box>
-      <Helmet>
-        <title>Detail Pembayaran | SMK Kras Kediri</title>
-        <link rel="canonical" href="/" />
-      </Helmet>
-      <ScreenDialog
-        disabledSubmitButton={!Boolean(startUjian) || !Boolean(expiredDate)}
-        title="Masukkan tanggal hari ujian, jatuh tempo dan nomor"
-        labelClose="Batal"
-        labelSubmit="Generate"
-        open={openModalInputDate.openModal}
-        handleClose={() => {
-          setOpenModalInputDate((prev) => ({ ...prev, openModal: false }));
-          setExpiredDate('');
-          setStartUjian('');
-          nomorRef.current.value = '';
-        }}
-        handleSubmit={
-          openModalInputDate.isBulk ? handlePrintMassalTagihan : () => handlePrintTagihan(openModalInputDate.data)
-        }
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <FormHelperText>Masukan nomor, contoh : 247//104.E8/SMK-PGRI/Krs/IX/2023</FormHelperText>
-            <TextField
-              ref={nomorRef}
-              onChange={(i) => {
-                nomorRef.current.value = i.target.value;
-              }}
-              sx={{
-                mt: '-15px',
-              }}
-              size="small"
-            />
-            <Box>
-              <FormHelperText>Masukan tanggal ujian</FormHelperText>
-              <CustomDatePicker disabledMultipick startDate={startUjian} setStartDate={setStartUjian} />
-            </Box>
-            <Box>
-              <FormHelperText>Masukan tanggal jatuh tempo pembayaran</FormHelperText>
-              <CustomDatePicker disabledMultipick startDate={expiredDate} setStartDate={setExpiredDate} />
-            </Box>
-          </Box>
-        </Box>
-      </ScreenDialog>
-      <Box sx={{ display: location.pathname?.includes('/detail-tagihan') ? 'none' : 'grid' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2 }}>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Box>
-              <Button
-                startIcon={<DownloadIcon />}
-                variant="contained"
-                id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                disabled={Boolean(itemsRebuild?.length === 0)}
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-              >
-                Download File
-              </Button>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
+    <ContainerCard>
+      <Box>
+        <Helmet>
+          <title>Detail Pembayaran | SMK Kras Kediri</title>
+          <link rel="canonical" href="/" />
+        </Helmet>
+        <ScreenDialog
+          disabledSubmitButton={!Boolean(startUjian) || !Boolean(expiredDate)}
+          title="Masukkan tanggal hari ujian, jatuh tempo dan nomor"
+          labelClose="Batal"
+          labelSubmit="Generate"
+          open={openModalInputDate.openModal}
+          handleClose={() => {
+            setOpenModalInputDate((prev) => ({ ...prev, openModal: false }));
+            setExpiredDate('');
+            setStartUjian('');
+            nomorRef.current.value = '';
+          }}
+          handleSubmit={
+            openModalInputDate.isBulk ? handlePrintMassalTagihan : () => handlePrintTagihan(openModalInputDate.data)
+          }
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <FormHelperText>Masukan nomor, contoh : 247//104.E8/SMK-PGRI/Krs/IX/2023</FormHelperText>
+              <TextField
+                ref={nomorRef}
+                onChange={(i) => {
+                  nomorRef.current.value = i.target.value;
                 }}
-              >
-                <MenuItem onClick={() => handleDownloadFile('pdf')}>Download PDF</MenuItem>
-                <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
-              </Menu>
-            </Box>
-            {Boolean(bill === 'not_paid') &&
-              Boolean(jurusan) &&
-              Boolean(kelas) &&
-              Boolean(itemsRebuild?.length !== 0) &&
-              !disabledPrintBill && (
-                <Button
-                  onClick={() => setOpenModalInputDate(() => ({ isBulk: true, openModal: true }))}
-                  color="warning"
-                  variant="contained"
-                >
-                  Print Tagihan Massal
-                </Button>
-              )}
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Box sx={{ display: 'grid', gap: 1 }}>
-              <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-end' }}>
-                <Box sx={{ display: 'grid', width: '100%' }}>
-                  <LabelField
-                    clearIcon={Boolean(search)}
-                    onClickClearIcon={() => {
-                      setPage(1);
-                      setSearch('');
-                      searchInputRef.current.value = '';
-                    }}
-                    title="Masukan nama siswa / Kode siswa / Username / Nama ayah / Nama ibu"
-                  />
-                  <TextField
-                    inputRef={searchInputRef}
-                    fullWidth
-                    onChange={debounce((i) => {
-                      setPage(1);
-                      setSearch(i.target.value);
-                    }, 500)}
-                    size="small"
-                  />
-                </Box>
-                <Box>
-                  <LabelField
-                    clearIcon={Boolean(bill)}
-                    onClickClearIcon={() => {
-                      setBill('');
-                    }}
-                    title="Sort Status Pembayaran"
-                  />
-                  <Select
-                    sx={{
-                      minWidth: '200px',
-                    }}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={bill || ''}
-                    size="small"
-                    onChange={handleChangeStatusTagihan}
-                  >
-                    <MenuItem value={'paid'}>Lunas</MenuItem>
-                    <MenuItem value={'not_paid'}>Belum Lunas</MenuItem>
-                    <MenuItem value={'deposit'}>Deposit</MenuItem>
-                    <MenuItem value={'not_paid_yet'}>Belum Ada Tagihan</MenuItem>
-                  </Select>
-                </Box>
-                {[
-                  Boolean(jurusan),
-                  Boolean(kelas),
-                  Boolean(subKelas),
-                  Boolean(bill),
-                  Boolean(search),
-                  Boolean(angkatan),
-                ].filter((item) => item)?.length > 2 ? (
-                  <ClearFilter
-                    handleClear={() => {
-                      setJurusanId('');
-                      setJurusan('');
-                      setSearch('');
-                      searchInputRef.current.value = '';
-                      setKelas('');
-                      setSubKelasKelas('');
-                      setBill('');
-                      setAngkatan('');
-                    }}
-                  />
-                ) : null}
-              </Box>
-
-              <Box
                 sx={{
-                  display: 'flex',
-                  gap: 1,
+                  mt: '-15px',
                 }}
-              >
-                <Box>
-                  <LabelField
-                    title="Sort Jurusan"
-                    clearIcon={Boolean(jurusan)}
-                    onClickClearIcon={() => {
-                      setJurusanId('');
-                      setJurusan('');
-                    }}
-                  />
-                  <Select
-                    sx={{
-                      minWidth: '270px',
-                    }}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={jurusan || ''}
-                    size="small"
-                    onChange={handleChangesJurusan}
+                size="small"
+              />
+              <Box>
+                <FormHelperText>Masukan tanggal ujian</FormHelperText>
+                <CustomDatePicker disabledMultipick startDate={startUjian} setStartDate={setStartUjian} />
+              </Box>
+              <Box>
+                <FormHelperText>Masukan tanggal jatuh tempo pembayaran</FormHelperText>
+                <CustomDatePicker disabledMultipick startDate={expiredDate} setStartDate={setExpiredDate} />
+              </Box>
+            </Box>
+          </Box>
+        </ScreenDialog>
+        <Box sx={{ display: location.pathname?.includes('/detail-tagihan') ? 'none' : 'grid' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2 }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Box>
+                <Button
+                  startIcon={<DownloadIcon />}
+                  variant="contained"
+                  id="basic-button"
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  disabled={Boolean(itemsRebuild?.length === 0)}
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleClick}
+                >
+                  Download File
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <MenuItem onClick={() => handleDownloadFile('pdf')}>Download PDF</MenuItem>
+                  <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
+                </Menu>
+              </Box>
+              {Boolean(bill === 'not_paid') &&
+                Boolean(jurusan) &&
+                Boolean(kelas) &&
+                Boolean(itemsRebuild?.length !== 0) &&
+                !disabledPrintBill && (
+                  <Button
+                    onClick={() => setOpenModalInputDate(() => ({ isBulk: true, openModal: true }))}
+                    color="warning"
+                    variant="contained"
                   >
-                    {jurusanList?.map((item, index) => (
-                      <MenuItem key={index} onClick={() => setJurusanId(item?.id)} value={item?.nama}>
-                        {item?.nama}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    Print Tagihan Massal
+                  </Button>
+                )}
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Box sx={{ display: 'grid', gap: 1 }}>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-end' }}>
+                  <Box sx={{ display: 'grid', width: '100%' }}>
+                    <LabelField
+                      clearIcon={Boolean(search)}
+                      onClickClearIcon={() => {
+                        setPage(1);
+                        setSearch('');
+                        searchInputRef.current.value = '';
+                      }}
+                      title="Masukan nama siswa / Kode siswa / Username / Nama ayah / Nama ibu"
+                    />
+                    <TextField
+                      inputRef={searchInputRef}
+                      fullWidth
+                      onChange={debounce((i) => {
+                        setPage(1);
+                        setSearch(i.target.value);
+                      }, 500)}
+                      size="small"
+                    />
+                  </Box>
+                  <Box>
+                    <LabelField
+                      clearIcon={Boolean(bill)}
+                      onClickClearIcon={() => {
+                        setBill('');
+                      }}
+                      title="Sort Status Pembayaran"
+                    />
+                    <Select
+                      sx={{
+                        minWidth: '200px',
+                      }}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={bill || ''}
+                      size="small"
+                      onChange={handleChangeStatusTagihan}
+                    >
+                      <MenuItem value={'paid'}>Lunas</MenuItem>
+                      <MenuItem value={'not_paid'}>Belum Lunas</MenuItem>
+                      <MenuItem value={'deposit'}>Deposit</MenuItem>
+                      <MenuItem value={'not_paid_yet'}>Belum Ada Tagihan</MenuItem>
+                    </Select>
+                  </Box>
+                  {[
+                    Boolean(jurusan),
+                    Boolean(kelas),
+                    Boolean(subKelas),
+                    Boolean(bill),
+                    Boolean(search),
+                    Boolean(angkatan),
+                  ].filter((item) => item)?.length > 2 ? (
+                    <ClearFilter
+                      handleClear={() => {
+                        setJurusanId('');
+                        setJurusan('');
+                        setSearch('');
+                        searchInputRef.current.value = '';
+                        setKelas('');
+                        setSubKelasKelas('');
+                        setBill('');
+                        setAngkatan('');
+                      }}
+                    />
+                  ) : null}
                 </Box>
-                <Box>
-                  <LabelField title="Sort Kelas" onClickClearIcon={() => setKelas('')} clearIcon={Boolean(kelas)} />
-                  <Select
-                    sx={{
-                      minWidth: '100px',
-                    }}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={kelas}
-                    size="small"
-                    onChange={(event) => setKelas(event.target.value)}
-                  >
-                    <MenuItem value={'10'}>10</MenuItem>
-                    <MenuItem value={'11'}>11</MenuItem>
-                    <MenuItem value={'12'}>12</MenuItem>
-                  </Select>
-                </Box>
-                <Box>
-                  <LabelField
-                    title="Sort Sub Kelas"
-                    onClickClearIcon={() => setSubKelasKelas('')}
-                    clearIcon={Boolean(subKelas)}
-                  />
 
-                  <Select
-                    sx={{
-                      minWidth: '100px',
-                    }}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={subKelas}
-                    size="small"
-                    onChange={handleChangeSubKelas}
-                  >
-                    <MenuItem value={'1'}>1</MenuItem>
-                    <MenuItem value={'2'}>2</MenuItem>
-                    <MenuItem value={'3'}>3</MenuItem>
-                    <MenuItem value={'4'}>4</MenuItem>
-                    <MenuItem value={'5'}>5</MenuItem>
-                    <MenuItem value={'6'}>6</MenuItem>
-                  </Select>
-                </Box>
-                <Box sx={{ minWidth: '100px' }}>
-                  <LabelField
-                    title="Sort Angkatan"
-                    clearIcon={Boolean(angkatan)}
-                    onClickClearIcon={() => setAngkatan('')}
-                  />
-                  <AutoCompleteAsync
-                    size="small"
-                    keyAttribute="tahun_angkatan"
-                    paginateData
-                    initialLimit={3}
-                    value={angkatan || {}}
-                    module="tahun-angkatan"
-                    type="number"
-                    onChange={(x, y) => handleChangeAngkatan(x, y)}
-                  />
-                </Box>
-                <Box>
-                  <LabelField
-                    title="/Page"
-                    onClickClearIcon={() => {
-                      setPage(1);
-                      setLimit(40);
-                      limitInputRef.current.value = '';
-                    }}
-                    clearIcon={Boolean(limit !== 40)}
-                  />
-                  <TextField
-                    InputProps={{
-                      min: 1,
-                      max: 100,
-                    }}
-                    size="small"
-                    type="number"
-                    placeholder="40"
-                    inputRef={limitInputRef}
-                    onChange={debounce((i) => {
-                      setPage(1);
-                      setLimit(i.target.value);
-                    }, 500)}
-                    sx={{
-                      width: '100px',
-                    }}
-                  />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 1,
+                  }}
+                >
+                  <Box>
+                    <LabelField
+                      title="Sort Jurusan"
+                      clearIcon={Boolean(jurusan)}
+                      onClickClearIcon={() => {
+                        setJurusanId('');
+                        setJurusan('');
+                      }}
+                    />
+                    <Select
+                      sx={{
+                        minWidth: '270px',
+                      }}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={jurusan || ''}
+                      size="small"
+                      onChange={handleChangesJurusan}
+                    >
+                      {jurusanList?.map((item, index) => (
+                        <MenuItem key={index} onClick={() => setJurusanId(item?.id)} value={item?.nama}>
+                          {item?.nama}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Box>
+                  <Box>
+                    <LabelField title="Sort Kelas" onClickClearIcon={() => setKelas('')} clearIcon={Boolean(kelas)} />
+                    <Select
+                      sx={{
+                        minWidth: '100px',
+                      }}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={kelas}
+                      size="small"
+                      onChange={(event) => setKelas(event.target.value)}
+                    >
+                      <MenuItem value={'10'}>10</MenuItem>
+                      <MenuItem value={'11'}>11</MenuItem>
+                      <MenuItem value={'12'}>12</MenuItem>
+                    </Select>
+                  </Box>
+                  <Box>
+                    <LabelField
+                      title="Sort Sub Kelas"
+                      onClickClearIcon={() => setSubKelasKelas('')}
+                      clearIcon={Boolean(subKelas)}
+                    />
+
+                    <Select
+                      sx={{
+                        minWidth: '100px',
+                      }}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={subKelas}
+                      size="small"
+                      onChange={handleChangeSubKelas}
+                    >
+                      <MenuItem value={'1'}>1</MenuItem>
+                      <MenuItem value={'2'}>2</MenuItem>
+                      <MenuItem value={'3'}>3</MenuItem>
+                      <MenuItem value={'4'}>4</MenuItem>
+                      <MenuItem value={'5'}>5</MenuItem>
+                      <MenuItem value={'6'}>6</MenuItem>
+                    </Select>
+                  </Box>
+                  <Box sx={{ minWidth: '100px' }}>
+                    <LabelField
+                      title="Sort Angkatan"
+                      clearIcon={Boolean(angkatan)}
+                      onClickClearIcon={() => setAngkatan('')}
+                    />
+                    <AutoCompleteAsync
+                      size="small"
+                      keyAttribute="tahun_angkatan"
+                      paginateData
+                      initialLimit={3}
+                      value={angkatan || {}}
+                      module="tahun-angkatan"
+                      type="number"
+                      onChange={(x, y) => handleChangeAngkatan(x, y)}
+                    />
+                  </Box>
+                  <Box>
+                    <LabelField
+                      title="/Page"
+                      onClickClearIcon={() => {
+                        setPage(1);
+                        setLimit(40);
+                        limitInputRef.current.value = '';
+                      }}
+                      clearIcon={Boolean(limit !== 40)}
+                    />
+                    <TextField
+                      InputProps={{
+                        min: 1,
+                        max: 100,
+                      }}
+                      size="small"
+                      type="number"
+                      placeholder="40"
+                      inputRef={limitInputRef}
+                      onChange={debounce((i) => {
+                        setPage(1);
+                        setLimit(i.target.value);
+                      }, 500)}
+                      sx={{
+                        width: '100px',
+                      }}
+                    />
+                  </Box>
                 </Box>
               </Box>
             </Box>
           </Box>
+          <Box>
+            <TableComponen
+              hideOption
+              customIconSecondary={<LocalPrintshopIcon sx={{ color: purple[500] }} />}
+              colorHead="cyan"
+              count={totalPage}
+              pageOnchange={(x, y) => {
+                setPage(y);
+              }}
+              page={page}
+              handleSeeBill={handleSeeBill}
+              handlePrint={disabledPrintBill ? null : handlePrint}
+              tooltipHandlePrint="Print Surat Tagihan"
+              emptyTag="( sepertinya tidak ada siswa )"
+              tableBody={itemsRebuild}
+              tableHead={tableHead}
+              totalRows={
+                Boolean(jurusanId) || Boolean(kelas) || Boolean(search) || Boolean(subKelas) || Boolean(bill)
+                  ? totalRows
+                  : null
+              }
+              totalData={totalData}
+              isLoading={isLoading}
+            />
+          </Box>
         </Box>
-        <Box>
-          <TableComponen
-            hideOption
-            customIconSecondary={<LocalPrintshopIcon sx={{ color: purple[500] }} />}
-            colorHead="cyan"
-            count={totalPage}
-            pageOnchange={(x, y) => {
-              setPage(y);
-            }}
-            page={page}
-            handleSeeBill={handleSeeBill}
-            handlePrint={disabledPrintBill ? null : handlePrint}
-            tooltipHandlePrint="Print Surat Tagihan"
-            emptyTag="( sepertinya tidak ada siswa )"
-            tableBody={itemsRebuild}
-            tableHead={tableHead}
-            totalRows={
-              Boolean(jurusanId) || Boolean(kelas) || Boolean(search) || Boolean(subKelas) || Boolean(bill)
-                ? totalRows
-                : null
-            }
-            totalData={totalData}
-            isLoading={isLoading}
-          />
-        </Box>
+        <Outlet />
       </Box>
-      <Outlet />
-    </Box>
+    </ContainerCard>
   );
 }
 

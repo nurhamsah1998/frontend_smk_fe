@@ -2,29 +2,11 @@ import { useState, useContext } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
+import { Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
 import jwtDecode from 'jwt-decode';
+import { getInitialName } from '../../../utils/getInitialName';
 import { Dialog } from '../../../hooks/useContextHook';
 import { PROFILE } from '../../../hooks/useHelperContext';
-
-// ----------------------------------------------------------------------
-
-const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-  },
-];
-
-// ----------------------------------------------------------------------
 
 export default function AccountPopover() {
   const token = window.localStorage.getItem('accessToken');
@@ -78,7 +60,9 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={''} alt="photoURL" />
+        <Avatar src={''} alt="photoURL">
+          {getInitialName(itemsNoPagination?.nama)}
+        </Avatar>
       </IconButton>
 
       <Popover

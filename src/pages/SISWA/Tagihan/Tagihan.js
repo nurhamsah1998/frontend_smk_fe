@@ -4,17 +4,16 @@ import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import { FormatCurrency } from '../../../components/FormatCurrency';
+import ContainerCard from '../../../components/ContainerCard';
 
 function Tagihan() {
-  const [value, setValue] = React.useState(0);
-  const { itemsNoPagination: studentProfile } = React.useContext(PROFILE);
-  const { itemsNoPagination, isLoading } = React.useContext(PROFILE);
+  const { isLoading } = React.useContext(PROFILE);
   const { itemsNoPagination: tagihanPermanent } = useFetch({
-    module: `tagihan-permanent-siswa?tahun_angkatan=${studentProfile?.angkatan}`,
+    module: `tagihan-permanent-siswa-me`,
   });
   const { itemsNoPagination: paymentHistory } = useFetch({
     isCustom: true,
-    module: `invoice?kode_tagihan=${studentProfile?.kode_siswa}`,
+    module: `invoice-me`,
   });
   const dataRaw = tagihanPermanent?.map((x) => {
     delete x?.id;
@@ -87,47 +86,49 @@ function Tagihan() {
     },
   ];
   return (
-    <Box>
-      <Box mb={2}>
-        <Typography variant="h5">Ringkasan tagihanmu</Typography>
-        {detailBill?.map((item, index) => (
-          <Box key={index} sx={{ display: 'flex', gap: 2, width: '100%' }}>
-            <Typography sx={{ width: '30%' }}>{item?.label}</Typography>
-            <Typography>: {FormatCurrency(item?.value)}</Typography>
-          </Box>
-        ))}
+    <ContainerCard>
+      <Box>
+        <Box mb={2}>
+          <Typography variant="h5">Ringkasan tagihanmu</Typography>
+          {detailBill?.map((item, index) => (
+            <Box key={index} sx={{ display: 'flex', gap: 2, width: '100%' }}>
+              <Typography sx={{ width: '30%' }}>{item?.label}</Typography>
+              <Typography>: {FormatCurrency(item?.value)}</Typography>
+            </Box>
+          ))}
+        </Box>
+        <Divider />
+        <Box sx={{ my: 2 }}>
+          <Typography variant="h5">Tagihan mu</Typography>
+          <TableComponen
+            isLoading={isLoading}
+            isTotal
+            emptyTag="masih belum ada tagihan"
+            hideOption
+            totalBill={totalBillStudent}
+            tableHead={tableHeadTagihanSiswa}
+            disablePagination
+            colorHead="cyan"
+            tableBody={itemsRebuild}
+          />
+        </Box>
+        <Divider />
+        <Box sx={{ my: 2 }}>
+          <Typography variant="h5">Riwayat pembayaranmu</Typography>
+          <TableComponen
+            isLoading={isLoading}
+            emptyTag="sepertinya belum ada transaksi"
+            hideOption
+            isTotal
+            totalBill={totalBillPaymentHistory}
+            tableHead={tableHeadPembayaranSiswa}
+            disablePagination
+            colorHead="cyan"
+            tableBody={paymentHistory}
+          />
+        </Box>
       </Box>
-      <Divider />
-      <Box sx={{ my: 2 }}>
-        <Typography variant="h5">Tagihan mu</Typography>
-        <TableComponen
-          isLoading={isLoading}
-          isTotal
-          emptyTag="masih belum ada tagihan"
-          hideOption
-          totalBill={totalBillStudent}
-          tableHead={tableHeadTagihanSiswa}
-          disablePagination
-          colorHead="cyan"
-          tableBody={itemsRebuild}
-        />
-      </Box>
-      <Divider />
-      <Box sx={{ my: 2 }}>
-        <Typography variant="h5">Riwayat pembayaranmu</Typography>
-        <TableComponen
-          isLoading={isLoading}
-          emptyTag="sepertinya belum ada transaksi"
-          hideOption
-          isTotal
-          totalBill={totalBillPaymentHistory}
-          tableHead={tableHeadPembayaranSiswa}
-          disablePagination
-          colorHead="cyan"
-          tableBody={paymentHistory}
-        />
-      </Box>
-    </Box>
+    </ContainerCard>
   );
 }
 

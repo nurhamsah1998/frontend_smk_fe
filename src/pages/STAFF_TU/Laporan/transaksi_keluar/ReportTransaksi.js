@@ -1,6 +1,6 @@
 import { Box, MenuItem, Select, TextField, Menu, Button } from '@mui/material';
 import React, { useRef } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { jsPDF as JSPDF } from 'jspdf';
@@ -15,6 +15,7 @@ import CustomDatePicker from '../../../../components/CustomDatePicker';
 import TableComponen from '../../../../components/TableComponent';
 import { FormatCurrency } from '../../../../components/FormatCurrency';
 import CreateInvoiceOut from './CreateInvoiceOut';
+import ContainerCard from '../../../../components/ContainerCard';
 
 export const KopPdf = (doc) => {
   const img = new Image();
@@ -224,164 +225,166 @@ function ReportTransaksi() {
     }
   };
   return (
-    <Box>
-      <CreateInvoiceOut open={openModalCreate} handleClose={() => setOpenModalCreate(false)} />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2, gap: 1 }}>
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Box>
-            <Button
-              startIcon={<DownloadIcon />}
-              variant="contained"
-              id="basic-button"
-              aria-controls={open ? 'basic-menu' : undefined}
-              aria-haspopup="true"
-              disabled={Boolean(itemsRebuild?.length === 0)}
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-            >
-              Download File
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              <MenuItem onClick={() => handleDownloadFile('pdf')}>Download PDF</MenuItem>
-              <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
-            </Menu>
-          </Box>
-          <Button
-            startIcon={<MonetizationOnIcon />}
-            onClick={() => setOpenModalCreate(true)}
-            variant="contained"
-            color="warning"
-          >
-            Buat pengeluaran
-          </Button>
-        </Box>
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', gap: 1, mb: '4px' }}>
+    <ContainerCard>
+      <Box>
+        <CreateInvoiceOut open={openModalCreate} handleClose={() => setOpenModalCreate(false)} />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2, gap: 1 }}>
+          <Box sx={{ display: 'flex', gap: 1 }}>
             <Box>
-              <LabelField title="Custom filter tanggal" />
-              <CustomDatePicker
-                disabled={Boolean(filteraTanggalOption.start)}
-                setEndDate={setEndDate}
-                endDate={endDate}
-                setStartDate={setStartDate}
-                startDate={startDate}
-              />
-            </Box>
-            <Box>
-              <LabelField
-                title="Filter tanggal"
-                onClickClearIcon={() => {
-                  setFilterTanggal('');
-                  setFilteraTanggalOption({ start: null, end: null });
-                }}
-                clearIcon={Boolean(filterTanggal)}
-              />
-              <Select
-                sx={{
-                  minWidth: '140px',
-                }}
-                disabled={Boolean(startDate)}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={filterTanggal}
-                size="small"
-                onChange={(event) => {
-                  const type = event.target.value;
-                  const date = new Date();
-                  setPage(1);
-                  if (type === 'day') {
-                    /// https://stackoverflow.com/a/12970385/18038473
-                    setFilteraTanggalOption({
-                      start: moment(date).startOf('day').format('YYYY-MM-DD H:mm:ss'),
-                      end: moment(date).endOf('day').format('YYYY-MM-DD H:mm:ss'),
-                    });
-                  }
-                  if (type === 'week') {
-                    /// https://stackoverflow.com/a/12970385/18038473
-                    setFilteraTanggalOption({
-                      start: moment(date).startOf('week').format('YYYY-MM-DD H:mm:ss'),
-                      end: moment(date).endOf('week').format('YYYY-MM-DD H:mm:ss'),
-                    });
-                  }
-                  if (type === 'month') {
-                    /// https://stackoverflow.com/a/12970385/18038473
-                    setFilteraTanggalOption({
-                      start: moment(date).startOf('month').format('YYYY-MM-DD H:mm:ss'),
-                      end: moment(date).endOf('month').format('YYYY-MM-DD H:mm:ss'),
-                    });
-                  }
-                  if (type === 'year') {
-                    /// https://stackoverflow.com/a/12970385/18038473
-                    setFilteraTanggalOption({
-                      start: moment(date).startOf('year').format('YYYY-MM-DD H:mm:ss'),
-                      end: moment(date).endOf('year').format('YYYY-MM-DD H:mm:ss'),
-                    });
-                  }
-                  setFilterTanggal(event.target.value);
+              <Button
+                startIcon={<DownloadIcon />}
+                variant="contained"
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                disabled={Boolean(itemsRebuild?.length === 0)}
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+              >
+                Download File
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem value={`day`}>Hari ini</MenuItem>
-                <MenuItem value={'week'}>Minggu ini</MenuItem>
-                <MenuItem value={'month'}>Bulan ini</MenuItem>
-                <MenuItem value={'year'}>Tahun ini</MenuItem>
-              </Select>
+                <MenuItem onClick={() => handleDownloadFile('pdf')}>Download PDF</MenuItem>
+                <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
+              </Menu>
             </Box>
+            <Button
+              startIcon={<MonetizationOnIcon />}
+              onClick={() => setOpenModalCreate(true)}
+              variant="contained"
+              color="warning"
+            >
+              Buat pengeluaran
+            </Button>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-            <Box>
-              <LabelField
-                title="/Page"
-                onClickClearIcon={() => {
-                  setPage(1);
-                  setLimit(40);
-                  limitInputRef.current.value = '';
-                }}
-                clearIcon={Boolean(limit !== 40)}
-              />
-              <TextField
-                inputProps={{
-                  min: 1,
-                  max: 100,
-                }}
-                size="small"
-                type="number"
-                placeholder="40"
-                inputRef={limitInputRef}
-                onChange={debounce((i) => {
-                  setPage(1);
-                  setLimit(i.target.value);
-                }, 500)}
-                sx={{
-                  width: '100px',
-                }}
-              />
+          <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', gap: 1, mb: '4px' }}>
+              <Box>
+                <LabelField title="Custom filter tanggal" />
+                <CustomDatePicker
+                  disabled={Boolean(filteraTanggalOption.start)}
+                  setEndDate={setEndDate}
+                  endDate={endDate}
+                  setStartDate={setStartDate}
+                  startDate={startDate}
+                />
+              </Box>
+              <Box>
+                <LabelField
+                  title="Filter tanggal"
+                  onClickClearIcon={() => {
+                    setFilterTanggal('');
+                    setFilteraTanggalOption({ start: null, end: null });
+                  }}
+                  clearIcon={Boolean(filterTanggal)}
+                />
+                <Select
+                  sx={{
+                    minWidth: '140px',
+                  }}
+                  disabled={Boolean(startDate)}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={filterTanggal}
+                  size="small"
+                  onChange={(event) => {
+                    const type = event.target.value;
+                    const date = new Date();
+                    setPage(1);
+                    if (type === 'day') {
+                      /// https://stackoverflow.com/a/12970385/18038473
+                      setFilteraTanggalOption({
+                        start: moment(date).startOf('day').format('YYYY-MM-DD H:mm:ss'),
+                        end: moment(date).endOf('day').format('YYYY-MM-DD H:mm:ss'),
+                      });
+                    }
+                    if (type === 'week') {
+                      /// https://stackoverflow.com/a/12970385/18038473
+                      setFilteraTanggalOption({
+                        start: moment(date).startOf('week').format('YYYY-MM-DD H:mm:ss'),
+                        end: moment(date).endOf('week').format('YYYY-MM-DD H:mm:ss'),
+                      });
+                    }
+                    if (type === 'month') {
+                      /// https://stackoverflow.com/a/12970385/18038473
+                      setFilteraTanggalOption({
+                        start: moment(date).startOf('month').format('YYYY-MM-DD H:mm:ss'),
+                        end: moment(date).endOf('month').format('YYYY-MM-DD H:mm:ss'),
+                      });
+                    }
+                    if (type === 'year') {
+                      /// https://stackoverflow.com/a/12970385/18038473
+                      setFilteraTanggalOption({
+                        start: moment(date).startOf('year').format('YYYY-MM-DD H:mm:ss'),
+                        end: moment(date).endOf('year').format('YYYY-MM-DD H:mm:ss'),
+                      });
+                    }
+                    setFilterTanggal(event.target.value);
+                  }}
+                >
+                  <MenuItem value={`day`}>Hari ini</MenuItem>
+                  <MenuItem value={'week'}>Minggu ini</MenuItem>
+                  <MenuItem value={'month'}>Bulan ini</MenuItem>
+                  <MenuItem value={'year'}>Tahun ini</MenuItem>
+                </Select>
+              </Box>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+              <Box>
+                <LabelField
+                  title="/Page"
+                  onClickClearIcon={() => {
+                    setPage(1);
+                    setLimit(40);
+                    limitInputRef.current.value = '';
+                  }}
+                  clearIcon={Boolean(limit !== 40)}
+                />
+                <TextField
+                  inputProps={{
+                    min: 1,
+                    max: 100,
+                  }}
+                  size="small"
+                  type="number"
+                  placeholder="40"
+                  inputRef={limitInputRef}
+                  onChange={debounce((i) => {
+                    setPage(1);
+                    setLimit(i.target.value);
+                  }, 500)}
+                  sx={{
+                    width: '100px',
+                  }}
+                />
+              </Box>
             </Box>
           </Box>
         </Box>
+        <TableComponen
+          colorHead="cyan"
+          count={totalPage}
+          pageOnchange={(x, y) => {
+            setPage(y);
+          }}
+          page={page}
+          tableBody={itemsRebuild}
+          tableHead={tableHead}
+          emptyTag="( sepertinya belum ada transaksi di hari ini )"
+          totalRows={Boolean(endDate) || Boolean(kelas) || Boolean(subKelas) || Boolean(jurusan) ? totalRows : null}
+          totalData={totalData}
+          isLoading={isLoading}
+        />
       </Box>
-      <TableComponen
-        colorHead="cyan"
-        count={totalPage}
-        pageOnchange={(x, y) => {
-          setPage(y);
-        }}
-        page={page}
-        tableBody={itemsRebuild}
-        tableHead={tableHead}
-        emptyTag="( sepertinya belum ada transaksi di hari ini )"
-        totalRows={Boolean(endDate) || Boolean(kelas) || Boolean(subKelas) || Boolean(jurusan) ? totalRows : null}
-        totalData={totalData}
-        isLoading={isLoading}
-      />
-    </Box>
+    </ContainerCard>
   );
 }
 

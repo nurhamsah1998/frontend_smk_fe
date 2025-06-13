@@ -1,7 +1,6 @@
 import React from 'react';
 import jwtDecode from 'jwt-decode';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import { orange } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import { themeAppColors } from './theme/themeAppColor';
 

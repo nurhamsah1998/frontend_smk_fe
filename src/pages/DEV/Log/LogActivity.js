@@ -4,6 +4,7 @@ import { JsonView, darkStyles, collapseAllNested } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import ContainerCard from '../../../components/ContainerCard';
 import useFetch from '../../../hooks/useFetch';
 import TableComponen from '../../../components/TableComponent';
 import { LabelField } from '../../../components/Commons';
@@ -42,31 +43,38 @@ function LogActivity() {
   }, [items]);
 
   return (
-    <Box>
-      <Box sx={{ mb: 3 }}>
-        <LabelField title="Filter tanggal" />
-        <CustomDatePicker setEndDate={setEndDate} setStartDate={setStartDate} startDate={startDate} endDate={endDate} />
+    <ContainerCard>
+      <Box>
+        <Box sx={{ mb: 3 }}>
+          <LabelField title="Filter tanggal" />
+          <CustomDatePicker
+            setEndDate={setEndDate}
+            setStartDate={setStartDate}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        </Box>
+        <TableComponen
+          hideOption
+          colorHead="cyan"
+          count={totalPage}
+          pageOnchange={(x, y) => {
+            setPage(y);
+          }}
+          page={page}
+          tableBody={itemsRebuild}
+          tableHead={head}
+          totalRows={Boolean(endDate) ? totalRows : null}
+          emptyTag={
+            Boolean(endDate)
+              ? `( tidak bisa menemukan, mungkin masih belum ada aktivitas diwaktu tersebut )`
+              : '( sepertinya belum ada aktivitas )'
+          }
+          totalData={totalData}
+          isLoading={isLoading}
+        />
       </Box>
-      <TableComponen
-        hideOption
-        colorHead="cyan"
-        count={totalPage}
-        pageOnchange={(x, y) => {
-          setPage(y);
-        }}
-        page={page}
-        tableBody={itemsRebuild}
-        tableHead={head}
-        totalRows={Boolean(endDate) ? totalRows : null}
-        emptyTag={
-          Boolean(endDate)
-            ? `( tidak bisa menemukan, mungkin masih belum ada aktivitas diwaktu tersebut )`
-            : '( sepertinya belum ada aktivitas )'
-        }
-        totalData={totalData}
-        isLoading={isLoading}
-      />
-    </Box>
+    </ContainerCard>
   );
 }
 

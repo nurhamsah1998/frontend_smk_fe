@@ -25,6 +25,7 @@ const ReportTransaksiKeluar = lazy(() => import('./pages/STAFF_TU/Laporan/transa
 const LogActivity = lazy(() => import('./pages/DEV/Log/LogActivity'));
 const DashboardDev = lazy(() => import('./pages/DEV/Dashboard/Dashboard'));
 const Account = lazy(() => import('./pages/DEV/Account/Account'));
+const Major = lazy(() => import('./pages/DEV/major/Major'));
 const Campaign = lazy(() => import('./pages/STAFF_TU/Campaign/Campaign'));
 
 // ----------------------------------------------------------------------
@@ -39,6 +40,7 @@ export default function Router() {
         { path: 'dashboard', element: <DashboardDev /> },
         { path: 'log-activity', element: <LogActivity /> },
         { path: 'account', element: <Account /> },
+        { path: 'major', element: <Major /> },
       ],
     },
     {

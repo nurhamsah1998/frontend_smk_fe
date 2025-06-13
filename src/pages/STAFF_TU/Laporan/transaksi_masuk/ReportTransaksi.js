@@ -1,6 +1,6 @@
 import { Box, MenuItem, Select, TextField, Menu, Button } from '@mui/material';
 import React, { useRef } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { jsPDF as JSPDF } from 'jspdf';
@@ -14,6 +14,7 @@ import { ClearFilter } from '../../Pembayaran/Pembayaran';
 import CustomDatePicker from '../../../../components/CustomDatePicker';
 import TableComponen from '../../../../components/TableComponent';
 import { FormatCurrency } from '../../../../components/FormatCurrency';
+import ContainerCard from '../../../../components/ContainerCard';
 
 export const KopPdf = (doc) => {
   const img = new Image();
@@ -250,246 +251,248 @@ function ReportTransaksi() {
     }
   };
   return (
-    <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2, gap: 1 }}>
-        <Box>
-          <Button
-            startIcon={<DownloadIcon />}
-            variant="contained"
-            id="basic-button"
-            aria-controls={open ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            disabled={Boolean(itemsRebuild?.length === 0)}
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-          >
-            Download File
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem onClick={() => handleDownloadFile('pdf')}>Download PDF</MenuItem>
-            <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
-          </Menu>
-        </Box>
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', gap: 1, mb: '4px' }}>
-            <Box>
-              <LabelField
-                title="Sort Jurusan"
-                clearIcon={Boolean(jurusan)}
-                onClickClearIcon={() => {
-                  setJurusan('');
-                }}
-              />
-              <Select
-                sx={{
-                  minWidth: '270px',
-                }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={jurusan || ''}
-                size="small"
-                onChange={handleChangesJurusan}
-              >
-                {data?.data?.map((item, index) => (
-                  <MenuItem
-                    key={index}
-                    onClick={() => {
-                      setJurusan(item?.kode_jurusan);
-                      // setJurusanFullName(item?.nama);
-                    }}
-                    value={item?.kode_jurusan}
-                  >
-                    {item?.nama}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Box>
-            <Box>
-              <LabelField
-                title="Filter tanggal"
-                onClickClearIcon={() => {
-                  setFilterTanggal('');
-                  setFilteraTanggalOption({ start: null, end: null });
-                }}
-                clearIcon={Boolean(filterTanggal)}
-              />
-              <Select
-                sx={{
-                  minWidth: '140px',
-                }}
-                disabled={Boolean(startDate)}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={filterTanggal}
-                size="small"
-                onChange={(event) => {
-                  const type = event.target.value;
-                  const date = new Date();
-                  setPage(1);
-                  if (type === 'day') {
-                    /// https://stackoverflow.com/a/12970385/18038473
-                    setFilteraTanggalOption({
-                      start: moment(date).startOf('day').format('YYYY-MM-DD H:mm:ss'),
-                      end: moment(date).endOf('day').format('YYYY-MM-DD H:mm:ss'),
-                    });
-                  }
-                  if (type === 'week') {
-                    /// https://stackoverflow.com/a/12970385/18038473
-                    setFilteraTanggalOption({
-                      start: moment(date).startOf('week').format('YYYY-MM-DD H:mm:ss'),
-                      end: moment(date).endOf('week').format('YYYY-MM-DD H:mm:ss'),
-                    });
-                  }
-                  if (type === 'month') {
-                    /// https://stackoverflow.com/a/12970385/18038473
-                    setFilteraTanggalOption({
-                      start: moment(date).startOf('month').format('YYYY-MM-DD H:mm:ss'),
-                      end: moment(date).endOf('month').format('YYYY-MM-DD H:mm:ss'),
-                    });
-                  }
-                  if (type === 'year') {
-                    /// https://stackoverflow.com/a/12970385/18038473
-                    setFilteraTanggalOption({
-                      start: moment(date).startOf('year').format('YYYY-MM-DD H:mm:ss'),
-                      end: moment(date).endOf('year').format('YYYY-MM-DD H:mm:ss'),
-                    });
-                  }
-                  setFilterTanggal(event.target.value);
-                }}
-              >
-                <MenuItem value={`day`}>Hari ini</MenuItem>
-                <MenuItem value={'week'}>Minggu ini</MenuItem>
-                <MenuItem value={'month'}>Bulan ini</MenuItem>
-                <MenuItem value={'year'}>Tahun ini</MenuItem>
-              </Select>
-            </Box>
-            {[Boolean(jurusan), Boolean(kelas), Boolean(subKelas), Boolean(filterTanggal), Boolean(startDate)].filter(
-              (item) => item
-            )?.length > 2 ? (
-              <ClearFilter
-                handleClear={() => {
-                  setJurusan('');
-                  setKelas('');
-                  setSubKelasKelas('');
-                  setFilterTanggal('');
-                  setFilteraTanggalOption({ start: null, end: null });
-                  setEndDate(null);
-                  setStartDate(null);
-                }}
-              />
-            ) : null}
+    <ContainerCard>
+      <Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2, gap: 1 }}>
+          <Box>
+            <Button
+              startIcon={<DownloadIcon />}
+              variant="contained"
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              disabled={Boolean(itemsRebuild?.length === 0)}
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+            >
+              Download File
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={() => handleDownloadFile('pdf')}>Download PDF</MenuItem>
+              <MenuItem onClick={() => handleDownloadFile('xlsx')}>Download XLSX</MenuItem>
+            </Menu>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-            <Box>
-              <LabelField title="Custom filter tanggal" />
-              <CustomDatePicker
-                disabled={Boolean(filteraTanggalOption.start)}
-                setEndDate={setEndDate}
-                endDate={endDate}
-                setStartDate={setStartDate}
-                startDate={startDate}
-              />
+          <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', gap: 1, mb: '4px' }}>
+              <Box>
+                <LabelField
+                  title="Sort Jurusan"
+                  clearIcon={Boolean(jurusan)}
+                  onClickClearIcon={() => {
+                    setJurusan('');
+                  }}
+                />
+                <Select
+                  sx={{
+                    minWidth: '270px',
+                  }}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={jurusan || ''}
+                  size="small"
+                  onChange={handleChangesJurusan}
+                >
+                  {data?.data?.map((item, index) => (
+                    <MenuItem
+                      key={index}
+                      onClick={() => {
+                        setJurusan(item?.kode_jurusan);
+                        // setJurusanFullName(item?.nama);
+                      }}
+                      value={item?.kode_jurusan}
+                    >
+                      {item?.nama}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Box>
+              <Box>
+                <LabelField
+                  title="Filter tanggal"
+                  onClickClearIcon={() => {
+                    setFilterTanggal('');
+                    setFilteraTanggalOption({ start: null, end: null });
+                  }}
+                  clearIcon={Boolean(filterTanggal)}
+                />
+                <Select
+                  sx={{
+                    minWidth: '140px',
+                  }}
+                  disabled={Boolean(startDate)}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={filterTanggal}
+                  size="small"
+                  onChange={(event) => {
+                    const type = event.target.value;
+                    const date = new Date();
+                    setPage(1);
+                    if (type === 'day') {
+                      /// https://stackoverflow.com/a/12970385/18038473
+                      setFilteraTanggalOption({
+                        start: moment(date).startOf('day').format('YYYY-MM-DD H:mm:ss'),
+                        end: moment(date).endOf('day').format('YYYY-MM-DD H:mm:ss'),
+                      });
+                    }
+                    if (type === 'week') {
+                      /// https://stackoverflow.com/a/12970385/18038473
+                      setFilteraTanggalOption({
+                        start: moment(date).startOf('week').format('YYYY-MM-DD H:mm:ss'),
+                        end: moment(date).endOf('week').format('YYYY-MM-DD H:mm:ss'),
+                      });
+                    }
+                    if (type === 'month') {
+                      /// https://stackoverflow.com/a/12970385/18038473
+                      setFilteraTanggalOption({
+                        start: moment(date).startOf('month').format('YYYY-MM-DD H:mm:ss'),
+                        end: moment(date).endOf('month').format('YYYY-MM-DD H:mm:ss'),
+                      });
+                    }
+                    if (type === 'year') {
+                      /// https://stackoverflow.com/a/12970385/18038473
+                      setFilteraTanggalOption({
+                        start: moment(date).startOf('year').format('YYYY-MM-DD H:mm:ss'),
+                        end: moment(date).endOf('year').format('YYYY-MM-DD H:mm:ss'),
+                      });
+                    }
+                    setFilterTanggal(event.target.value);
+                  }}
+                >
+                  <MenuItem value={`day`}>Hari ini</MenuItem>
+                  <MenuItem value={'week'}>Minggu ini</MenuItem>
+                  <MenuItem value={'month'}>Bulan ini</MenuItem>
+                  <MenuItem value={'year'}>Tahun ini</MenuItem>
+                </Select>
+              </Box>
+              {[Boolean(jurusan), Boolean(kelas), Boolean(subKelas), Boolean(filterTanggal), Boolean(startDate)].filter(
+                (item) => item
+              )?.length > 2 ? (
+                <ClearFilter
+                  handleClear={() => {
+                    setJurusan('');
+                    setKelas('');
+                    setSubKelasKelas('');
+                    setFilterTanggal('');
+                    setFilteraTanggalOption({ start: null, end: null });
+                    setEndDate(null);
+                    setStartDate(null);
+                  }}
+                />
+              ) : null}
             </Box>
-            <Box>
-              <LabelField title="Sort Kelas" onClickClearIcon={() => setKelas('')} clearIcon={Boolean(kelas)} />
-              <Select
-                sx={{
-                  minWidth: '100px',
-                }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={kelas}
-                size="small"
-                onChange={(event) => {
-                  setPage(1);
-                  setKelas(event.target.value);
-                }}
-              >
-                <MenuItem value={'10'}>10</MenuItem>
-                <MenuItem value={'11'}>11</MenuItem>
-                <MenuItem value={'12'}>12</MenuItem>
-              </Select>
-            </Box>
-            <Box>
-              <LabelField
-                title="Sort Sub Kelas"
-                onClickClearIcon={() => setSubKelasKelas('')}
-                clearIcon={Boolean(subKelas)}
-              />
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+              <Box>
+                <LabelField title="Custom filter tanggal" />
+                <CustomDatePicker
+                  disabled={Boolean(filteraTanggalOption.start)}
+                  setEndDate={setEndDate}
+                  endDate={endDate}
+                  setStartDate={setStartDate}
+                  startDate={startDate}
+                />
+              </Box>
+              <Box>
+                <LabelField title="Sort Kelas" onClickClearIcon={() => setKelas('')} clearIcon={Boolean(kelas)} />
+                <Select
+                  sx={{
+                    minWidth: '100px',
+                  }}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={kelas}
+                  size="small"
+                  onChange={(event) => {
+                    setPage(1);
+                    setKelas(event.target.value);
+                  }}
+                >
+                  <MenuItem value={'10'}>10</MenuItem>
+                  <MenuItem value={'11'}>11</MenuItem>
+                  <MenuItem value={'12'}>12</MenuItem>
+                </Select>
+              </Box>
+              <Box>
+                <LabelField
+                  title="Sort Sub Kelas"
+                  onClickClearIcon={() => setSubKelasKelas('')}
+                  clearIcon={Boolean(subKelas)}
+                />
 
-              <Select
-                sx={{
-                  minWidth: '130px',
-                }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={subKelas}
-                size="small"
-                onChange={handleChangeSubKelas}
-              >
-                <MenuItem value={'1'}>1</MenuItem>
-                <MenuItem value={'2'}>2</MenuItem>
-                <MenuItem value={'3'}>3</MenuItem>
-                <MenuItem value={'4'}>4</MenuItem>
-                <MenuItem value={'5'}>5</MenuItem>
-                <MenuItem value={'6'}>6</MenuItem>
-              </Select>
-            </Box>
+                <Select
+                  sx={{
+                    minWidth: '130px',
+                  }}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={subKelas}
+                  size="small"
+                  onChange={handleChangeSubKelas}
+                >
+                  <MenuItem value={'1'}>1</MenuItem>
+                  <MenuItem value={'2'}>2</MenuItem>
+                  <MenuItem value={'3'}>3</MenuItem>
+                  <MenuItem value={'4'}>4</MenuItem>
+                  <MenuItem value={'5'}>5</MenuItem>
+                  <MenuItem value={'6'}>6</MenuItem>
+                </Select>
+              </Box>
 
-            <Box>
-              <LabelField
-                title="/Page"
-                onClickClearIcon={() => {
-                  setPage(1);
-                  setLimit(40);
-                  limitInputRef.current.value = '';
-                }}
-                clearIcon={Boolean(limit !== 40)}
-              />
-              <TextField
-                inputProps={{
-                  min: 1,
-                  max: 100,
-                }}
-                size="small"
-                type="number"
-                placeholder="40"
-                inputRef={limitInputRef}
-                onChange={debounce((i) => {
-                  setPage(1);
-                  setLimit(i.target.value);
-                }, 500)}
-                sx={{
-                  width: '100px',
-                }}
-              />
+              <Box>
+                <LabelField
+                  title="/Page"
+                  onClickClearIcon={() => {
+                    setPage(1);
+                    setLimit(40);
+                    limitInputRef.current.value = '';
+                  }}
+                  clearIcon={Boolean(limit !== 40)}
+                />
+                <TextField
+                  inputProps={{
+                    min: 1,
+                    max: 100,
+                  }}
+                  size="small"
+                  type="number"
+                  placeholder="40"
+                  inputRef={limitInputRef}
+                  onChange={debounce((i) => {
+                    setPage(1);
+                    setLimit(i.target.value);
+                  }, 500)}
+                  sx={{
+                    width: '100px',
+                  }}
+                />
+              </Box>
             </Box>
           </Box>
         </Box>
+        <TableComponen
+          colorHead="cyan"
+          count={totalPage}
+          pageOnchange={(x, y) => {
+            setPage(y);
+          }}
+          page={page}
+          tableBody={itemsRebuild}
+          tableHead={tableHead}
+          emptyTag="( sepertinya belum ada transaksi di hari ini )"
+          totalRows={Boolean(endDate) || Boolean(kelas) || Boolean(subKelas) || Boolean(jurusan) ? totalRows : null}
+          totalData={totalData}
+          isLoading={isLoading}
+        />
       </Box>
-      <TableComponen
-        colorHead="cyan"
-        count={totalPage}
-        pageOnchange={(x, y) => {
-          setPage(y);
-        }}
-        page={page}
-        tableBody={itemsRebuild}
-        tableHead={tableHead}
-        emptyTag="( sepertinya belum ada transaksi di hari ini )"
-        totalRows={Boolean(endDate) || Boolean(kelas) || Boolean(subKelas) || Boolean(jurusan) ? totalRows : null}
-        totalData={totalData}
-        isLoading={isLoading}
-      />
-    </Box>
+    </ContainerCard>
   );
 }
 

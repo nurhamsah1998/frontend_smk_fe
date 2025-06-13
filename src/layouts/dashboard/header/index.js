@@ -4,16 +4,12 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Box, Stack, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import { grey } from '@mui/material/colors';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // components
 import Iconify from '../../../components/iconify';
 //
-import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
-import NotificationsPopover from './NotificationsPopover';
 import { themeAppColors } from '../../../theme/themeAppColor';
 
 // ----------------------------------------------------------------------
@@ -81,8 +77,6 @@ export default function Header({ onOpenNav, navConfigMenu }) {
               {currentPage?.title || 'Detail Pembayaran'}
             </Typography>
           </Box>
-          {/* <LanguagePopover />
-          <NotificationsPopover /> */}
           <AccountPopover />
         </Stack>
       </StyledToolbar>

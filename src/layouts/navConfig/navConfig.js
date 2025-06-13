@@ -8,6 +8,7 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
+import SchoolIcon from '@mui/icons-material/School';
 
 import SvgColor from '../../components/svg-color';
 
@@ -44,7 +45,6 @@ export const navConfigTU = [
     permission: false,
     name: 'pembayaran',
   },
-
   {
     title: 'Transaksi Masuk',
     path: '/staff-tu/laporan-transaksi-masuk',
@@ -92,6 +92,12 @@ export const navConfigDEV = [
     path: '/dev/account',
     name: 'account_staff',
     icon: <AssignmentIndIcon />,
+  },
+  {
+    title: 'Jurusan',
+    path: '/dev/major',
+    name: 'major',
+    icon: <SchoolIcon />,
   },
 ];
 export const navConfigPPDB = [

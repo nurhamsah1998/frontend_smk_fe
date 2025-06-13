@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import PropTypes from 'prop-types';
 import { useEffect, useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -18,7 +19,6 @@ import {
 } from '@mui/material';
 // hooks
 import { useQueryClient } from '@tanstack/react-query';
-import { useSnackbar } from 'notistack';
 import useResponsive from '../../../hooks/useResponsive';
 // components
 import Scrollbar from '../../../components/scrollbar';
@@ -28,6 +28,7 @@ import ScreenDialog from '../../../components/ScreenDialog';
 //
 import navConfig from './config';
 import useMutationPatch from '../../../hooks/useMutationPatch';
+import { getInitialName, randomColorInitialName } from '../../../utils/getInitialName';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +55,6 @@ export default function Nav({ openNav, onCloseNav }) {
   const [value, setValue] = useState('');
   const navigate = useNavigate();
   const client = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
   const { itemsNoPagination, isLoading } = useContext(PROFILE);
   const isDesktop = useResponsive('up', 'md');
   const mutation = useMutationPatch({
@@ -65,12 +65,6 @@ export default function Nav({ openNav, onCloseNav }) {
     },
   });
   const handleSave = () => {
-    if (value.length <= 5 || value.length >= 12) {
-      enqueueSnackbar('Nomor telepon tidak valid (min 5 karakter, max 12 karakter)', {
-        variant: 'error',
-      });
-      return;
-    }
     mutation.mutate({ id: itemsNoPagination?.id, noHP: value });
   };
   useEffect(() => {
@@ -90,7 +84,17 @@ export default function Nav({ openNav, onCloseNav }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={''} alt="photoURL" />
+            <Avatar
+              src={''}
+              sx={{
+                border: () => `solid 2px #fff`,
+                bgcolor: randomColorInitialName(itemsNoPagination?.nama),
+                textTransform: 'capitalize',
+              }}
+              alt="photoURL"
+            >
+              {getInitialName(itemsNoPagination?.nama)}
+            </Avatar>
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary', textTransform: 'capitalize' }}>
                 {isLoading ? <LinearProgress /> : itemsNoPagination?.nama}
@@ -176,6 +180,7 @@ export default function Nav({ openNav, onCloseNav }) {
               <Typography>No Hp</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <TextField
+                  type="number"
                   placeholder="contoh: 81213221343 "
                   defaultValue={itemsNoPagination?.noHP || ''}
                   onChange={(i) => setValue(i.target.value)}
@@ -188,7 +193,10 @@ export default function Nav({ openNav, onCloseNav }) {
             </Box>
           ) : (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <ListItemText primary="No Hp" secondary={`${itemsNoPagination?.noHP}` || '-'} />
+              <ListItemText
+                primary="No Hp"
+                secondary={`${itemsNoPagination?.noHP == 0 ? '-' : itemsNoPagination?.noHP}` || '-'}
+              />
               <Button onClick={() => setEdit(true)} variant="contained">
                 Edit
               </Button>

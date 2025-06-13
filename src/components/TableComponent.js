@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable arrow-body-style */
 import React, { memo, useMemo } from 'react';
 import {
@@ -16,11 +17,12 @@ import {
   CircularProgress,
   Tooltip,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import moment from 'moment/moment';
 import 'moment/locale/id';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
-import { grey, green, red, blue, orange, cyan, purple } from '@mui/material/colors';
+import { grey, green, red, blue, orange, purple } from '@mui/material/colors';
 import { FormatCurrency } from './FormatCurrency';
 import { themeAppColors } from '../theme/themeAppColor';
 import TableRowDate from './TableRowDate';
@@ -49,6 +51,7 @@ function TableComponen({
   totalData,
   customIcon,
   customIconSecondary,
+  handleDelete,
   handlePrint,
   tooltipHandlePrint = '',
   tooltipCustom = '',
@@ -167,6 +170,7 @@ function TableComponen({
                     handleSeeBill={handleSeeBill}
                     setAnchorEl={setAnchorEl}
                     handleCustomOnClickRow={handleCustomOnClickRow}
+                    handleDelete={handleDelete}
                     tooltipCustom={tooltipCustom}
                     customIcon={customIcon}
                     handlePrint={handlePrint}
@@ -247,6 +251,7 @@ function TableComponen({
 const Row = memo(
   ({
     tableHead,
+    handleDelete,
     bodyIndex,
     body,
     handleSeeBill,
@@ -292,6 +297,13 @@ const Row = memo(
                   }}
                 >
                   <RequestQuoteIcon color="primary" />
+                </IconButton>
+              </Tooltip>
+            ) : null}
+            {handleDelete ? (
+              <Tooltip arrow title="Hapus">
+                <IconButton sx={{ color: red[500] }} onClick={() => handleDelete(body)}>
+                  <DeleteIcon />
                 </IconButton>
               </Tooltip>
             ) : null}

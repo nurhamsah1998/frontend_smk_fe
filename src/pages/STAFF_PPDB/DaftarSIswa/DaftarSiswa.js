@@ -1,7 +1,7 @@
 import { Box, Button, Menu, MenuItem, Select, Typography, TextField, ListItemText } from '@mui/material';
 
 import React, { useCallback, useRef } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { blue, orange } from '@mui/material/colors';
 import AddIcon from '@mui/icons-material/Add';
@@ -19,6 +19,7 @@ import { LabelField } from '../../../components/Commons';
 import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 import StudentDetail from '../../STAFF_TU/Pembayaran/Modal/StudentDetail';
 import { ClearFilter } from '../../STAFF_TU/Pembayaran/Pembayaran';
+import ContainerCard from '../../../components/ContainerCard';
 
 function Pendaftar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -39,7 +40,6 @@ function Pendaftar() {
     setAnchorEl(null);
     setAnchorElChild(null);
   };
-
   const [checked, setChecked] = React.useState(null);
   const [openModalCreate, setOpenModalCreate] = React.useState(false);
   const [openModalCreateImport, setOpenModalCreateImport] = React.useState(false);
@@ -212,364 +212,366 @@ function Pendaftar() {
     }
   };
   return (
-    <Box>
-      <KenaikanKelas
-        listJurusan={data}
-        jurusanId={jurusanId}
-        kelas={kelas}
-        item={itemsRebuild}
-        subKelas={subKelas}
-        jurusan={jurusan}
-        refetch={refetch}
-        handleCloseMenuGroub={handleClose}
-        openModalKenaikanKelas={openModalKenaikanKelas}
-        setOpenModalKenaikanKelas={setOpenModalKenaikanKelas}
-        listSiswaKelasManagement={listSiswaKelasManagement}
-        setListSiswaKelasManagement={setListSiswaKelasManagement}
-      />
-      <StudentDetail
-        openModal={modalDetailStudent.isOpen}
-        itemStudent={modalDetailStudent?.data}
-        setModalDetailStudent={setModalDetailStudent}
-      />
-      <ScreenDialog
-        type={modal.type}
-        open={modal.open}
-        labelClose="Tutup"
-        handleClose={handleCLoseModal}
-        title={modal.title}
-      >
-        {modal?.message?.map((item, index) => (
-          <Box key={index}>
-            <ListItemText
-              primary={
-                <Typography textTransform="capitalize" variant="h5">
-                  {item?.nama}
-                </Typography>
-              }
-              secondary={item?.kode_siswa}
-            />
-          </Box>
-        ))}
-      </ScreenDialog>
-      <CreateImport
-        refetch={refetch}
-        openModalCreateImport={openModalCreateImport}
-        setOpenModalCreateImport={setOpenModalCreateImport}
-      />
-      <Create openModalCreate={openModalCreate} setOpenModalCreate={setOpenModalCreate} />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'end',
-          mb: 2,
-        }}
-      >
+    <ContainerCard>
+      <Box>
+        <KenaikanKelas
+          listJurusan={data}
+          jurusanId={jurusanId}
+          kelas={kelas}
+          item={itemsRebuild}
+          subKelas={subKelas}
+          jurusan={jurusan}
+          refetch={refetch}
+          handleCloseMenuGroub={handleClose}
+          openModalKenaikanKelas={openModalKenaikanKelas}
+          setOpenModalKenaikanKelas={setOpenModalKenaikanKelas}
+          listSiswaKelasManagement={listSiswaKelasManagement}
+          setListSiswaKelasManagement={setListSiswaKelasManagement}
+        />
+        <StudentDetail
+          openModal={modalDetailStudent.isOpen}
+          itemStudent={modalDetailStudent?.data}
+          setModalDetailStudent={setModalDetailStudent}
+        />
+        <ScreenDialog
+          type={modal.type}
+          open={modal.open}
+          labelClose="Tutup"
+          handleClose={handleCLoseModal}
+          title={modal.title}
+        >
+          {modal?.message?.map((item, index) => (
+            <Box key={index}>
+              <ListItemText
+                primary={
+                  <Typography textTransform="capitalize" variant="h5">
+                    {item?.nama}
+                  </Typography>
+                }
+                secondary={item?.kode_siswa}
+              />
+            </Box>
+          ))}
+        </ScreenDialog>
+        <CreateImport
+          refetch={refetch}
+          openModalCreateImport={openModalCreateImport}
+          setOpenModalCreateImport={setOpenModalCreateImport}
+        />
+        <Create openModalCreate={openModalCreate} setOpenModalCreate={setOpenModalCreate} />
         <Box
           sx={{
             display: 'flex',
-            gap: 1,
+            justifyContent: 'space-between',
+            alignItems: 'end',
+            mb: 2,
           }}
         >
-          <Box>
-            <Button
-              startIcon={<AddIcon />}
-              disabled={isLoading}
-              variant="contained"
-              onClick={() => setOpenModalCreate(true)}
-            >
-              Tambah
-            </Button>
-          </Box>
-          <Box>
-            <Button
-              startIcon={<ImportExportIcon />}
-              variant="contained"
-              color="warning"
-              disabled={isLoading}
-              onClick={() => setOpenModalCreateImport(true)}
-            >
-              Import
-            </Button>
-          </Box>
-          {Boolean(jurusanId) && Boolean(kelas) && Boolean(itemsRebuild?.length > 0) && (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+            }}
+          >
             <Box>
-              <Button variant="contained" color="warning" onClick={handleClick} startIcon={<SettingsIcon />}>
-                Group
-              </Button>
-
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
-                }}
-                sx={{
-                  '.css-6hp17o-MuiList-root-MuiMenu-list': {
-                    bgcolor: orange[50],
-                  },
-                }}
+              <Button
+                startIcon={<AddIcon />}
+                disabled={isLoading}
+                variant="contained"
+                onClick={() => setOpenModalCreate(true)}
               >
-                {Boolean(subKelas) && Boolean(limit) && (
-                  <MenuItem
-                    onClick={() => {
-                      setOpenModalKenaikanKelas(true);
-                      setListSiswaKelasManagement(itemsRebuild);
-                    }}
-                  >
-                    Management kelas
-                  </MenuItem>
-                )}
-                <MenuItem onClick={handleClickChild}>Status</MenuItem>
+                Tambah
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                startIcon={<ImportExportIcon />}
+                variant="contained"
+                color="warning"
+                disabled={isLoading}
+                onClick={() => setOpenModalCreateImport(true)}
+              >
+                Import
+              </Button>
+            </Box>
+            {Boolean(jurusanId) && Boolean(kelas) && Boolean(itemsRebuild?.length > 0) && (
+              <Box>
+                <Button variant="contained" color="warning" onClick={handleClick} startIcon={<SettingsIcon />}>
+                  Group
+                </Button>
+
                 <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
                   sx={{
                     '.css-6hp17o-MuiList-root-MuiMenu-list': {
-                      bgcolor: orange[100],
+                      bgcolor: orange[50],
                     },
                   }}
-                  anchorEl={anchorElChild}
-                  open={openChild}
-                  onClose={handleCloseChild}
                 >
-                  <MenuItem onClick={() => handleBulkChangeStatus('checking')}>Calon Siswa</MenuItem>
-                  <MenuItem onClick={() => handleBulkChangeStatus('accepted')}>SIswa</MenuItem>
-                  <MenuItem onClick={() => handleBulkChangeStatus('lock')}>Terkunci</MenuItem>
-                  <MenuItem onClick={() => handleBulkChangeStatus('blokir')}>Blokir</MenuItem>
+                  {Boolean(subKelas) && Boolean(limit) && (
+                    <MenuItem
+                      onClick={() => {
+                        setOpenModalKenaikanKelas(true);
+                        setListSiswaKelasManagement(itemsRebuild);
+                      }}
+                    >
+                      Management kelas
+                    </MenuItem>
+                  )}
+                  <MenuItem onClick={handleClickChild}>Status</MenuItem>
+                  <Menu
+                    sx={{
+                      '.css-6hp17o-MuiList-root-MuiMenu-list': {
+                        bgcolor: orange[100],
+                      },
+                    }}
+                    anchorEl={anchorElChild}
+                    open={openChild}
+                    onClose={handleCloseChild}
+                  >
+                    <MenuItem onClick={() => handleBulkChangeStatus('checking')}>Calon Siswa</MenuItem>
+                    <MenuItem onClick={() => handleBulkChangeStatus('accepted')}>SIswa</MenuItem>
+                    <MenuItem onClick={() => handleBulkChangeStatus('lock')}>Terkunci</MenuItem>
+                    <MenuItem onClick={() => handleBulkChangeStatus('blokir')}>Blokir</MenuItem>
+                  </Menu>
                 </Menu>
-              </Menu>
+              </Box>
+            )}
+          </Box>
+          <Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                gap: 1,
+              }}
+            >
+              <Box width="100%">
+                <LabelField
+                  title="Masukan nama siswa / Kode siswa / Username / Nama ayah / Nama ibu"
+                  onClickClearIcon={() => {
+                    setPage(1);
+                    setSearch('');
+                    searchInputRef.current.value = '';
+                  }}
+                  clearIcon={Boolean(search)}
+                />
+                <TextField
+                  inputRef={searchInputRef}
+                  fullWidth
+                  onChange={debounce((i) => {
+                    setPage(1);
+                    setSearch(i.target.value);
+                  }, 500)}
+                  size="small"
+                />
+              </Box>
+              <Box>
+                <LabelField
+                  title="Sort Jurusan"
+                  clearIcon={Boolean(jurusan)}
+                  onClickClearIcon={() => {
+                    setJurusanId('');
+                    setJurusan('');
+                  }}
+                />
+                <Select
+                  sx={{
+                    minWidth: '270px',
+                  }}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={jurusan || ''}
+                  size="small"
+                  onChange={handleChangesJurusan}
+                >
+                  {data?.data?.map((item, index) => (
+                    <MenuItem key={index} onClick={() => setJurusanId(item?.id)} value={item?.nama}>
+                      {item?.nama}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Box>
+              {[
+                Boolean(jurusan),
+                Boolean(kelas),
+                Boolean(subKelas),
+                Boolean(search),
+                Boolean(angkatan),
+                Boolean(status),
+              ].filter((item) => item)?.length > 2 ? (
+                <ClearFilter
+                  handleClear={() => {
+                    setJurusan('');
+                    setJurusanId('');
+                    setSearch('');
+                    searchInputRef.current.value = '';
+                    setKelas('');
+                    setSubKelasKelas('');
+                    setAngkatan('');
+                    setStatus('');
+                  }}
+                />
+              ) : null}
             </Box>
-          )}
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 1,
+                mt: 0.5,
+              }}
+            >
+              <Box>
+                <LabelField title="Sort Kelas" onClickClearIcon={() => setKelas('')} clearIcon={Boolean(kelas)} />
+                <Select
+                  sx={{
+                    minWidth: '100px',
+                  }}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={kelas}
+                  size="small"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={'10'}>10</MenuItem>
+                  <MenuItem value={'11'}>11</MenuItem>
+                  <MenuItem value={'12'}>12</MenuItem>
+                </Select>
+              </Box>
+              <Box>
+                <LabelField
+                  title="Sort Sub Kelas"
+                  onClickClearIcon={() => setSubKelasKelas('')}
+                  clearIcon={Boolean(subKelas)}
+                />
+
+                <Select
+                  sx={{
+                    minWidth: '130px',
+                  }}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={subKelas}
+                  size="small"
+                  onChange={handleChangeSubKelas}
+                >
+                  <MenuItem value={'1'}>1</MenuItem>
+                  <MenuItem value={'2'}>2</MenuItem>
+                  <MenuItem value={'3'}>3</MenuItem>
+                  <MenuItem value={'4'}>4</MenuItem>
+                  <MenuItem value={'5'}>5</MenuItem>
+                  <MenuItem value={'6'}>6</MenuItem>
+                </Select>
+              </Box>
+              <Box sx={{ minWidth: '100px' }}>
+                <LabelField
+                  title="Sort Angkatan"
+                  clearIcon={Boolean(angkatan)}
+                  onClickClearIcon={() => setAngkatan('')}
+                />
+                <AutoCompleteAsync
+                  size="small"
+                  keyAttribute="tahun_angkatan"
+                  paginateData
+                  initialLimit={5}
+                  value={angkatan || {}}
+                  module="tahun-angkatan"
+                  type="number"
+                  onChange={(x, y) => handleChangeAngkatan(x, y)}
+                />
+              </Box>
+              <Box>
+                <LabelField title="Sort Status" clearIcon={Boolean(status)} onClickClearIcon={() => setStatus('')} />
+                <Select
+                  sx={{
+                    minWidth: '150px',
+                  }}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={status || ''}
+                  size="small"
+                  onChange={handleChangeStatus}
+                >
+                  <MenuItem value={'checking'}>Calon siswa</MenuItem>
+                  <MenuItem value={'accepted'}>Siswa</MenuItem>
+                  <MenuItem value={'lock'}>Terkunci</MenuItem>
+                  <MenuItem value={'blokir'}>Terblokir</MenuItem>
+                </Select>
+              </Box>
+              <Box>
+                <LabelField
+                  title="/Page"
+                  onClickClearIcon={() => {
+                    setPage(1);
+                    setLimit(40);
+                    limitInputRef.current.value = '';
+                  }}
+                  clearIcon={Boolean(limit !== 40)}
+                />
+                <TextField
+                  InputProps={{
+                    min: 1,
+                    max: 100,
+                  }}
+                  size="small"
+                  type="number"
+                  placeholder="40"
+                  inputRef={limitInputRef}
+                  onChange={debounce((i) => {
+                    setPage(1);
+                    setLimit(i.target.value);
+                  }, 500)}
+                  sx={{
+                    width: '100px',
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
         </Box>
         <Box>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              gap: 1,
+          <TableComponen
+            customIcon={<InfoIcon sx={{ color: blue[500] }} />}
+            colorHead="cyan"
+            checked={checked}
+            handleAccount
+            handleLockAccount={handleLockAccount}
+            handleAcceptAccount={handleAcceptAccount}
+            handleHoldAccount={handleHoldAccount}
+            handleCustomOnClickRow={handleCustomOnClickRow}
+            tooltipCustom="Detail Siswa"
+            handleBlockAccount={handleBlockAccount}
+            setChecked={setChecked}
+            count={totalPage}
+            pageOnchange={(x, y) => {
+              setPage(y);
             }}
-          >
-            <Box width="100%">
-              <LabelField
-                title="Masukan nama siswa / Kode siswa / Username / Nama ayah / Nama ibu"
-                onClickClearIcon={() => {
-                  setPage(1);
-                  setSearch('');
-                  searchInputRef.current.value = '';
-                }}
-                clearIcon={Boolean(search)}
-              />
-              <TextField
-                inputRef={searchInputRef}
-                fullWidth
-                onChange={debounce((i) => {
-                  setPage(1);
-                  setSearch(i.target.value);
-                }, 500)}
-                size="small"
-              />
-            </Box>
-            <Box>
-              <LabelField
-                title="Sort Jurusan"
-                clearIcon={Boolean(jurusan)}
-                onClickClearIcon={() => {
-                  setJurusanId('');
-                  setJurusan('');
-                }}
-              />
-              <Select
-                sx={{
-                  minWidth: '270px',
-                }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={jurusan || ''}
-                size="small"
-                onChange={handleChangesJurusan}
-              >
-                {data?.data?.map((item, index) => (
-                  <MenuItem key={index} onClick={() => setJurusanId(item?.id)} value={item?.nama}>
-                    {item?.nama}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Box>
-            {[
-              Boolean(jurusan),
-              Boolean(kelas),
-              Boolean(subKelas),
-              Boolean(search),
-              Boolean(angkatan),
-              Boolean(status),
-            ].filter((item) => item)?.length > 2 ? (
-              <ClearFilter
-                handleClear={() => {
-                  setJurusan('');
-                  setJurusanId('');
-                  setSearch('');
-                  searchInputRef.current.value = '';
-                  setKelas('');
-                  setSubKelasKelas('');
-                  setAngkatan('');
-                  setStatus('');
-                }}
-              />
-            ) : null}
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1,
-              mt: 0.5,
-            }}
-          >
-            <Box>
-              <LabelField title="Sort Kelas" onClickClearIcon={() => setKelas('')} clearIcon={Boolean(kelas)} />
-              <Select
-                sx={{
-                  minWidth: '100px',
-                }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={kelas}
-                size="small"
-                onChange={handleChange}
-              >
-                <MenuItem value={'10'}>10</MenuItem>
-                <MenuItem value={'11'}>11</MenuItem>
-                <MenuItem value={'12'}>12</MenuItem>
-              </Select>
-            </Box>
-            <Box>
-              <LabelField
-                title="Sort Sub Kelas"
-                onClickClearIcon={() => setSubKelasKelas('')}
-                clearIcon={Boolean(subKelas)}
-              />
-
-              <Select
-                sx={{
-                  minWidth: '130px',
-                }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={subKelas}
-                size="small"
-                onChange={handleChangeSubKelas}
-              >
-                <MenuItem value={'1'}>1</MenuItem>
-                <MenuItem value={'2'}>2</MenuItem>
-                <MenuItem value={'3'}>3</MenuItem>
-                <MenuItem value={'4'}>4</MenuItem>
-                <MenuItem value={'5'}>5</MenuItem>
-                <MenuItem value={'6'}>6</MenuItem>
-              </Select>
-            </Box>
-            <Box sx={{ minWidth: '100px' }}>
-              <LabelField
-                title="Sort Angkatan"
-                clearIcon={Boolean(angkatan)}
-                onClickClearIcon={() => setAngkatan('')}
-              />
-              <AutoCompleteAsync
-                size="small"
-                keyAttribute="tahun_angkatan"
-                paginateData
-                initialLimit={5}
-                value={angkatan || {}}
-                module="tahun-angkatan"
-                type="number"
-                onChange={(x, y) => handleChangeAngkatan(x, y)}
-              />
-            </Box>
-            <Box>
-              <LabelField title="Sort Status" clearIcon={Boolean(status)} onClickClearIcon={() => setStatus('')} />
-              <Select
-                sx={{
-                  minWidth: '150px',
-                }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={status || ''}
-                size="small"
-                onChange={handleChangeStatus}
-              >
-                <MenuItem value={'checking'}>Calon siswa</MenuItem>
-                <MenuItem value={'accepted'}>Siswa</MenuItem>
-                <MenuItem value={'lock'}>Terkunci</MenuItem>
-                <MenuItem value={'blokir'}>Terblokir</MenuItem>
-              </Select>
-            </Box>
-            <Box>
-              <LabelField
-                title="/Page"
-                onClickClearIcon={() => {
-                  setPage(1);
-                  setLimit(40);
-                  limitInputRef.current.value = '';
-                }}
-                clearIcon={Boolean(limit !== 40)}
-              />
-              <TextField
-                InputProps={{
-                  min: 1,
-                  max: 100,
-                }}
-                size="small"
-                type="number"
-                placeholder="40"
-                inputRef={limitInputRef}
-                onChange={debounce((i) => {
-                  setPage(1);
-                  setLimit(i.target.value);
-                }, 500)}
-                sx={{
-                  width: '100px',
-                }}
-              />
-            </Box>
-          </Box>
+            page={page}
+            tableBody={itemsRebuild}
+            tableHead={tableHead}
+            totalRows={
+              Boolean(jurusanId) ||
+              Boolean(kelas) ||
+              Boolean(subKelas) ||
+              Boolean(angkatan) ||
+              Boolean(status) ||
+              Boolean(search)
+                ? totalRows
+                : null
+            }
+            emptyTag={Boolean(search) ? `( tidak bisa menemukan "${search}")` : '( sepertinya tidak ada siswa )'}
+            isLoading={isLoading}
+            totalData={totalData}
+          />
         </Box>
       </Box>
-      <Box>
-        <TableComponen
-          customIcon={<InfoIcon sx={{ color: blue[500] }} />}
-          colorHead="cyan"
-          checked={checked}
-          handleAccount
-          handleLockAccount={handleLockAccount}
-          handleAcceptAccount={handleAcceptAccount}
-          handleHoldAccount={handleHoldAccount}
-          handleCustomOnClickRow={handleCustomOnClickRow}
-          tooltipCustom="Detail Siswa"
-          handleBlockAccount={handleBlockAccount}
-          setChecked={setChecked}
-          count={totalPage}
-          pageOnchange={(x, y) => {
-            setPage(y);
-          }}
-          page={page}
-          tableBody={itemsRebuild}
-          tableHead={tableHead}
-          totalRows={
-            Boolean(jurusanId) ||
-            Boolean(kelas) ||
-            Boolean(subKelas) ||
-            Boolean(angkatan) ||
-            Boolean(status) ||
-            Boolean(search)
-              ? totalRows
-              : null
-          }
-          emptyTag={Boolean(search) ? `( tidak bisa menemukan "${search}")` : '( sepertinya tidak ada siswa )'}
-          isLoading={isLoading}
-          totalData={totalData}
-        />
-      </Box>
-    </Box>
+    </ContainerCard>
   );
 }
 

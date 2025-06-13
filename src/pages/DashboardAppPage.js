@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
@@ -145,11 +144,11 @@ export default function DashboardAppPage() {
             <AppNewsUpdate
               title="News Update"
               list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: faker.name.jobTitle(),
-                description: faker.name.jobTitle(),
+                id: 'faker.datatype.uuid()',
+                title: 'faker.name.jobTitle()',
+                description: 'faker.name.jobTitle()',
                 image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
+                postedAt: 'faker.date.recent()',
               }))}
             />
           </Grid>
@@ -158,7 +157,7 @@ export default function DashboardAppPage() {
             <AppOrderTimeline
               title="Order Timeline"
               list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
+                id: 'faker.datatype.uuid()',
                 title: [
                   '1983, orders, $4220',
                   '12 Invoices have been paid',
@@ -167,7 +166,7 @@ export default function DashboardAppPage() {
                   'New order placed #XF-2346',
                 ][index],
                 type: `order${index + 1}`,
-                time: faker.date.past(),
+                time: 'faker.date.past()',
               }))}
             />
           </Grid>

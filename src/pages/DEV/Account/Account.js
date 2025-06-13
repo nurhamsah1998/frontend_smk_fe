@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-extra-boolean-cast */
 import { Box, TextField, Typography, Checkbox } from '@mui/material';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import React from 'react';
 import moment from 'moment';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -12,6 +12,7 @@ import useMutationPatch from '../../../hooks/useMutationPatch';
 import ScreenDialog from '../../../components/ScreenDialog';
 import { themeAppColors } from '../../../theme/themeAppColor';
 import useQueryFetch from '../../../hooks/useQueryFetch';
+import ContainerCard from '../../../components/ContainerCard';
 
 function Account() {
   const [inputView, setInputView] = React.useState('');
@@ -170,92 +171,94 @@ function Account() {
     });
   };
   return (
-    <Box>
-      <ScreenDialog
-        handleSubmit={handleSubmitPermissions}
-        open={modalPermissions.isOpen}
-        handleClose={() => setModalPermissions({ isOpen: false, data: [], user_id: '', user_name: '' })}
-        labelClose="Tutup"
-        isLoading={modalPermissions.isLoading}
-        labelSubmit="Simpan"
-        title={`Hak Akses ${modalPermissions?.user_name}`}
-      >
-        <Box display="grid" gap={1}>
-          {modalPermissions.data.map((item, index) => (
-            <Box
-              bgcolor={themeAppColors.light}
-              display="flex"
-              width="100%"
-              justifyContent="space-between"
-              alignItems="flex-start"
-              gap={3}
-              key={index}
-              padding={2.5}
-            >
-              <Box maxWidth={{ xs: '80%', sm: '80%', md: '70%', lg: '70%' }}>
-                <Typography color={themeAppColors.dark} variant="h6">
-                  {item.title}
-                </Typography>
-                <Typography variant="subtitle2" lineHeight={1} fontWeight={400} color={grey[600]} mt={-0.5}>
-                  {item.desc}
-                </Typography>
+    <ContainerCard>
+      <Box>
+        <ScreenDialog
+          handleSubmit={handleSubmitPermissions}
+          open={modalPermissions.isOpen}
+          handleClose={() => setModalPermissions({ isOpen: false, data: [], user_id: '', user_name: '' })}
+          labelClose="Tutup"
+          isLoading={modalPermissions.isLoading}
+          labelSubmit="Simpan"
+          title={`Hak Akses ${modalPermissions?.user_name}`}
+        >
+          <Box display="grid" gap={1}>
+            {modalPermissions.data.map((item, index) => (
+              <Box
+                bgcolor={themeAppColors.light}
+                display="flex"
+                width="100%"
+                justifyContent="space-between"
+                alignItems="flex-start"
+                gap={3}
+                key={index}
+                padding={2.5}
+              >
+                <Box maxWidth={{ xs: '80%', sm: '80%', md: '70%', lg: '70%' }}>
+                  <Typography color={themeAppColors.dark} variant="h6">
+                    {item.title}
+                  </Typography>
+                  <Typography variant="subtitle2" lineHeight={1} fontWeight={400} color={grey[600]} mt={-0.5}>
+                    {item.desc}
+                  </Typography>
+                </Box>
+                <Checkbox onChange={(e, i) => handleChangeCheckbox(item, i)} checked={item.permission} />
               </Box>
-              <Checkbox onChange={(e, i) => handleChangeCheckbox(item, i)} checked={item.permission} />
-            </Box>
-          ))}
+            ))}
+          </Box>
+        </ScreenDialog>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'end',
+            mb: 2,
+          }}
+        >
+          <Box>
+            <LabelField
+              title="Cari nama / username"
+              onClickClearIcon={() => {
+                setSearch('');
+                setInputView('');
+              }}
+              clearIcon={Boolean(search)}
+            />
+            <TextField
+              fullWidth
+              value={inputView}
+              onChange={(i) => {
+                inputChange(i.target.value);
+                setInputView(i.target.value);
+              }}
+              size="small"
+            />
+          </Box>
         </Box>
-      </ScreenDialog>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'end',
-          mb: 2,
-        }}
-      >
-        <Box>
-          <LabelField
-            title="Cari nama / username"
-            onClickClearIcon={() => {
-              setSearch('');
-              setInputView('');
-            }}
-            clearIcon={Boolean(search)}
-          />
-          <TextField
-            fullWidth
-            value={inputView}
-            onChange={(i) => {
-              inputChange(i.target.value);
-              setInputView(i.target.value);
-            }}
-            size="small"
-          />
-        </Box>
+        <TableComponen
+          colorHead="cyan"
+          handleAccount
+          handleAcceptAccount={handleAcceptAccount}
+          handleHoldAccount={handleHoldAccount}
+          disabledBlokir
+          disabledLock
+          tooltipCustom="Hak Akses"
+          count={totalPage}
+          pageOnchange={(x, y) => {
+            setPage(y);
+          }}
+          page={page}
+          tableBody={itemsRebuild}
+          tableHead={tableHead}
+          totalRows={Boolean(search) ? totalRows : null}
+          emptyTag={Boolean(search) ? `( tidak bisa menemukan "${search}")` : '( sepertinya tidak ada akun )'}
+          handleCustomOnClickRow={handleCustomOnClickRow}
+          customIcon={<AssignmentIcon sx={{ color: blue[500] }} />}
+          isLoading={isLoading}
+          totalData={totalData}
+        />
       </Box>
-      <TableComponen
-        colorHead="cyan"
-        handleAccount
-        handleAcceptAccount={handleAcceptAccount}
-        handleHoldAccount={handleHoldAccount}
-        disabledBlokir
-        disabledLock
-        tooltipCustom="Hak Akses"
-        count={totalPage}
-        pageOnchange={(x, y) => {
-          setPage(y);
-        }}
-        page={page}
-        tableBody={itemsRebuild}
-        tableHead={tableHead}
-        totalRows={Boolean(search) ? totalRows : null}
-        emptyTag={Boolean(search) ? `( tidak bisa menemukan "${search}")` : '( sepertinya tidak ada akun )'}
-        handleCustomOnClickRow={handleCustomOnClickRow}
-        customIcon={<AssignmentIcon sx={{ color: blue[500] }} />}
-        isLoading={isLoading}
-        totalData={totalData}
-      />
-    </Box>
+    </ContainerCard>
   );
 }
 

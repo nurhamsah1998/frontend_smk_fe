@@ -2,7 +2,7 @@ import './CustomDatePicker.css';
 
 import { Box, TextField } from '@mui/material';
 import React from 'react';
-import { range } from 'lodash';
+import range from 'lodash/range';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import getMonth from 'date-fns/getMonth';
 import { getDay } from 'date-fns';

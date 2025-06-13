@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useContext, useMemo } from 'react';
+import { memo, useContext, useMemo } from 'react';
 import { NavLink as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
@@ -68,13 +68,9 @@ export default function NavSection({ data = [], ...other }) {
 
 // ----------------------------------------------------------------------
 
-NavItem.propTypes = {
-  item: PropTypes.object,
-};
-
-function NavItem({ item }) {
+const NavItem = memo(({ item }) => {
   const { title, path, icon, info } = item;
-
+  const location = useLocation();
   return (
     <StyledNavItem
       component={RouterLink}
@@ -87,11 +83,21 @@ function NavItem({ item }) {
         },
       }}
     >
-      <StyledNavItemIcon sx={{ color: themeAppColors.main }}>{icon && icon}</StyledNavItemIcon>
+      <StyledNavItemIcon
+        sx={{
+          color: location?.pathname?.includes(path) ? themeAppColors.main : 'grey',
+        }}
+      >
+        {icon && icon}
+      </StyledNavItemIcon>
 
       <ListItemText disableTypography primary={title} />
 
       {info && info}
     </StyledNavItem>
   );
-}
+});
+
+NavItem.propTypes = {
+  item: PropTypes.object,
+};

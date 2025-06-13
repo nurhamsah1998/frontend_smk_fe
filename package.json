@@ -40,7 +40,6 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@faker-js/faker": "^7.6.0",
     "@iconify/react": "^4.0.0",
     "@mui/icons-material": "^5.10.16",
     "@mui/lab": "^5.0.0-alpha.103",
@@ -49,7 +48,6 @@
     "@tanstack/react-query-devtools": "^4.16.1",
     "apexcharts": "^3.36.0",
     "axios": "^1.2.0",
-    "change-case": "^4.1.2",
     "date-fns": "^2.29.3",
     "formik": "^2.2.9",
     "history": "^5.3.0",
@@ -57,7 +55,6 @@
     "jspdf-autotable": "^3.6.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
-    "lodash.debounce": "^4.0.8",
     "moment": "^2.29.4",
     "notistack": "^2.0.8",
     "numeral": "^2.0.6",
@@ -77,8 +74,7 @@
     "react-to-print": "^2.14.13",
     "simplebar-react": "^2.4.3",
     "uid": "^2.0.2",
-    "web-vitals": "^3.0.3",
-    "yup": "^0.32.11"
+    "web-vitals": "^3.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

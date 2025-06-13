@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
 import { PROFILE } from '../../../hooks/useHelperContext';
 import { Dialog } from '../../../hooks/useContextHook';
+import { getInitialName } from '../../../utils/getInitialName';
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +57,9 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={''} alt="photoURL" />
+        <Avatar src={''} alt="photoURL">
+          {getInitialName(itemsNoPagination?.nama)}
+        </Avatar>
       </IconButton>
 
       <Popover
