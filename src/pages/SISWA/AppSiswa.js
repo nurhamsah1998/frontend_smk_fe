@@ -3,6 +3,7 @@ import { Box, Button, Link, Skeleton, Typography } from '@mui/material';
 import { grey, red } from '@mui/material/colors';
 import moment from 'moment';
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
+import CampaignIcon from '@mui/icons-material/Campaign';
 
 import { PROFILE } from '../../hooks/useHelperContext';
 import { themeAppColors } from '../../theme/themeAppColor';
@@ -57,8 +58,28 @@ function AppSiswa() {
                     }}
                     key={index}
                   >
-                    <Box zIndex={2}>
-                      <Box color={item?.status === 'umum' ? themeAppColors.dark : red[800]}>
+                    <Box
+                      sx={{
+                        position: 'relative',
+                        zIndex: 2,
+                      }}
+                    >
+                      <Box sx={{ position: 'absolute', top: -50, right: 0, zIndex: 1 }}>
+                        <CampaignIcon
+                          sx={{
+                            width: 300,
+                            height: 300,
+                            rotate: '-30deg',
+                            color: item?.status === 'umum' ? themeAppColors.dark : red[800],
+                            opacity: 0.1,
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        zIndex={2}
+                        position="relative"
+                        color={item?.status === 'umum' ? themeAppColors.dark : red[800]}
+                      >
                         <Box display="flex" justifyContent="space-between">
                           <Typography textTransform="capitalize" variant="h6">
                             {item?.title}
@@ -99,7 +120,7 @@ function AppSiswa() {
                           )}
                         </Box>
                       </Box>
-                      <Box>
+                      <Box zIndex={2} position="relative">
                         <Typography fontSize={13} mt={1} fontStyle="italic">
                           "{item?.text}""
                         </Typography>

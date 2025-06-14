@@ -135,147 +135,145 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
           }}
           enableReinitialize
         >
-          {({ values, getFieldProps, setFieldValue }) => {
-            return (
-              <Form>
-                <Box display="grid" gap={2}>
-                  <Box>
-                    <TextField
-                      inputProps={{
-                        maxLength: 70,
-                      }}
-                      size="small"
-                      fullWidth
-                      name="title"
-                      {...getFieldProps('title')}
-                      label="Judul"
-                    />
-                    <FormHelperText
-                      sx={{
-                        textAlign: 'right',
-                      }}
-                    >
-                      {values?.title?.length} / 70
-                    </FormHelperText>
-                  </Box>
-                  <Box width="100%">
-                    <TextField
-                      fullWidth
-                      id="outlined-multiline-static"
-                      multiline
-                      rows={6}
-                      inputProps={{
-                        maxLength: 800,
-                      }}
-                      {...getFieldProps('text')}
-                      label="Text"
-                    />
-                    <FormHelperText
-                      sx={{
-                        textAlign: 'right',
-                      }}
-                    >
-                      {values?.text?.length} / 800
-                    </FormHelperText>
-                  </Box>
-                  <Box>
-                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
-                    <TextField
-                      fullWidth
-                      size="small"
-                      select
-                      // onChange={handleChange}
-                      //   value={gender}
-                      {...getFieldProps('status')}
-                      label="Status"
-                    >
-                      <MenuItem value={'umum'}>Umum</MenuItem>
-                      <MenuItem value={'penting'}>Penting</MenuItem>
-                    </TextField>
-                  </Box>
-
-                  <Box>
-                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
-                    <TextField
-                      fullWidth
-                      size="small"
-                      select
-                      onChange={(event) => {
-                        setFieldValue('angkatan', event.target.value);
-                      }}
-                      value={values.angkatan}
-                      label="Untuk angkatan"
-                    >
-                      {angkatan()?.map((item, index) => (
-                        <MenuItem key={index} value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Box>
-                  <AutoCompleteAsync
-                    size="small"
-                    value={values.jurusan_id || {}}
-                    module="jurusan"
-                    label="Untuk jurusan"
-                    onChange={(x, y) => {
-                      setFieldValue('jurusan_id', y);
+          {({ values, getFieldProps, setFieldValue }) => (
+            <Form>
+              <Box display="grid" gap={2}>
+                <Box>
+                  <TextField
+                    inputProps={{
+                      maxLength: 70,
                     }}
+                    size="small"
+                    fullWidth
+                    name="title"
+                    {...getFieldProps('title')}
+                    label="Judul"
                   />
-                  <Box>
-                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
-                    <TextField
-                      fullWidth
-                      size="small"
-                      select
-                      // onChange={handleChange}
-                      //   value={gender}
-                      {...getFieldProps('is_response')}
-                      label="Merespon"
-                    >
-                      <MenuItem value={'1'}>Siswa dapat merespon pengumuman ini</MenuItem>
-                      <MenuItem value={'0'}>Siswa tidak dapat merespon pengumuman ini</MenuItem>
-                    </TextField>
-                  </Box>
-                  <Box>
-                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
-                    <TextField
-                      fullWidth
-                      size="small"
-                      select
-                      value={values.kelas}
-                      //   value={gender}
-                      {...getFieldProps('kelas')}
-                      label="Untuk kelas"
-                    >
-                      <MenuItem value={'10'}>10</MenuItem>
-                      <MenuItem value={'11'}>11</MenuItem>
-                      <MenuItem value={'12'}>12</MenuItem>
-                    </TextField>
-                  </Box>
-                  <Box>
-                    {/* /// https://stackoverflow.com/a/67068903/18038473 */}
-                    <TextField
-                      fullWidth
-                      size="small"
-                      select
-                      value={values.sub_kelas}
-                      //   value={gender}
-                      {...getFieldProps('sub_kelas')}
-                      label="Untuk sub kelas"
-                    >
-                      <MenuItem value={'1'}>1</MenuItem>
-                      <MenuItem value={'2'}>2</MenuItem>
-                      <MenuItem value={'3'}>3</MenuItem>
-                      <MenuItem value={'4'}>4</MenuItem>
-                      <MenuItem value={'5'}>5</MenuItem>
-                      <MenuItem value={'6'}>6</MenuItem>
-                    </TextField>
-                  </Box>
+                  <FormHelperText
+                    sx={{
+                      textAlign: 'right',
+                    }}
+                  >
+                    {values?.title?.length} / 70
+                  </FormHelperText>
                 </Box>
-              </Form>
-            );
-          }}
+                <Box width="100%">
+                  <TextField
+                    fullWidth
+                    id="outlined-multiline-static"
+                    multiline
+                    rows={6}
+                    inputProps={{
+                      maxLength: 800,
+                    }}
+                    {...getFieldProps('text')}
+                    label="Text"
+                  />
+                  <FormHelperText
+                    sx={{
+                      textAlign: 'right',
+                    }}
+                  >
+                    {values?.text?.length} / 800
+                  </FormHelperText>
+                </Box>
+                <Box>
+                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    select
+                    // onChange={handleChange}
+                    //   value={gender}
+                    {...getFieldProps('status')}
+                    label="Status"
+                  >
+                    <MenuItem value={'umum'}>Umum</MenuItem>
+                    <MenuItem value={'penting'}>Penting</MenuItem>
+                  </TextField>
+                </Box>
+
+                <Box>
+                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    select
+                    onChange={(event) => {
+                      setFieldValue('angkatan', event.target.value);
+                    }}
+                    value={values.angkatan}
+                    label="Untuk angkatan"
+                  >
+                    {angkatan()?.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+                <AutoCompleteAsync
+                  size="small"
+                  value={values.jurusan_id || {}}
+                  module="jurusan"
+                  label="Untuk jurusan"
+                  onChange={(x, y) => {
+                    setFieldValue('jurusan_id', y);
+                  }}
+                />
+                <Box>
+                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    select
+                    // onChange={handleChange}
+                    //   value={gender}
+                    {...getFieldProps('is_response')}
+                    label="Merespon"
+                  >
+                    <MenuItem value={'1'}>Siswa dapat merespon pengumuman ini</MenuItem>
+                    <MenuItem value={'0'}>Siswa tidak dapat merespon pengumuman ini</MenuItem>
+                  </TextField>
+                </Box>
+                <Box>
+                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    select
+                    value={values.kelas}
+                    //   value={gender}
+                    {...getFieldProps('kelas')}
+                    label="Untuk kelas"
+                  >
+                    <MenuItem value={'10'}>10</MenuItem>
+                    <MenuItem value={'11'}>11</MenuItem>
+                    <MenuItem value={'12'}>12</MenuItem>
+                  </TextField>
+                </Box>
+                <Box>
+                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    select
+                    value={values.sub_kelas}
+                    //   value={gender}
+                    {...getFieldProps('sub_kelas')}
+                    label="Untuk sub kelas"
+                  >
+                    <MenuItem value={'1'}>1</MenuItem>
+                    <MenuItem value={'2'}>2</MenuItem>
+                    <MenuItem value={'3'}>3</MenuItem>
+                    <MenuItem value={'4'}>4</MenuItem>
+                    <MenuItem value={'5'}>5</MenuItem>
+                    <MenuItem value={'6'}>6</MenuItem>
+                  </TextField>
+                </Box>
+              </Box>
+            </Form>
+          )}
         </Formik>
       </ScreenDialog>
     </div>

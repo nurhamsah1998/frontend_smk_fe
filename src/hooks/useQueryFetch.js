@@ -10,7 +10,7 @@ import { apiUrl } from './api';
 function useQueryFetch({ invalidateKey, module, enabled = true, query, initialLimit = 40 }) {
   const token = window.localStorage.getItem('accessToken');
   const [page, setPage] = React.useState(1);
-  const [search, setSearch] = React.useState(null);
+  const [search, setSearch] = React.useState('');
   const [limit, setLimit] = React.useState(initialLimit);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();

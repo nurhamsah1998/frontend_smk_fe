@@ -76,24 +76,7 @@ function Pembayaran() {
     module: 'jurusan',
     invalidateKey: 'jurusan',
   });
-  const billStatus = [
-    {
-      name: 'deposit',
-      title: 'DEPOSIT',
-    },
-    {
-      name: 'not_paid_yet',
-      title: 'BELUM ADA TAGIHAN',
-    },
-    {
-      name: 'paid',
-      title: 'LUNAS',
-    },
-    {
-      name: 'not_paid',
-      title: 'BELUM LUNAS',
-    },
-  ];
+
   const jurusanList = useMemo(() => data?.data, [data?.data]);
   const itemsRebuild = useMemo(() => {
     return items?.map((i) => ({
@@ -166,30 +149,7 @@ function Pembayaran() {
     setPage(1);
     setSubKelasKelas(event.target.value);
   };
-  const dataFIlePDF = React.useMemo(() => {
-    return items
-      ?.map((item) => ({
-        nama: item?.nama,
-        kelas_student: `${item?.kelas} ${item?.['jurusan.kode_jurusan']} ${item?.sub_kelas}`,
-        angkatan: item?.angkatan,
-        status_bill:
-          item?.current_bill < 0
-            ? 'DEPOSIT'
-            : item?.current_bill > 0
-            ? 'BELUM LUNAS'
-            : item?.status_bill?.includes('BELUM ADA TAGIHAN')
-            ? 'BELUM ADA TAGIHAN'
-            : 'LUNAS',
-        /// https://stackoverflow.com/a/4652112/18038473
-        current_bill:
-          item?.current_bill < 0
-            ? `+ ${FormatCurrency(Math.abs(item?.current_bill))}`
-            : FormatCurrency(item?.current_bill),
-      }))
-      ?.map((item) => {
-        return Object.values(item);
-      });
-  }, [items, jurusan, kelas, subKelas, bill, search, limitInputRef.current?.value, jurusanId, angkatan]);
+
   const nomorRef = useRef({ value: '' });
   const pdfSuratTagihan = (doc, data) => {
     const stampel = new Image();
@@ -345,94 +305,36 @@ function Pembayaran() {
   };
   const handleDownloadFile = async (event) => {
     setAnchorEl(null);
-    if (event === 'xlsx') {
-      await axios
-        .get(
-          `${apiUrl}download/report-bill?page=${page}&limit=${limit}&search=${search}&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}&angkatan=${
-            Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
-          }`,
-          {
-            responseType: 'blob',
-            headers: {
-              authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
-            },
-          }
-        )
-        .then((res) => {
-          const isUserHasFilter = Boolean(kelas) || Boolean(jurusan) || Boolean(subKelas);
-          const specifictFilter = `${isUserHasFilter ? '(' : ''}${Boolean(kelas) ? `Kelas ${kelas}` : ''}${
-            Boolean(jurusan) ? ` ${data?.data?.find((item) => item?.nama === jurusan)?.kode_jurusan}` : ''
-          }${Boolean(subKelas) ? ` ${subKelas}` : ''}${isUserHasFilter ? ')' : ''}`;
-          /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
-          const url = URL.createObjectURL(new Blob([res?.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', `Laporan Tagihan ${specifictFilter} ${moment().format('Do-MMMM-YYYY')}.xlsx`);
-          document.body.appendChild(link);
-          link.click();
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        .finally(() => {});
-    } else {
-      const img = new Image();
-      img.src = '/assets/logo_pgri.png';
-      const doc = new JSPDF({
-        orientation: 'p',
-        unit: 'mm',
-        format: 'legal',
-      });
-      autoTable(doc, {
-        html: '#my-table',
-        margin: { top: 70 },
-      });
-      KopPdf(doc);
-      doc.setFontSize(14);
-      doc.setFont('', '', 700);
-      doc.text(`Laporan Tagihan`, 10, 60, {
-        align: 'left',
-      });
-      doc.setFont('', '', '');
-      doc.setFontSize(12);
-      doc.setFontSize(10);
-      doc.setFont('', '', '');
-      doc.text(
-        `Kelas : ${
-          Boolean(kelas) && Boolean(jurusan) && Boolean(subKelas)
-            ? `${kelas} ${data?.data?.find((item) => item?.nama === jurusan)?.kode_jurusan} ${subKelas} ${
-                Boolean(angkatan) ? `/ ${angkatan?.tahun_angkatan}` : ''
-              }`
-            : '-'
-        }`,
-        10,
-        65,
+    await axios
+      .get(
+        `${apiUrl}download/report-bill?page=${page}&limit=${limit}&search=${search}&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}&angkatan=${
+          Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
+        }&type=${event}`,
         {
-          align: 'left',
+          responseType: 'blob',
+          headers: {
+            authorization: `Bearer ${window.localStorage.getItem('accessToken')}`,
+          },
         }
-      );
-      doc.setFontSize(10);
-      doc.text(
-        `Status pembayaran : ${Boolean(bill) ? billStatus?.find((item) => item.name === bill)?.title : '-'}`,
-        10,
-        69,
-        {
-          align: 'left',
-        }
-      );
-      doc.text(`Tanggal dibuat : ${moment().format('Do MMM YYYY H:mm')}`, 10, 73, {
-        align: 'left',
-      });
-      autoTable(doc, {
-        margin: { horizontal: 10 },
-        head: [tableHead?.map((item) => item?.label)],
-        body: dataFIlePDF,
-      });
-      doc.text(`SMK PGRI KRAS`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 7, {
-        align: 'center',
-      });
-      window.open(URL.createObjectURL(doc.output('blob')));
-    }
+      )
+      .then((res) => {
+        const isUserHasFilter = Boolean(kelas) || Boolean(jurusan) || Boolean(subKelas);
+        const specifictFilter = `${isUserHasFilter ? '(' : ''}${Boolean(kelas) ? `Kelas ${kelas}` : ''}${
+          Boolean(jurusan) ? ` ${data?.data?.find((item) => item?.nama === jurusan)?.kode_jurusan}` : ''
+        }${Boolean(subKelas) ? ` ${subKelas}` : ''}${isUserHasFilter ? ')' : ''}`;
+        /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+        const url = URL.createObjectURL(new Blob([res?.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `Laporan Tagihan ${specifictFilter} ${moment().format('Do-MMMM-YYYY')}.${event}`);
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch((error) => {
+        console.log(error);
+        enqueueSnackbar(error?.message, { variant: 'error' });
+      })
+      .finally(() => {});
   };
   const handleChangeAngkatan = (x, event) => {
     setPage(1);

@@ -3,6 +3,7 @@ import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import { grey, red } from '@mui/material/colors';
+import CampaignIcon from '@mui/icons-material/Campaign';
 import { themeAppColors } from '../../../theme/themeAppColor';
 import MutationCampaign from './MutationCampaign';
 import useMutationDelete from '../../../hooks/useMutationDelete';
@@ -100,9 +101,22 @@ function Campaign() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
+                  overflow: 'hidden',
+                  position: 'relative',
                 }}
                 key={index}
               >
+                <Box sx={{ position: 'absolute', top: -50, right: 0, zIndex: 1 }}>
+                  <CampaignIcon
+                    sx={{
+                      width: 300,
+                      height: 300,
+                      rotate: '-30deg',
+                      color: item?.status === 'umum' ? themeAppColors.dark : red[800],
+                      opacity: 0.1,
+                    }}
+                  />
+                </Box>
                 <Box>
                   <Box color={item?.status === 'umum' ? themeAppColors.dark : red[800]}>
                     <Box display="flex" justifyContent="space-between">
