@@ -4,7 +4,7 @@ import { alpha } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover, LinearProgress } from '@mui/material';
 import jwtDecode from 'jwt-decode';
-import { getInitialName } from '../../../utils/getInitialName';
+import { getInitialName, randomColorInitialName } from '../../../utils/getInitialName';
 import { Dialog } from '../../../hooks/useContextHook';
 import { PROFILE } from '../../../hooks/useHelperContext';
 
@@ -60,7 +60,15 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={''} alt="photoURL">
+        <Avatar
+          src={''}
+          sx={{
+            border: () => `solid 2px #fff`,
+            bgcolor: randomColorInitialName(itemsNoPagination?.nama),
+            textTransform: 'capitalize',
+          }}
+          alt="photoURL"
+        >
           {getInitialName(itemsNoPagination?.nama)}
         </Avatar>
       </IconButton>

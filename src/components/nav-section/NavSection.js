@@ -91,7 +91,7 @@ const NavItem = memo(({ item }) => {
         {icon && icon}
       </StyledNavItemIcon>
 
-      <ListItemText disableTypography primary={title} />
+      <ListItemText disableTypography sx={{ fontSize: '13px' }} primary={title} />
 
       {info && info}
     </StyledNavItem>

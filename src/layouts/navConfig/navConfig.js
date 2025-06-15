@@ -7,6 +7,7 @@ import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import FastForwardIcon from '@mui/icons-material/FastForward';
+import SettingsIcon from '@mui/icons-material/Settings';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import SchoolIcon from '@mui/icons-material/School';
 
@@ -65,6 +66,13 @@ export const navConfigTU = [
     icon: <CampaignIcon />,
     permission: false,
     name: 'pengumuman',
+  },
+  {
+    title: 'Pengaturan',
+    path: '/staff-tu/pengaturan',
+    icon: <SettingsIcon />,
+    permission: true,
+    name: 'log_out',
   },
   {
     title: 'Keluar',

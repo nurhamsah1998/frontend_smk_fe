@@ -2,8 +2,9 @@ import PropTypes from 'prop-types';
 import { useEffect, useContext, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
+import SchoolIcon from '@mui/icons-material/School';
 import { styled } from '@mui/material/styles';
-import { Box, Link, Drawer, Typography, Avatar, Toolbar, LinearProgress } from '@mui/material';
+import { Box, Link, Drawer, Typography, Avatar, LinearProgress } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // components
@@ -22,6 +23,8 @@ const NAV_WIDTH = 280;
 const StyledAccount = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
+  overflow: 'hidden',
+  position: 'relative',
   padding: theme.spacing(2, 2.5),
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
   backgroundColor: themeAppColors.light,
@@ -74,10 +77,31 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
         '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
       }}
     >
-      <Toolbar />
-      <Box sx={{ mb: 5, mx: 2.5 }}>
+      {/* <Box
+        sx={{
+          mx: 2.5,
+          p: 2,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+        }}
+      >
+        <Box sx={{ width: 40, height: 40, borderRadius: 1, bgcolor: 'gray' }} />
+        <Typography variant="h6">Nama Aplikasi</Typography>
+      </Box> */}
+      <Box sx={{ mb: 1, mt: 2.5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
+            <Box sx={{ position: 'absolute', top: 0, right: 5, zIndex: 1 }}>
+              <SchoolIcon
+                sx={{
+                  width: 70,
+                  height: 70,
+                  color: themeAppColors.hard_light,
+                  opacity: 0.4,
+                }}
+              />
+            </Box>
             <Avatar
               src={''}
               sx={{
@@ -90,7 +114,7 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
               {getInitialName(itemsNoPagination?.nama)}
             </Avatar>
 
-            <Box sx={{ ml: 2 }}>
+            <Box sx={{ ml: 2, zIndex: 2, position: 'relative' }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary', lineHeight: 1 }}>
                 {isLoading ? <LinearProgress /> : itemsNoPagination?.nama}
               </Typography>

@@ -27,6 +27,7 @@ const DashboardDev = lazy(() => import('./pages/DEV/Dashboard/Dashboard'));
 const Account = lazy(() => import('./pages/DEV/Account/Account'));
 const Major = lazy(() => import('./pages/DEV/major/Major'));
 const Campaign = lazy(() => import('./pages/STAFF_TU/Campaign/Campaign'));
+const Pengaturan = lazy(() => import('./pages/STAFF_TU/Pengaturan/Pengaturan'));
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +65,7 @@ export default function Router() {
         { path: 'laporan-transaksi-masuk', element: <ReportTransaksiMasuk /> },
         { path: 'laporan-transaksi-keluar', element: <ReportTransaksiKeluar /> },
         { path: 'pengumuman', element: <Campaign /> },
+        { path: 'pengaturan', element: <Pengaturan /> },
       ],
     },
     {
