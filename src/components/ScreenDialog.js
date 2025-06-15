@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { LoadingButton } from '@mui/lab';
 import { green, red } from '@mui/material/colors';
 
-export default function ScreenDialog({
+function ScreenDialog({
   children,
   title,
   open,
@@ -100,3 +100,5 @@ export default function ScreenDialog({
     </div>
   );
 }
+
+export default React.memo(ScreenDialog);

@@ -8,6 +8,7 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import SettingsIcon from '@mui/icons-material/Settings';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import SchoolIcon from '@mui/icons-material/School';
 
@@ -106,6 +107,12 @@ export const navConfigDEV = [
     path: '/dev/major',
     name: 'major',
     icon: <SchoolIcon />,
+  },
+  {
+    title: 'Files',
+    path: '/dev/files',
+    name: 'files',
+    icon: <InsertDriveFileIcon />,
   },
 ];
 export const navConfigPPDB = [

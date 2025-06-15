@@ -7,7 +7,16 @@ import { useNavigate } from 'react-router-dom';
 
 import { apiUrl } from './api';
 
-function useQueryFetch({ invalidateKey, module, enabled = true, query, initialLimit = 40 }) {
+function useQueryFetch({
+  invalidateKey,
+  next = false,
+  fail = false,
+  module,
+  enabled = true,
+  query,
+  initialLimit = 40,
+  disabledParamInit = false,
+}) {
   const token = window.localStorage.getItem('accessToken');
   const [page, setPage] = React.useState(1);
   const [search, setSearch] = React.useState('');
@@ -21,16 +30,22 @@ function useQueryFetch({ invalidateKey, module, enabled = true, query, initialLi
   const fetch = useQuery({
     queryKey: [invalidateKey, queryParams],
     queryFn: async () => {
-      const data = await axios.get(`${apiUrl}${module}?${queryParams}`, {
+      const data = await axios.get(`${apiUrl}${module}${!disabledParamInit ? `?${queryParams}` : ''}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
+      if (next) {
+        next(data);
+      }
       return data;
     },
     enabled: Boolean(enabled),
     networkMode: 'always',
     onError: (error) => {
+      if (fail) {
+        fail(error);
+      }
       if (error?.response?.status === 403) {
         enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
         window.localStorage.clear();

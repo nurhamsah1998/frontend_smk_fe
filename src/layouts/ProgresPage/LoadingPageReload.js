@@ -17,7 +17,7 @@ function LoadingPageReload() {
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
         <CircularProgress sx={{ color: '#fff' }} />
         <Typography fontSize={25} color="#fff">
-          Memuat
+          Memuat halaman...
         </Typography>
       </Box>
     </Box>

@@ -3,6 +3,7 @@ import { useEffect, useContext, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import SchoolIcon from '@mui/icons-material/School';
+import PestControlIcon from '@mui/icons-material/PestControl';
 import { styled } from '@mui/material/styles';
 import { Box, Link, Drawer, Typography, Avatar, LinearProgress } from '@mui/material';
 // hooks
@@ -36,7 +37,12 @@ Nav.propTypes = {
   openNav: PropTypes.bool,
   onCloseNav: PropTypes.func,
 };
-
+const iconStyle = {
+  width: 70,
+  height: 70,
+  color: themeAppColors.hard_light,
+  opacity: 0.4,
+};
 export default function Nav({ openNav, onCloseNav, navConfig }) {
   const { pathname } = useLocation();
 
@@ -92,16 +98,12 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
       <Box sx={{ mb: 1, mt: 2.5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Box sx={{ position: 'absolute', top: 0, right: 5, zIndex: 1 }}>
-              <SchoolIcon
-                sx={{
-                  width: 70,
-                  height: 70,
-                  color: themeAppColors.hard_light,
-                  opacity: 0.4,
-                }}
-              />
-            </Box>
+            {!isLoading && (
+              <Box sx={{ position: 'absolute', top: 0, right: 5, zIndex: 1 }}>
+                {itemsNoPagination?.role === 'DEV' ? <PestControlIcon sx={iconStyle} /> : <SchoolIcon sx={iconStyle} />}
+              </Box>
+            )}
+
             <Avatar
               src={''}
               sx={{
