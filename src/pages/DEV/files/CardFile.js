@@ -18,24 +18,25 @@ import { Dialog } from '../../../hooks/useContextHook';
 function CardFile({ item, refetchFiles }) {
   const { setDialog } = React.useContext(Dialog);
   const isXlsx = item?.fileName?.includes('.xlsx');
-  const {
-    refetch: downloadFile,
-    isLoading: isLoadingDownload,
-    isFetching: isFetchingDownload,
-  } = useQueryFetch({
-    module: `download-files?path=${item?.fileLocation}`,
-    invalidateKey: `download-files?path=${item?.fileLocation}_none`,
-    enabled: false,
-    disabledParamInit: true,
-    next: (res) => {
-      const url = URL.createObjectURL(new Blob([res?.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `${item?.fileName}`);
-      document.body.appendChild(link);
-      link.click();
-    },
-  });
+  // const {
+  //   refetch: downloadFile,
+  //   isLoading: isLoadingDownload,
+  //   isFetching: isFetchingDownload,
+  // } = useQueryFetch({
+  //   module: `download-files?path=${item?.fileLocation}`,
+  //   invalidateKey: `download-files?path=${item?.fileLocation}_none`,
+  //   enabled: false,
+  //   disabledParamInit: true,
+  //   next: (res) => {
+  /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+  //     const url = URL.createObjectURL(new Blob([res?.data]));
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.setAttribute('download', `${item?.fileName}`);
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   },
+  // });
 
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -91,7 +92,7 @@ function CardFile({ item, refetchFiles }) {
             >
               Hapus
             </Button>
-            <Button
+            {/* <Button
               disabled={isLoadingDownload && isFetchingDownload}
               onClick={() => {
                 downloadFile();
@@ -101,7 +102,7 @@ function CardFile({ item, refetchFiles }) {
               variant="outlined"
             >
               Unduh
-            </Button>
+            </Button> */}
           </CardActions>
         </Card>
       </Grid>
