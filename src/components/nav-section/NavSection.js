@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { memo, useContext, useMemo } from 'react';
 import { NavLink as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import jwtDecode from 'jwt-decode';
 
 // @mui
 import { Box, Button, List, ListItemText } from '@mui/material';
@@ -18,6 +19,8 @@ NavSection.propTypes = {
 
 export default function NavSection({ data = [], ...other }) {
   const { setDialog } = useContext(Dialog);
+  const token = window.localStorage.getItem('accessToken');
+  const localToken = token ? jwtDecode(token || {}) : {};
   const navigate = useNavigate();
   const location = useLocation();
   const handleLogOut = () => {
@@ -30,7 +33,11 @@ export default function NavSection({ data = [], ...other }) {
         window.localStorage.removeItem('accessToken');
         window.localStorage.removeItem('current_page_tagihan');
         window.localStorage.removeItem('current_tab_tagihan');
-        navigate('/');
+        if (localToken?.roleStaff === 'ADMINISTRASI') {
+          navigate('/staff-login');
+        } else {
+          navigate('/');
+        }
       },
       isCloseAfterSubmit: true,
     }));

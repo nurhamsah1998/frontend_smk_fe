@@ -4,8 +4,10 @@ import React from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
 import ContainerCard from 'src/components/ContainerCard';
 import useQueryFetch from 'src/hooks/useQueryFetch';
+import { useSnackbar } from 'notistack';
 
 function Database() {
+  const { enqueueSnackbar } = useSnackbar();
   const {
     refetch: backupDB,
     isLoading: isLoadingDB,
@@ -14,6 +16,7 @@ function Database() {
     module: `database-backup`,
     invalidateKey: `database-backup_none`,
     enabled: false,
+    retry: false,
     disabledParamInit: true,
     next: (res) => {
       /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
@@ -26,6 +29,10 @@ function Database() {
       );
       document.body.appendChild(link);
       link.click();
+      enqueueSnackbar('Backup berhasil', { variant: 'success' });
+    },
+    fail: () => {
+      enqueueSnackbar('Backup gagal. ada kesalahan server', { variant: 'error' });
     },
   });
   return (

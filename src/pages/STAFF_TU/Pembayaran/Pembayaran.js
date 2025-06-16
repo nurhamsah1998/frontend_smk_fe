@@ -309,7 +309,7 @@ function Pembayaran() {
       .get(
         `${apiUrl}download/report-bill?page=${page}&limit=${limit}&search=${search}&current_bill=${bill}&kelas=${kelas}&jurusanId=${jurusanId}&sub_kelas=${subKelas}&angkatan=${
           Boolean(angkatan?.tahun_angkatan === 'undefined' || angkatan === '') ? '' : angkatan?.tahun_angkatan
-        }&type=${event}`,
+        }&type_file=${event}`,
         {
           responseType: 'blob',
           headers: {
