@@ -7,9 +7,10 @@ import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import StorageIcon from '@mui/icons-material/Storage';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { green, red } from '@mui/material/colors';
+import { green, orange, red } from '@mui/material/colors';
 import { Tooltip } from '@mui/material';
 import useQueryFetch from 'src/hooks/useQueryFetch';
 import { useSnackbar } from 'notistack';
@@ -17,7 +18,13 @@ import { Dialog } from '../../../hooks/useContextHook';
 
 function CardFile({ item, refetchFiles }) {
   const { setDialog } = React.useContext(Dialog);
-  const isXlsx = item?.fileName?.includes('.xlsx');
+  const icon = {
+    xlsx: <InsertDriveFileIcon sx={{ color: green[500], width: 40, height: 40 }} />,
+    pdf: <PictureAsPdfIcon sx={{ color: red[500], width: 40, height: 40 }} />,
+    sql: <StorageIcon sx={{ color: orange[500], width: 40, height: 40 }} />,
+  };
+  const formatArray = item?.fileName?.split('.');
+  const extention = formatArray[formatArray?.length - 1];
   // const {
   //   refetch: downloadFile,
   //   isLoading: isLoadingDownload,
@@ -73,11 +80,7 @@ function CardFile({ item, refetchFiles }) {
       <Grid item>
         <Card sx={{ maxWidth: 240 }}>
           <CardContent sx={{ pb: 2 }}>
-            {isXlsx ? (
-              <InsertDriveFileIcon sx={{ color: green[500], width: 40, height: 40 }} />
-            ) : (
-              <PictureAsPdfIcon sx={{ color: red[500], width: 40, height: 40 }} />
-            )}
+            {icon[extention]}
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {item?.fileName}
             </Typography>

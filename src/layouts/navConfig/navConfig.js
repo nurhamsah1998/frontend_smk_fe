@@ -10,6 +10,7 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
+import StorageIcon from '@mui/icons-material/Storage';
 import SchoolIcon from '@mui/icons-material/School';
 
 import SvgColor from '../../components/svg-color';
@@ -113,6 +114,12 @@ export const navConfigDEV = [
     path: '/dev/files',
     name: 'files',
     icon: <InsertDriveFileIcon />,
+  },
+  {
+    title: 'Database',
+    path: '/dev/database',
+    name: 'database',
+    icon: <StorageIcon />,
   },
 ];
 export const navConfigPPDB = [

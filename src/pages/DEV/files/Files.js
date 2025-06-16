@@ -16,7 +16,7 @@ function Files() {
   return (
     <ContainerCard>
       <Box sx={{ mb: 3, minHeight: 'calc(100dvh - 245px)' }}>
-        <Typography>Ini merupakan list file yang berada di server hasil download ataupun upload dari admin.</Typography>
+        <Typography variant="h4">Ini merupakan list file yang berada di server</Typography>
 
         <Grid
           container

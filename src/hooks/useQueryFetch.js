@@ -13,6 +13,7 @@ function useQueryFetch({
   fail = false,
   module,
   enabled = true,
+  retry = true,
   query,
   initialLimit = 40,
   disabledParamInit = false,
@@ -42,6 +43,7 @@ function useQueryFetch({
     },
     enabled: Boolean(enabled),
     networkMode: 'always',
+    retry,
     onError: (error) => {
       if (fail) {
         fail(error);
