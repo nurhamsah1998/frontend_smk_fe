@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
 
+import { Navigate } from 'react-router-dom';
 import { Container, Typography, Box } from '@mui/material';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
@@ -72,6 +73,8 @@ export const SideAuthBox = () => (
 );
 export default function LoginStudentPage() {
   const mdUp = useResponsive('up', 'md');
+  const token = window.localStorage.getItem('accessToken');
+  if (token) return <Navigate to="/" replace />;
   return (
     <>
       <Helmet>

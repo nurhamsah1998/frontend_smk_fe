@@ -73,7 +73,7 @@ function TableRowDate({ head, body }) {
       sx={{
         px: 2,
         py: 0,
-        textTransform: 'capitalize',
+        textTransform: head?.isCapitalize === false ? 'none' : 'capitalize',
       }}
     >
       {isDate || '-'}

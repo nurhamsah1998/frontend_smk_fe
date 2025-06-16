@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-extra-boolean-cast */
-import { Box, TextField, Typography, Checkbox } from '@mui/material';
+import { Box, TextField, Typography, Checkbox, Button } from '@mui/material';
 import debounce from 'lodash/debounce';
 import React from 'react';
 import moment from 'moment';
@@ -13,19 +13,22 @@ import ScreenDialog from '../../../components/ScreenDialog';
 import { themeAppColors } from '../../../theme/themeAppColor';
 import useQueryFetch from '../../../hooks/useQueryFetch';
 import ContainerCard from '../../../components/ContainerCard';
+import CreateAccount from './CreateAccount';
 
 function Account() {
   const [inputView, setInputView] = React.useState('');
+  const [openModalMutation, setOpenModalMutation] = React.useState({ isOpen: false, type: '' });
   const [modalPermissions, setModalPermissions] = React.useState({
     isOpen: false,
     data: [],
     user_id: '',
     user_name: '',
   });
-  const { items, totalPage, setPage, setSearch, page, search, totalRows, totalData, isLoading } = useQueryFetch({
-    module: `staff`,
-    invalidateKey: 'staff',
-  });
+  const { items, totalPage, setPage, setSearch, refetch, page, search, totalRows, totalData, isLoading } =
+    useQueryFetch({
+      module: `staff`,
+      invalidateKey: 'staff',
+    });
   const permissions = [
     {
       title: 'Daftar Siswa',
@@ -122,6 +125,7 @@ function Account() {
     {
       id: 'username',
       label: 'Username',
+      isCapitalize: false,
     },
     {
       id: 'role',
@@ -172,6 +176,7 @@ function Account() {
   };
   return (
     <ContainerCard>
+      <CreateAccount refetch={refetch} openModal={openModalMutation} setOpenModal={setOpenModalMutation} />
       <Box>
         <ScreenDialog
           handleSubmit={handleSubmitPermissions}
@@ -210,11 +215,19 @@ function Account() {
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'end',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             mb: 2,
           }}
         >
+          <Button
+            onClick={() => {
+              setOpenModalMutation({ isOpen: true, type: 'Buat' });
+            }}
+            variant="contained"
+          >
+            Pendaftaran Staff Baru
+          </Button>
           <Box>
             <LabelField
               title="Cari nama / username"

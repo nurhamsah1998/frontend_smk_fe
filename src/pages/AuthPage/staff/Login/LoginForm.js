@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Formik, Form } from 'formik';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import { Stack, IconButton, InputAdornment, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../../components/iconify';
@@ -11,8 +10,6 @@ import useLogin from '../../../../hooks/useLogin';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
   const { login, isLoading } = useLogin({
     module: 'staff-login',

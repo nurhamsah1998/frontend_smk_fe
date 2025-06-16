@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Container, Typography, Box } from '@mui/material';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
@@ -33,6 +33,8 @@ const StyledContent = styled('div')(({ theme }) => ({
 export default function LoginStaff() {
   const mdUp = useResponsive('up', 'md');
   const navigate = useNavigate();
+  const token = window.localStorage.getItem('accessToken');
+  if (token) return <Navigate to="/" replace />;
   return (
     <>
       <Helmet>

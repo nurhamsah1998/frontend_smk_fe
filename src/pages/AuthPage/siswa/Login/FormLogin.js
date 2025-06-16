@@ -11,8 +11,6 @@ import { useSnackbar } from 'notistack';
 import Iconify from '../../../../components/iconify';
 import { apiUrl } from '../../../../hooks/api';
 
-import useLogin from '../../../../hooks/useLogin';
-
 // ----------------------------------------------------------------------
 
 export default function FormLogin() {

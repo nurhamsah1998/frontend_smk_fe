@@ -116,9 +116,9 @@ export const navConfigDEV = [
     icon: <InsertDriveFileIcon />,
   },
   {
-    title: 'Database',
-    path: '/dev/database',
-    name: 'database',
+    title: 'Server',
+    path: '/dev/server',
+    name: 'server',
     icon: <StorageIcon />,
   },
 ];

@@ -8,12 +8,12 @@ import {
   AppWebsiteVisits,
 } from '../../../sections/@dashboard/app';
 import ContainerCard from '../../../components/ContainerCard';
-import useFetch from '../../../hooks/useFetch';
 import AppTotalStudentByMajorAnual from '../../../sections/@dashboard/app/DEV/AppTotalStudentByMajorAnual';
+import useQueryFetch from '../../../hooks/useQueryFetch';
 
 function DashboardDev() {
   const theme = useTheme();
-  const { itemsNoPagination, isLoading } = useFetch({
+  const { itemsNoPagination, isLoading } = useQueryFetch({
     module: 'dashboard-dev',
   });
   const majorList = Object.keys(itemsNoPagination?.data?.analytics ?? {});

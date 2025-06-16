@@ -9,6 +9,7 @@ import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 import Iconify from '../../../components/iconify';
 import useFetch from '../../../hooks/useFetch';
 import { isEmpty } from '../../../utils/helper';
+import { getLocalTahunAngkatan } from '../../../utils/getLocalAngkatan';
 
 function Create({ openModalCreate, setOpenModalCreate }) {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -29,14 +30,6 @@ function Create({ openModalCreate, setOpenModalCreate }) {
 
   const handleChange = (event) => {
     setGender(event.target.value);
-  };
-  const angkatan = () => {
-    const result = [];
-    const date = new Date();
-    result.push(date.getFullYear() - 1);
-    result.push(date.getFullYear());
-    result.push(date.getFullYear() + 1);
-    return result;
   };
 
   return (
@@ -124,7 +117,7 @@ function Create({ openModalCreate, setOpenModalCreate }) {
                     value={values.angkatan}
                     label="Angkatan"
                   >
-                    {angkatan()?.map((item, index) => (
+                    {getLocalTahunAngkatan()?.map((item, index) => (
                       <MenuItem key={index} value={item}>
                         {item}
                       </MenuItem>

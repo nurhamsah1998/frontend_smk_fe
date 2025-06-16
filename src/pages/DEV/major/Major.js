@@ -13,7 +13,7 @@ import useMutationPost from '../../../hooks/useMutationPost';
 import useMutationDelete from '../../../hooks/useMutationDelete';
 import ContainerCard from '../../../components/ContainerCard';
 
-function Account() {
+function Major() {
   const [openModal, setOpenModal] = React.useState({ isOpen: false, type: '' });
   const { data, totalPage, setPage, page, search, totalRows, totalData, isLoading } = useQueryFetch({
     module: `jurusan`,
@@ -107,6 +107,7 @@ function Account() {
           {(openModal.type === 'Edit' || openModal.type === 'Buat') && (
             <Box sx={{ display: 'grid', gap: 2 }}>
               <TextField
+                size="small"
                 value={formValue?.nama || ''}
                 onChange={(i) => {
                   setFormValue((prev) => ({ ...prev, nama: i?.target?.value }));
@@ -114,6 +115,7 @@ function Account() {
                 label="Nama jurusan"
               />
               <TextField
+                size="small"
                 value={formValue?.kode_jurusan || ''}
                 onChange={(i) => {
                   setFormValue((prev) => ({ ...prev, kode_jurusan: i?.target?.value }));
@@ -138,7 +140,7 @@ function Account() {
           tableBody={itemRebuild}
           tableHead={tableHead}
           totalRows={Boolean(search) ? totalRows : null}
-          emptyTag={Boolean(search) ? `( tidak bisa menemukan "${search}")` : '( sepertinya tidak ada akun )'}
+          emptyTag={Boolean(search) ? `( tidak bisa menemukan "${search}")` : '( sepertinya belum membuat jurusan )'}
           tooltipCustom="Edit"
           handleCustomOnClickRow={handleCustomOnClickRow}
           handleDelete={handleDelete}
@@ -151,4 +153,4 @@ function Account() {
   );
 }
 
-export default Account;
+export default Major;

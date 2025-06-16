@@ -29,7 +29,7 @@ export default function FormRegisterStaff() {
           noHP: '',
         }}
         onSubmit={(values) => {
-          register.mutate({ ...values, jurusanId: values?.values?.id });
+          register.mutate({ ...values });
         }}
       >
         {({ getFieldProps, setFieldValue, values }) => (

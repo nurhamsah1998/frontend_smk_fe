@@ -27,7 +27,7 @@ const DashboardDev = lazy(() => import('./pages/DEV/Dashboard/Dashboard'));
 const Account = lazy(() => import('./pages/DEV/Account/Account'));
 const Major = lazy(() => import('./pages/DEV/major/Major'));
 const Files = lazy(() => import('./pages/DEV/files/Files'));
-const Database = lazy(() => import('./pages/DEV/database/Database'));
+const Server = lazy(() => import('./pages/DEV/server/Server'));
 const Campaign = lazy(() => import('./pages/STAFF_TU/Campaign/Campaign'));
 const Pengaturan = lazy(() => import('./pages/STAFF_TU/Pengaturan/Pengaturan'));
 
@@ -45,7 +45,7 @@ export default function Router() {
         { path: 'account', element: <Account /> },
         { path: 'major', element: <Major /> },
         { path: 'files', element: <Files /> },
-        { path: 'database', element: <Database /> },
+        { path: 'server', element: <Server /> },
       ],
     },
     {
