@@ -13,13 +13,12 @@ import AccountPopover from './AccountPopover';
 
 const NAV_WIDTH = 280;
 
-const HEADER_MOBILE = 64;
+const HEADER_MOBILE = 60;
 
-const HEADER_DESKTOP = 92;
+const HEADER_DESKTOP = 60;
 
 const StyledRoot = styled(AppBar)(({ theme }) => ({
-  ...bgBlur({ color: theme.palette.background.default }),
-  boxShadow: 'none',
+  backgroundColor: '#fff',
   [theme.breakpoints.up('lg')]: {
     width: `calc(100% - ${NAV_WIDTH + 1}px)`,
   },

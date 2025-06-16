@@ -19,7 +19,7 @@ import { getInitialName, randomColorInitialName } from '../../../utils/getInitia
 
 // ----------------------------------------------------------------------
 
-const NAV_WIDTH = 280;
+const NAV_WIDTH = 281;
 
 const StyledAccount = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -43,6 +43,36 @@ const iconStyle = {
   color: themeAppColors.hard_light,
   opacity: 0.4,
 };
+export const LogoApp = () => (
+  <Box
+    sx={{
+      mx: 0.5,
+      p: 2,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 1,
+    }}
+  >
+    <Box
+      sx={{
+        width: 50,
+        height: 50,
+        borderRadius: 1,
+        // bgcolor: themeAppColors.main
+      }}
+    >
+      <img src="/assets/logo_pgri.png" alt="logo_pic" />
+    </Box>
+    <Box>
+      <Typography variant="h6" sx={{ lineHeight: 0.5 }}>
+        SMK PGRI KRAS
+      </Typography>
+      <Typography sx={{ lineHeight: 0 }} variant="caption">
+        kediri jawa timur
+      </Typography>
+    </Box>
+  </Box>
+);
 export default function Nav({ openNav, onCloseNav, navConfig }) {
   const { pathname } = useLocation();
 
@@ -80,22 +110,12 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
     <Scrollbar
       sx={{
         height: 1,
+        bgcolor: '#fff',
         '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
       }}
     >
-      {/* <Box
-        sx={{
-          mx: 2.5,
-          p: 2,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-        }}
-      >
-        <Box sx={{ width: 40, height: 40, borderRadius: 1, bgcolor: 'gray' }} />
-        <Typography variant="h6">Nama Aplikasi</Typography>
-      </Box> */}
-      <Box sx={{ mb: 1, mt: 2.5, mx: 2.5 }}>
+      <LogoApp />
+      <Box sx={{ mb: 1, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
             {!isLoading && (
@@ -117,7 +137,10 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
             </Avatar>
 
             <Box sx={{ ml: 2, zIndex: 2, position: 'relative' }}>
-              <Typography variant="subtitle2" sx={{ color: 'text.primary', lineHeight: 1 }}>
+              <Typography
+                variant="subtitle2"
+                sx={{ color: 'text.primary', lineHeight: 1, textTransform: 'capitalize' }}
+              >
                 {isLoading ? <LinearProgress /> : itemsNoPagination?.nama}
               </Typography>
 
@@ -128,9 +151,7 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
           </StyledAccount>
         </Link>
       </Box>
-
       <NavSection data={permissionsSlicing} />
-
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>
   );
@@ -152,6 +173,7 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
               width: NAV_WIDTH,
               bgcolor: 'background.default',
               borderRightStyle: 'dashed',
+              borderRight: 'none',
             },
           }}
         >
@@ -165,7 +187,7 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
             keepMounted: true,
           }}
           PaperProps={{
-            sx: { width: NAV_WIDTH },
+            sx: { width: NAV_WIDTH, borderRight: 'none' },
           }}
         >
           {renderContent}

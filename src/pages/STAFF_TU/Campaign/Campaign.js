@@ -43,7 +43,11 @@ function Campaign() {
 
   return (
     <ContainerCard>
-      <Box>
+      <Box
+        sx={{
+          minHeight: 'calc(100dvh - 245px)',
+        }}
+      >
         <MutationCampaign
           setDataEdit={setDataEdit}
           dataEdit={dataEdit}
@@ -79,7 +83,15 @@ function Campaign() {
               <CircularProgress /> <span>Memuat</span>
             </Box>
           ) : items?.length === 0 ? (
-            <Box sx={{ textAlign: 'center', mt: 3, display: 'grid' }}>
+            <Box
+              sx={{
+                textAlign: 'center',
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
               <Typography variant="h6" color={grey[600]}>
                 Tidak ada pengumuman
               </Typography>

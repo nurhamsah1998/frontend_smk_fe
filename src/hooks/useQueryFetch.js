@@ -3,6 +3,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 import React from 'react';
 import { useSnackbar } from 'notistack';
+import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
 import { apiUrl } from './api';
@@ -19,6 +20,7 @@ function useQueryFetch({
   disabledParamInit = false,
 }) {
   const token = window.localStorage.getItem('accessToken');
+  const localToken = token ? jwtDecode(token || {}) : {};
   const [page, setPage] = React.useState(1);
   const [search, setSearch] = React.useState('');
   const [limit, setLimit] = React.useState(initialLimit);
@@ -50,8 +52,12 @@ function useQueryFetch({
       }
       if (error?.response?.status === 403) {
         enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+        if (localToken?.roleStaff === 'ADMINISTRASI') {
+          navigate('/staff-login');
+        } else {
+          navigate('/');
+        }
         window.localStorage.clear();
-        navigate('/');
       }
     },
     staleTime: 5000,

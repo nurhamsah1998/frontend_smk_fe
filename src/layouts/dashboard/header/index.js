@@ -21,8 +21,7 @@ const HEADER_MOBILE = 60;
 const HEADER_DESKTOP = 60;
 
 const StyledRoot = styled(AppBar)(({ theme }) => ({
-  ...bgBlur({ color: theme.palette.background.default }),
-  boxShadow: 'none',
+  backgroundColor: '#fff',
   [theme.breakpoints.up('lg')]: {
     width: `calc(100% - ${NAV_WIDTH + 1}px)`,
   },
@@ -72,8 +71,8 @@ export default function Header({ onOpenNav, navConfigMenu }) {
             sm: 1,
           }}
         >
-          <Box sx={{ position: 'absolute', left: { xs: 70, sm: 70, md: 290, lg: 10 } }}>
-            <Typography sx={{ color: themeAppColors.dark }} variant="h4">
+          <Box sx={{ position: 'absolute', left: { xs: 70, sm: 70, md: 290, lg: 20 } }}>
+            <Typography sx={{ color: themeAppColors.dark }} variant="h6">
               {currentPage?.title || 'Detail Pembayaran'}
             </Typography>
           </Box>

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react';
+import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
 import { apiUrl } from './api';
@@ -8,6 +9,7 @@ import { apiUrl } from './api';
 function useFetch({ module, enabled = true, isCustom = false, params = '', initialLimit = 40 }) {
   const token = window.localStorage.getItem('accessToken');
   const [page, setPage] = React.useState(1);
+  const localToken = token ? jwtDecode(token || {}) : {};
   const [search, setSearch] = React.useState('');
   const [limit, setLimit] = React.useState(initialLimit);
   const navigate = useNavigate();
@@ -31,7 +33,11 @@ function useFetch({ module, enabled = true, isCustom = false, params = '', initi
         console.log(error, '<---- ERROR');
         if (error?.response?.status === 403) {
           window.localStorage.clear();
-          navigate('/');
+          if (localToken?.roleStaff === 'ADMINISTRASI') {
+            navigate('/staff-login');
+          } else {
+            navigate('/');
+          }
         }
       },
     }

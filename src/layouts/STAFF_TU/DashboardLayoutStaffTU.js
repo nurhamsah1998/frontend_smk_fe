@@ -22,16 +22,17 @@ import LockPage from '../ProgresPage/LockPage';
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
 
-const StyledRoot = styled('div')({
+export const StyledRootWraper = styled('div')({
   display: 'flex',
   minHeight: '100%',
   overflow: 'hidden',
 });
 
-const Main = styled('div')(({ theme }) => ({
+export const MainWrapper = styled('div')(({ theme }) => ({
   flexGrow: 1,
   overflow: 'auto',
   minHeight: '100%',
+  backgroundColor: '#f0f0f0',
   paddingTop: APP_BAR_MOBILE,
   // paddingTop: '10px',
   paddingBottom: theme.spacing(10),
@@ -99,15 +100,15 @@ const ComponentAccountValidation = memo(({ itemsNoPagination, navigate, setOpen,
         />
       )}
       {itemsNoPagination?.role === 'ADMINISTRASI' && !isError && (
-        <StyledRoot>
+        <StyledRootWraper>
           <Header navConfigMenu={navConfigTU} onOpenNav={() => setOpen(true)} />
           <Nav openNav={open} navConfig={navConfigTU} onCloseNav={() => setOpen(false)} />
-          <Main>
+          <MainWrapper>
             <Suspense fallback={<SuspenseLoading />}>
               <Outlet />
             </Suspense>
-          </Main>
-        </StyledRoot>
+          </MainWrapper>
+        </StyledRootWraper>
       )}
       {itemsNoPagination?.role === 'DEV' && !isError && (
         <Box sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

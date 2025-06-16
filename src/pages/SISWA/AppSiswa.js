@@ -17,7 +17,11 @@ function AppSiswa() {
   const [previewResponCampaign, setPreviewResponCampaign] = React.useState({ isOpen: false, data: [] });
   return (
     <ContainerCard>
-      <Box>
+      <Box
+        sx={{
+          minHeight: 'calc(100dvh - 260px)',
+        }}
+      >
         <ResponseCampaign open={campaign} setOpen={setCampaign} />
         <PreviewResponCampaign open={previewResponCampaign} setOpen={setPreviewResponCampaign} />
         <Box sx={{ mt: 4 }}>

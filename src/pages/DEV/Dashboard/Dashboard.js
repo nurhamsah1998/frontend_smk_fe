@@ -36,13 +36,13 @@ function DashboardDev() {
                   data: dataAnalytics[majorList[0]] || [],
                 },
                 {
-                  name: majorList[1],
+                  name: majorList[1] || '',
                   type: 'area',
                   fill: 'gradient',
                   data: dataAnalytics[majorList[1]] || [],
                 },
                 {
-                  name: majorList[2],
+                  name: majorList[2] || '',
                   type: 'line',
                   fill: 'solid',
                   data: dataAnalytics[majorList[2]] || [],

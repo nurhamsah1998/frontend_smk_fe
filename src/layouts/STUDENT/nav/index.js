@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable eqeqeq */
 import PropTypes from 'prop-types';
 import { useEffect, useContext, useState } from 'react';
@@ -12,13 +13,13 @@ import {
   Typography,
   Avatar,
   Stack,
-  Toolbar,
   LinearProgress,
   ListItemText,
   TextField,
 } from '@mui/material';
 // hooks
 import { useQueryClient } from '@tanstack/react-query';
+import { LogoApp } from 'src/layouts/dashboard/nav';
 import useResponsive from '../../../hooks/useResponsive';
 // components
 import Scrollbar from '../../../components/scrollbar';
@@ -32,7 +33,7 @@ import { getInitialName, randomColorInitialName } from '../../../utils/getInitia
 
 // ----------------------------------------------------------------------
 
-const NAV_WIDTH = 280;
+const NAV_WIDTH = 281;
 
 const StyledAccount = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -77,11 +78,12 @@ export default function Nav({ openNav, onCloseNav }) {
     <Scrollbar
       sx={{
         height: 1,
+        bgcolor: '#fff',
         '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
       }}
     >
-      <Toolbar />
-      <Box sx={{ mb: 5, mx: 2.5 }}>
+      <LogoApp />
+      <Box sx={{ mb: 1, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
             <Avatar
@@ -139,6 +141,7 @@ export default function Nav({ openNav, onCloseNav }) {
               width: NAV_WIDTH,
               bgcolor: 'background.default',
               borderRightStyle: 'dashed',
+              borderRight: 'none',
             },
           }}
         >
@@ -152,7 +155,7 @@ export default function Nav({ openNav, onCloseNav }) {
             keepMounted: true,
           }}
           PaperProps={{
-            sx: { width: NAV_WIDTH },
+            sx: { width: NAV_WIDTH, borderRight: 'none' },
           }}
         >
           {renderContent}

@@ -1,10 +1,22 @@
 import React from 'react';
-import { Box, Button, Typography, Tab, Tabs, FormHelperText, CircularProgress, Paper, IconButton } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  Tab,
+  Tabs,
+  FormHelperText,
+  CircularProgress,
+  Paper,
+  IconButton,
+  Alert,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import SaveIcon from '@mui/icons-material/Save';
+import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
 import { red } from '@mui/material/colors';
 import useMutationPatch from '../../../hooks/useMutationPatch';
@@ -172,9 +184,9 @@ export default function TagihanStaff() {
               </Box>
               <Box sx={{ mt: 2, display: 'flex', gap: 1, alignItems: 'center' }}>
                 <Button
-                  color="warning"
+                  color="info"
                   variant="contained"
-                  startIcon={mutation.isLoading ? <CircularProgress size={20} /> : <SaveIcon />}
+                  startIcon={mutation.isLoading ? <CircularProgress size={20} /> : <AddIcon />}
                   disabled={loadingCurrentPage || mutation.isLoading || createMutation.isLoading}
                   onClick={handleAddTahunTagihan}
                 >
@@ -182,20 +194,17 @@ export default function TagihanStaff() {
                 </Button>
                 <Button
                   startIcon={mutation.isLoading ? <CircularProgress size={20} /> : <SaveIcon />}
-                  variant="contained"
+                  variant="outlined"
                   disabled={loadingCurrentPage || mutation.isLoading || createMutation.isLoading}
                   onClick={handleSave}
                 >
                   Simpan perubahan
                 </Button>
               </Box>
-              <Box sx={{ display: 'flex', alignItem: 'flex-start', gap: 1, mt: 1 }}>
-                <InfoIcon sx={{ color: red[400] }} />
-                <FormHelperText sx={{ color: red[400] }}>
-                  PENTING : Jika melakukan perubahan tagihan dan ingin berpindah tab tahun ajaran, simpan perubahan
-                  terlebih dahulu !
-                </FormHelperText>
-              </Box>
+              <Alert sx={{ mt: 1, mb: 0.5 }} variant="filled" severity="error">
+                PENTING : Jika melakukan perubahan tagihan dan ingin berpindah tab tahun ajaran, simpan perubahan
+                terlebih dahulu !
+              </Alert>
               <Box>
                 <Typography sx={{ fontSize: '12px' }}>Total tagihan : {FormatCurrency(totalBill)}</Typography>
               </Box>

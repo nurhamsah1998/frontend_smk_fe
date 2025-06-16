@@ -127,7 +127,7 @@ function Database() {
                 Brand : {itemsNoPagination?.cpu?.manufacturer} {itemsNoPagination?.cpu?.brand}
               </Box>
               <Box component="li">Cores : {itemsNoPagination?.cpu?.cores}</Box>
-              <Box component="li">Hidup : {itemsNoPagination?.up_time}</Box>
+              <Box component="li">Waktu server berjalan : {itemsNoPagination?.up_time}</Box>
             </Box>
           )}
         </Box>
