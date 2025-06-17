@@ -61,7 +61,7 @@ export default function NavSection({ data = [], ...other }) {
                 onClick={handleLogOut}
                 sx={{
                   position: 'absolute',
-                  bottom: 40,
+                  bottom: 20,
                   right: 8,
                   left: 8,
                 }}
@@ -70,7 +70,6 @@ export default function NavSection({ data = [], ...other }) {
                   component={RouterLink}
                   to={null}
                   sx={{
-                    mt: 5,
                     width: '100%',
                     '&.active': {
                       color: red[500],

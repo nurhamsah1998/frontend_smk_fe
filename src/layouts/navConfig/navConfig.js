@@ -6,6 +6,7 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -108,6 +109,12 @@ export const navConfigDEV = [
     path: '/dev/major',
     name: 'major',
     icon: <SchoolIcon />,
+  },
+  {
+    title: 'Kabar Berita',
+    path: '/dev/news',
+    name: 'news',
+    icon: <NewspaperIcon />,
   },
   {
     title: 'Files',

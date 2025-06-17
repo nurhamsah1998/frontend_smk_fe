@@ -1,11 +1,15 @@
-import { Typography, Box, Container, Grid } from '@mui/material';
-import React from 'react';
+/* eslint-disable camelcase */
+import { Typography, Box, Container, Grid, Skeleton, Card, CardHeader } from '@mui/material';
+import React, { useMemo } from 'react';
 import { useTheme } from '@mui/material/styles';
+import SchoolIcon from '@mui/icons-material/School';
 import {
   AppConversionRates,
   AppCurrentSubject,
   AppCurrentVisits,
+  AppOrderTimeline,
   AppWebsiteVisits,
+  AppWidgetSummary,
 } from '../../../sections/@dashboard/app';
 import ContainerCard from '../../../components/ContainerCard';
 import AppTotalStudentByMajorAnual from '../../../sections/@dashboard/app/DEV/AppTotalStudentByMajorAnual';
@@ -19,11 +23,60 @@ function DashboardDev() {
   const majorList = Object.keys(itemsNoPagination?.data?.analytics ?? {});
   const dataAnalytics = itemsNoPagination?.data?.analytics || [];
   const tahunAngkatan = itemsNoPagination?.data?.tahun_angkatan || [];
+  const { total_siswa_aktif, total_siswa_alumni, log_activity, latest_campaign } = itemsNoPagination?.data || {};
+  const dataRebuildLogActivity = useMemo(
+    () =>
+      log_activity?.map((item, index) => ({
+        id: item?.id,
+        time: new Date(item?.createdAt),
+        type: `order${index + 1}`,
+        title: item?.action,
+        author_name: item?.staf?.nama,
+      })),
+    [log_activity]
+  );
   return (
     <ContainerCard>
       <Box>
-        <Container>
-          <Grid item xs={12} md={6} lg={8}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={6}>
+            <AppWidgetSummary
+              color="primary"
+              icon={<SchoolIcon />}
+              title={
+                isLoading ? (
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Skeleton height={30} width="80%" />
+                  </Box>
+                ) : (
+                  <>
+                    <Box>{Boolean(total_siswa_aktif) ? `Belum ada siswa aktif` : `Total siswa aktif`}</Box>
+                  </>
+                )
+              }
+              total={total_siswa_aktif || 0}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={6}>
+            <AppWidgetSummary
+              color="secondary"
+              icon={<SchoolIcon />}
+              title={
+                isLoading ? (
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Skeleton height={30} width="80%" />
+                  </Box>
+                ) : (
+                  <>
+                    <Box>{Boolean(total_siswa_alumni) ? `Belum ada siswa alumni` : `Total siswa alumni`}</Box>
+                  </>
+                )
+              }
+              total={total_siswa_alumni || 0}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={12} lg={12}>
             <AppTotalStudentByMajorAnual
               title="Analytic Jurusan Sekolah"
               subheader="Total siswa berdasarkan jurusan tiap tahun"
@@ -50,7 +103,16 @@ function DashboardDev() {
               ]}
             />
           </Grid>
-          {/* <Grid item xs={12} md={6} lg={4}>
+          <Grid item xs={12} md={6} lg={5}>
+            <AppOrderTimeline title="Aktivitas Admin Terakhir" list={dataRebuildLogActivity || []} />
+          </Grid>
+          <Grid item xs={12} md={6} lg={7}>
+            <Card>
+              <CardHeader title="Campaign Terbaru" subheader="dg" />
+            </Card>
+          </Grid>
+        </Grid>
+        {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
               title="Current Visits"
               chartData={[
@@ -68,7 +130,7 @@ function DashboardDev() {
             />
           </Grid> */}
 
-          {/* <Grid item xs={12} md={6} lg={4}>
+        {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentSubject
               title="Current Subject"
               chartLabels={['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math']}
@@ -80,7 +142,6 @@ function DashboardDev() {
               chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
             />
           </Grid> */}
-        </Container>
       </Box>
     </ContainerCard>
   );

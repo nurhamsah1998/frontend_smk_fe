@@ -24,8 +24,12 @@ function LogActivity() {
       label: 'Action',
     },
     {
-      id: 'author',
-      label: 'Author',
+      id: 'author_name',
+      label: 'Author name',
+    },
+    {
+      id: 'author_username',
+      label: 'Author username',
     },
     {
       id: 'data',
@@ -38,7 +42,8 @@ function LogActivity() {
       data: (
         <JsonView data={item?.data} allExpanded={() => false} shouldExpandNode={collapseAllNested} style={darkStyles} />
       ),
-      author: item?.author?.namaStaff,
+      author_name: item?.author_name,
+      author_username: item?.author_username,
     }));
   }, [items]);
 

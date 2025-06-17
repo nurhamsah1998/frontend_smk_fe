@@ -152,25 +152,6 @@ export default function DashboardAppPage() {
               }))}
             />
           </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppOrderTimeline
-              title="Order Timeline"
-              list={[...Array(5)].map((_, index) => ({
-                id: 'faker.datatype.uuid()',
-                title: [
-                  '1983, orders, $4220',
-                  '12 Invoices have been paid',
-                  'Order #37745 from September',
-                  'New order placed #XF-2356',
-                  'New order placed #XF-2346',
-                ][index],
-                type: `order${index + 1}`,
-                time: 'faker.date.past()',
-              }))}
-            />
-          </Grid>
-
           <Grid item xs={12} md={6} lg={4}>
             <AppTrafficBySite
               title="Traffic by Site"
@@ -198,7 +179,23 @@ export default function DashboardAppPage() {
               ]}
             />
           </Grid>
-
+          <Grid item xs={12} md={6} lg={4}>
+            <AppOrderTimeline
+              title="Order Timeline"
+              list={[...Array(5)].map((_, index) => ({
+                id: 'faker.datatype.uuid()',
+                title: [
+                  '1983, orders, $4220',
+                  '12 Invoices have been paid',
+                  'Order #37745 from September',
+                  'New order placed #XF-2356',
+                  'New order placed #XF-2346',
+                ][index],
+                type: `order${index + 1}`,
+                time: 'faker.date.past()',
+              }))}
+            />
+          </Grid>
           <Grid item xs={12} md={6} lg={8}>
             <AppTasks
               title="Tasks"

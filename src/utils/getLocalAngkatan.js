@@ -7,8 +7,8 @@ export const getLocalTahunAngkatan = () => {
   }
   result.push(date.getFullYear());
 
-  for (let index = 1; index < 3; index += 1) {
-    result.push(date.getFullYear() + index);
-  }
+  // for (let index = 1; index < 3; index += 1) {
+  //   result.push(date.getFullYear() + index);
+  // }
   return result;
 };

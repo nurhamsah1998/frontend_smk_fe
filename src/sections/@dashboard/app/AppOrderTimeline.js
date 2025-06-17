@@ -1,6 +1,6 @@
 // @mui
 import PropTypes from 'prop-types';
-import { Card, Typography, CardHeader, CardContent } from '@mui/material';
+import { Card, Typography, CardHeader, CardContent, Box } from '@mui/material';
 import { Timeline, TimelineDot, TimelineItem, TimelineContent, TimelineSeparator, TimelineConnector } from '@mui/lab';
 // utils
 import { fDateTime } from '../../../utils/formatTime';
@@ -64,11 +64,25 @@ function OrderItem({ item, isLast }) {
       </TimelineSeparator>
 
       <TimelineContent>
-        <Typography variant="subtitle2">{title}</Typography>
-
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          {fDateTime(time)}
+        <Typography variant="subtitle2" sx={{ lineHeight: 1 }}>
+          {title}
         </Typography>
+
+        <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+            {fDateTime(time)}
+          </Typography>
+          {item?.author_name && (
+            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+              |
+            </Typography>
+          )}
+          {item?.author_name && (
+            <Typography variant="caption" sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+              {item?.author_name}
+            </Typography>
+          )}
+        </Box>
       </TimelineContent>
     </TimelineItem>
   );
