@@ -68,8 +68,10 @@ export default function PreviewResponCampaign({ open, setOpen, setDialog, refetc
     },
   });
   const onClickDeleteResponseCampaign = (item) => {
-    setDialog((i) => ({
-      title: 'Apakah anda yakin ingin menghapus respon ini ?',
+    setDialog(() => ({
+      helperText: 'Apakah anda yakin ingin menghapus respon ini ?',
+      title: 'Hapus',
+      variant: 'warning',
       labelClose: 'Batal',
       labelSubmit: 'Ya',
       fullWidth: false,

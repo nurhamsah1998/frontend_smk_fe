@@ -20,6 +20,8 @@ export default function App() {
     do: null,
     title: 'text here',
     content: null,
+    helperText: null,
+    variant: '',
     labelClose: '',
     labelSubmit: '',
     isCloseAfterSubmit: false,
@@ -35,26 +37,30 @@ export default function App() {
           <ScrollToTop />
           <StyledChart />
           <Router />
-          <ScreenDialog
-            fullWidth={dialog.fullWidth}
-            title={dialog.title}
-            labelClose={dialog.labelClose}
-            isLoading={dialog.isLoading}
-            labelSubmit={dialog.labelSubmit}
-            open={Boolean(dialog.do)}
-            handleSubmit={() => {
-              dialog.do();
-              if (dialog.isCloseAfterSubmit) {
-                setDialog((i) => ({ ...i, do: null }));
-              }
-              if (dialog.isLoadingAfterSubmit) {
-                setDialog((i) => ({ ...i, isLoading: true }));
-              }
-            }}
-            handleClose={() => setDialog((i) => ({ ...i, do: null }))}
-          >
-            {dialog.content}
-          </ScreenDialog>
+          {Boolean(dialog.do) && (
+            <ScreenDialog
+              fullWidth={dialog.fullWidth}
+              title={dialog.title}
+              variant={dialog.variant}
+              labelClose={dialog.labelClose}
+              isLoading={dialog.isLoading}
+              labelSubmit={dialog.labelSubmit}
+              helperText={dialog.helperText}
+              open={Boolean(dialog.do)}
+              handleSubmit={() => {
+                dialog.do();
+                if (dialog.isCloseAfterSubmit) {
+                  setDialog((i) => ({ ...i, do: null }));
+                }
+                if (dialog.isLoadingAfterSubmit) {
+                  setDialog((i) => ({ ...i, isLoading: true }));
+                }
+              }}
+              handleClose={() => setDialog((i) => ({ ...i, do: null }))}
+            >
+              {dialog.content}
+            </ScreenDialog>
+          )}
         </Dialog.Provider>
       </ThemeProvider>
     </ErrorBoundary>

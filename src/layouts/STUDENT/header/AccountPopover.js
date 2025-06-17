@@ -25,8 +25,10 @@ export default function AccountPopover() {
   };
   const handleLogOut = () => {
     setDialog({
-      title: 'Apakah anda yakin ingin keluar?',
+      helperText: 'Apakah anda yakin ingin keluar?',
+      title: 'Keluar',
       labelClose: 'Batal',
+      variant: 'warning',
       labelSubmit: 'Keluar',
       fullWidth: false,
       do: () => {

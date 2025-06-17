@@ -53,7 +53,7 @@ function Pendaftar() {
   const searchInputRef = useRef();
   const limitInputRef = useRef();
   const [listSiswaKelasManagement, setListSiswaKelasManagement] = React.useState([]);
-  const [modal, setModal] = React.useState({ type: '', message: [], title: '', open: false });
+  const [modal, setModal] = React.useState({ variant: '', message: [], title: '', open: false });
   const {
     items,
     refetch,
@@ -92,12 +92,12 @@ function Pendaftar() {
     isBulk: true,
     next: (res) => {
       setSubKelasKelas('');
-      setModal({ type: 'success', open: true, message: res?.data?.message, title: 'List siswa berhasil diupdate' });
+      setModal({ variant: 'success', open: true, message: res?.data?.message, title: 'List siswa berhasil diupdate' });
       refetch();
     },
     fail: (err) => {
       setModal({
-        type: 'error',
+        variant: 'error',
         open: true,
         message: err?.response?.data?.message,
         title: 'List siswa gagal diupdate',
@@ -197,9 +197,9 @@ function Pendaftar() {
     setModalDetailStudent({ isOpen: true, data: i });
   }, []);
   const handleCLoseModal = () => {
-    if (modal.type?.includes('error')) {
+    if (modal.variant?.includes('error')) {
       handleCloseChild();
-      setModal({ open: false, message: [], title: '', type: '' });
+      setModal({ open: false, message: [], title: '', variant: '' });
     } else {
       setKelas('');
       setStatus('');
@@ -208,7 +208,7 @@ function Pendaftar() {
       setJurusan('');
       refetch();
       handleCloseChild();
-      setModal({ open: false, message: [], title: '', type: '' });
+      setModal({ open: false, message: [], title: '', variant: '' });
     }
   };
   return (
@@ -234,7 +234,7 @@ function Pendaftar() {
           setModalDetailStudent={setModalDetailStudent}
         />
         <ScreenDialog
-          type={modal.type}
+          variant={modal.variant}
           open={modal.open}
           labelClose="Tutup"
           handleClose={handleCLoseModal}

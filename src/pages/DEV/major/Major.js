@@ -1,10 +1,12 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-extra-boolean-cast */
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 
 import { green } from '@mui/material/colors';
 import CreateIcon from '@mui/icons-material/Create';
+import { Dialog } from 'src/hooks/useContextHook';
 import TableComponen from '../../../components/TableComponent';
 import useMutationPatch from '../../../hooks/useMutationPatch';
 import ScreenDialog from '../../../components/ScreenDialog';
@@ -14,6 +16,7 @@ import useMutationDelete from '../../../hooks/useMutationDelete';
 import ContainerCard from '../../../components/ContainerCard';
 
 function Major() {
+  const { setDialog } = useContext(Dialog);
   const [openModal, setOpenModal] = React.useState({ isOpen: false, type: '' });
   const { data, totalPage, setPage, page, search, totalRows, totalData, isLoading } = useQueryFetch({
     module: `jurusan`,
@@ -71,7 +74,18 @@ function Major() {
     setFormValue({ nama: i?.nama, kode_jurusan: i?.kode_jurusan, id: i?.id });
   };
   const handleDelete = (i) => {
-    setOpenModal({ isOpen: true, type: 'Hapus' });
+    setDialog(() => ({
+      helperText: `Apakah anda yakin ingin menghapus jurusan ${i?.nama}?`,
+      title: 'Hapus',
+      labelClose: 'Batal',
+      variant: 'error',
+      labelSubmit: 'Hapus',
+      fullWidth: false,
+      do: () => {
+        mutationDelete.mutate({ id: i?.id });
+      },
+      isCloseAfterSubmit: true,
+    }));
     setFormValue((prev) => ({ ...prev, nama: i?.nama, id: i?.id }));
   };
   const handleSubmitMajor = () => {
@@ -83,8 +97,6 @@ function Major() {
       });
     } else if (openModal.type === 'Buat') {
       mutationPost.mutate({ nama: formValue?.nama, kode_jurusan: formValue?.kode_jurusan });
-    } else {
-      mutationDelete.mutate({ id: formValue?.id });
     }
   };
   const handleClickCreate = () => {
@@ -100,10 +112,9 @@ function Major() {
           handleClose={() => setOpenModal({ isOpen: false, type: '' })}
           labelClose="Tutup"
           isLoading={isLoading || mutationPost.isLoading || isLoadingPatch || mutationDelete.isLoading}
-          labelSubmit={openModal.type === 'Buat' ? 'Buat' : openModal.type === 'Hapus' ? 'Hapus' : 'Simpan'}
+          labelSubmit={openModal.type === 'Buat' ? 'Buat' : 'Simpan'}
           title={`${openModal.type} jurusan`}
         >
-          {openModal.type === 'Hapus' && <Typography>Apakah anda yakin ingin menghapus {formValue?.nama}</Typography>}
           {(openModal.type === 'Edit' || openModal.type === 'Buat') && (
             <Box sx={{ display: 'grid', gap: 2 }}>
               <TextField

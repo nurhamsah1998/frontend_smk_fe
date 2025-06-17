@@ -5,7 +5,6 @@ import React from 'react';
 import { Box, Stack, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 // utils
-import { bgBlur } from '../../../utils/cssStyles';
 // components
 import Iconify from '../../../components/iconify';
 //

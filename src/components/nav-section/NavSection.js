@@ -5,7 +5,8 @@ import { Helmet } from 'react-helmet-async';
 import jwtDecode from 'jwt-decode';
 
 // @mui
-import { Box, Button, List, ListItemText } from '@mui/material';
+import { red } from '@mui/material/colors';
+import { Box, List, ListItemText } from '@mui/material';
 //
 import { StyledNavItem, StyledNavItemIcon } from './styles';
 import { Dialog } from '../../hooks/useContextHook';
@@ -25,8 +26,10 @@ export default function NavSection({ data = [], ...other }) {
   const location = useLocation();
   const handleLogOut = () => {
     setDialog((i) => ({
-      title: 'Apakah anda yakin ingin keluar?',
+      helperText: 'Apakah anda yakin ingin keluar?',
+      title: 'Keluar',
       labelClose: 'Batal',
+      variant: 'error',
       labelSubmit: 'Keluar',
       fullWidth: false,
       do: () => {
@@ -44,26 +47,49 @@ export default function NavSection({ data = [], ...other }) {
   };
   const titleHead = useMemo(() => data.find((item) => item?.path === location.pathname), [location.pathname]);
   return (
-    <Box {...other}>
+    <Box {...other} sx={{ height: 1 }}>
       <Helmet>
         <title>{titleHead?.title || ''} | SMK Kras Kediri</title>
         <link rel="canonical" href="/" />
       </Helmet>
-      <List disablePadding sx={{ p: 1 }}>
+      <List disablePadding sx={{ p: 1, height: 1 }}>
         {data.map((item, index) => {
           if (item?.path?.includes('/log-out')) {
             return (
-              <Button
+              <Box
                 key={index}
                 onClick={handleLogOut}
-                color="error"
-                startIcon={item.icon}
-                variant="outlined"
-                sx={{ mt: 5 }}
-                fullWidth
+                sx={{
+                  position: 'absolute',
+                  bottom: 40,
+                  right: 8,
+                  left: 8,
+                }}
               >
-                {item.title}
-              </Button>
+                <StyledNavItem
+                  component={RouterLink}
+                  to={null}
+                  sx={{
+                    mt: 5,
+                    width: '100%',
+                    '&.active': {
+                      color: red[500],
+                      bgcolor: red[50],
+                      fontWeight: 'fontWeightBold',
+                    },
+                  }}
+                >
+                  <StyledNavItemIcon
+                    sx={{
+                      color: red[500],
+                    }}
+                  >
+                    {item?.icon && item?.icon}
+                  </StyledNavItemIcon>
+
+                  <ListItemText disableTypography sx={{ fontSize: '13px' }} primary={item?.title} />
+                </StyledNavItem>
+              </Box>
             );
           }
           return <NavItem key={index} item={item} />;

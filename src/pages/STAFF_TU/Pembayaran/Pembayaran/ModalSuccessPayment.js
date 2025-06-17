@@ -1,3 +1,5 @@
+/* eslint-disable arrow-body-style */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Button, CircularProgress } from '@mui/material';
 import { useReactToPrint } from 'react-to-print';
@@ -230,7 +232,7 @@ function ModalSuccessPayment({ open, handleClose, data }) {
     <ScreenDialog
       disabledSubmitButton
       labelClose="Tutup"
-      type="success"
+      variant="success"
       title="Pembayaran berhasil"
       open={Boolean(open)}
       handleClose={handleClose}

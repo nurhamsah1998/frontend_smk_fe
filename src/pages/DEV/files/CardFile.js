@@ -65,7 +65,9 @@ function CardFile({ item, refetchFiles }) {
   });
   const handleDeleteFile = () => {
     setDialog(() => ({
-      title: 'Apakah anda yakin ingin menghapus file ini?',
+      helperText: 'Apakah anda yakin ingin menghapus file ini?',
+      title: 'Hapus',
+      variant: 'warning',
       labelClose: 'Batal',
       labelSubmit: 'Ya',
       fullWidth: false,

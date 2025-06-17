@@ -32,7 +32,7 @@ export const MainWrapper = styled('div')(({ theme }) => ({
   flexGrow: 1,
   overflow: 'auto',
   minHeight: '100%',
-  backgroundColor: '#f0f0f0',
+  backgroundColor: '#f7f7f7',
   paddingTop: APP_BAR_MOBILE,
   // paddingTop: '10px',
   paddingBottom: theme.spacing(10),

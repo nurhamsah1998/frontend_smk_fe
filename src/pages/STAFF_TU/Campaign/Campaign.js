@@ -29,8 +29,10 @@ function Campaign() {
     module: 'campaign',
   });
   const handleDelete = (item) => {
-    setDialog((i) => ({
-      title: 'Apakah anda yakin ingin menghapus pengumuman ini?',
+    setDialog(() => ({
+      helperText: 'Apakah anda yakin ingin menghapus pengumuman ini?',
+      title: 'Hapus',
+      variant: 'warning',
       labelClose: 'Batal',
       labelSubmit: 'Ya',
       fullWidth: false,

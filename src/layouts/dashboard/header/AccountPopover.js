@@ -23,9 +23,11 @@ export default function AccountPopover() {
     setOpen(null);
   };
   const handleLogOut = () => {
-    setDialog((i) => ({
-      title: 'Apakah anda yakin ingin keluar?',
+    setDialog(() => ({
+      helperText: 'Apakah anda yakin ingin keluar?',
+      title: 'Keluar',
       labelClose: 'Batal',
+      variant: 'warning',
       labelSubmit: 'Keluar',
       fullWidth: false,
       do: () => {
@@ -114,7 +116,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
         {localToken?.roleStaff !== 'ADMINISTRASI' && (
           <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
-            Logout
+            Keluar
           </MenuItem>
         )}
       </Popover>

@@ -64,7 +64,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
   return (
     <div>
       <ScreenDialog
-        type="error"
+        variant="error"
         open={Boolean(error?.length)}
         labelClose="Tutup"
         handleClose={() => {

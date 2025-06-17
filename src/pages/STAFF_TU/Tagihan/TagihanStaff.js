@@ -216,10 +216,11 @@ export default function TagihanStaff() {
                 enableReinitialize
                 onSubmit={(values) => {
                   setDialog({
-                    title: 'Apakah anda yakin ingin menyimpan perubahan?',
+                    title: 'Simpan perubahan',
                     labelClose: 'Batal',
+                    variant: 'warning',
                     labelSubmit: 'Simpan',
-                    content:
+                    helperText:
                       'Jumlah tagihan yang dirubah, nantinya akan disinkronisasikan dengan riwayat pembayaran siswa yang mana jika ada uang sisa dari hasil perubahan ini, maka hasil sisa tersebut akan muncul ditampilan siswa. Begitupun dengan siswa yang lunas pembayarannya, akan muncul kekurangannya berapa jika ada penambahan jumlah tagihan. User ADMIN lainnya juga bisa merubah tagihan ini, jadi pastikan perubahan yang terjadi sudah sesuai dan saling konfirmasi antar ADMIN lainnya.',
                     do: () => {
                       const totalAmountRaw = Object.values(values || {});
