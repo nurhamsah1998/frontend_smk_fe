@@ -22,6 +22,7 @@ const DaftarSiswa = lazy(() => import('./pages/STAFF_PPDB/DaftarSIswa/DaftarSisw
 const DetailTagihan = lazy(() => import('./pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan'));
 const ReportTransaksiMasuk = lazy(() => import('./pages/STAFF_TU/Laporan/transaksi_masuk/ReportTransaksi'));
 const ReportTransaksiKeluar = lazy(() => import('./pages/STAFF_TU/Laporan/transaksi_keluar/ReportTransaksi'));
+const NewsTu = lazy(() => import('./pages/STAFF_TU/news/News'));
 const LogActivity = lazy(() => import('./pages/DEV/Log/LogActivity'));
 const DashboardDev = lazy(() => import('./pages/DEV/Dashboard/Dashboard'));
 const Account = lazy(() => import('./pages/DEV/Account/Account'));
@@ -72,6 +73,7 @@ export default function Router() {
         { path: 'laporan-transaksi-keluar', element: <ReportTransaksiKeluar /> },
         { path: 'pengumuman', element: <Campaign /> },
         { path: 'pengaturan', element: <Pengaturan /> },
+        { path: 'news', element: <NewsTu /> },
       ],
     },
     {

@@ -29,6 +29,13 @@ export const navConfigTU = [
     name: 'dashboard',
   },
   {
+    title: 'Kabar Berita',
+    path: '/staff-tu/news',
+    name: 'news',
+    permission: true,
+    icon: <NewspaperIcon />,
+  },
+  {
     title: 'Tagihan',
     path: '/staff-tu/tagihan',
     icon: <RequestQuoteIcon />,
