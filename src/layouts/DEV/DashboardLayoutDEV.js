@@ -1,7 +1,6 @@
 import { useState, useEffect, Suspense } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 // @mui
-import { styled } from '@mui/material/styles';
 import jwtDecode from 'jwt-decode';
 //
 // eslint-disable-next-line import/no-unresolved

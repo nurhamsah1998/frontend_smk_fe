@@ -42,10 +42,15 @@ Header.propTypes = {
 
 export default function Header({ onOpenNav, navConfigMenu }) {
   const location = useLocation();
-  const currentPage = React.useMemo(
-    () => navConfigMenu?.find((item) => item?.path === location?.pathname),
-    [location?.pathname]
-  );
+  const currentPage = React.useMemo(() => {
+    const isUpdateNewsPage = location?.pathname?.includes('/dev/news/update-news/');
+    try {
+      const isMatch = navConfigMenu.find((item) => item?.path === location.pathname);
+      return isMatch.title;
+    } catch (error) {
+      return isUpdateNewsPage ? 'Edit Kabar Berita' : 'Detail Pembayaran';
+    }
+  }, [location?.pathname]);
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -72,7 +77,7 @@ export default function Header({ onOpenNav, navConfigMenu }) {
         >
           <Box sx={{ position: 'absolute', left: { xs: 70, sm: 70, md: 290, lg: 20 } }}>
             <Typography sx={{ color: themeAppColors.dark }} variant="h6">
-              {currentPage?.title || 'Detail Pembayaran'}
+              {currentPage}
             </Typography>
           </Box>
           <AccountPopover />

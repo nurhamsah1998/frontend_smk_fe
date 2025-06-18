@@ -35,7 +35,7 @@ export const MainWrapper = styled('div')(({ theme }) => ({
   backgroundColor: '#f7f7f7',
   paddingTop: APP_BAR_MOBILE,
   // paddingTop: '10px',
-  paddingBottom: theme.spacing(10),
+  paddingBottom: theme.spacing(2),
   [theme.breakpoints.up('md')]: {
     paddingTop: APP_BAR_DESKTOP,
     paddingLeft: theme.spacing(2),

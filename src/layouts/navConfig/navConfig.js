@@ -35,6 +35,11 @@ export const navConfigTU = [
     permission: true,
     icon: <NewspaperIcon />,
   },
+  /// NESTED ROUTE
+  {
+    title: 'Detail Kabar Berita',
+    path: '/staff-tu/news/detail',
+  },
   {
     title: 'Tagihan',
     path: '/staff-tu/tagihan',
@@ -100,6 +105,26 @@ export const navConfigDEV = [
     icon: icon('ic_analytics'),
   },
   {
+    title: 'Kabar Berita',
+    path: '/dev/news',
+    name: 'news',
+    icon: <NewspaperIcon />,
+  },
+  /// NESTED ROUTE
+  {
+    title: 'Buat Kabar Berita',
+    path: '/dev/news/create-news',
+  },
+  {
+    title: 'List Kabar Berita',
+    path: '/dev/news/my-news',
+  },
+  {
+    title: 'Detail Kabar Berita',
+    path: '/dev/news/detail',
+  },
+  ///
+  {
     title: 'Log Activity',
     path: '/dev/log-activity',
     name: 'log_activity',
@@ -117,12 +142,7 @@ export const navConfigDEV = [
     name: 'major',
     icon: <SchoolIcon />,
   },
-  {
-    title: 'Kabar Berita',
-    path: '/dev/news',
-    name: 'news',
-    icon: <NewspaperIcon />,
-  },
+
   {
     title: 'Files',
     path: '/dev/files',

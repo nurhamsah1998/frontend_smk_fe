@@ -30,6 +30,11 @@ const Major = lazy(() => import('./pages/DEV/major/Major'));
 const Files = lazy(() => import('./pages/DEV/files/Files'));
 const Server = lazy(() => import('./pages/DEV/server/Server'));
 const News = lazy(() => import('./pages/DEV/news/News'));
+const MyNews = lazy(() => import('./pages/DEV/news/MyNews'));
+const PublicNewsDetail = lazy(() => import('./pages/PublicNewsDetail'));
+const PrivateNewsDetail = lazy(() => import('./pages/DEV/news/PrivateNewsDetail'));
+const AllNews = lazy(() => import('./pages/DEV/news/AllNews'));
+const NewsMutation = lazy(() => import('./pages/DEV/news/NewsMutation'));
 const Campaign = lazy(() => import('./pages/STAFF_TU/Campaign/Campaign'));
 const Pengaturan = lazy(() => import('./pages/STAFF_TU/Pengaturan/Pengaturan'));
 
@@ -48,7 +53,17 @@ export default function Router() {
         { path: 'major', element: <Major /> },
         { path: 'files', element: <Files /> },
         { path: 'server', element: <Server /> },
-        { path: 'news', element: <News /> },
+        {
+          path: 'news',
+          element: <News />,
+          children: [
+            { element: <AllNews />, index: true },
+            { path: 'my-news', element: <MyNews /> },
+            { path: 'detail/:id', element: <PrivateNewsDetail /> },
+            { path: 'create-news', element: <NewsMutation /> },
+            { path: 'update-news/:id', element: <NewsMutation /> },
+          ],
+        },
       ],
     },
     {
@@ -74,6 +89,7 @@ export default function Router() {
         { path: 'pengumuman', element: <Campaign /> },
         { path: 'pengaturan', element: <Pengaturan /> },
         { path: 'news', element: <NewsTu /> },
+        { path: 'news/detail/:id', element: <PrivateNewsDetail /> },
       ],
     },
     {
@@ -89,6 +105,10 @@ export default function Router() {
     {
       path: 'siswa-login',
       element: <LoginStudentPage />,
+    },
+    {
+      path: 'news/:id',
+      element: <PublicNewsDetail />,
     },
     {
       path: 'brand',

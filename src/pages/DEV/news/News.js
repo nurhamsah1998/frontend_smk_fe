@@ -1,42 +1,48 @@
 /* eslint-disable import/no-unresolved */
-import { Box, Button, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, SpeedDial, SpeedDialAction } from '@mui/material';
+import React from 'react';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import ContainerCard from 'src/components/ContainerCard';
-import useMutationPost from 'src/hooks/useMutationPost';
-import WangTextEditor from './WangTextEditor';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
+import AddToQueueIcon from '@mui/icons-material/AddToQueue';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+const actions = [
+  { icon: <AddToQueueIcon />, name: 'Buat kabar berita', path: '/create-news' },
+  { icon: <NewspaperIcon />, name: 'List beritaku', path: '/my-news' },
+];
 
 function News() {
-  const [html, setHtml] = useState('');
-  const [formValues, setFormValues] = useState({
-    title: '',
-    isPublish: false,
-  });
-  const mutationPost = useMutationPost({
-    module: 'news',
-  });
-  const handleSave = () => {
-    mutationPost.mutate({
-      html,
-      title: formValues.title,
-      isPublish: true,
-    });
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const nav = useNavigate();
+  const location = useLocation();
+  const handleClickSpeedDialAction = (action) => {
+    nav(`${location.pathname}${action?.path}`);
   };
   return (
     <ContainerCard>
-      <Box>
-        <TextField
-          value={formValues.title}
-          onChange={(i) => setFormValues((prev) => ({ ...prev, title: i.target.value }))}
-          size="small"
-          label="Judul berita"
-          fullWidth
-          sx={{ my: 2 }}
-        />
-        <WangTextEditor html={html} setHtml={setHtml} />
-        <Button disabled={mutationPost.isLoading} variant="contained" onClick={handleSave}>
-          Simpan
-        </Button>
-      </Box>
+      <Outlet />
+      {location.pathname === '/dev/news' && (
+        <SpeedDial
+          ariaLabel="SpeedDial controlled open example"
+          sx={{ position: 'fixed', bottom: 28, right: 28 }}
+          icon={<SpeedDialIcon />}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          open={open}
+        >
+          {actions.map((action) => (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              onClick={() => handleClickSpeedDialAction(action)}
+            />
+          ))}
+        </SpeedDial>
+      )}
     </ContainerCard>
   );
 }

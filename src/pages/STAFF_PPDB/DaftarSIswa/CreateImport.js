@@ -153,6 +153,7 @@ function CreateImport({ openModalCreateImport, setOpenModalCreateImport, refetch
                 width: '100%',
                 cursor: 'pointer',
               }}
+              accept=".xlsx"
               type="file"
             />
             <Box

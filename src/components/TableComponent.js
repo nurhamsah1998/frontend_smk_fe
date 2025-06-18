@@ -29,7 +29,7 @@ import TableRowDate from './TableRowDate';
 
 function TableComponen({
   tableHead,
-  tableBody,
+  tableBody = [],
   emptyTag,
   colorHead = 'green',
   count,
@@ -253,7 +253,7 @@ const Row = memo(
     tableHead,
     handleDelete,
     bodyIndex,
-    body,
+    body = {},
     handleSeeBill,
     setAnchorEl,
     handleCustomOnClickRow,

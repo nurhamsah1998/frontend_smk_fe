@@ -9,7 +9,9 @@ export default function SelectComponent({ placeholder, onChange, value, listSele
   return (
     <Box sx={{ width: '100%' }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">{placeholder}</InputLabel>
+        <InputLabel size={size} id="demo-simple-select-label">
+          {placeholder}
+        </InputLabel>
         <Select size={size} value={value} label={placeholder} onChange={onChange}>
           {listSelect?.map((item, index) => (
             <MenuItem key={index} value={item?.value}>

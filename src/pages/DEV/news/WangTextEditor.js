@@ -10,7 +10,7 @@ import axios from 'axios';
 
 i18nChangeLanguage('en');
 
-function WangTextEditor({ html, setHtml = () => {} }) {
+function WangTextEditor({ html, setHtml = () => {}, onChangeUploadImage = () => {} }) {
   const [editor, setEditor] = useState(null); // TS syntax
   const token = window.localStorage.getItem('accessToken');
 
@@ -24,6 +24,7 @@ function WangTextEditor({ html, setHtml = () => {} }) {
       uploadImage: {
         async customUpload(file, insertFn) {
           try {
+            onChangeUploadImage(file);
             const formData = new FormData();
             formData.append('img', file);
             const data = await axios.post(`${apiUrl}news-image`, formData, {

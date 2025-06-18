@@ -1,9 +1,9 @@
 /* eslint-disable import/no-unresolved */
 import { Box, Grid } from '@mui/material';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import useQueryFetch from 'src/hooks/useQueryFetch';
-import CardNews from 'src/pages/DEV/news/CardNews';
+import { useNavigate } from 'react-router-dom';
+import CardNews from './CardNews';
 
 function AllNews() {
   const { items } = useQueryFetch({
@@ -12,7 +12,7 @@ function AllNews() {
   });
   const nav = useNavigate();
   const handleClickCard = (item) => {
-    nav(`/staff-tu/news/detail/${item?.id}`);
+    nav(`/dev/news/detail/${item?.id}`);
   };
   return (
     <Box>
