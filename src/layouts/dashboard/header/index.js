@@ -44,11 +44,13 @@ export default function Header({ onOpenNav, navConfigMenu }) {
   const location = useLocation();
   const currentPage = React.useMemo(() => {
     const isUpdateNewsPage = location?.pathname?.includes('/dev/news/update-news/');
+    const isDetailNewsPage = location?.pathname?.includes('/news/detail/');
     try {
-      const isMatch = navConfigMenu.find((item) => item?.path === location.pathname);
+      const isMatch = navConfigMenu.find((item) => item.path === location.pathname);
+      console.log(isMatch);
       return isMatch.title;
     } catch (error) {
-      return isUpdateNewsPage ? 'Edit Kabar Berita' : 'Detail Pembayaran';
+      return isUpdateNewsPage ? 'Edit Kabar Berita' : isDetailNewsPage ? 'Konten Berita' : 'Detail Pembayaran';
     }
   }, [location?.pathname]);
   return (

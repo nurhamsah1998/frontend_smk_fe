@@ -2,7 +2,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable arrow-body-style */
 /* eslint-disable import/no-unresolved */
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Grid,
   Typography,
@@ -18,7 +18,7 @@ import {
   TextField,
   IconButton,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useQueryFetch from 'src/hooks/useQueryFetch';
 import CircularProgress from '@mui/material/CircularProgress';
 import { fDateTime } from 'src/utils/formatTime';
@@ -27,25 +27,39 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { apiUrl } from 'src/hooks/api';
 import { Editor } from '@wangeditor/editor-for-react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { grey, pink } from '@mui/material/colors';
 import useMutationPost from 'src/hooks/useMutationPost';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { getInitialName, randomColorInitialName } from 'src/utils/getInitialName';
+import jwtDecode from 'jwt-decode';
+import { LoadingButton } from '@mui/lab';
 import { PROFILE } from 'src/hooks/useHelperContext';
 import ListCommentItem from './ListCommentItem';
+import '@wangeditor/editor/dist/css/style.css';
+import RecommendedNews from './RecommendedNews';
 
 const beritaRekomendasi = [
   { id: 1, title: 'Lomba 17 Agustus', date: '12 Juni 2025' },
   { id: 2, title: 'Kegiatan Pramuka Mingguan', date: '10 Juni 2025' },
   { id: 3, title: 'Kunjungan Dinas Pendidikan', date: '08 Juni 2025' },
 ];
-
+const styleIMageHEader = {
+  width: '100%',
+  borderRadius: 2,
+  mb: 2,
+  bgcolor: '#f0f0f0',
+  height: '400px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
 export default function PrivateNewsDetail() {
-  const theme = useTheme();
+  const nav = useNavigate();
   const { itemsNoPagination: itemProfile } = useContext(PROFILE);
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const token = window.localStorage.getItem('accessToken');
+  const localToken = token ? jwtDecode(token || {}) : {};
   const { id } = useParams();
   const client = useQueryClient();
   const inputCommentRef = useRef(null);
@@ -58,19 +72,54 @@ export default function PrivateNewsDetail() {
     invalidateKey: `private-news/${id}`,
     disabledParamInit: true,
   });
+  ///
+  const fetchProjects = async ({ pageParam }) => {
+    try {
+      const res = await axios.get(`${apiUrl}news-comment/${id}?limit=10&page=${pageParam}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return res;
+    } catch (error) {
+      if (error?.response?.status === 403) {
+        enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+        if (localToken?.roleStaff === 'ADMINISTRASI') {
+          nav('/staff-login');
+        } else {
+          nav('/');
+        }
+        window.localStorage.clear();
+      }
+      return [];
+    }
+  };
+  ///
   const {
-    items,
+    data,
+    fetchNextPage,
     isLoading: isLoadingComment,
+    hasNextPage,
     refetch: refetchComment,
-  } = useQueryFetch({
-    module: `news-comment/${id}`,
-    invalidateKey: `news-comment/${id}`,
-    disabledParamInit: true,
+  } = useInfiniteQuery({
+    queryKey: [`${apiUrl}news-comment/${id}`],
+    queryFn: fetchProjects,
+    getNextPageParam: (lastPage) => {
+      const currentPage = lastPage?.data?.page;
+      const totalPage = lastPage?.data?.totalPage;
+      if (currentPage === totalPage) {
+        return undefined;
+      }
+      return currentPage + 1;
+    },
   });
+  ///
   const { title, thumbnail, up_vote, down_vote, html, staf, createdAt } = itemsNoPagination?.data || {};
   const { is_already_comment, is_reacted } = itemsNoPagination || {};
   const mutationPostComment = useMutationPost({
     module: 'news-comment',
+    disabledNotif: true,
     next: () => {
       refetchNews();
       refetchComment();
@@ -101,16 +150,32 @@ export default function PrivateNewsDetail() {
       client.removeQueries([`private-news/${id}`]);
     };
   }, []);
+  const [commentList, setCommentList] = useState([]);
+  const arrayMerge = (pageParams, pages) => {
+    let result = [];
+    for (let index = 0; index < pageParams.length; index += 1) {
+      result = result.concat(pages[index]?.data?.data);
+    }
+    return result;
+  };
+
+  useEffect(() => {
+    if (Boolean(data?.pageParams?.length)) {
+      const listCommentUQ = arrayMerge(data?.pageParams, data?.pages);
+      setCommentList(listCommentUQ);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
   return (
     <>
       {/* Konten utama */}
       <Grid container spacing={4}>
-        <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 3, borderRadius: 2 }}>
+        <Grid item xs={12} md={12} lg={8}>
+          <Paper sx={{ p: { xs: 1, md: 3 }, borderRadius: 2 }}>
             {isLoading ? (
               <Skeleton sx={{ height: 30 }} animation="wave" />
             ) : (
-              <Typography variant="h4" textTransform="capitalize">
+              <Typography variant="h4" textTransform="capitalize" lineHeight={1.2}>
                 {title}
               </Typography>
             )}
@@ -121,7 +186,7 @@ export default function PrivateNewsDetail() {
                 Dipublikasikan pada {fDateTime(createdAt)} oleh {staf?.nama}
               </Typography>
             )}
-            <Box sx={{ display: 'flex', mb: 3, mt: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 1 }}>
+            <Box sx={{ display: 'flex', mb: 3, mt: 1, alignItems: 'center', justifyContent: 'flex-start', gap: 0.5 }}>
               {isLoading ? (
                 <Skeleton sx={{ height: 30, width: 20 }} animation="wave" />
               ) : (
@@ -131,9 +196,10 @@ export default function PrivateNewsDetail() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 0.5,
+                    p: 0.5,
                   }}
                 >
-                  <FavoriteIcon sx={{ color: is_reacted === 'up_vote' ? pink[500] : 'inherit' }} />
+                  <FavoriteIcon sx={{ width: 20, color: is_reacted === 'up_vote' ? pink[500] : 'inherit' }} />
                   <Typography variant="caption">{up_vote}</Typography>
                 </IconButton>
               )}
@@ -160,38 +226,28 @@ export default function PrivateNewsDetail() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 0.5,
+                    p: 0.5,
                   }}
                 >
-                  <ThumbDownAltIcon sx={{ color: is_reacted === 'down_vote' ? pink[500] : 'inherit' }} />
+                  <ThumbDownAltIcon sx={{ width: 20, color: is_reacted === 'down_vote' ? pink[500] : 'inherit' }} />
                   <Typography variant="caption">{down_vote}</Typography>
                 </IconButton>
               )}
             </Box>
-            {isLoading && !thumbnail ? (
-              <Box
-                sx={{
-                  width: '100%',
-                  borderRadius: 2,
-                  mb: 2,
-                  bgcolor: '#f0f0f0',
-                  height: '400px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                {isLoading ? (
-                  <CircularProgress />
-                ) : (
-                  <img
-                    src="/assets/logo_pgri.png"
-                    style={{
-                      height: '200px',
-                      opacity: '0.3',
-                    }}
-                    alt="logo_pic"
-                  />
-                )}
+            {isLoading ? (
+              <Box sx={styleIMageHEader}>
+                <CircularProgress />
+              </Box>
+            ) : !thumbnail ? (
+              <Box sx={styleIMageHEader}>
+                <img
+                  src="/assets/logo_pgri.png"
+                  style={{
+                    height: '200px',
+                    opacity: '0.3',
+                  }}
+                  alt="logo_pic"
+                />
               </Box>
             ) : (
               <Box
@@ -221,7 +277,7 @@ export default function PrivateNewsDetail() {
                   defaultConfig={{ readOnly: true }}
                   value={html || ''}
                   mode="default"
-                  style={{ height: '500px', overflowY: 'hidden' }}
+                  style={{ overflowY: 'hidden' }}
                 />
               )}
             </Box>
@@ -271,8 +327,8 @@ export default function PrivateNewsDetail() {
                 <Box>
                   <Skeleton sx={{ height: 50 }} animation="wave" />
                 </Box>
-              ) : items?.length !== 0 ? (
-                items?.map((item, idx) => (
+              ) : commentList?.length !== 0 ? (
+                commentList?.map((item, idx) => (
                   <ListCommentItem refetchComment={refetchComment} refetchNews={refetchNews} item={item} key={idx} />
                 ))
               ) : (
@@ -282,6 +338,19 @@ export default function PrivateNewsDetail() {
                   </Typography>
                 </Box>
               )}
+              {commentList.length !== 0 && (
+                <LoadingButton
+                  loading={isLoadingComment}
+                  onClick={fetchNextPage}
+                  variant="text"
+                  sx={{
+                    mt: 3,
+                    display: hasNextPage ? 'block' : 'none',
+                  }}
+                >
+                  Lihat komentar lainnya
+                </LoadingButton>
+              )}
             </Box>
           </Paper>
         </Grid>
@@ -290,7 +359,8 @@ export default function PrivateNewsDetail() {
         <Grid
           item
           xs={12}
-          md={4}
+          md={12}
+          lg={4}
           sx={{
             position: 'sticky',
             top: 0,
@@ -308,22 +378,7 @@ export default function PrivateNewsDetail() {
                 <Skeleton sx={{ height: 60 }} animation="wave" />
               </Box>
             ) : (
-              // beritaRekomendasi.map((item) => (
-              //   <Box key={item.id} sx={{ mb: 2 }}>
-              //     <Link href={`/berita/${item.id}`} underline="hover">
-              //       <Typography variant="subtitle1">{item.title}</Typography>
-              //     </Link>
-              //     <Typography variant="caption" color="text.secondary">
-              //       {item.date}
-              //     </Typography>
-              //   </Box>
-              // ))
-              <Box>
-                <Typography>Masih Belum didevelopment</Typography>
-                <Typography varian="caption" color="gray">
-                  Insyaallah next update
-                </Typography>
-              </Box>
+              <RecommendedNews news_id={id} />
             )}
           </Paper>
         </Grid>

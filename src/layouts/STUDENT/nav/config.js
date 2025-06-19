@@ -1,5 +1,6 @@
 // component
 import PaymentIcon from '@mui/icons-material/Payment';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import SvgColor from '../../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -16,6 +17,11 @@ const navConfig = [
     title: 'tagihan',
     path: '/siswa/tagihan',
     icon: <PaymentIcon />,
+  },
+  {
+    title: 'Kabar Berita',
+    path: '/siswa/news',
+    icon: <NewspaperIcon />,
   },
 ];
 

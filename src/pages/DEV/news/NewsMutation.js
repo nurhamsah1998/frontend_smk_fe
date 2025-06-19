@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React, { useState, useTransition } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import { cyan } from '@mui/material/colors';
 import PhotoIcon from '@mui/icons-material/Photo';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -20,34 +20,46 @@ function NewsMutation() {
     title: '',
     isPublish: false,
     isPrivate: true,
+    thumbnail: null,
   });
   const { id } = useParams();
-  const { itemsNoPagination, isLoading } = useQueryFetch({
-    module: `public-news/${id}`,
-    invalidateKey: `public-news/${id}`,
+  const { isLoading, refetch, isFetching } = useQueryFetch({
+    module: `my-news/${id}`,
+    invalidateKey: `my-news/${id}`,
     disabledParamInit: true,
-    enabled: id,
+    enabled: false,
+    next: (res) => {
+      const { html, title, isPublish, isPrivate, thumbnail } = res?.data?.data;
+      setFormValues({ title, isPublish, isPrivate, thumbnail });
+      setHtml(html);
+    },
   });
-  console.log(itemsNoPagination, '<---');
+  useEffect(() => {
+    if (id) {
+      refetch();
+    }
+  }, [id]);
   const nav = useNavigate();
   const handleSave = () => {
     onTransition(async () => {
       try {
         const token = window.localStorage.getItem('accessToken');
         const formData = new FormData();
-        formData.append('thumbnail', files);
+        if (files?.name) {
+          formData.append('thumbnail', files);
+        }
         formData.append('html', html ?? null);
         formData.append('title', formValues.title ?? null);
         formData.append('isPublish', formValues.isPublish);
         formData.append('isPrivate', formValues.isPrivate);
-        const res = await axios.post(`${apiUrl}news`, formData, {
+        const res = await axios[id ? 'patch' : 'post'](`${apiUrl}my-news${id ? `/${id}` : ''}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             authorization: `Bearer ${token}`,
           },
         });
         setHtml('');
-        setFormValues({ title: '', isPublish: false, isPrivate: true });
+        setFormValues({ title: '', isPublish: false, isPrivate: true, thumbnail: null });
         nav('/dev/news/my-news');
         enqueueSnackbar(res?.data?.msg || 'Berhasil', { variant: 'success' });
       } catch (error) {
@@ -69,7 +81,8 @@ function NewsMutation() {
         <Box
           sx={{
             bgcolor: cyan[100],
-            height: '150px',
+            p: 1,
+            minHeight: '210px',
             borderRadius: '10px',
             display: 'flex',
             justifyContent: 'center',
@@ -92,30 +105,48 @@ function NewsMutation() {
             type="file"
             accept=".png,.jpg"
           />
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              border: `dashed 1px ${cyan[700]}`,
-              p: '20px 60px',
-              borderRadius: '10px',
-            }}
-          >
-            <PhotoIcon
+          {formValues?.thumbnail && id && !files?.name ? (
+            <Box>
+              <img
+                src={`${apiUrl}news-thumbnail/${formValues?.thumbnail}`}
+                style={{
+                  height: '200px',
+                }}
+                alt="thumbnail"
+              />
+            </Box>
+          ) : (
+            <Box
               sx={{
-                color: cyan[800],
-              }}
-            />
-            <Typography
-              sx={{
-                color: cyan[800],
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                border: `dashed 1px ${cyan[700]}`,
+                p: '20px 60px',
+                borderRadius: '10px',
               }}
             >
-              {files?.name || 'Import file berformat .png atau .jpg'}
-            </Typography>
-          </Box>
+              {files?.name && (
+                <img
+                  src={files?.name ? URL.createObjectURL(files) : '/'}
+                  style={{
+                    height: '200px',
+                  }}
+                  alt="thumbnail"
+                />
+              )}
+
+              <Typography
+                sx={{
+                  color: cyan[800],
+                }}
+              >
+                {files?.name || 'Import file berformat .png atau .jpg'}
+              </Typography>
+            </Box>
+          )}
         </Box>
+
         <WangTextEditor html={html} setHtml={setHtml} />
         <SelectComponent
           size="small"
@@ -150,7 +181,13 @@ function NewsMutation() {
           ]}
         />
       </Box>
-      <Button fullWidth sx={{ mt: 4 }} disabled={transition} variant="contained" onClick={handleSave}>
+      <Button
+        fullWidth
+        sx={{ mt: 4 }}
+        disabled={transition || (isLoading && isFetching)}
+        variant="contained"
+        onClick={handleSave}
+      >
         Simpan
       </Button>
     </Box>

@@ -19,6 +19,7 @@ function DashboardDev() {
   const theme = useTheme();
   const { itemsNoPagination, isLoading } = useQueryFetch({
     module: 'dashboard-dev',
+    invalidateKey: 'dashboard-dev',
   });
   const majorList = Object.keys(itemsNoPagination?.data?.analytics ?? {});
   const dataAnalytics = itemsNoPagination?.data?.analytics || [];

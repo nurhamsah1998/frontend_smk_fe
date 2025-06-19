@@ -18,12 +18,24 @@ import { MainWrapper, StyledRootWraper } from '../STAFF_TU/DashboardLayoutStaffT
 
 export default function DashboardLayoutDEV() {
   const [open, setOpen] = useState(false);
-  const { itemsNoPagination, isLoading, isFetched } = useFetch({
+  const { itemsNoPagination, isLoading, data, isFetched } = useFetch({
     module: 'staff-profile',
   });
   const navigate = useNavigate();
   const token = window.localStorage.getItem('accessToken');
   const localToken = token ? jwtDecode(token || {}) : {};
+  /// JIKA TERJADI PERUBAHAN PADA AKUN DI DB YANG MENGHASILKAN NULL JIKA GET PROFILE
+  useEffect(() => {
+    if (data?.data === null) {
+      window.localStorage.removeItem('accessToken');
+      window.localStorage.removeItem('current_page_tagihan');
+      window.localStorage.removeItem('current_tab_tagihan');
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    }
+  }, [data]);
+
   useEffect(() => {
     if (!token) {
       navigate('/staff-login');

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { apiUrl } from './api';
 
-function useMutationPost({ module, next = () => false }) {
+function useMutationPost({ module, next = () => false, disabledNotif = false }) {
   const { enqueueSnackbar } = useSnackbar();
   const client = useQueryClient();
   const mutationPost = useMutation(
@@ -20,13 +20,17 @@ function useMutationPost({ module, next = () => false }) {
           }
         )
         .then((res) => {
-          enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+          if (!disabledNotif) {
+            enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+          }
           client.invalidateQueries([module]);
           next();
         })
         .catch((error) => {
           console.log(error, 'ini');
-          enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+          if (!disabledNotif) {
+            enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+          }
         });
     },
     { networkMode: 'always' }

@@ -8,15 +8,12 @@ import Typography from '@mui/material/Typography';
 import { apiUrl } from 'src/hooks/api';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import stripTags from 'striptags';
 import { textEllipsis } from 'src/utils/textEliipsis';
 import { Box, Chip } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { fDateTime } from 'src/utils/formatTime';
 
 function CardNews({ item, handleClickCard = () => {} }) {
-  const textHTML = stripTags(item?.html);
-
   return (
     <Card
       onClick={() => handleClickCard(item)}
@@ -64,7 +61,12 @@ function CardNews({ item, handleClickCard = () => {} }) {
           pt: 1,
         }}
       >
-        {Boolean(item?.isPrivate) ? <Chip label="Private" color="primary" /> : <Chip label="Public" color="info" />}
+        <Chip
+          size="small"
+          label={Boolean(item?.isPrivate) ? 'Private' : 'Public'}
+          color={Boolean(item?.isPrivate) ? 'primary' : 'info'}
+        />
+
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box
             sx={{
@@ -99,11 +101,11 @@ function CardNews({ item, handleClickCard = () => {} }) {
         </Box>
       </Box>
       <CardContent style={{ paddingTop: '10px' }}>
-        <Typography gutterBottom variant="h5" component="div" textTransform="capitalize">
-          {item?.title}
+        <Typography gutterBottom variant="h5" component="div" lineHeight={1.2} textTransform="capitalize">
+          {textEllipsis(item?.title, 50)}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {textEllipsis(textHTML, 200)}
+          {item?.html}
         </Typography>
       </CardContent>
       {/* <CardActions>
@@ -120,7 +122,7 @@ function CardNews({ item, handleClickCard = () => {} }) {
           pr: 2,
         }}
       >
-        <AccessTimeIcon sx={{ color: grey[500] }} />
+        <AccessTimeIcon sx={{ color: grey[500], width: 20 }} />
         <Typography color={grey[500]} variant="caption">
           {fDateTime(new Date().toISOString())}
         </Typography>

@@ -35,6 +35,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { grey, pink } from '@mui/material/colors';
 import ListCommentItem from './DEV/news/ListCommentItem';
 
+import '@wangeditor/editor/dist/css/style.css';
+
 const beritaRekomendasi = [
   { id: 1, title: 'Lomba 17 Agustus', date: '12 Juni 2025' },
   { id: 2, title: 'Kegiatan Pramuka Mingguan', date: '10 Juni 2025' },
@@ -68,8 +70,8 @@ export default function PublicNewsDetail() {
   }, []);
   if (!title && !isLoading) return <Navigate to="/404" replace />;
   return (
-    <>
-      <AppBar position="static" color="primary">
+    <Box>
+      <AppBar position="sticky" top={0} color="primary">
         <Toolbar>
           <Box>
             <img
@@ -98,12 +100,12 @@ export default function PublicNewsDetail() {
       {/* Konten utama */}
       <Container sx={{ mt: 3, minHeight: 'calc(100dvh - 272px)' }}>
         <Grid container spacing={4}>
-          <Grid item xs={12} md={8}>
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+          <Grid item xs={12} md={12} lg={8}>
+            <Paper elevation={3} sx={{ p: { xs: 1, md: 3 }, borderRadius: 2 }}>
               {isLoading ? (
                 <Skeleton sx={{ height: 30 }} animation="wave" />
               ) : (
-                <Typography variant="h4" textTransform="capitalize">
+                <Typography variant="h4" textTransform="capitalize" lineHeight={1.2}>
                   {title}
                 </Typography>
               )}
@@ -114,7 +116,7 @@ export default function PublicNewsDetail() {
                   Dipublikasikan pada {fDateTime(createdAt)} oleh {staf?.nama}
                 </Typography>
               )}
-              <Box sx={{ display: 'flex', mb: 3, mt: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 2 }}>
+              <Box sx={{ display: 'flex', mb: 3, mt: 1, alignItems: 'center', justifyContent: 'flex-start', gap: 0.5 }}>
                 {isLoading ? (
                   <Skeleton sx={{ height: 30, width: 20 }} animation="wave" />
                 ) : (
@@ -123,6 +125,7 @@ export default function PublicNewsDetail() {
                       display: 'flex',
                       alignItems: 'center',
                       gap: 0.5,
+                      p: 0.5,
                     }}
                   >
                     <FavoriteIcon sx={{ color: grey[500] }} />
@@ -137,6 +140,7 @@ export default function PublicNewsDetail() {
                       display: 'flex',
                       alignItems: 'center',
                       gap: 0.5,
+                       p: 0.5,
                     }}
                   >
                     <ChatBubbleIcon sx={{ color: grey[500] }} />
@@ -151,6 +155,7 @@ export default function PublicNewsDetail() {
                       display: 'flex',
                       alignItems: 'center',
                       gap: 0.5,
+                      p: 0.5,
                     }}
                   >
                     <ThumbDownAltIcon sx={{ color: grey[500] }} />
@@ -208,12 +213,7 @@ export default function PublicNewsDetail() {
                       ))}
                   </Box>
                 ) : (
-                  <Editor
-                    defaultConfig={{ readOnly: true }}
-                    value={html || ''}
-                    mode="default"
-                    style={{ height: '500px', overflowY: 'hidden' }}
-                  />
+                  <Editor defaultConfig={{ readOnly: true }} value={html || ''} mode="default" />
                 )}
               </Box>
               <Box sx={{ my: 10 }}>
@@ -237,8 +237,8 @@ export default function PublicNewsDetail() {
           </Grid>
 
           {/* Rekomendasi Berita */}
-          <Grid item xs={12} md={4}>
-            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+          <Grid item xs={12} md={12} lg={4}>
+            <Paper elevation={3} sx={{ p: 2, borderRadius: 2, position: 'sticky', top: 90 }}>
               <Typography variant="h6" gutterBottom>
                 Berita Rekomendasi
               </Typography>
@@ -283,6 +283,6 @@ export default function PublicNewsDetail() {
           </Typography>
         </Container>
       </Box>
-    </>
+    </Box>
   );
 }

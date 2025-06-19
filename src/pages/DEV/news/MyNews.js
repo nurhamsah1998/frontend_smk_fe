@@ -11,16 +11,14 @@ import useMutationDelete from 'src/hooks/useMutationDelete';
 
 function MyNews() {
   const { setDialog } = useContext(Dialog);
-  const { data, totalPage, setPage, page, search, totalRows, totalData, isLoading, refetch } = useQueryFetch({
+  const { items, totalPage, setPage, page, search, totalRows, totalData, isLoading } = useQueryFetch({
     module: 'my-news',
+    invalidateKey: 'my-news',
   });
   const mutationDelete = useMutationDelete({
     module: 'my-news',
-    next: () => {
-      refetch();
-    },
   });
-  const itemRebuild = useMemo(() => data?.data?.data, [data]);
+  const itemRebuild = useMemo(() => items, [items]);
   const nav = useNavigate();
   const tableHead = [
     {
@@ -28,11 +26,11 @@ function MyNews() {
       label: 'Judul',
     },
     {
-      id: 'like',
+      id: 'up_vote',
       label: 'Reaksi suka',
     },
     {
-      id: 'down_like',
+      id: 'down_vote',
       label: 'Reaksi tidak suka',
     },
     {

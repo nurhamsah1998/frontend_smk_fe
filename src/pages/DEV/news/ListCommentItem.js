@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 /* eslint-disable import/no-unresolved */
-import { Avatar, Box, IconButton, Typography } from '@mui/material';
+import { Avatar, Box, Chip, IconButton, Typography } from '@mui/material';
 import React, { memo, useContext } from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import CreateIcon from '@mui/icons-material/Create';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getInitialName, randomColorInitialName } from 'src/utils/getInitialName';
 import { PROFILE } from 'src/hooks/useHelperContext';
@@ -13,12 +14,13 @@ import { apiUrl } from 'src/hooks/api';
 import { useSnackbar } from 'notistack';
 import useMutationDelete from 'src/hooks/useMutationDelete';
 import { Dialog } from 'src/hooks/useContextHook';
-import { pink } from '@mui/material/colors';
+import { grey, pink } from '@mui/material/colors';
+import { fDateTime } from 'src/utils/formatTime';
 
 function ListCommentItem({ item, refetchComment = () => {}, refetchNews = () => {} }) {
   const { setDialog } = useContext(Dialog);
   const { itemsNoPagination } = useContext(PROFILE);
-  const { text, staf, siswa, up_vote, down_vote } = item || {};
+  const { text, staf, siswa, up_vote, down_vote, is_author, createdAt } = item || {};
   const { enqueueSnackbar } = useSnackbar();
   const commentProfileName = siswa?.nama || staf?.nama || '';
   const mutationDelete = useMutationDelete({
@@ -28,7 +30,7 @@ function ListCommentItem({ item, refetchComment = () => {}, refetchNews = () => 
       refetchNews();
     },
   });
-  const hasPermissionDelete = itemsNoPagination?.id === (siswa?.id || staf?.id);
+  const isAuthor = itemsNoPagination?.id === (siswa?.id || staf?.id);
   const handleReaction = async (type) => {
     if (!itemsNoPagination?.id) return;
     const token = window.localStorage.getItem('accessToken');
@@ -71,12 +73,21 @@ function ListCommentItem({ item, refetchComment = () => {}, refetchNews = () => 
           {getInitialName(commentProfileName)}
         </Avatar>
         <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="subtitle2" textTransform="capitalize">
-            {commentProfileName}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Typography variant="subtitle2" textTransform="capitalize">
+              {commentProfileName}
+            </Typography>
+            {is_author && <Chip size="small" sx={{ fontSize: '12px' }} label="Penulis" color="primary" />}
+          </Box>
           <Typography variant="body2" sx={{ mb: 1 }}>
             {text}
           </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <AccessTimeIcon sx={{ color: grey[500], width: 18 }} />
+            <Typography variant="caption" color={grey[500]}>
+              {fDateTime(createdAt)}
+            </Typography>
+          </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <IconButton
               sx={{
@@ -124,7 +135,7 @@ function ListCommentItem({ item, refetchComment = () => {}, refetchNews = () => 
           </IconButton>
         )} */}
 
-        {hasPermissionDelete && itemsNoPagination?.id && (
+        {isAuthor && itemsNoPagination?.id && (
           <IconButton disabled={!itemsNoPagination?.id} onClick={handleDeleteComment} color="error" size="small">
             <DeleteIcon fontSize="small" />
           </IconButton>
