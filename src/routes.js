@@ -33,11 +33,13 @@ const Server = lazy(() => import('./pages/DEV/server/Server'));
 const News = lazy(() => import('./pages/DEV/news/News'));
 const MyNews = lazy(() => import('./pages/DEV/news/MyNews'));
 const PublicNewsDetail = lazy(() => import('./pages/PublicNewsDetail'));
+const PublicNews = lazy(() => import('./pages/PublicNews'));
 const PrivateNewsDetail = lazy(() => import('./pages/DEV/news/PrivateNewsDetail'));
 const AllNews = lazy(() => import('./pages/DEV/news/AllNews'));
 const NewsMutation = lazy(() => import('./pages/DEV/news/NewsMutation'));
 const Campaign = lazy(() => import('./pages/STAFF_TU/Campaign/Campaign'));
-const Pengaturan = lazy(() => import('./pages/STAFF_TU/Pengaturan/Pengaturan'));
+const PengaturanTU = lazy(() => import('./pages/STAFF_TU/Pengaturan/Pengaturan'));
+const PengaturanDev = lazy(() => import('./pages/DEV/Pengaturan/Pengaturan'));
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +56,7 @@ export default function Router() {
         { path: 'major', element: <Major /> },
         { path: 'files', element: <Files /> },
         { path: 'server', element: <Server /> },
+        { path: 'pengaturan', element: <PengaturanDev /> },
         {
           path: 'news',
           element: <News />,
@@ -88,7 +91,7 @@ export default function Router() {
         { path: 'laporan-transaksi-masuk', element: <ReportTransaksiMasuk /> },
         { path: 'laporan-transaksi-keluar', element: <ReportTransaksiKeluar /> },
         { path: 'pengumuman', element: <Campaign /> },
-        { path: 'pengaturan', element: <Pengaturan /> },
+        { path: 'pengaturan', element: <PengaturanTU /> },
         { path: 'news', element: <NewsTu /> },
         { path: 'news/detail/:id', element: <PrivateNewsDetail /> },
       ],
@@ -112,6 +115,10 @@ export default function Router() {
     {
       path: 'news/:id',
       element: <PublicNewsDetail />,
+    },
+    {
+      path: 'news',
+      element: <PublicNews />,
     },
     {
       path: 'brand',

@@ -18,7 +18,7 @@ function CardNews({ item, handleClickCard = () => {} }) {
     <Card
       onClick={() => handleClickCard(item)}
       sx={{
-        width: 355,
+        width: 335,
         transition: '0.3s all',
         cursor: 'pointer',
         '&:hover': {

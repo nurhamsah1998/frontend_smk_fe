@@ -3,32 +3,26 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 import { Box, IconButton, Link, Typography } from '@mui/material';
-import React, { useContext } from 'react';
+import React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import useQueryFetch from 'src/hooks/useQueryFetch';
 import { fDateTime } from 'src/utils/formatTime';
 import { grey } from '@mui/material/colors';
-import { PROFILE } from 'src/hooks/useHelperContext';
 
-function RecommendedNews({ news_id }) {
-  const { itemsNoPagination } = useContext(PROFILE);
+function PublicRecommendedNews({ news_id }) {
   const { items } = useQueryFetch({
-    module: `news-recommended/${news_id}`,
-    invalidateKey: `news-recommended/${news_id}`,
+    module: `news-public-recommended/${news_id}`,
+    invalidateKey: `news-public-recommended/${news_id}`,
     disabledParamInit: true,
   });
-  const { role } = itemsNoPagination || {};
-  const pathNewsRecomended = {
-    ADMINISTRASI: '/staff-tu/news/detail',
-    DEV: '/dev/news/detail',
-  };
+
   return (
     <Box>
       {items?.length !== 0 ? (
         items?.map((item, index) => (
           <Box key={index} sx={{ mb: 2, display: 'grid' }}>
-            <Link href={`${pathNewsRecomended[role] ?? '/siswa/news/detail'}/${item?.id}`} underline="hover">
+            <Link href={`/news/${item?.id}`} underline="hover">
               <Typography variant="subtitle1" lineHeight={1}>
                 {item?.title}
               </Typography>
@@ -88,4 +82,4 @@ function RecommendedNews({ news_id }) {
   );
 }
 
-export default RecommendedNews;
+export default PublicRecommendedNews;

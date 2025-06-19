@@ -7,13 +7,14 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import { apiUrl } from 'src/hooks/api';
 import { i18nChangeLanguage } from '@wangeditor/editor';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 i18nChangeLanguage('en');
 
 function WangTextEditor({ html, setHtml = () => {}, onChangeUploadImage = () => {} }) {
   const [editor, setEditor] = useState(null); // TS syntax
   const token = window.localStorage.getItem('accessToken');
-
+  const { enqueueSnackbar } = useSnackbar();
   const toolbarConfig = {
     excludeKeys: ['fullScreen'],
   };
@@ -37,6 +38,7 @@ function WangTextEditor({ html, setHtml = () => {}, onChangeUploadImage = () => 
             const urlFile = `${apiUrl}news-image/${url}`;
             insertFn(urlFile, alt, urlFile);
           } catch (error) {
+            enqueueSnackbar(error?.response?.data?.msg || error?.message || 'Gagal', { variant: 'error' });
             console.log(error);
           }
         },

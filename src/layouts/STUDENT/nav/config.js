@@ -14,14 +14,14 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'tagihan',
-    path: '/siswa/tagihan',
-    icon: <PaymentIcon />,
-  },
-  {
     title: 'Kabar Berita',
     path: '/siswa/news',
     icon: <NewspaperIcon />,
+  },
+  {
+    title: 'tagihan',
+    path: '/siswa/tagihan',
+    icon: <PaymentIcon />,
   },
 ];
 

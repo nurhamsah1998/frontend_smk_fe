@@ -40,6 +40,10 @@ function NewsMutation() {
     }
   }, [id]);
   const nav = useNavigate();
+  const handleCancel = (params) => {
+    setFormValues({ title: '', isPublish: false, isPrivate: true, thumbnail: null });
+    nav(-1);
+  };
   const handleSave = () => {
     onTransition(async () => {
       try {
@@ -181,15 +185,27 @@ function NewsMutation() {
           ]}
         />
       </Box>
-      <Button
-        fullWidth
-        sx={{ mt: 4 }}
-        disabled={transition || (isLoading && isFetching)}
-        variant="contained"
-        onClick={handleSave}
-      >
-        Simpan
-      </Button>
+      <Box sx={{ display: 'flex', gap: 1 }}>
+        <Button
+          fullWidth
+          sx={{ mt: 4 }}
+          disabled={transition || (isLoading && isFetching)}
+          variant="outlined"
+          onClick={handleCancel}
+          color="error"
+        >
+          Batal
+        </Button>
+        <Button
+          fullWidth
+          sx={{ mt: 4 }}
+          disabled={transition || (isLoading && isFetching)}
+          variant="contained"
+          onClick={handleSave}
+        >
+          Simpan
+        </Button>
+      </Box>
     </Box>
   );
 }

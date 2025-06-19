@@ -2,50 +2,28 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable import/no-unresolved */
 import React, { useEffect } from 'react';
-import {
-  Container,
-  Grid,
-  Typography,
-  Box,
-  Paper,
-  AppBar,
-  Toolbar,
-  CssBaseline,
-  Link,
-  Divider,
-  useTheme,
-  useMediaQuery,
-  Skeleton,
-  Avatar,
-  IconButton,
-  Button,
-  TextField,
-} from '@mui/material';
+import { Container, Grid, Typography, Box, Paper, Divider, Skeleton } from '@mui/material';
 import { Navigate, useParams } from 'react-router-dom';
-import { themeAppColors } from 'src/theme/themeAppColor';
+
 import useQueryFetch from 'src/hooks/useQueryFetch';
 import CircularProgress from '@mui/material/CircularProgress';
 import { fDateTime } from 'src/utils/formatTime';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { apiUrl } from 'src/hooks/api';
 import { Editor } from '@wangeditor/editor-for-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { grey, pink } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
+import PublicFooter from 'src/components/PublicFooter';
+import PublicAppBar from 'src/components/PublicAppBar';
 import ListCommentItem from './DEV/news/ListCommentItem';
+import PublicRecommendedNews from './PublicRecommendedNews';
 
 import '@wangeditor/editor/dist/css/style.css';
-
-const beritaRekomendasi = [
-  { id: 1, title: 'Lomba 17 Agustus', date: '12 Juni 2025' },
-  { id: 2, title: 'Kegiatan Pramuka Mingguan', date: '10 Juni 2025' },
-  { id: 3, title: 'Kunjungan Dinas Pendidikan', date: '08 Juni 2025' },
-];
+import { styleImageHeader } from './DEV/news/PrivateNewsDetail';
 
 export default function PublicNewsDetail() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { id } = useParams();
   const client = useQueryClient();
   const { itemsNoPagination, isLoading } = useQueryFetch({
@@ -71,36 +49,20 @@ export default function PublicNewsDetail() {
   if (!title && !isLoading) return <Navigate to="/404" replace />;
   return (
     <Box>
-      <AppBar position="sticky" top={0} color="primary">
-        <Toolbar>
-          <Box>
-            <img
-              src="/assets/logo_pgri.png"
-              style={{
-                height: '50px',
-              }}
-              alt="logo_pic"
-            />
-          </Box>
-
-          <Typography variant="h6" component="div">
-            SMK PGRI KRASS
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <PublicAppBar />
 
       {/* Breadcrumb */}
-      <Box sx={{ bgcolor: '#f9f9f9', py: 1, px: 2 }}>
+      {/* <Box sx={{ bgcolor: '#f9f9f9', py: 1, px: 2 }}>
         <Typography variant="body2">
           <Link href="/">Beranda</Link> &gt; <Link href="/berita">Berita</Link> &gt;
           <strong>{title}</strong>
         </Typography>
-      </Box>
+      </Box> */}
 
       {/* Konten utama */}
       <Container sx={{ mt: 3, minHeight: 'calc(100dvh - 272px)' }}>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={12} lg={8}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={8}>
             <Paper elevation={3} sx={{ p: { xs: 1, md: 3 }, borderRadius: 2 }}>
               {isLoading ? (
                 <Skeleton sx={{ height: 30 }} animation="wave" />
@@ -163,31 +125,20 @@ export default function PublicNewsDetail() {
                   </Box>
                 )}
               </Box>
-              {isLoading && !thumbnail ? (
-                <Box
-                  sx={{
-                    width: '100%',
-                    borderRadius: 2,
-                    mb: 2,
-                    bgcolor: '#f0f0f0',
-                    height: '400px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  {isLoading ? (
-                    <CircularProgress />
-                  ) : (
-                    <img
-                      src="/assets/logo_pgri.png"
-                      style={{
-                        height: '200px',
-                        opacity: '0.3',
-                      }}
-                      alt="logo_pic"
-                    />
-                  )}
+              {isLoading ? (
+                <Box sx={styleImageHeader}>
+                  <CircularProgress />
+                </Box>
+              ) : !thumbnail ? (
+                <Box sx={styleImageHeader}>
+                  <img
+                    src="/assets/logo_pgri.png"
+                    style={{
+                      height: '200px',
+                      opacity: '0.3',
+                    }}
+                    alt="logo_pic"
+                  />
                 </Box>
               ) : (
                 <Box
@@ -237,7 +188,7 @@ export default function PublicNewsDetail() {
           </Grid>
 
           {/* Rekomendasi Berita */}
-          <Grid item xs={12} md={12} lg={4}>
+          <Grid item xs={12} md={4}>
             <Paper elevation={3} sx={{ p: 2, borderRadius: 2, position: 'sticky', top: 90 }}>
               <Typography variant="h6" gutterBottom>
                 Berita Rekomendasi
@@ -250,22 +201,7 @@ export default function PublicNewsDetail() {
                   <Skeleton sx={{ height: 60 }} animation="wave" />
                 </Box>
               ) : (
-                // beritaRekomendasi.map((item) => (
-                //   <Box key={item.id} sx={{ mb: 2 }}>
-                //     <Link href={`/berita/${item.id}`} underline="hover">
-                //       <Typography variant="subtitle1">{item.title}</Typography>
-                //     </Link>
-                //     <Typography variant="caption" color="text.secondary">
-                //       {item.date}
-                //     </Typography>
-                //   </Box>
-                // ))
-                <Box>
-                  <Typography>Under development</Typography>
-                  <Typography varian="caption" color="gray">
-                    -
-                  </Typography>
-                </Box>
+                <PublicRecommendedNews news_id={id} />
               )}
             </Paper>
           </Grid>
@@ -273,16 +209,7 @@ export default function PublicNewsDetail() {
       </Container>
 
       {/* Footer */}
-      <Box sx={{ bgcolor: themeAppColors.main, color: 'white', mt: 4, py: 3 }}>
-        <Container>
-          <Typography variant="h6">SMK NEGERI CONTOH</Typography>
-          <Typography variant="body2">Jl. Pendidikan No. 123, Jakarta</Typography>
-          <Typography variant="body2">Telp: (021) 12345678 | Email: info@smkcontoh.sch.id</Typography>
-          <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-            &copy; 2025 SMK NEGERI CONTOH. All rights reserved.
-          </Typography>
-        </Container>
-      </Box>
+      <PublicFooter />
     </Box>
   );
 }

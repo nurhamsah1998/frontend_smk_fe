@@ -155,6 +155,13 @@ export const navConfigDEV = [
     name: 'server',
     icon: <StorageIcon />,
   },
+  {
+    title: 'Pengaturan',
+    path: '/dev/pengaturan',
+    icon: <SettingsIcon />,
+    permission: true,
+    name: 'log_out',
+  },
 ];
 export const navConfigPPDB = [
   {

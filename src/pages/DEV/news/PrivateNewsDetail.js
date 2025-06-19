@@ -40,12 +40,7 @@ import ListCommentItem from './ListCommentItem';
 import '@wangeditor/editor/dist/css/style.css';
 import RecommendedNews from './RecommendedNews';
 
-const beritaRekomendasi = [
-  { id: 1, title: 'Lomba 17 Agustus', date: '12 Juni 2025' },
-  { id: 2, title: 'Kegiatan Pramuka Mingguan', date: '10 Juni 2025' },
-  { id: 3, title: 'Kunjungan Dinas Pendidikan', date: '08 Juni 2025' },
-];
-const styleIMageHEader = {
+export const styleImageHeader = {
   width: '100%',
   borderRadius: 2,
   mb: 2,
@@ -235,11 +230,11 @@ export default function PrivateNewsDetail() {
               )}
             </Box>
             {isLoading ? (
-              <Box sx={styleIMageHEader}>
+              <Box sx={styleImageHeader}>
                 <CircularProgress />
               </Box>
             ) : !thumbnail ? (
-              <Box sx={styleIMageHEader}>
+              <Box sx={styleImageHeader}>
                 <img
                   src="/assets/logo_pgri.png"
                   style={{

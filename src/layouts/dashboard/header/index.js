@@ -47,7 +47,6 @@ export default function Header({ onOpenNav, navConfigMenu }) {
     const isDetailNewsPage = location?.pathname?.includes('/news/detail/');
     try {
       const isMatch = navConfigMenu.find((item) => item.path === location.pathname);
-      console.log(isMatch);
       return isMatch.title;
     } catch (error) {
       return isUpdateNewsPage ? 'Edit Kabar Berita' : isDetailNewsPage ? 'Konten Berita' : 'Detail Pembayaran';
