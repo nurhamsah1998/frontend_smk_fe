@@ -2,39 +2,24 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable arrow-body-style */
 /* eslint-disable import/no-unresolved */
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-  Grid,
-  Typography,
-  Box,
-  Paper,
-  Link,
-  Divider,
-  useTheme,
-  useMediaQuery,
-  Skeleton,
-  Avatar,
-  Button,
-  TextField,
-  IconButton,
-} from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useRef } from 'react';
+import { Grid, Typography, Box, Paper, Divider, Skeleton, Avatar, Button, TextField, IconButton } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import useQueryFetch from 'src/hooks/useQueryFetch';
 import CircularProgress from '@mui/material/CircularProgress';
 import { fDateTime } from 'src/utils/formatTime';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { apiUrl } from 'src/hooks/api';
 import { Editor } from '@wangeditor/editor-for-react';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { grey, pink } from '@mui/material/colors';
 import useMutationPost from 'src/hooks/useMutationPost';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { getInitialName, randomColorInitialName } from 'src/utils/getInitialName';
-import jwtDecode from 'jwt-decode';
 import { LoadingButton } from '@mui/lab';
+import useInfinityFetch from 'src/hooks/useInfinityFetch';
 import { PROFILE } from 'src/hooks/useHelperContext';
 import ListCommentItem from './ListCommentItem';
 import '@wangeditor/editor/dist/css/style.css';
@@ -51,13 +36,11 @@ export const styleImageHeader = {
   alignItems: 'center',
 };
 export default function PrivateNewsDetail() {
-  const nav = useNavigate();
   const { itemsNoPagination: itemProfile } = useContext(PROFILE);
-  const token = window.localStorage.getItem('accessToken');
-  const localToken = token ? jwtDecode(token || {}) : {};
   const { id } = useParams();
   const client = useQueryClient();
   const inputCommentRef = useRef(null);
+  const { enqueueSnackbar } = useSnackbar();
   const {
     itemsNoPagination,
     isLoading,
@@ -67,49 +50,13 @@ export default function PrivateNewsDetail() {
     invalidateKey: `private-news/${id}`,
     disabledParamInit: true,
   });
-  ///
-  const fetchProjects = async ({ pageParam }) => {
-    try {
-      const res = await axios.get(`${apiUrl}news-comment/${id}?limit=10&page=${pageParam}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return res;
-    } catch (error) {
-      if (error?.response?.status === 403) {
-        enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
-        if (localToken?.roleStaff === 'ADMINISTRASI') {
-          nav('/staff-login');
-        } else {
-          nav('/');
-        }
-        window.localStorage.clear();
-      }
-      return [];
-    }
-  };
-  ///
   const {
-    data,
+    itemData: commentList,
     fetchNextPage,
     isLoading: isLoadingComment,
-    hasNextPage,
     refetch: refetchComment,
-  } = useInfiniteQuery({
-    queryKey: [`${apiUrl}news-comment/${id}`],
-    queryFn: fetchProjects,
-    getNextPageParam: (lastPage) => {
-      const currentPage = lastPage?.data?.page;
-      const totalPage = lastPage?.data?.totalPage;
-      if (currentPage === totalPage) {
-        return undefined;
-      }
-      return currentPage + 1;
-    },
-  });
-  ///
+    hasNextPage,
+  } = useInfinityFetch({ api: `news-comment/${id}`, enabled: !isLoading });
   const { title, thumbnail, up_vote, down_vote, html, staf, createdAt } = itemsNoPagination?.data || {};
   const { is_already_comment, is_reacted } = itemsNoPagination || {};
   const mutationPostComment = useMutationPost({
@@ -120,7 +67,7 @@ export default function PrivateNewsDetail() {
       refetchComment();
     },
   });
-  const { enqueueSnackbar } = useSnackbar();
+
   const onClickComment = () => {
     mutationPostComment.mutate({
       text: inputCommentRef.current?.value || '',
@@ -145,22 +92,6 @@ export default function PrivateNewsDetail() {
       client.removeQueries([`private-news/${id}`]);
     };
   }, []);
-  const [commentList, setCommentList] = useState([]);
-  const arrayMerge = (pageParams, pages) => {
-    let result = [];
-    for (let index = 0; index < pageParams.length; index += 1) {
-      result = result.concat(pages[index]?.data?.data);
-    }
-    return result;
-  };
-
-  useEffect(() => {
-    if (Boolean(data?.pageParams?.length)) {
-      const listCommentUQ = arrayMerge(data?.pageParams, data?.pages);
-      setCommentList(listCommentUQ);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
   return (
     <>
       {/* Konten utama */}
@@ -198,20 +129,6 @@ export default function PrivateNewsDetail() {
                   <Typography variant="caption">{up_vote}</Typography>
                 </IconButton>
               )}
-              {/* {isLoading ? (
-                <Skeleton sx={{ height: 30, width: 20 }} animation="wave" />
-              ) : (
-                <IconButton
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 0.5,
-                  }}
-                >
-                  <ChatBubbleIcon sx={{ color: grey[500] }} />
-                  <Typography variant="caption">12</Typography>
-                </IconButton>
-              )} */}
               {isLoading ? (
                 <Skeleton sx={{ height: 30, width: 20 }} animation="wave" />
               ) : (

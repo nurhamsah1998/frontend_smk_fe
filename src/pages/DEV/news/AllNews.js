@@ -1,10 +1,11 @@
 /* eslint-disable import/no-unresolved */
-import { Box, CircularProgress, Grid, Skeleton, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import React from 'react';
-import useQueryFetch from 'src/hooks/useQueryFetch';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
+import useInfinityFetch from 'src/hooks/useInfinityFetch';
 
 import CardNews from './CardNews';
 
@@ -60,16 +61,33 @@ export const ViewAllNews = ({ isLoading, items = [], handleClickCard = () => {} 
   </Box>
 );
 function AllNews() {
-  const { items, isLoading } = useQueryFetch({
-    module: 'news',
-    invalidateKey: 'news',
-  });
+  const { itemData: items, fetchNextPage, isLoading, hasNextPage } = useInfinityFetch({ api: 'news' });
+
   const nav = useNavigate();
   const location = useLocation();
   const handleClickCard = (item) => {
     nav(`${location.pathname}/detail/${item?.id}`);
   };
-  return <ViewAllNews isLoading={isLoading} handleClickCard={handleClickCard} items={items} />;
+
+  return (
+    <Box>
+      <ViewAllNews isLoading={isLoading} handleClickCard={handleClickCard} items={items} />
+      {items.length !== 0 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <LoadingButton
+            loading={isLoading}
+            onClick={fetchNextPage}
+            variant="contained"
+            sx={{
+              display: hasNextPage ? 'block' : 'none',
+            }}
+          >
+            Lihat berita lainnya
+          </LoadingButton>
+        </Box>
+      )}
+    </Box>
+  );
 }
 
 export default AllNews;

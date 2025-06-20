@@ -16,9 +16,8 @@ function WangTextEditor({ html, setHtml = () => {}, onChangeUploadImage = () => 
   const token = window.localStorage.getItem('accessToken');
   const { enqueueSnackbar } = useSnackbar();
   const toolbarConfig = {
-    excludeKeys: ['fullScreen'],
+    excludeKeys: ['fullScreen', 'uploadVideo', 'editVideoSize', 'fontFamily'],
   };
-
   const editorConfig = {
     placeholder: 'Tulis disini...',
     MENU_CONF: {

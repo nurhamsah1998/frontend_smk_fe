@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import { Box, Button, ListItemText, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
 import ContainerCard from 'src/components/ContainerCard';
@@ -37,26 +37,27 @@ function Database() {
     },
   });
 
-  const { itemsNoPagination, isLoading, refetch } = useQueryFetch({
+  const { itemsNoPagination, isLoading } = useQueryFetch({
     module: 'server-info',
-    next: () => {
-      setProgress(60);
-    },
+    invalidateKey: 'server-info',
+    // next: () => {
+    //   setProgress(60);
+    // },
   });
-  const [progress, setProgress] = useState(60);
-  useEffect(() => {
-    const timeInterval = setTimeout(() => {
-      if (progress === 0 && !isLoading) {
-        refetch();
-      } else if (!isLoading) {
-        // eslint-disable-next-line no-return-assign
-        setProgress((prev) => (prev -= 1));
-      }
-    }, 1000);
-    return () => {
-      clearTimeout(timeInterval);
-    };
-  }, [progress, isLoading]);
+  // const [progress, setProgress] = useState(60);
+  // useEffect(() => {
+  //   const timeInterval = setTimeout(() => {
+  //     if (progress === 0 && !isLoading) {
+  //       refetch();
+  //     } else if (!isLoading) {
+  //       // eslint-disable-next-line no-return-assign
+  //       setProgress((prev) => (prev -= 1));
+  //     }
+  //   }, 1000);
+  //   return () => {
+  //     clearTimeout(timeInterval);
+  //   };
+  // }, [progress, isLoading]);
 
   return (
     <ContainerCard>
@@ -72,7 +73,7 @@ function Database() {
           Backup Database
         </Button>
       </Box>
-      <Box
+      {/* <Box
         sx={{
           width: '100%',
           height: 30,
@@ -113,7 +114,7 @@ function Database() {
         >
           <Typography variant="subtitle2">{progress}</Typography>
         </Box>
-      </Box>
+      </Box> */}
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <Box>
           <Typography variant="h4" color={themeAppColors.main}>
