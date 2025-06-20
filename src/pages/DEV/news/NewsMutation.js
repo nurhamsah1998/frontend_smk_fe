@@ -3,7 +3,7 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState, useTransition } from 'react';
 import { cyan } from '@mui/material/colors';
 import PhotoIcon from '@mui/icons-material/Photo';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { apiUrl } from 'src/hooks/api';
 import { useSnackbar } from 'notistack';
@@ -18,8 +18,8 @@ function NewsMutation() {
   const { enqueueSnackbar } = useSnackbar();
   const [formValues, setFormValues] = useState({
     title: '',
-    isPublish: false,
-    isPrivate: true,
+    isPublish: true,
+    isPrivate: false,
     thumbnail: null,
   });
   const { id } = useParams();
@@ -40,6 +40,7 @@ function NewsMutation() {
     }
   }, [id]);
   const nav = useNavigate();
+  const location = useLocation();
   const handleCancel = (params) => {
     setFormValues({ title: '', isPublish: false, isPrivate: true, thumbnail: null });
     nav(-1);
@@ -64,7 +65,8 @@ function NewsMutation() {
         });
         setHtml('');
         setFormValues({ title: '', isPublish: false, isPrivate: true, thumbnail: null });
-        nav('/dev/news/my-news');
+        nav(`${location.pathname?.replace(`/${id}`, '').replace(id ? 'update-news' : 'create-news', '')}my-news`);
+
         enqueueSnackbar(res?.data?.msg || 'Berhasil', { variant: 'success' });
       } catch (error) {
         enqueueSnackbar(error?.response?.data?.msg || error?.message || 'Gagal', { variant: 'error' });

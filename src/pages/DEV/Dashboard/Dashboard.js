@@ -1,8 +1,16 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable camelcase */
-import { Typography, Box, Container, Grid, Skeleton, Card, CardHeader } from '@mui/material';
-import React, { useMemo } from 'react';
-import { useTheme } from '@mui/material/styles';
+import { Typography, Box, Grid, Skeleton, Card, CardHeader, IconButton } from '@mui/material';
+import React, { useContext, useMemo } from 'react';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import SchoolIcon from '@mui/icons-material/School';
+import { fDateTime } from 'src/utils/formatTime';
+import { grey } from '@mui/material/colors';
+import { Link, useNavigate } from 'react-router-dom';
+import { PROFILE } from 'src/hooks/useHelperContext';
+import { themeAppColors } from 'src/theme/themeAppColor';
+
 import {
   AppConversionRates,
   AppCurrentSubject,
@@ -16,15 +24,17 @@ import AppTotalStudentByMajorAnual from '../../../sections/@dashboard/app/DEV/Ap
 import useQueryFetch from '../../../hooks/useQueryFetch';
 
 function DashboardDev() {
-  const theme = useTheme();
+  const { itemsNoPagination: profileData } = useContext(PROFILE);
   const { itemsNoPagination, isLoading } = useQueryFetch({
     module: 'dashboard-dev',
     invalidateKey: 'dashboard-dev',
   });
+  const nav = useNavigate();
+  const { role } = profileData || {};
   const majorList = Object.keys(itemsNoPagination?.data?.analytics ?? {});
   const dataAnalytics = itemsNoPagination?.data?.analytics || [];
   const tahunAngkatan = itemsNoPagination?.data?.tahun_angkatan || [];
-  const { total_siswa_aktif, total_siswa_alumni, log_activity, latest_campaign } = itemsNoPagination?.data || {};
+  const { total_siswa_aktif, total_siswa_alumni, log_activity, news_data } = itemsNoPagination?.data || {};
   const dataRebuildLogActivity = useMemo(
     () =>
       log_activity?.map((item, index) => ({
@@ -36,6 +46,13 @@ function DashboardDev() {
       })),
     [log_activity]
   );
+  const pathNewsRecomended = {
+    ADMINISTRASI: '/staff-tu/news/detail',
+    DEV: '/dev/news/detail',
+  };
+  const handleClickNews = (item) => {
+    nav(`${pathNewsRecomended[role] ?? '/siswa/news/detail'}/${item?.id}`);
+  };
   return (
     <ContainerCard>
       <Box>
@@ -51,7 +68,7 @@ function DashboardDev() {
                   </Box>
                 ) : (
                   <>
-                    <Box>{Boolean(total_siswa_aktif) ? `Belum ada siswa aktif` : `Total siswa aktif`}</Box>
+                    <Box>{!Boolean(total_siswa_aktif) ? `Belum ada siswa aktif` : `Total siswa aktif`}</Box>
                   </>
                 )
               }
@@ -69,7 +86,7 @@ function DashboardDev() {
                   </Box>
                 ) : (
                   <>
-                    <Box>{Boolean(total_siswa_alumni) ? `Belum ada siswa alumni` : `Total siswa alumni`}</Box>
+                    <Box>{!Boolean(total_siswa_alumni) ? `Belum ada siswa alumni` : `Total siswa alumni`}</Box>
                   </>
                 )
               }
@@ -109,7 +126,84 @@ function DashboardDev() {
           </Grid>
           <Grid item xs={12} md={6} lg={7}>
             <Card>
-              <CardHeader title="Campaign Terbaru" subheader="dg" />
+              <CardHeader title="Berita menarik" subheader="berita pilihan" />
+              <Box sx={{ p: 3 }}>
+                {news_data?.length !== 0 ? (
+                  news_data?.map((item, index) => (
+                    <Box key={index} sx={{ mb: 2, display: 'grid' }}>
+                      <Box
+                        component="a"
+                        onClick={() => handleClickNews(item)}
+                        sx={{
+                          color: themeAppColors.main,
+                          '&:hover': {
+                            cursor: 'pointer',
+                            textDecoration: 'underline',
+                          },
+                        }}
+                      >
+                        <Typography variant="subtitle1" lineHeight={1}>
+                          {item?.title}
+                        </Typography>
+                        <Typography sx={{ fontSize: '13px', color: 'primary', mt: 0.5 }} lineHeight={1}>
+                          {item?.html}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'grid' }}>
+                        <Typography mt={1} variant="caption" color="text.secondary">
+                          {fDateTime(item?.createdAt)}
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <IconButton
+                            sx={{
+                              display: 'flex',
+                              gap: 0.5,
+
+                              alignItems: 'center',
+                            }}
+                            size="small"
+                            disabled
+                          >
+                            <FavoriteIcon
+                              sx={{
+                                color: grey[500],
+                                width: 20,
+                                height: 20,
+                              }}
+                              fontSize="small"
+                            />
+                            <Typography variant="caption">{item?.up_vote}</Typography>
+                          </IconButton>
+                          <IconButton
+                            sx={{
+                              display: 'flex',
+                              gap: 0.5,
+
+                              alignItems: 'center',
+                            }}
+                            size="small"
+                            disabled
+                          >
+                            <ThumbDownAltIcon
+                              sx={{
+                                color: grey[500],
+                                width: 20,
+                                height: 20,
+                              }}
+                              fontSize="small"
+                            />
+                            <Typography variant="caption">{item?.down_vote}</Typography>
+                          </IconButton>
+                        </Box>
+                      </Box>
+                    </Box>
+                  ))
+                ) : (
+                  <Box py={3}>
+                    <Typography sx={{ color: grey[600], textAlign: 'center' }}>Belum ada berita rekomendasi</Typography>
+                  </Box>
+                )}
+              </Box>
             </Card>
           </Grid>
         </Grid>

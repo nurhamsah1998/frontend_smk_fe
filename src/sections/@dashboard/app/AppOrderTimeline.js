@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, Typography, CardHeader, CardContent, Box } from '@mui/material';
 import { Timeline, TimelineDot, TimelineItem, TimelineContent, TimelineSeparator, TimelineConnector } from '@mui/lab';
 // utils
+import { grey } from '@mui/material/colors';
 import { fDateTime } from '../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
@@ -25,11 +26,17 @@ export default function AppOrderTimeline({ title, subheader, list, ...other }) {
           },
         }}
       >
-        <Timeline>
-          {list.map((item, index) => (
-            <OrderItem key={item.id} item={item} isLast={index === list.length - 1} />
-          ))}
-        </Timeline>
+        {list?.length !== 0 ? (
+          <Timeline>
+            {list.map((item, index) => (
+              <OrderItem key={item.id} item={item} isLast={index === list.length - 1} />
+            ))}
+          </Timeline>
+        ) : (
+          <Box>
+            <Typography sx={{ color: grey[700] }}>Belum ada aktivitas </Typography>
+          </Box>
+        )}
       </CardContent>
     </Card>
   );

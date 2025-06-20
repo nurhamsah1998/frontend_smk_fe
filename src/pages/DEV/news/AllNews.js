@@ -3,7 +3,7 @@ import { Box, CircularProgress, Grid, Skeleton, Typography } from '@mui/material
 import React from 'react';
 import useQueryFetch from 'src/hooks/useQueryFetch';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
 
 import CardNews from './CardNews';
@@ -65,8 +65,9 @@ function AllNews() {
     invalidateKey: 'news',
   });
   const nav = useNavigate();
+  const location = useLocation();
   const handleClickCard = (item) => {
-    nav(`/dev/news/detail/${item?.id}`);
+    nav(`${location.pathname}/detail/${item?.id}`);
   };
   return <ViewAllNews isLoading={isLoading} handleClickCard={handleClickCard} items={items} />;
 }

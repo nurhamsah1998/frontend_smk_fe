@@ -6,7 +6,7 @@ import TableComponen from 'src/components/TableComponent';
 import { Dialog } from 'src/hooks/useContextHook';
 import useQueryFetch from 'src/hooks/useQueryFetch';
 import { green } from '@mui/material/colors';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useMutationDelete from 'src/hooks/useMutationDelete';
 
 function MyNews() {
@@ -20,10 +20,43 @@ function MyNews() {
   });
   const itemRebuild = useMemo(() => items, [items]);
   const nav = useNavigate();
+  const location = useLocation();
   const tableHead = [
     {
       id: 'title',
       label: 'Judul',
+    },
+    {
+      id: 'isPrivate',
+      label: 'Mode',
+      variantStatusColor: [
+        {
+          variant: 'success',
+          label: 'Public',
+          value: false,
+        },
+        {
+          variant: 'warning',
+          label: 'Private',
+          value: true,
+        },
+      ],
+    },
+    {
+      id: 'isPublish',
+      label: 'Status',
+      variantStatusColor: [
+        {
+          variant: 'success',
+          label: 'Ditampilkan',
+          value: true,
+        },
+        {
+          variant: 'warning',
+          label: 'Disembunyikan',
+          value: false,
+        },
+      ],
     },
     {
       id: 'up_vote',
@@ -40,7 +73,7 @@ function MyNews() {
     },
   ];
   const handleCustomOnClickRow = (i) => {
-    nav(`/dev/news/update-news/${i?.id}`);
+    nav(`${location.pathname?.replace('my-news', '')}update-news/${i?.id}`);
   };
   const handleDelete = (i) => {
     setDialog(() => ({
@@ -57,7 +90,7 @@ function MyNews() {
     }));
   };
   const handleClickCreate = () => {
-    nav(`/dev/news/create-news`);
+    nav(`${location.pathname?.replace('my-news', '')}create-news`);
   };
   return (
     <Box>

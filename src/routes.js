@@ -22,7 +22,6 @@ const DaftarSiswa = lazy(() => import('./pages/STAFF_PPDB/DaftarSIswa/DaftarSisw
 const DetailTagihan = lazy(() => import('./pages/STAFF_TU/Pembayaran/Pembayaran/DetailTagihan'));
 const ReportTransaksiMasuk = lazy(() => import('./pages/STAFF_TU/Laporan/transaksi_masuk/ReportTransaksi'));
 const ReportTransaksiKeluar = lazy(() => import('./pages/STAFF_TU/Laporan/transaksi_keluar/ReportTransaksi'));
-const NewsTu = lazy(() => import('./pages/STAFF_TU/news/News'));
 const NewsStudent = lazy(() => import('./pages/SISWA/news/News'));
 const LogActivity = lazy(() => import('./pages/DEV/Log/LogActivity'));
 const DashboardDev = lazy(() => import('./pages/DEV/Dashboard/Dashboard'));
@@ -92,8 +91,17 @@ export default function Router() {
         { path: 'laporan-transaksi-keluar', element: <ReportTransaksiKeluar /> },
         { path: 'pengumuman', element: <Campaign /> },
         { path: 'pengaturan', element: <PengaturanTU /> },
-        { path: 'news', element: <NewsTu /> },
-        { path: 'news/detail/:id', element: <PrivateNewsDetail /> },
+        {
+          path: 'news',
+          element: <News />,
+          children: [
+            { element: <AllNews />, index: true },
+            { path: 'my-news', element: <MyNews /> },
+            { path: 'detail/:id', element: <PrivateNewsDetail /> },
+            { path: 'create-news', element: <NewsMutation /> },
+            { path: 'update-news/:id', element: <NewsMutation /> },
+          ],
+        },
       ],
     },
     {

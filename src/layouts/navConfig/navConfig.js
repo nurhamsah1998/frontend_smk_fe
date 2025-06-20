@@ -32,7 +32,7 @@ export const navConfigTU = [
     title: 'Kabar Berita',
     path: '/staff-tu/news',
     name: 'news',
-    permission: true,
+    permission: false,
     icon: <NewspaperIcon />,
   },
   /// NESTED ROUTE

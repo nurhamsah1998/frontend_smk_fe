@@ -4,6 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import Typography from '@mui/material/Typography';
 import { apiUrl } from 'src/hooks/api';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -12,8 +13,10 @@ import { textEllipsis } from 'src/utils/textEliipsis';
 import { Box, Chip } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { fDateTime } from 'src/utils/formatTime';
+import { useLocation } from 'react-router-dom';
 
 function CardNews({ item, handleClickCard = () => {} }) {
+  const location = useLocation();
   return (
     <Card
       onClick={() => handleClickCard(item)}
@@ -61,13 +64,29 @@ function CardNews({ item, handleClickCard = () => {} }) {
           pt: 1,
         }}
       >
-        <Chip
-          size="small"
-          label={Boolean(item?.isPrivate) ? 'Private' : 'Public'}
-          color={Boolean(item?.isPrivate) ? 'primary' : 'info'}
-        />
+        {location.pathname === '/news' ? null : (
+          <Chip
+            size="small"
+            label={Boolean(item?.isPrivate) ? 'Private' : 'Public'}
+            color={Boolean(item?.isPrivate) ? 'primary' : 'info'}
+          />
+        )}
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <HistoryEduIcon sx={{ width: 20, height: 20, color: grey[700] }} />
+          <Typography color={grey[700]} variant="caption">
+            {textEllipsis(item?.staf?.nama || '', 35)}
+          </Typography>
+        </Box>
+      </Box>
+      <CardContent style={{ paddingTop: '10px' }}>
+        <Typography gutterBottom variant="h5" component="div" lineHeight={1.2} textTransform="capitalize">
+          {textEllipsis(item?.title, 50)}
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.2 }}>
+          {item?.html}
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 0.5 }}>
           <Box
             sx={{
               display: 'flex',
@@ -99,14 +118,6 @@ function CardNews({ item, handleClickCard = () => {} }) {
             <Typography variant="caption">{item?.down_vote}</Typography>
           </Box>
         </Box>
-      </Box>
-      <CardContent style={{ paddingTop: '10px' }}>
-        <Typography gutterBottom variant="h5" component="div" lineHeight={1.2} textTransform="capitalize">
-          {textEllipsis(item?.title, 50)}
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {item?.html}
-        </Typography>
       </CardContent>
       {/* <CardActions>
         <Button size="small">Share</Button>

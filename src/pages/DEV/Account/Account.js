@@ -37,6 +37,18 @@ function Account() {
       name: 'daftar_siswa',
     },
     {
+      title: 'Berita sekolah',
+      permission: false,
+      desc: 'Hak admin untuk bisa mengakses halaman "Kabar Berita", private maupun public. Kalau tidak tercentang maka admin hanya bisa melihat berita public. untuk link berita public = "/news"',
+      name: 'news',
+    },
+    {
+      title: 'BEH Berita Sekolah',
+      permission: false,
+      desc: 'Hak admin untuk bisa Buat, Edit, Hapus pada "Kabar Berita", public maupun private.',
+      name: 'cud_news',
+    },
+    {
       title: 'Tagihan',
       permission: false,
       desc: 'Hak admin untuk bisa mengakses halaman "Tagihan". Admin bisa melakukan penambahan tahun ajaran untuk tagihan dan mengedit tagihan.',
