@@ -178,7 +178,9 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
                   </FormHelperText>
                 </Box>
                 <Box>
-                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// question https://stackoverflow.com/questions/67064682/material-ui-outlined-select-label-is-not-rendering-properly/67068903#67068903 */}
+                  {/* /// base on answer : https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// thank to NearHuscarl : https://stackoverflow.com/users/9449426/nearhuscarl */}
                   <TextField
                     fullWidth
                     size="small"
@@ -194,7 +196,9 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
                 </Box>
 
                 <Box>
-                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// question https://stackoverflow.com/questions/67064682/material-ui-outlined-select-label-is-not-rendering-properly/67068903#67068903 */}
+                  {/* /// base on answer : https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// thank to NearHuscarl : https://stackoverflow.com/users/9449426/nearhuscarl */}
                   <TextField
                     fullWidth
                     size="small"
@@ -222,7 +226,9 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
                   }}
                 />
                 <Box>
-                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// question https://stackoverflow.com/questions/67064682/material-ui-outlined-select-label-is-not-rendering-properly/67068903#67068903 */}
+                  {/* /// base on answer : https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// thank to NearHuscarl : https://stackoverflow.com/users/9449426/nearhuscarl */}
                   <TextField
                     fullWidth
                     size="small"
@@ -237,7 +243,9 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
                   </TextField>
                 </Box>
                 <Box>
-                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// question https://stackoverflow.com/questions/67064682/material-ui-outlined-select-label-is-not-rendering-properly/67068903#67068903 */}
+                  {/* /// base on answer : https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// thank to NearHuscarl : https://stackoverflow.com/users/9449426/nearhuscarl */}
                   <TextField
                     fullWidth
                     size="small"
@@ -253,7 +261,9 @@ function MutationCampaign({ openModalCreate, setOpenModalCreate, dataEdit, setDa
                   </TextField>
                 </Box>
                 <Box>
-                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// question https://stackoverflow.com/questions/67064682/material-ui-outlined-select-label-is-not-rendering-properly/67068903#67068903 */}
+                  {/* /// base on answer : https://stackoverflow.com/a/67068903/18038473 */}
+                  {/* /// thank to NearHuscarl : https://stackoverflow.com/users/9449426/nearhuscarl */}
                   <TextField
                     fullWidth
                     size="small"

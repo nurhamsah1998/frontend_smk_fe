@@ -16,12 +16,13 @@ import { Helmet } from 'react-helmet-async';
 import { useSnackbar } from 'notistack';
 import TableComponen from '../../../components/TableComponent';
 import { LabelField } from '../../../components/Commons';
-
-/// https://stackoverflow.com/a/45526690/18038473
+/// question : https://stackoverflow.com/questions/34582405/react-wont-load-local-images/45526690#45526690
+/// answer : https://stackoverflow.com/a/45526690/18038473
+/// thanks to Hawkeye Parker :  https://stackoverflow.com/users/99717/hawkeye-parker
+import { KopPdf } from '../Laporan/transaksi_masuk/ReportTransaksi';
 import { apiUrl } from '../../../hooks/api';
 import { FormatCurrency } from '../../../components/FormatCurrency';
 import ScreenDialog from '../../../components/ScreenDialog';
-import { KopPdf } from '../Laporan/transaksi_masuk/ReportTransaksi';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import AutoCompleteAsync from '../../../components/Core/AutoCompleteAsync';
 import { PROFILE } from '../../../hooks/useHelperContext';
@@ -322,7 +323,9 @@ function Pembayaran() {
         const specifictFilter = `${isUserHasFilter ? '(' : ''}${Boolean(kelas) ? `Kelas ${kelas}` : ''}${
           Boolean(jurusan) ? ` ${data?.data?.find((item) => item?.nama === jurusan)?.kode_jurusan}` : ''
         }${Boolean(subKelas) ? ` ${subKelas}` : ''}${isUserHasFilter ? ')' : ''}`;
-        /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+        /// HOW TO DOWNLOAD FILE
+        /// SOURCES : https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+        /// Thanks To Javier Bermúdez Lobo : https://gist.github.com/javilobo8
         const url = URL.createObjectURL(new Blob([res?.data]));
         const link = document.createElement('a');
         link.href = url;

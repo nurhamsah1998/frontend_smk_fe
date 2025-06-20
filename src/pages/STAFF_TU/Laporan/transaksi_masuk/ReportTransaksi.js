@@ -159,7 +159,9 @@ function ReportTransaksi() {
           const specifictFilter = ` ${isUserHasFilter ? '(' : ''} ${Boolean(kelas) ? `Kelas ${kelas}` : ''} ${
             Boolean(jurusan) ? `Jurusan ${jurusan}` : ''
           } ${Boolean(subKelas) ? `${subKelas}` : ''} ${isUserHasFilter ? ')' : ''}`;
-          /// https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+          /// HOW TO DOWNLOAD FILE
+          /// SOURCES : https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+          /// Thanks To Javier Bermúdez Lobo : https://gist.github.com/javilobo8
           const url = URL.createObjectURL(new Blob([res?.data]));
           const link = document.createElement('a');
           link.href = url;

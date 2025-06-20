@@ -60,67 +60,67 @@ export default function FormRegisterStudent() {
         }}
         enableReinitialize
       >
-        {({ values, getFieldProps, setFieldValue }) => {
-          return (
-            <Form>
-              <Box display="grid" gap={2}>
-                <TextField size="small" fullWidth name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
-                <TextField size="small" fullWidth name="username" {...getFieldProps('username')} label="Username" />
-                <Box>
-                  {/* /// https://stackoverflow.com/a/67068903/18038473 */}
-                  <TextField fullWidth size="small" select onChange={handleChange} value={gender} label="Gender">
-                    <MenuItem value={'L'}>Laki - Laki</MenuItem>
-                    <MenuItem value={'P'}>Perempuan</MenuItem>
-                  </TextField>
-                </Box>
-                <TextField
-                  size="small"
-                  fullWidth
-                  name="noHP"
-                  {...getFieldProps('noHP')}
-                  type="number"
-                  label="Nomor Telpon/Wa"
-                />
-                <AutoCompleteAsync
-                  size="small"
-                  value={values.jurusanId || {}}
-                  module="jurusan"
-                  label="Pilih jurusan"
-                  onChange={(x, y) => {
-                    setFieldValue('jurusanId', y);
-                  }}
-                />
-                <TextField
-                  size="small"
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  {...getFieldProps('password')}
-                  type={showPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
+        {({ values, getFieldProps, setFieldValue }) => (
+          <Form>
+            <Box display="grid" gap={2}>
+              <TextField size="small" fullWidth name="nama" {...getFieldProps('nama')} label="Nama lengkap" />
+              <TextField size="small" fullWidth name="username" {...getFieldProps('username')} label="Username" />
+              <Box>
+                {/* /// question https://stackoverflow.com/questions/67064682/material-ui-outlined-select-label-is-not-rendering-properly/67068903#67068903 */}
+                {/* /// base on answer : https://stackoverflow.com/a/67068903/18038473 */}
+                {/* /// thank to NearHuscarl : https://stackoverflow.com/users/9449426/nearhuscarl */}
+                <TextField fullWidth size="small" select onChange={handleChange} value={gender} label="Gender">
+                  <MenuItem value={'L'}>Laki - Laki</MenuItem>
+                  <MenuItem value={'P'}>Perempuan</MenuItem>
+                </TextField>
               </Box>
+              <TextField
+                size="small"
+                fullWidth
+                name="noHP"
+                {...getFieldProps('noHP')}
+                type="number"
+                label="Nomor Telpon/Wa"
+              />
+              <AutoCompleteAsync
+                size="small"
+                value={values.jurusanId || {}}
+                module="jurusan"
+                label="Pilih jurusan"
+                onChange={(x, y) => {
+                  setFieldValue('jurusanId', y);
+                }}
+              />
+              <TextField
+                size="small"
+                fullWidth
+                name="password"
+                label="Password"
+                {...getFieldProps('password')}
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
 
-              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-                <Checkbox name="remember" label="Remember me" />
-                <Link variant="subtitle2" underline="hover">
-                  Forgot password?
-                </Link>
-              </Stack>
-              <LoadingButton fullWidth size="large" type="submit" loading={register.isLoading} variant="contained">
-                Register
-              </LoadingButton>
-            </Form>
-          );
-        }}
+            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+              <Checkbox name="remember" label="Remember me" />
+              <Link variant="subtitle2" underline="hover">
+                Forgot password?
+              </Link>
+            </Stack>
+            <LoadingButton fullWidth size="large" type="submit" loading={register.isLoading} variant="contained">
+              Register
+            </LoadingButton>
+          </Form>
+        )}
       </Formik>
     </>
   );

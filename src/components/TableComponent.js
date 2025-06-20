@@ -60,7 +60,9 @@ function TableComponen({
 }) {
   moment.locale('id');
   const [selectedData, setSelectedData] = React.useState({});
-  /// https://stackoverflow.com/a/72384851/18038473
+  /// question : https://stackoverflow.com/questions/66115375/how-to-handle-multiple-menu-state-with-material-ui-menu-component/72384851#72384851
+  /// answer : https://stackoverflow.com/a/72384851/18038473
+  /// thanks to Julian Perez : https://stackoverflow.com/users/19202129/julian-perez
   const [anchorEl, setAnchorEl] = React.useState(
     Array(tableBody?.length)
       .fill(1)
