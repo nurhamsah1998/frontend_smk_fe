@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable arrow-body-style */
 /* eslint-disable react/prop-types */
 import React from 'react';
@@ -7,10 +8,10 @@ import moment from 'moment';
 import 'moment/locale/id';
 import { jsPDF as JSPDF } from 'jspdf';
 import PrintIcon from '@mui/icons-material/Print';
+import KopPdf from 'src/utils/KopPdf';
 
 import ScreenDialog from '../../../../components/ScreenDialog';
 import { FormatCurrency } from '../../../../components/FormatCurrency';
-import { KopPdf } from '../../Laporan/transaksi_masuk/ReportTransaksi';
 
 export const PrintTemplateInvoice = ({ data, printRef, width = '100%' }) => {
   return (

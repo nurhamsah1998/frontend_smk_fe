@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable consistent-return */
 /* eslint-disable no-extra-boolean-cast */
 /* eslint-disable arrow-body-style */
@@ -14,12 +15,12 @@ import { purple } from '@mui/material/colors';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Helmet } from 'react-helmet-async';
 import { useSnackbar } from 'notistack';
+import KopPdf from 'src/utils/KopPdf';
 import TableComponen from '../../../components/TableComponent';
 import { LabelField } from '../../../components/Commons';
 /// question : https://stackoverflow.com/questions/34582405/react-wont-load-local-images/45526690#45526690
 /// answer : https://stackoverflow.com/a/45526690/18038473
 /// thanks to Hawkeye Parker :  https://stackoverflow.com/users/99717/hawkeye-parker
-import { KopPdf } from '../Laporan/transaksi_masuk/ReportTransaksi';
 import { apiUrl } from '../../../hooks/api';
 import { FormatCurrency } from '../../../components/FormatCurrency';
 import ScreenDialog from '../../../components/ScreenDialog';

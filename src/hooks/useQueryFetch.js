@@ -14,7 +14,7 @@ function useQueryFetch({
   fail = false,
   module,
   enabled = true,
-  retry = true,
+  retry = 3,
   query,
   initialLimit = 40,
   disabledParamInit = false,

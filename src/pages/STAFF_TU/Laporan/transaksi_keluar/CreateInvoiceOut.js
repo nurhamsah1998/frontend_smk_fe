@@ -1,8 +1,10 @@
-import React, { useRef, useState } from 'react';
+/* eslint-disable import/no-unresolved */
+import React, { useContext, useRef } from 'react';
 import { Form, Formik } from 'formik';
-import { Box, Stack, TextField, Typography } from '@mui/material';
+import { Box, Stack, TextField } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
+import { Dialog } from 'src/hooks/useContextHook';
 
 import ScreenDialog from '../../../../components/ScreenDialog';
 import TextFieldNumberFormat from '../../../../components/TextFieldNumberFormat';
@@ -10,43 +12,25 @@ import formatNumberChange from '../../../../components/formatNumberChange';
 import useMutationPost from '../../../../hooks/useMutationPost';
 
 function CreateInvoiceOut({ handleClose, open }) {
+  const { setDialog } = useContext(Dialog);
   const refForm = useRef();
   const client = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const [openConfirm, setOpenConfirm] = useState({ isOpen: false, data: {} });
   const mutation = useMutationPost({
     module: 'invoice-out',
     next: () => {
-      setOpenConfirm({ isOpen: false, data: {} });
       handleClose();
       client.invalidateQueries(['get-all-invoice-out']);
     },
   });
-  const handleSubmit = () => {
-    mutation.mutate(openConfirm.data);
-  };
   return (
     <Box>
-      <ScreenDialog
-        handleSubmit={handleSubmit}
-        open={openConfirm.isOpen}
-        handleClose={() => setOpenConfirm({ isOpen: false, data: {} })}
-        labelClose="Cancel"
-        isLoading={mutation.isLoading}
-        labelSubmit="Ok"
-        title="Konfirmasi Pengeluaran"
-      >
-        <Typography>
-          Apakah anda telah memeriksa kembali pengeluaran ini ? pengeluaran yang sudah dibuat tidak dapat dihapus atau
-          dimodifikasi, apakah anda yakin ingin melanjutkan membuat pengeluaran ?
-        </Typography>
-      </ScreenDialog>
       <ScreenDialog
         handleSubmit={() => refForm.current?.handleSubmit()}
         open={open}
         handleClose={handleClose}
         labelClose="Cancel"
-        //   isLoading={modalPermissions.isLoading}
+        isLoading={mutation.isLoading}
         labelSubmit="Simpan"
         title="Pengeluaran"
       >
@@ -64,7 +48,19 @@ function CreateInvoiceOut({ handleClose, open }) {
                 enqueueSnackbar('Input nama dan input uang keluar wajib diisi', { variant: 'error' });
                 return;
               }
-              setOpenConfirm({ isOpen: true, data: values });
+              setDialog(() => ({
+                helperText: `Apakah anda telah memeriksa kembali pengeluaran ini ? pengeluaran yang sudah dibuat tidak dapat dihapus atau
+          dimodifikasi, apakah anda yakin ingin melanjutkan membuat pengeluaran ?`,
+                title: 'Konfirmasi',
+                labelClose: 'Batal',
+                variant: 'warning',
+                labelSubmit: 'Oke',
+                fullWidth: false,
+                do: () => {
+                  mutation.mutate(values);
+                },
+                isCloseAfterSubmit: true,
+              }));
             }}
           >
             {({ getFieldProps, values, setFieldValue }) => (

@@ -34,10 +34,11 @@ export default function AccountPopover() {
         window.localStorage.removeItem('accessToken');
         window.localStorage.removeItem('current_page_tagihan');
         window.localStorage.removeItem('current_tab_tagihan');
-        navigate('/');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        if (localToken?.roleStaff === 'ADMINISTRASI' || localToken?.roleStaff === 'DEV') {
+          navigate('/staff-login');
+        } else {
+          navigate('/');
+        }
       },
       isCloseAfterSubmit: true,
     }));
@@ -114,11 +115,9 @@ export default function AccountPopover() {
         </Stack> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
-        {localToken?.roleStaff !== 'ADMINISTRASI' && (
-          <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
-            Keluar
-          </MenuItem>
-        )}
+        <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
+          Keluar
+        </MenuItem>
       </Popover>
     </>
   );

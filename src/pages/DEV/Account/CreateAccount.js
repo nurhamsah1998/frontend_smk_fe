@@ -111,7 +111,7 @@ function CreateAccount({ openModal, setOpenModal, refetch }) {
                 ),
               }}
             />
-            <Alert sx={{ mt: 1 }} variant="filled" severity="error">
+            <Alert sx={{ mt: 1 }} variant="standard" severity="info">
               Password tidak akan bisa dilihat setelah membuat akun baru.
             </Alert>
           </Box>

@@ -201,7 +201,7 @@ export default function TagihanStaff() {
                   Simpan perubahan
                 </Button>
               </Box>
-              <Alert sx={{ mt: 1, mb: 0.5 }} variant="filled" severity="error">
+              <Alert sx={{ mt: 1, mb: 0.5 }} variant="standard" severity="info">
                 PENTING : Jika melakukan perubahan tagihan dan ingin berpindah tab tahun ajaran, simpan perubahan
                 terlebih dahulu !
               </Alert>

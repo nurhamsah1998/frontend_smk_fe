@@ -1,6 +1,5 @@
 // component
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
-import LogoutIcon from '@mui/icons-material/Logout';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import PaymentIcon from '@mui/icons-material/Payment';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
@@ -86,13 +85,6 @@ export const navConfigTU = [
     title: 'Pengaturan',
     path: '/staff-tu/pengaturan',
     icon: <SettingsIcon />,
-    permission: true,
-    name: 'log_out',
-  },
-  {
-    title: 'Keluar',
-    path: '/log-out',
-    icon: <LogoutIcon />,
     permission: true,
     name: 'log_out',
   },
