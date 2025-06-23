@@ -33,22 +33,24 @@ export default function DashboardLayoutDEV() {
   const hasReminded = cookie.get('backup_remainder');
   useEffect(() => {
     if (!hasReminded) {
-      setDialog(() => ({
-        helperText: `Sangat direkomendasikan untuk melakukan backup database per 7 hari, untuk meminimalisir kejadian yang tidak diinginkan. Pesan ini diharapkan akan terus muncul per 7 hari sebagai pengingat. 👀`,
-        title: 'Perhatian',
-        labelClose: 'Tutup, ingatkan nanti.',
-        variant: 'info',
-        labelSubmit: 'Oke',
-        fullWidth: false,
-        do: () => {
-          const dateTime = new Date();
-          cookie.set('backup_remainder', 1, {
-            path: '/',
-            expires: new Date(dateTime.setDate(dateTime.getDate() + 7)),
-          });
-        },
-        isCloseAfterSubmit: true,
-      }));
+      setTimeout(() => {
+        setDialog(() => ({
+          helperText: `Sangat direkomendasikan untuk melakukan backup database per 7 hari, untuk meminimalisir kejadian yang tidak diinginkan. Pesan ini diharapkan akan terus muncul per 7 hari sebagai pengingat. 👀`,
+          title: 'Perhatian',
+          labelClose: 'Tutup, ingatkan nanti.',
+          variant: 'info',
+          labelSubmit: 'Oke',
+          fullWidth: false,
+          do: () => {
+            const dateTime = new Date();
+            cookie.set('backup_remainder', 1, {
+              path: '/',
+              expires: new Date(dateTime.setDate(dateTime.getDate() + 7)),
+            });
+          },
+          isCloseAfterSubmit: true,
+        }));
+      }, 5000);
     }
   }, []);
   /// JIKA TERJADI PERUBAHAN PADA AKUN DI DB YANG MENGHASILKAN NULL JIKA GET PROFILE
