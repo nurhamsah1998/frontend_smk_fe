@@ -17,8 +17,6 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
-import InfoIcon from '@mui/icons-material/Info';
-import { red } from '@mui/material/colors';
 import useMutationPatch from '../../../hooks/useMutationPatch';
 import { Dialog } from '../../../hooks/useContextHook';
 import formatNumberChange from '../../../components/formatNumberChange';
@@ -96,7 +94,18 @@ export default function TagihanStaff() {
     formRef.current?.handleSubmit();
   };
   const handleAddTahunTagihan = () => {
-    createMutation.mutate({ date: new Date().getFullYear() });
+    setDialog(() => ({
+      helperText: `Apakah anda yakin ingin menambah tahun ajaran baru ?`,
+      title: 'Konfirmasi',
+      labelClose: 'Batal',
+      variant: 'warning',
+      labelSubmit: 'Tambah',
+      fullWidth: false,
+      do: () => {
+        createMutation.mutate({ date: new Date().getFullYear() });
+      },
+      isCloseAfterSubmit: true,
+    }));
   };
   React.useEffect(() => {
     if (Boolean(window.localStorage.getItem('current_page_tagihan'))) {

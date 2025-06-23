@@ -1,5 +1,8 @@
-import { useState, useEffect, Suspense } from 'react';
+/* eslint-disable import/no-unresolved */
+import { useState, useEffect, Suspense, useContext } from 'react';
+import Cookies from 'universal-cookie';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Dialog } from 'src/hooks/useContextHook';
 // @mui
 import jwtDecode from 'jwt-decode';
 //
@@ -17,13 +20,37 @@ import { MainWrapper, StyledRootWraper } from '../STAFF_TU/DashboardLayoutStaffT
 // ----------------------------------------------------------------------
 
 export default function DashboardLayoutDEV() {
+  const { setDialog } = useContext(Dialog);
   const [open, setOpen] = useState(false);
-  const { itemsNoPagination, isLoading, data, isFetched } = useFetch({
+  const { itemsNoPagination, isLoading, data } = useFetch({
     module: 'staff-profile',
   });
   const navigate = useNavigate();
   const token = window.localStorage.getItem('accessToken');
   const localToken = token ? jwtDecode(token || {}) : {};
+  const cookie = new Cookies();
+  /// NOTIF UNTUK MELAKUKAN BACKUP PER 7 HARI
+  const hasReminded = cookie.get('backup_remainder');
+  useEffect(() => {
+    if (!hasReminded) {
+      setDialog(() => ({
+        helperText: `Sangat direkomendasikan untuk melakukan backup database per 7 hari, untuk meminimalisir kejadian yang tidak diinginkan. Pesan ini diharapkan akan terus muncul per 7 hari sebagai pengingat. 👀`,
+        title: 'Perhatian',
+        labelClose: 'Tutup, ingatkan nanti.',
+        variant: 'info',
+        labelSubmit: 'Oke',
+        fullWidth: false,
+        do: () => {
+          const dateTime = new Date();
+          cookie.set('backup_remainder', 1, {
+            path: '/',
+            expires: new Date(dateTime.setDate(dateTime.getDate() + 7)),
+          });
+        },
+        isCloseAfterSubmit: true,
+      }));
+    }
+  }, []);
   /// JIKA TERJADI PERUBAHAN PADA AKUN DI DB YANG MENGHASILKAN NULL JIKA GET PROFILE
   useEffect(() => {
     if (data?.data === null) {

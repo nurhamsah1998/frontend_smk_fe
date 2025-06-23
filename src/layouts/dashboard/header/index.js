@@ -1,9 +1,10 @@
+/* eslint-disable import/no-unresolved */
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Box, Stack, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import useGetPathName from 'src/hooks/useGetPathName';
 // utils
 // components
 import Iconify from '../../../components/iconify';
@@ -41,17 +42,7 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav, navConfigMenu }) {
-  const location = useLocation();
-  const currentPage = React.useMemo(() => {
-    const isUpdateNewsPage = location?.pathname?.includes('/dev/news/update-news/');
-    const isDetailNewsPage = location?.pathname?.includes('/news/detail/');
-    try {
-      const isMatch = navConfigMenu.find((item) => item.path === location.pathname);
-      return isMatch.title;
-    } catch (error) {
-      return isUpdateNewsPage ? 'Edit Kabar Berita' : isDetailNewsPage ? 'Konten Berita' : 'Detail Pembayaran';
-    }
-  }, [location?.pathname]);
+  const currentPage = useGetPathName({ navConfigMenu });
   return (
     <StyledRoot>
       <StyledToolbar>

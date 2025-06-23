@@ -54,8 +54,8 @@ export const SideAuthBox = () => (
         justifyContent: 'space-between',
       }}
     >
-      <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>version 1.0.0</Typography>
-      <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>©️ Copyright 2023 | SMK PGRI KRAS</Typography>
+      <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>version 2.0.0</Typography>
+      <Typography sx={{ color: '#fff', fontSize: '12px', zIndex: 1 }}>&copy; Copyright 2023 | SMK PGRI KRAS</Typography>
     </Box>
     <Box
       sx={{

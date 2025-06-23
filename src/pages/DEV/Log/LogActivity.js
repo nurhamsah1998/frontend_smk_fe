@@ -1,6 +1,10 @@
-import { Box } from '@mui/material';
-import React from 'react';
+/* eslint-disable import/no-unresolved */
+import { Box, Button } from '@mui/material';
+import React, { useContext } from 'react';
+import { Dialog } from 'src/hooks/useContextHook';
+import useQueryFetch from 'src/hooks/useQueryFetch';
 import { JsonView, darkStyles, collapseAllNested } from 'react-json-view-lite';
+import { useSnackbar } from 'notistack';
 import 'react-json-view-lite/dist/index.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -11,9 +15,10 @@ import { LabelField } from '../../../components/Commons';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 
 function LogActivity() {
+  const { setDialog } = useContext(Dialog);
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
-  const { items, setPage, page, totalData, isLoading, totalRows, totalPage } = useFetch({
+  const { items, setPage, refetch, page, totalData, isLoading, totalRows, totalPage } = useFetch({
     module: 'log',
     initialLimit: 10,
     params: `&startDate=${startDate}&endDate=${endDate}`,
@@ -36,28 +41,76 @@ function LogActivity() {
       label: 'Data',
     },
   ];
-  const itemsRebuild = React.useMemo(() => {
-    return items?.map((item) => ({
-      action: item?.action,
-      data: (
-        <JsonView data={item?.data} allExpanded={() => false} shouldExpandNode={collapseAllNested} style={darkStyles} />
-      ),
-      author_name: item?.author_name,
-      author_username: item?.author_username,
+  const itemsRebuild = React.useMemo(
+    () =>
+      items?.map((item) => ({
+        action: item?.action,
+        data: (
+          <JsonView
+            data={item?.data}
+            allExpanded={() => false}
+            shouldExpandNode={collapseAllNested}
+            style={darkStyles}
+          />
+        ),
+        author_name: item?.author_name,
+        author_username: item?.author_username,
+      })),
+    [items]
+  );
+  const { enqueueSnackbar } = useSnackbar();
+  const {
+    refetch: clearLog,
+    isLoading: isLoadingClearLog,
+    isFetching: isFetchingClearLog,
+  } = useQueryFetch({
+    module: 'clear-log',
+    invalidateKey: 'log',
+    enabled: false,
+    retry: 1,
+    next: (res) => {
+      enqueueSnackbar(res?.data?.msg, { variant: 'success' });
+      refetch();
+    },
+    fail: (error) => {
+      enqueueSnackbar(error?.response?.data?.msg, { variant: 'error' });
+    },
+  });
+  const handleDelete = () => {
+    setDialog(() => ({
+      helperText: `Apakah anda yakin ingin menghapus semua log aktivitas?`,
+      title: 'Hapus',
+      labelClose: 'Batal',
+      variant: 'error',
+      labelSubmit: 'Hapus',
+      fullWidth: false,
+      do: () => {
+        clearLog();
+      },
+      isCloseAfterSubmit: true,
     }));
-  }, [items]);
-
+  };
   return (
     <ContainerCard>
       <Box>
-        <Box sx={{ mb: 3 }}>
-          <LabelField title="Filter tanggal" />
-          <CustomDatePicker
-            setEndDate={setEndDate}
-            setStartDate={setStartDate}
-            startDate={startDate}
-            endDate={endDate}
-          />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box sx={{ mb: 3 }}>
+            <LabelField title="Filter tanggal" />
+            <CustomDatePicker
+              setEndDate={setEndDate}
+              setStartDate={setStartDate}
+              startDate={startDate}
+              endDate={endDate}
+            />
+          </Box>
+          <Button
+            disabled={isLoadingClearLog && isFetchingClearLog}
+            onClick={handleDelete}
+            variant="contained"
+            color="error"
+          >
+            Hapus semua aktivitas
+          </Button>
         </Box>
         <TableComponen
           hideOption

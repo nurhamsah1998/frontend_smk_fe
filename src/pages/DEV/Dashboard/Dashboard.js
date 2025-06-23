@@ -10,6 +10,7 @@ import { grey } from '@mui/material/colors';
 import { Link, useNavigate } from 'react-router-dom';
 import { PROFILE } from 'src/hooks/useHelperContext';
 import { themeAppColors } from 'src/theme/themeAppColor';
+import { textEllipsis } from 'src/utils/textEliipsis';
 
 import {
   AppConversionRates,
@@ -42,7 +43,7 @@ function DashboardDev() {
         time: new Date(item?.createdAt),
         type: `order${index + 1}`,
         title: item?.action,
-        author_name: item?.staf?.nama,
+        author_name: textEllipsis(item?.staf?.nama, 10),
       })),
     [log_activity]
   );

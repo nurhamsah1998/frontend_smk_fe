@@ -151,7 +151,7 @@ export default function Nav({ openNav, onCloseNav, navConfig }) {
           </StyledAccount>
         </Link>
       </Box>
-      <NavSection data={permissionsSlicing} />
+      <NavSection data={permissionsSlicing} navConfig={navConfig} />
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>
   );

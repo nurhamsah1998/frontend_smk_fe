@@ -1,7 +1,9 @@
+/* eslint-disable import/no-unresolved */
 import PropTypes from 'prop-types';
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import useGetPathName from 'src/hooks/useGetPathName';
 
 // @mui
 import { Box, List, ListItemText } from '@mui/material';
@@ -15,13 +17,12 @@ NavSection.propTypes = {
   data: PropTypes.array,
 };
 
-export default function NavSection({ data = [], ...other }) {
-  const location = useLocation();
-  const titleHead = useMemo(() => data.find((item) => item?.path === location.pathname), [location.pathname]);
+export default function NavSection({ data = [], navConfig, ...other }) {
+  const titleHead = useGetPathName({ navConfigMenu: navConfig });
   return (
     <Box {...other} sx={{ height: 1 }}>
       <Helmet>
-        <title>{titleHead?.title || ''} | SMK Kras Kediri</title>
+        <title>{titleHead || ''} | SMK Kras Kediri</title>
         <link rel="canonical" href="/" />
       </Helmet>
       <List disablePadding sx={{ p: 1, height: 1 }}>
