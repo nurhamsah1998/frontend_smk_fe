@@ -96,7 +96,7 @@ function DetailTagihan() {
           bgcolor: '#f9fafb',
           zIndex: 99,
           pt: '10px',
-          px: '10px',
+          px: { xs: '20px', md: '50px' },
           pb: '20px',
         }}
       >
